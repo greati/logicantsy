@@ -8,6 +8,7 @@ namespace ltsy{
     const std::string NEGATIVE_ARITY_EXCEPTION = "provide an arity > 0";
     const std::string CONECTIVE_NOT_IN_SIGNATURE_EXCEPTION = "connective is not in signature";
     const std::string WRONG_NUMBER_ARGUMENTS_FMLA_EXCEPTION = "connective is not in signature";
+    const std::string WRONG_TUPLE_POSITION_EXCEPTION = "invalid tuple position";
 
     class ConnectiveNotPresentException : public std::exception {
         Symbol _symbol;

@@ -30,6 +30,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # libraries
 # --------------------------------------- #
+#add_library(core_utils src/core/utils.cpp)
+#target_include_directories(core_utils PUBLIC include)
 
 # executables
 # --------------------------------------- #
@@ -52,6 +54,8 @@ include(GoogleTest)
 set(test_sources ${test_sources}
     tests/main.cpp
     tests/syntax_tests.cpp
+    tests/truth_table_tests.cpp
+    tests/core_utils_tests.cpp
 )
 
 add_executable(maintest ${test_sources})
