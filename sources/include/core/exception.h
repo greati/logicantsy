@@ -10,6 +10,11 @@ namespace ltsy{
     const std::string WRONG_NUMBER_ARGUMENTS_FMLA_EXCEPTION = "connective is not in signature";
     const std::string WRONG_TUPLE_POSITION_EXCEPTION = "invalid tuple position";
     const std::string WRONG_ARITY_INPUT_EXCEPTION = "invalid input tuple arity";
+    const std::string INVALID_CONNECTIVE_INTERP_EXCEPTION = "invalid connective interpretation";
+    const std::string INVALID_TRUTH_VALUE_EXCEPTION = "invalid truth-value";
+    const std::string NULL_IN_CONNECTIVE_INTERP_EXCEPTION = "null value in connective interpretation";
+    const std::string CONNECTIVE_ALREADY_INTERP_EXCEPTION = "connective already interpreted";
+
 
     class ConnectiveNotPresentException : public std::exception {
         Symbol _symbol;

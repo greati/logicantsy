@@ -64,6 +64,10 @@ namespace ltsy {
             /* Return the image at a given input tuple.
              * */
             int at(const std::vector<int>& input) const;
+
+            inline int arity() const { return _arity; }
+
+            inline int nvalues() const { return _nvalues; }
     };
 
 };
