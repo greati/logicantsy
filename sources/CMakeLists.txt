@@ -30,8 +30,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # libraries
 # --------------------------------------- #
-#add_library(core_utils src/core/utils.cpp)
-#target_include_directories(core_utils PUBLIC include)
+add_library(logicantsy 
+    src/core/utils.cpp 
+    src/core/semantics/truth_tables.cpp
+    )
+target_include_directories(logicantsy PUBLIC include)
 
 # executables
 # --------------------------------------- #
@@ -59,7 +62,7 @@ set(test_sources ${test_sources}
 )
 
 add_executable(maintest ${test_sources})
-target_link_libraries(maintest PRIVATE gtest)
+target_link_libraries(maintest PRIVATE gtest logicantsy)
 target_include_directories(maintest PRIVATE include)
 
 gtest_discover_tests(maintest)

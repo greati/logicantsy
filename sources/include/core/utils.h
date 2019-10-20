@@ -2,16 +2,14 @@
 #define __CORE_UTILS__
 
 #include <array>
+#include <vector>
 
 namespace ltsy::utils {
 
-    template<int NValues, int MArity>
-    std::array<int, MArity> tuple_from_position(int position);
+    std::vector<int> tuple_from_position(int nvalues, int arity, int position);
 
-    template<int NValues, int MArity>
-    int position_from_tuple(const std::array<int, MArity>& tuple);
+    int position_from_tuple(int nvalues, int arity, const std::vector<int>& tuple);
 
 };
 
-#include "../../src/core/utils.cpp"
 #endif

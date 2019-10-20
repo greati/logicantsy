@@ -5,27 +5,25 @@
 
 namespace ltsy::utils {
 
-    template<int NValues, int MArity>
-    std::array<int, MArity> tuple_from_position(int position) {
-        if (position < 0 or position > int(std::pow(NValues, MArity)))
+    std::vector<int> tuple_from_position(int nvalues, int arity, int position) {
+        if (position < 0 or position > int(std::pow(nvalues, arity)))
             throw std::invalid_argument(ltsy::WRONG_TUPLE_POSITION_EXCEPTION);
-        auto i = MArity - 1;
-        std::array<int, MArity> tuple;
+        auto i = arity - 1;
+        std::vector<int> tuple (arity, 0);
         while (i >= 0) {
-            auto power = int(std::pow(NValues, i));
-            tuple[MArity - i - 1] = position / power;
+            auto power = int(std::pow(nvalues, i));
+            tuple[arity - i - 1] = position / power;
             position %= power;
             i -= 1;
         }
         return tuple;
     }
 
-    template<int NValues, int MArity>
-    int position_from_tuple(const std::array<int, MArity>& tuple) {
+    int position_from_tuple(int nvalues, int arity, const std::vector<int>& tuple) {
         int i = 0;
         int position = 0;
-        while (i < MArity) {
-            auto power = int(std::pow(NValues, MArity - i - 1));
+        while (i < arity) {
+            auto power = int(std::pow(nvalues, arity - i - 1));
             position += tuple[i] * power;
             ++i;
         }

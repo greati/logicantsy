@@ -2,6 +2,7 @@
 #define __TRUTH_TABLES__
 
 #include <cmath>
+#include <vector>
 
 namespace ltsy {
 
@@ -16,34 +17,45 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
-    template<int NValues, int Arity>
     class TruthTable {
         
         private:
 
-            static const int _number_of_lines = int(std::pow(NValues, Arity));
-            std::array<int, _number_of_lines> _images;
+            int _nvalues;
+            int _number_of_rows;
+            int _arity = -1;
+            std::vector<int> _images;
 
-            using InputTuple = std::array<int, Arity>;
-            using TableRow = std::pair<InputTuple, int>;
+            using TruthTableRow = std::pair<std::vector<int>, int>;
+
+            static constexpr auto compute_number_of_rows = [](int nvalues, int arity) { return int(std::pow(nvalues, arity)); };
 
         public:
+
+            TruthTable(int _nvalues, int _arity) : 
+                _nvalues {_nvalues},
+                _arity {_arity},
+                _number_of_rows { this->compute_number_of_rows(_nvalues, _arity) },
+                _images {std::vector<int>(_number_of_rows, 0)}
+                {/* empty */}
 
             /**
              * Build truth table according to its lexicographic
              * position.
              * */
-            TruthTable(int i);
+            TruthTable(int _nvalues, int _arity, int i);
 
             /**
              * Build truth table giving its images array.
              * */
-            TruthTable(const decltype(_images)& _images) : _images {_images} { /* empty */ } 
+            TruthTable(int _nvalues, int _arity, const decltype(_images)& _images) : 
+                TruthTable {_nvalues, _arity}
+                { this->_images = _images; } 
 
             /**
              * Build a truth table from its rows.
              * */
-            TruthTable(const std::initializer_list<TableRow>& rows);
+            TruthTable(int nvalues, const std::initializer_list<TruthTableRow>& rows);
 
             /* Gives the image at the given position.
              * */
@@ -51,11 +63,9 @@ namespace ltsy {
 
             /* Return the image at a given input tuple.
              * */
-            int at(const std::array<int, Arity>& input) const;
+            int at(const std::vector<int>& input) const;
     };
 
 };
-
-#include "../../../src/core/semantics/truth_tables.cpp"
 
 #endif
