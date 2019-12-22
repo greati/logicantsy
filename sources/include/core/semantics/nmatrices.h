@@ -16,7 +16,10 @@ namespace ltsy {
         public:
             TruthInterp (const decltype(_connective_ptr)& _connective_ptr, int _max_truth_value = 2)
                 : _connective_ptr {_connective_ptr}, _max_truth_value {_max_truth_value} {/*empty*/}
+
             inline const decltype(_connective_ptr)& connective_ptr() const { return _connective_ptr; }
+
+            virtual int at(const std::vector<int>& args) const = 0;
     };
 
     /**
@@ -29,6 +32,10 @@ namespace ltsy {
             ConstantTruthInterp (int _value) : TruthInterp {_connective_ptr}, _value {_value} {
                 if (_value < 0 or _value >= this->_max_truth_value)
                     throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
+            }
+
+            inline int at(const std::vector<int>& args) const override {
+                return _value;
             }
     };
 
@@ -54,6 +61,10 @@ namespace ltsy {
                 if (_truth_table_ptr->nvalues() != this->_max_truth_value)
                     throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
             }
+
+            inline int at(const std::vector<int>& args) const override {
+                return _truth_table_ptr->at(args);
+            }
     };
 
     class SignatureTruthInterp {
@@ -76,6 +87,11 @@ namespace ltsy {
                 } catch (ConnectiveNotPresentException e) {
                     throw; 
                 }
+            }
+
+            const std::shared_ptr<TruthInterp>& get_interpretation(const Symbol& symbol) const {
+                //TODO check
+                return this->_truth_interps.at(symbol);
             }
     };
 
@@ -100,6 +116,10 @@ namespace ltsy {
             }
 
             inline int nvalues() const { return _nvalues; }
+
+            inline const decltype(_interpretation)& interpretation() const {
+                return _interpretation;
+            }
     };
 
     class NMatrixValuation {
@@ -124,8 +144,12 @@ namespace ltsy {
                         throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
                 } 
             }
+
+            inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
+                return _nmatrix_ptr;
+            }
             
-            int operator()(const Prop& p) {
+            inline int operator()(const Prop& p) {
                 //TODO check
                 return _valuation_map[p];
             }
@@ -134,15 +158,28 @@ namespace ltsy {
     class NMatrixEvaluator : public FormulaVisitor<int> {
         private:
             std::shared_ptr<NMatrixValuation> _nmatrix_valuation_ptr;
+
         public:
+
             int visit_prop(Prop* prop) override {
                 if (prop != nullptr) {
                     return (*_nmatrix_valuation_ptr)(*prop);
                 }
             }
+
             int visit_compound(Compound* compound) override {
                 if (compound != nullptr) {
-                    for (auto& comp : compound->components()) {}
+                    auto connective = compound->connective();
+                    auto conn_interp = 
+                        _nmatrix_valuation_ptr->nmatrix_ptr()->interpretation()
+                            ->get_interpretation(connective->symbol());
+                    auto components = compound->components();
+                    std::vector<int> args;
+                    std::transform(components.begin(), components.end(), args.begin(),
+                            [&](std::shared_ptr<Formula> fmla) {
+                               return fmla->accept(*this); 
+                            });
+                    return conn_interp->at(args);
                 }
             }
     };

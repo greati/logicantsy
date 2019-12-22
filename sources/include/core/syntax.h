@@ -78,8 +78,6 @@ namespace ltsy {
     
     };
 
-    class Formula {};
-
     class Compound;
     class Prop;
  
@@ -88,6 +86,11 @@ namespace ltsy {
         public:
             virtual ReturnT visit_prop(Prop* prop) = 0;
             virtual ReturnT visit_compound(Compound* compound) = 0;
+    };
+
+    class Formula {
+        public:
+            virtual int accept(FormulaVisitor<int>& visitor) = 0;
     };
 
     class Prop : public Formula {
@@ -102,9 +105,8 @@ namespace ltsy {
                 return _symbol < p1._symbol;
             }
 
-            template<typename ReturnT>
-            ReturnT accept(FormulaVisitor<ReturnT>& visitor) {
-                visitor.visit_prop(this);
+            inline int accept(FormulaVisitor<int>& visitor) {
+                return visitor.visit_prop(this);
             }
     };
 
@@ -123,13 +125,16 @@ namespace ltsy {
                 }
             }
 
+            const decltype(_connective)& connective() const {
+                return _connective;
+            }
+
             const decltype(_components)& components() const {
                 return _components;
             }
 
-            template<typename ReturnT>
-            ReturnT accept(FormulaVisitor<ReturnT>& visitor) {
-                visitor.visit_compound(this);
+            inline int accept(FormulaVisitor<int>& visitor) {
+                return visitor.visit_compound(this);
             }
     };
 
