@@ -9,7 +9,8 @@
 namespace ltsy {
     
     /**
-     * Represents a connective.
+     * Represents a connective, with a symbol
+     * and an arity.
      *
      * @author Vitor Greati
      * */
@@ -81,6 +82,11 @@ namespace ltsy {
     class Compound;
     class Prop;
  
+    /**
+     * A visitor for the formula structure.
+     *
+     * @author Vitor Greati
+     * */
     template<typename ReturnT>
     class FormulaVisitor {
         public:
@@ -88,11 +94,24 @@ namespace ltsy {
             virtual ReturnT visit_compound(Compound* compound) = 0;
     };
 
+
+
+    /**
+     * Represents a general formula.
+     *
+     * @author Vitor Greati
+     * */
     class Formula {
         public:
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
+            virtual void accept(FormulaVisitor<void>& visitor) = 0;
     };
 
+    /**
+     * Represents a propositional symbol.
+     *
+     * @author Vitor Greati
+     * */
     class Prop : public Formula {
         private:
             Symbol _symbol;
@@ -108,9 +127,18 @@ namespace ltsy {
             inline int accept(FormulaVisitor<int>& visitor) {
                 return visitor.visit_prop(this);
             }
+
+            inline void accept(FormulaVisitor<void>& visitor) {
+                visitor.visit_prop(this);
+            }
     };
 
 
+    /**
+     * Represents a compound formula.
+     *
+     * @author Vitor Greati
+     * */
     class Compound : public Formula {
         private:
             std::shared_ptr<Connective> _connective;
@@ -136,9 +164,31 @@ namespace ltsy {
             inline int accept(FormulaVisitor<int>& visitor) {
                 return visitor.visit_compound(this);
             }
+            inline void accept(FormulaVisitor<void>& visitor) {
+                visitor.visit_compound(this);
+            }
     };
 
+    /**
+     * A visitor to print a formula.
+     *
+     * @author Vitor Greati
+     * */
+    class FormulaPrinter : public FormulaVisitor<void> {
+        public:
+            virtual void visit_prop(Prop* prop) override {
+                std::cout << " " << prop->symbol() << " ";
+            }
+            virtual void visit_compound(Compound* compound) override {
+                std::cout << "(" << compound->connective()->symbol() << "(";
+                auto components = compound->components();
+                std::for_each(components.begin(), components.end(),
+                        [&](std::shared_ptr<Formula> fmla) {
+                           return fmla->accept(*this); 
+                        });
+                std::cout <<"))";
+            }
+    };
 
 }
-
 #endif

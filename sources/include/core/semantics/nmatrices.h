@@ -67,6 +67,11 @@ namespace ltsy {
             }
     };
 
+    /**
+     * Holds the truth interpretation of a whole signature.
+     *
+     * @author Vitor Greati
+     * */
     class SignatureTruthInterp {
         private:
             std::shared_ptr<Signature> _signature;
@@ -96,16 +101,18 @@ namespace ltsy {
     };
 
 
+    /**
+     * Represents an NMatrix.
+     *
+     * @author Vitor Greati
+     * */
     class NMatrix {
         
         private:
 
             int _nvalues;
-
             int _dvalues;
-
             std::shared_ptr<Signature> _signature;
-
             std::shared_ptr<SignatureTruthInterp> _interpretation;
 
         public:
@@ -122,6 +129,12 @@ namespace ltsy {
             }
     };
 
+    /**
+     * A valuation over an NMatrix, determined
+     * by assignments to each propositional variable.
+     *
+     * @author Vitor Greati
+     * */
     class NMatrixValuation {
         private:
 
@@ -155,6 +168,13 @@ namespace ltsy {
             }
     };
 
+    /* Based on a valuation, visit a formula to
+     * determine its truth value (it is the 
+     * unique homomorphic extension of the 
+     * given valuation).
+     *
+     * @author Vitor Greati
+     * */
     class NMatrixEvaluator : public FormulaVisitor<int> {
         private:
             std::shared_ptr<NMatrixValuation> _nmatrix_valuation_ptr;
