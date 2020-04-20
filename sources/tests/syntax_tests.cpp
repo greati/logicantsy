@@ -25,4 +25,20 @@ namespace {
         f.accept(printer);
     }
 
+    TEST(Signature, Specification) {
+        ltsy::Signature cl_sig {
+            {"&", 2},
+            {"|", 2},
+            {"->", 2},
+            {"~", 1},
+            {"1", 0},
+            {"0", 0},
+        }; 
+        ASSERT_EQ(cl_sig["~"].arity(), 1);
+        ASSERT_EQ(cl_sig["|"].arity(), 2);
+        ASSERT_EQ(cl_sig(2)["&"].arity(), 2);
+        ASSERT_EQ(cl_sig(2)["|"].arity(), 2);
+        ASSERT_EQ(cl_sig(2)["->"].arity(), 2);
+    }
+
 };

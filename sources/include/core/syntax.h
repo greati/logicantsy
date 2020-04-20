@@ -28,6 +28,10 @@ namespace ltsy {
             
             inline Symbol symbol() const { return _symbol; }
             inline Arity arity() const { return _arity; }
+
+            bool operator==(const Connective& other) const {
+                return (_symbol == other._symbol) and (_arity == other._arity);
+            }
     };
 
     /**
@@ -43,6 +47,7 @@ namespace ltsy {
 
         public:
 
+            Signature() {}
             Signature(const std::initializer_list<Connective> connectives) {
                 for (const auto& c : connectives)
                     this->add(c);
@@ -60,13 +65,13 @@ namespace ltsy {
                 _signature.insert(signature._signature.begin(), signature._signature.end());
             }
 
-            std::map<Symbol, Connective> operator()(Arity arity) const {
-                std::map<Symbol, Connective> connectives_by_arity;
+            Signature operator()(Arity arity) const {
+                Signature connectives_by_arity;
                 if (arity < 0)
                    throw std::invalid_argument(NEGATIVE_ARITY_EXCEPTION);
                 for (auto& [key,value] : _signature)
                     if (value.arity() == arity)
-                        connectives_by_arity.insert({value.symbol(), value});
+                        connectives_by_arity.add(value);
                 return connectives_by_arity;
             }
 
@@ -76,7 +81,7 @@ namespace ltsy {
                     throw ltsy::ConnectiveNotPresentException(symbol);
                 return it->second;
             }
-    
+
     };
 
     class Compound;
@@ -175,6 +180,8 @@ namespace ltsy {
      * @author Vitor Greati
      * */
     class FormulaPrinter : public FormulaVisitor<void> {
+        private:
+            std::string str = "";
         public:
             virtual void visit_prop(Prop* prop) override {
                 std::cout << " " << prop->symbol() << " ";
