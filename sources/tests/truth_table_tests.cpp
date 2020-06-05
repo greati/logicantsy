@@ -3,6 +3,17 @@
 
 namespace {
 
+    TEST(TruthTable, NondeterministicTT) {
+        auto tt_nondet = ltsy::TruthTable<std::unordered_set<int>> {2,
+            {
+                {{0, 0},{0, 1}},
+                {{0, 1},{0, 1}},
+                {{1, 0},{0, 1}},
+                {{1, 1},{0, 1}},
+            }
+        };
+    }
+
     TEST(TruthTable, ConstructAndAt) {
        auto tt_or = ltsy::TruthTable(2, 
                {

@@ -29,7 +29,7 @@ namespace ltsy {
         private:
             int _value;
         public:
-            ConstantTruthInterp (int _value) : TruthInterp {_connective_ptr}, _value {_value} {
+            ConstantTruthInterp (const decltype(_connective_ptr)& _connective_ptr, int _max_truth_value, int _value) : TruthInterp {_connective_ptr, _max_truth_value}, _value {_value} {
                 if (_value < 0 or _value >= this->_max_truth_value)
                     throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
             }
@@ -46,9 +46,10 @@ namespace ltsy {
      * Main purpose is to guarantee that this relation is
      * well set up.
      * */
+    template<typename CellType = int>
     class ConnectiveTruthInterp : public TruthInterp {
         private:
-            std::shared_ptr<TruthTable> _truth_table_ptr;
+            std::shared_ptr<TruthTable<CellType>> _truth_table_ptr;
         public:
             ConnectiveTruthInterp(
                     const decltype(_connective_ptr)& _connective_ptr,
@@ -65,6 +66,7 @@ namespace ltsy {
             inline int at(const std::vector<int>& args) const override {
                 return _truth_table_ptr->at(args);
             }
+
     };
 
     /**
@@ -80,10 +82,16 @@ namespace ltsy {
             SignatureTruthInterp(const decltype(_signature)& _signature)
                 : _signature {_signature} {/* empty */}
 
+            SignatureTruthInterp(const decltype(_signature)& _signature, std::initializer_list<std::shared_ptr<TruthInterp>> _interps)
+                : _signature {_signature} {
+                for (auto& ti : _interps)
+                    this->try_interpret(ti);
+            }
+
             void try_interpret(const std::shared_ptr<TruthInterp>& truth_interp) {
                 auto connective_symbol = truth_interp->connective_ptr()->symbol();
                 try {
-                    auto connective_in_sig_symbol = (*_signature)[connective_symbol].symbol();
+                    auto connective_in_sig_symbol = (*_signature)[connective_symbol]->symbol();
                     auto it = _truth_interps.find(connective_in_sig_symbol);
                     if (it == _truth_interps.end())
                         _truth_interps.insert({connective_in_sig_symbol, truth_interp});
@@ -102,7 +110,7 @@ namespace ltsy {
 
 
     /**
-     * Represents an NMatrix.
+     * Represents an logical matrix.
      *
      * @author Vitor Greati
      * */

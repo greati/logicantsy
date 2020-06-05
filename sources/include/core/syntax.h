@@ -43,18 +43,23 @@ namespace ltsy {
 
         private:
 
-            std::map<Symbol, Connective> _signature;
+            std::map<Symbol, std::shared_ptr<Connective>> _signature;
 
         public:
 
             Signature() {}
-            Signature(const std::initializer_list<Connective> connectives) {
+            Signature(const std::initializer_list<std::shared_ptr<Connective>> connectives) {
                 for (const auto& c : connectives)
                     this->add(c);
             }
 
-            void add(const Connective& connective) {
-                _signature.insert({connective.symbol(), connective});
+            Signature(const std::initializer_list<Connective> connectives) {
+                for (const auto& c : connectives)
+                    this->add(std::make_shared<Connective>(c.symbol(), c.arity()));
+            }
+
+            void add(const std::shared_ptr<Connective>& connective) {
+                _signature.insert({connective->symbol(), connective});
             }
 
             /**
@@ -70,12 +75,12 @@ namespace ltsy {
                 if (arity < 0)
                    throw std::invalid_argument(NEGATIVE_ARITY_EXCEPTION);
                 for (auto& [key,value] : _signature)
-                    if (value.arity() == arity)
+                    if (value->arity() == arity)
                         connectives_by_arity.add(value);
                 return connectives_by_arity;
             }
 
-            Connective operator[](const Symbol& symbol) {
+            std::shared_ptr<Connective> operator[](const Symbol& symbol) {
                 auto it = _signature.find(symbol);
                 if (it == _signature.end())
                     throw ltsy::ConnectiveNotPresentException(symbol);

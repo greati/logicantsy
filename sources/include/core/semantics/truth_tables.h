@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <vector>
+#include <unordered_set>
 
 namespace ltsy {
 
@@ -17,6 +18,7 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
+    template<typename CellType = int>
     class TruthTable {
         
         private:
@@ -24,9 +26,9 @@ namespace ltsy {
             int _nvalues;
             int _number_of_rows;
             int _arity = -1;
-            std::vector<int> _images;
+            std::vector<CellType> _images;
 
-            using TruthTableRow = std::pair<std::vector<int>, int>;
+            using TruthTableRow = std::pair<std::vector<int>, CellType>;
 
             static constexpr auto compute_number_of_rows = [](int nvalues, int arity) { return int(std::pow(nvalues, arity)); };
 
@@ -36,14 +38,14 @@ namespace ltsy {
                 _nvalues {_nvalues},
                 _arity {_arity},
                 _number_of_rows { this->compute_number_of_rows(_nvalues, _arity) },
-                _images {std::vector<int>(_number_of_rows, 0)}
+                _images {std::vector<CellType>(_number_of_rows)}
                 {/* empty */}
 
             /**
              * Build truth table according to its lexicographic
              * position.
              * */
-            TruthTable(int _nvalues, int _arity, int i);
+            //TruthTable(int _nvalues, int _arity, int i);
 
             /**
              * Build truth table giving its images array.
@@ -59,16 +61,19 @@ namespace ltsy {
 
             /* Gives the image at the given position.
              * */
-            inline int at(int i) const { return _images[i]; }
+            inline CellType at(int i) const { return _images[i]; }
 
             /* Return the image at a given input tuple.
              * */
-            int at(const std::vector<int>& input) const;
+            CellType at(const std::vector<int>& input) const;
 
             inline int arity() const { return _arity; }
 
             inline int nvalues() const { return _nvalues; }
     };
+
+    template class TruthTable<int>;
+    template class TruthTable<std::unordered_set<int>>;
 
 };
 
