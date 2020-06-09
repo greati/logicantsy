@@ -5,6 +5,7 @@
 #include <memory>
 #include "core/exception.h"
 #include "core/common.h"
+#include <unordered_set>
 
 namespace ltsy {
     
@@ -85,6 +86,10 @@ namespace ltsy {
                 if (it == _signature.end())
                     throw ltsy::ConnectiveNotPresentException(symbol);
                 return it->second;
+            }
+
+            bool operator==(const Signature& other) const {
+                return other._signature == this->_signature;
             }
 
     };
@@ -176,6 +181,51 @@ namespace ltsy {
             }
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_compound(this);
+            }
+    };
+
+    /**
+     * A visitor that collects all variables in a formula.
+     */
+    class VariableCollector : public FormulaVisitor<void> {
+        private:
+            std::unordered_set<Prop*> collected_variables;
+
+        public:
+            virtual void visit_prop(Prop* prop) override {
+                this->collected_variables.insert(prop);
+            }
+            virtual void visit_compound(Compound* compound) override {
+                auto components = compound->components();
+                std::for_each(components.begin(), components.end(),
+                        [&](std::shared_ptr<Formula> fmla) {
+                           return fmla->accept(*this); 
+                        });
+            }
+            virtual std::unordered_set<Prop*> get_collected_variables() {
+                return this->collected_variables;
+            }
+    };
+
+    /**
+     * A visitor that collects the least signature of a given formula.
+     */
+    class SignatureCollector : public FormulaVisitor<void> {
+        private:
+            Signature collected_signature;
+
+        public:
+            virtual void visit_prop(Prop* prop) override {/* empty */}
+            virtual void visit_compound(Compound* compound) override {
+                collected_signature.add(compound->connective());
+                auto components = compound->components();
+                std::for_each(components.begin(), components.end(),
+                        [&](std::shared_ptr<Formula> fmla) {
+                           return fmla->accept(*this); 
+                        });
+            }
+            virtual Signature get_collected_signature() {
+                return this->collected_signature;
             }
     };
 
