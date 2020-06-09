@@ -236,20 +236,22 @@ namespace ltsy {
      * */
     class FormulaPrinter : public FormulaVisitor<void> {
         private:
-            std::string str = "";
+            std::stringstream buffer;
         public:
             virtual void visit_prop(Prop* prop) override {
-                std::cout << " " << prop->symbol() << " ";
+                buffer << prop->symbol();
             }
             virtual void visit_compound(Compound* compound) override {
-                std::cout << "(" << compound->connective()->symbol() << "(";
+                buffer << "(" << compound->connective()->symbol() << "(";
                 auto components = compound->components();
-                std::for_each(components.begin(), components.end(),
-                        [&](std::shared_ptr<Formula> fmla) {
-                           return fmla->accept(*this); 
-                        });
-                std::cout <<"))";
+                for (auto it = components.cbegin(); it != components.cend(); ++it) {
+                    (*it)->accept(*this);
+                    if (std::next(it) != components.cend())
+                        buffer << ",";
+                }
+                buffer <<"))";
             }
+            std::string get_string() { return buffer.str(); }
     };
 
 }
