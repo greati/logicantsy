@@ -9,6 +9,10 @@ namespace {
             ASSERT_EQ(t[0], 0); ASSERT_EQ(t[1], 1); ASSERT_EQ(t[2], 2);
         }
         {
+            auto t = ltsy::utils::tuple_from_position(2, 3, 7);
+            ASSERT_EQ(t[0], 1); ASSERT_EQ(t[1], 1); ASSERT_EQ(t[2], 1);
+        }
+        {
             auto p = ltsy::utils::position_from_tuple(3, 3, {0, 1, 2});
             ASSERT_EQ(p, 5);
         }

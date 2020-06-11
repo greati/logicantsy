@@ -3,6 +3,7 @@
 
 #include "core/syntax.h"
 #include "core/semantics/truth_tables.h"
+#include <set>
 
 namespace ltsy {
 
@@ -12,12 +13,11 @@ namespace ltsy {
     class TruthInterp {
         protected:
             std::shared_ptr<Connective> _connective_ptr;
-            int _max_truth_value;
         public:
-            TruthInterp (const decltype(_connective_ptr)& _connective_ptr, int _max_truth_value = 2)
-                : _connective_ptr {_connective_ptr}, _max_truth_value {_max_truth_value} {/*empty*/}
+            TruthInterp (decltype(_connective_ptr) _connective_ptr)
+                : _connective_ptr {_connective_ptr}{/*empty*/}
 
-            inline const decltype(_connective_ptr)& connective_ptr() const { return _connective_ptr; }
+            inline decltype(_connective_ptr) connective_ptr() const { return _connective_ptr; }
 
             virtual int at(const std::vector<int>& args) const = 0;
     };
@@ -25,13 +25,13 @@ namespace ltsy {
     /**
      * Holds an interpretation of a constant.
      * */
+    template<typename CellType = int>
     class ConstantTruthInterp : public TruthInterp {
         private:
-            int _value;
+            CellType _value;
         public:
-            ConstantTruthInterp (const decltype(_connective_ptr)& _connective_ptr, int _max_truth_value, int _value) : TruthInterp {_connective_ptr, _max_truth_value}, _value {_value} {
-                if (_value < 0 or _value >= this->_max_truth_value)
-                    throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
+            ConstantTruthInterp (decltype(_connective_ptr) _connective_ptr, CellType _value) 
+                : TruthInterp {_connective_ptr}, _value {_value} {
             }
 
             inline int at(const std::vector<int>& args) const override {
@@ -52,15 +52,13 @@ namespace ltsy {
             std::shared_ptr<TruthTable<CellType>> _truth_table_ptr;
         public:
             ConnectiveTruthInterp(
-                    const decltype(_connective_ptr)& _connective_ptr,
-                    const decltype(_truth_table_ptr)& _truth_table_ptr) 
+                    decltype(_connective_ptr) _connective_ptr,
+                    decltype(_truth_table_ptr) _truth_table_ptr) 
             : TruthInterp {_connective_ptr}, _truth_table_ptr {_truth_table_ptr} {
                 if (_connective_ptr == nullptr or _truth_table_ptr == nullptr)
                     throw std::invalid_argument(NULL_IN_CONNECTIVE_INTERP_EXCEPTION);
                 if (_connective_ptr->arity() != _truth_table_ptr->arity())
                     throw std::invalid_argument(INVALID_CONNECTIVE_INTERP_EXCEPTION);
-                if (_truth_table_ptr->nvalues() != this->_max_truth_value)
-                    throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
             }
 
             inline int at(const std::vector<int>& args) const override {
@@ -79,16 +77,17 @@ namespace ltsy {
             std::shared_ptr<Signature> _signature;
             std::map<Symbol, std::shared_ptr<TruthInterp>> _truth_interps;
         public:
-            SignatureTruthInterp(const decltype(_signature)& _signature)
+            SignatureTruthInterp(decltype(_signature) _signature)
                 : _signature {_signature} {/* empty */}
 
-            SignatureTruthInterp(const decltype(_signature)& _signature, std::initializer_list<std::shared_ptr<TruthInterp>> _interps)
+            SignatureTruthInterp(decltype(_signature) _signature, 
+                    std::initializer_list<std::shared_ptr<TruthInterp>> _interps)
                 : _signature {_signature} {
                 for (auto& ti : _interps)
                     this->try_interpret(ti);
             }
 
-            void try_interpret(const std::shared_ptr<TruthInterp>& truth_interp) {
+            void try_interpret(std::shared_ptr<TruthInterp> truth_interp) {
                 auto connective_symbol = truth_interp->connective_ptr()->symbol();
                 try {
                     auto connective_in_sig_symbol = (*_signature)[connective_symbol]->symbol();
@@ -102,8 +101,7 @@ namespace ltsy {
                 }
             }
 
-            const std::shared_ptr<TruthInterp>& get_interpretation(const Symbol& symbol) const {
-                //TODO check
+            std::shared_ptr<TruthInterp> get_interpretation(const Symbol& symbol) const {
                 return this->_truth_interps.at(symbol);
             }
     };
@@ -119,20 +117,23 @@ namespace ltsy {
         private:
 
             int _nvalues;
-            int _dvalues;
+            std::set<int> _dvalues;
             std::shared_ptr<Signature> _signature;
             std::shared_ptr<SignatureTruthInterp> _interpretation;
 
         public:
 
-            NMatrix(int _nvalues, int _dvalues, const decltype(_signature)& _signature,
-                    const decltype(_interpretation)& _interpretation)
-                : _nvalues {_nvalues}, _dvalues {_dvalues}, _signature {_signature}, _interpretation {_interpretation} {
+            NMatrix(int _nvalues, decltype(_dvalues), decltype(_signature) _signature,
+                    decltype(_interpretation) _interpretation)
+                : _nvalues {_nvalues}, _dvalues {_dvalues}, 
+                _signature {_signature}, _interpretation {_interpretation} {
             }
 
             inline int nvalues() const { return _nvalues; }
 
-            inline const decltype(_interpretation)& interpretation() const {
+            inline decltype(_dvalues) dvalues() const { return _dvalues; }
+
+            inline decltype(_interpretation) interpretation() const {
                 return _interpretation;
             }
     };
@@ -151,19 +152,31 @@ namespace ltsy {
             
         public:
             
-            NMatrixValuation(const decltype(_nmatrix_ptr)& _nmatrix_ptr,
-                    const std::vector<std::pair<Prop, int>> mappings)
-                : _nmatrix_ptr {_nmatrix_ptr} {
+            NMatrixValuation(decltype(_nmatrix_ptr) nmatrix_ptr,
+                    const std::vector<std::pair<Prop, int>>& mappings)
+                {
+
+                std::atomic_store(&(this->_nmatrix_ptr), std::move(nmatrix_ptr));
 
                 int nvalues = _nmatrix_ptr->nvalues();
                
                 for (auto& mapping : mappings) {
                     auto [p, v] = mapping;
-                    if (v >= 0 and v < nvalues)
+                    if (v >= 0 and v < nvalues) {
                         _valuation_map.insert(mapping);
-                    else
+                    } else {
+                        std::cout << v;
                         throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
+                    }
                 } 
+            }
+
+            std::stringstream print() {
+                std::stringstream ss;
+                for (auto& [k, v] : _valuation_map) {
+                    ss << k.symbol() << " -> " << v << std::endl;
+                }
+                return ss;
             }
 
             inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
@@ -171,7 +184,6 @@ namespace ltsy {
             }
             
             inline int operator()(const Prop& p) {
-                //TODO check
                 return _valuation_map[p];
             }
     };
@@ -189,10 +201,13 @@ namespace ltsy {
 
         public:
 
+            NMatrixEvaluator(decltype(_nmatrix_valuation_ptr) nmatrix_valuation_ptr) :
+                _nmatrix_valuation_ptr {nmatrix_valuation_ptr} {/* empty */}
+
             int visit_prop(Prop* prop) override {
                 if (prop != nullptr) {
                     return (*_nmatrix_valuation_ptr)(*prop);
-                }
+                } else throw std::logic_error("proposition points to null");
             }
 
             int visit_compound(Compound* compound) override {
@@ -203,12 +218,47 @@ namespace ltsy {
                             ->get_interpretation(connective->symbol());
                     auto components = compound->components();
                     std::vector<int> args;
-                    std::transform(components.begin(), components.end(), args.begin(),
-                            [&](std::shared_ptr<Formula> fmla) {
-                               return fmla->accept(*this); 
-                            });
+                    for (auto component : components) {
+                        return component->accept(*this);
+                    }
                     return conn_interp->at(args);
-                }
+                } else throw std::logic_error("compound points to null");
+            }
+    };
+
+    /**
+     * Generator of NMatrix valuations.
+     * */
+    class NMatrixValuationGenerator {
+        
+        private:
+            std::shared_ptr<NMatrix> _nmatrix; 
+            std::vector<Prop> _props;
+            int _current_index = 0;
+            int _total_valuations;
+
+        public:
+
+            NMatrixValuationGenerator(decltype(_nmatrix) nmatrix, decltype(_props) props) : _props {props} {
+                std::atomic_store(&_nmatrix, nmatrix);
+                auto number_props = _props.size();
+                auto nvalues = _nmatrix->nvalues();
+                _total_valuations = std::pow(nvalues, number_props); 
+            }
+
+            bool has_next() {
+                return _current_index < _total_valuations;
+            }
+
+            NMatrixValuation next() {
+                if (not has_next())
+                    throw std::logic_error("no valuations to generate");
+                auto images = utils::tuple_from_position(_nmatrix->nvalues(), _props.size(), _current_index);
+                std::vector<std::pair<Prop, int>> val_map;
+                for (int i = 0; i < _props.size(); ++i)
+                    val_map.push_back({_props[i], images[i]});
+                ++_current_index;
+                return NMatrixValuation(std::atomic_load(&_nmatrix), val_map); 
             }
     };
 
