@@ -10,6 +10,10 @@ namespace ltsy::utils {
 
     int position_from_tuple(int nvalues, int arity, const std::vector<int>& tuple);
 
+    int compute_number_of_functions(int nvalues, int arity);
+
+    int compute_number_of_rows(int nvalues, int arity);
+
 };
 
 #endif

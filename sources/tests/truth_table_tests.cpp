@@ -30,4 +30,13 @@ namespace {
        ASSERT_EQ(tt_or.at({1, 0}),1);
     }
 
+    TEST(TruthTable, TruthTableGeneration) {
+        ltsy::TruthTableGenerator ttgen {2, 2};
+        while (ttgen.has_next()) {
+            auto tt = ttgen.next();
+            auto ss = tt.print( [](std::stringstream& ss, const int& t){ ss << t;} );
+            std::cout << ss.str() << std::endl << std::endl;
+        }
+    }
+
 };

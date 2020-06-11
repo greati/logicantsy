@@ -4,6 +4,9 @@
 #include <cmath>
 #include <vector>
 #include <unordered_set>
+#include "core/utils.h"
+#include <functional>
+#include <stdexcept>
 
 namespace ltsy {
 
@@ -70,10 +73,46 @@ namespace ltsy {
             inline int arity() const { return _arity; }
 
             inline int nvalues() const { return _nvalues; }
+
+            std::stringstream print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const;
     };
 
     template class TruthTable<int>;
     template class TruthTable<std::unordered_set<int>>;
+
+        
+    class TruthTableGenerator {
+        
+        private:
+            int _current_index = 0;
+            int _nvalues;
+            int _arity;
+            int _quantity;
+            int _number_of_rows;
+
+        public:
+
+            TruthTableGenerator(int nvalues, int arity) 
+                : _nvalues {nvalues}, _arity {arity} {
+                _number_of_rows = utils::compute_number_of_rows(nvalues, arity);
+                _quantity = utils::compute_number_of_functions(nvalues, arity);
+            }
+
+            TruthTable<int> next() {
+                if (has_next()) {
+                    auto images = utils::tuple_from_position(_nvalues, _number_of_rows, _current_index);
+                    ++_current_index;
+                    return TruthTable<int> {_nvalues, _arity, images};
+                } else {
+                    throw std::logic_error("no truth table available to generate");
+                }
+            }
+
+            bool has_next() {
+                return _current_index < _quantity;
+            }
+
+    };
 
 };
 
