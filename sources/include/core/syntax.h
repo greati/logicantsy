@@ -2,6 +2,7 @@
 #define __SYNTAX__
 
 #include <string>
+#include <atomic>
 #include <memory>
 #include "core/exception.h"
 #include "core/common.h"
@@ -49,17 +50,17 @@ namespace ltsy {
         public:
 
             Signature() {}
-            Signature(const std::initializer_list<std::shared_ptr<Connective>> connectives) {
+            Signature(std::initializer_list<std::shared_ptr<Connective>> connectives) {
                 for (const auto& c : connectives)
-                    this->add(c);
+                    this->add(std::atomic_load(&c));
             }
 
-            Signature(const std::initializer_list<Connective> connectives) {
+            Signature(std::initializer_list<Connective> connectives) {
                 for (const auto& c : connectives)
                     this->add(std::make_shared<Connective>(c.symbol(), c.arity()));
             }
 
-            void add(const std::shared_ptr<Connective>& connective) {
+            void add(std::shared_ptr<Connective> connective) {
                 _signature.insert({connective->symbol(), connective});
             }
 
@@ -85,7 +86,7 @@ namespace ltsy {
                 auto it = _signature.find(symbol);
                 if (it == _signature.end())
                     throw ltsy::ConnectiveNotPresentException(symbol);
-                return it->second;
+                return std::atomic_load(&it->second);
             }
 
             bool operator==(const Signature& other) const {
@@ -139,6 +140,10 @@ namespace ltsy {
                 return _symbol < p1._symbol;
             }
 
+            bool operator==(const Prop& p2) const {
+                return _symbol == p2._symbol;
+            }
+
             inline int accept(FormulaVisitor<int>& visitor) {
                 return visitor.visit_prop(this);
             }
@@ -159,20 +164,21 @@ namespace ltsy {
             std::shared_ptr<Connective> _connective;
             std::vector<std::shared_ptr<Formula>> _components;
         public:
-            Compound(const decltype(_connective)& _connective, const decltype(_components)& _components) {
+            Compound(decltype(_connective) _connective, const decltype(_components)& _components) {
                 if (_components.size() != _connective->arity())
                     throw std::invalid_argument(WRONG_NUMBER_ARGUMENTS_FMLA_EXCEPTION);
                 else {
-                    this->_connective = _connective;
+                    //this->_connective = _connective;
+                    std::atomic_store(&this->_connective, std::move(_connective));
                     this->_components = _components;
                 }
             }
 
-            const decltype(_connective)& connective() const {
+            decltype(_connective) connective() const {
                 return _connective;
             }
 
-            const decltype(_components)& components() const {
+            decltype(_components) components() const {
                 return _components;
             }
 
