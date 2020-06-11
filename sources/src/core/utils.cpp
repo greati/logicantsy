@@ -29,4 +29,12 @@ namespace ltsy::utils {
         }
         return position;
     }
+
+    int compute_number_of_functions(int nvalues, int arity) {
+        return std::pow(std::pow(arity, nvalues), nvalues); 
+    }
+
+    int compute_number_of_rows(int nvalues, int arity) { 
+        return int(std::pow(nvalues, arity)); 
+    };
 };

@@ -2,14 +2,9 @@
 #include "core/utils.h"
 #include "core/exception.h"
 #include <iostream>
+#include <sstream>
 
 namespace ltsy {
-
-    //template<typename CellType>
-    //TruthTable<CellType>::TruthTable(int nvalues, int arity, int position) : TruthTable {nvalues, arity} {
-        //TODO validate position
-    //    this->_images = utils::tuple_from_position(nvalues, arity, position);
-    //}
 
     template<typename CellType>
     TruthTable<CellType>::TruthTable(int _nvalues, const std::initializer_list<TruthTableRow>& rows) {
@@ -36,5 +31,23 @@ namespace ltsy {
             throw std::invalid_argument(ltsy::WRONG_ARITY_INPUT_EXCEPTION);
         auto position = utils::position_from_tuple(_nvalues, _arity, input);
         return _images[position];
+    }
+
+    template<typename CellType>
+    std::stringstream TruthTable<CellType>::print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const {
+        std::stringstream ss;
+        for (auto i = 0; i < _number_of_rows; ++i) {
+            auto row = utils::tuple_from_position(_nvalues, _arity, i);
+            for (auto it = row.cbegin(); it != row.cend(); it++) {
+                ss << (*it);
+                if (std::next(it) != row.cend())
+                    ss << " ";
+            }
+            ss << " -> ";
+            cell_printer(ss, _images[i]);
+            if (i < _number_of_rows - 1)
+                ss << std::endl;
+        }
+        return ss; 
     }
 };
