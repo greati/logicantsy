@@ -152,19 +152,31 @@ namespace ltsy {
             
         public:
             
-            NMatrixValuation(decltype(_nmatrix_ptr) _nmatrix_ptr,
+            NMatrixValuation(decltype(_nmatrix_ptr) nmatrix_ptr,
                     const std::vector<std::pair<Prop, int>>& mappings)
-                : _nmatrix_ptr {_nmatrix_ptr} {
+                {
+
+                std::atomic_store(&(this->_nmatrix_ptr), std::move(nmatrix_ptr));
 
                 int nvalues = _nmatrix_ptr->nvalues();
                
                 for (auto& mapping : mappings) {
                     auto [p, v] = mapping;
-                    if (v >= 0 and v < nvalues)
+                    if (v >= 0 and v < nvalues) {
                         _valuation_map.insert(mapping);
-                    else
+                    } else {
+                        std::cout << v;
                         throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
+                    }
                 } 
+            }
+
+            std::stringstream print() {
+                std::stringstream ss;
+                for (auto& [k, v] : _valuation_map) {
+                    ss << k.symbol() << " -> " << v << std::endl;
+                }
+                return ss;
             }
 
             inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
@@ -172,7 +184,6 @@ namespace ltsy {
             }
             
             inline int operator()(const Prop& p) {
-                //TODO check
                 return _valuation_map[p];
             }
     };
@@ -212,6 +223,42 @@ namespace ltsy {
                     }
                     return conn_interp->at(args);
                 } else throw std::logic_error("compound points to null");
+            }
+    };
+
+    /**
+     * Generator of NMatrix valuations.
+     * */
+    class NMatrixValuationGenerator {
+        
+        private:
+            std::shared_ptr<NMatrix> _nmatrix; 
+            std::vector<Prop> _props;
+            int _current_index = 0;
+            int _total_valuations;
+
+        public:
+
+            NMatrixValuationGenerator(decltype(_nmatrix) nmatrix, decltype(_props) props) : _props {props} {
+                std::atomic_store(&_nmatrix, nmatrix);
+                auto number_props = _props.size();
+                auto nvalues = _nmatrix->nvalues();
+                _total_valuations = std::pow(nvalues, number_props); 
+            }
+
+            bool has_next() {
+                return _current_index < _total_valuations;
+            }
+
+            NMatrixValuation next() {
+                if (not has_next())
+                    throw std::logic_error("no valuations to generate");
+                auto images = utils::tuple_from_position(_nmatrix->nvalues(), _props.size(), _current_index);
+                std::vector<std::pair<Prop, int>> val_map;
+                for (int i = 0; i < _props.size(); ++i)
+                    val_map.push_back({_props[i], images[i]});
+                ++_current_index;
+                return NMatrixValuation(std::atomic_load(&_nmatrix), val_map); 
             }
     };
 
