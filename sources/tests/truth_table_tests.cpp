@@ -14,6 +14,33 @@ namespace {
         std::cout << det;
     }
 
+    TEST(Determinants, ExtractDetsOr) {
+        auto tt_or = ltsy::TruthTable(2, 
+            {
+                {{0,0},0},
+                {{0,1},1},
+                {{1,0},1},
+                {{1,1},1}
+            });
+        auto dets = tt_or.get_determinants();
+        for (auto& d : dets)
+            std::cout << d << std::endl;
+    }
+
+    TEST(Determinants, NondeterministicTT) {
+        auto tt_nondet = ltsy::TruthTable<std::unordered_set<int>> {2,
+            {
+                {{0, 0},{0, 1}},
+                {{0, 1},{0, 1}},
+                {{1, 0},{0, 1}},
+                {{1, 1},{0, 1}},
+            }
+        };
+        auto dets = tt_nondet.get_determinants();
+        for (auto& d : dets)
+            std::cout << d << std::endl;
+    }
+
     TEST(TruthTable, NondeterministicTT) {
         auto tt_nondet = ltsy::TruthTable<std::unordered_set<int>> {2,
             {
