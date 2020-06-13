@@ -37,4 +37,15 @@ namespace ltsy::utils {
     int compute_number_of_rows(int nvalues, int arity) { 
         return int(std::pow(nvalues, arity)); 
     };
+
+    template<typename T>
+    bool is_subset(const std::unordered_set<T>& s1, const std::unordered_set<T>& s2){
+        if (s1.size() > s2.size())
+            return false;
+        for (auto& e : s1) 
+            if (s2.find(e) == s2.end()) return false;
+        return true;
+    }
+
+    template bool is_subset<int>(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
 };

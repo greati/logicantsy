@@ -1,7 +1,18 @@
 #include "gtest/gtest.h"
+#include "core/common.h"
 #include "core/semantics/truth_tables.h"
 
 namespace {
+
+    TEST(Determinants, InstantiationInt) {
+        ltsy::Determinant<int> det {3, 2, 3, 2};
+        std::cout << det;
+    }
+
+    TEST(Determinants, InstantiationUnordSet) {
+        ltsy::Determinant<std::unordered_set<int>> det {3, 2, 3, {1,2}};
+        std::cout << det;
+    }
 
     TEST(TruthTable, NondeterministicTT) {
         auto tt_nondet = ltsy::TruthTable<std::unordered_set<int>> {2,
