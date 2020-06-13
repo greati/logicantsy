@@ -1,6 +1,7 @@
 #include "core/semantics/truth_tables.h"
 #include "core/utils.h"
 #include "core/exception.h"
+#include "core/common.h"
 #include <iostream>
 #include <sstream>
 
@@ -49,5 +50,23 @@ namespace ltsy {
                 ss << std::endl;
         }
         return ss; 
+    }
+
+    template<>
+    bool Determinant<std::unordered_set<int>>::operator<(const Determinant<std::unordered_set<int>>& other) const {
+        if (_data.first != other._data.first)
+            return _data.first < other._data.first;
+        else {
+           return utils::is_subset<int>(this->_data.second, other._data.second);  
+        }
+        return false;
+    }
+
+    template<typename CellType>
+    bool Determinant<CellType>::operator<(const Determinant<CellType>& other) const {
+        if (_data.first == other._data.first)
+            return _data.second < other._data.second;
+        else
+            return _data.first < other._data.first;
     }
 };
