@@ -31,7 +31,7 @@ namespace ltsy::utils {
     }
 
     int compute_number_of_functions(int nvalues, int arity) {
-        return std::pow(std::pow(arity, nvalues), nvalues); 
+        return std::pow(nvalues, compute_number_of_rows(nvalues, arity)); 
     }
 
     int compute_number_of_rows(int nvalues, int arity) { 

@@ -8,38 +8,6 @@
 namespace ltsy {
 
     /**
-     * Abstracts a truth interpretation of a connective.
-     * */
-    class TruthInterp {
-        protected:
-            std::shared_ptr<Connective> _connective_ptr;
-        public:
-            TruthInterp (decltype(_connective_ptr) _connective_ptr)
-                : _connective_ptr {_connective_ptr}{/*empty*/}
-
-            inline decltype(_connective_ptr) connective_ptr() const { return _connective_ptr; }
-
-            virtual int at(const std::vector<int>& args) const = 0;
-    };
-
-    /**
-     * Holds an interpretation of a constant.
-     * */
-    template<typename CellType = int>
-    class ConstantTruthInterp : public TruthInterp {
-        private:
-            CellType _value;
-        public:
-            ConstantTruthInterp (decltype(_connective_ptr) _connective_ptr, CellType _value) 
-                : TruthInterp {_connective_ptr}, _value {_value} {
-            }
-
-            inline int at(const std::vector<int>& args) const override {
-                return _value;
-            }
-    };
-
-    /**
      * Holds the interpreation relation between a connective
      * and a truth table.
      *
@@ -47,24 +15,70 @@ namespace ltsy {
      * well set up.
      * */
     template<typename CellType = int>
-    class ConnectiveTruthInterp : public TruthInterp {
+    class TruthInterp {
         private:
-            std::shared_ptr<TruthTable<CellType>> _truth_table_ptr;
+            std::shared_ptr<Connective> _connective;
+            std::shared_ptr<TruthTable<CellType>> _truth_table;
         public:
-            ConnectiveTruthInterp(
-                    decltype(_connective_ptr) _connective_ptr,
-                    decltype(_truth_table_ptr) _truth_table_ptr) 
-            : TruthInterp {_connective_ptr}, _truth_table_ptr {_truth_table_ptr} {
-                if (_connective_ptr == nullptr or _truth_table_ptr == nullptr)
+            TruthInterp(
+                    decltype(_connective) connective,
+                    decltype(_truth_table) truth_table) 
+            : _connective {connective}, _truth_table {truth_table} {
+                if (_connective == nullptr or _truth_table == nullptr)
                     throw std::invalid_argument(NULL_IN_CONNECTIVE_INTERP_EXCEPTION);
-                if (_connective_ptr->arity() != _truth_table_ptr->arity())
+                if (_connective->arity() != _truth_table->arity())
                     throw std::invalid_argument(INVALID_CONNECTIVE_INTERP_EXCEPTION);
             }
 
-            inline int at(const std::vector<int>& args) const override {
-                return _truth_table_ptr->at(args);
+            inline decltype(_connective) connective() const { return _connective; }
+
+            inline int at(const std::vector<int>& args) const {
+                return _truth_table->at(args);
             }
 
+            friend std::ostream& operator<<(std::ostream& os, const TruthInterp<CellType>& ti) {
+                os << ti._connective->symbol();
+                os << std::string(":") << std::endl;
+                os << (*ti._truth_table);
+                return os;  
+            }
+    };
+
+    class TruthInterpGenerator {
+    
+        private:
+
+            std::shared_ptr<Connective> _connective;
+            int _nvalues;
+            TruthTableGenerator _ttgen;
+            std::shared_ptr<TruthInterp<int>> _current;
+
+        public:
+
+            TruthInterpGenerator(int nvalues, decltype(_connective) connective)
+            : _connective {connective}, _nvalues {nvalues} {
+                _ttgen = TruthTableGenerator{_nvalues, _connective->arity()};
+                reset();
+            };
+
+            decltype(_current) next() {
+                if (not has_next())
+                    throw std::logic_error("no next truth interpretation to produce");
+                auto tt = _ttgen.next();
+                _current = std::make_shared<TruthInterp<int>>(_connective, tt);
+                return _current;
+            }
+
+            bool has_next() {
+                return _ttgen.has_next();
+            }
+
+            void reset() {
+                _ttgen.reset();
+                _current = std::make_shared<TruthInterp<int>>(_connective, _ttgen.current());
+            }
+
+            decltype(_current) current() const { return _current; }
     };
 
     /**
@@ -72,38 +86,118 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
+    template<typename CellType>
     class SignatureTruthInterp {
         private:
             std::shared_ptr<Signature> _signature;
-            std::map<Symbol, std::shared_ptr<TruthInterp>> _truth_interps;
+            std::map<Symbol, std::shared_ptr<TruthInterp<CellType>>> _truth_interps;
         public:
             SignatureTruthInterp(decltype(_signature) _signature)
                 : _signature {_signature} {/* empty */}
 
             SignatureTruthInterp(decltype(_signature) _signature, 
-                    std::initializer_list<std::shared_ptr<TruthInterp>> _interps)
+                    std::initializer_list<std::shared_ptr<TruthInterp<CellType>>> _interps)
                 : _signature {_signature} {
                 for (auto& ti : _interps)
                     this->try_interpret(ti);
             }
 
-            void try_interpret(std::shared_ptr<TruthInterp> truth_interp) {
-                auto connective_symbol = truth_interp->connective_ptr()->symbol();
+            void try_interpret(std::shared_ptr<TruthInterp<CellType>> truth_interp, bool allow_overwrite=false) {
+                auto connective_symbol = truth_interp->connective()->symbol();
                 try {
                     auto connective_in_sig_symbol = (*_signature)[connective_symbol]->symbol();
                     auto it = _truth_interps.find(connective_in_sig_symbol);
-                    if (it == _truth_interps.end())
-                        _truth_interps.insert({connective_in_sig_symbol, truth_interp});
-                    else
-                        throw std::invalid_argument(CONNECTIVE_ALREADY_INTERP_EXCEPTION);
+                    if (allow_overwrite) {
+                        _truth_interps[connective_in_sig_symbol] = truth_interp;
+                    } else {
+                        if (it == _truth_interps.end())
+                            _truth_interps.insert({connective_in_sig_symbol, truth_interp});
+                        else
+                            throw std::invalid_argument(CONNECTIVE_ALREADY_INTERP_EXCEPTION);
+                    }
                 } catch (ConnectiveNotPresentException e) {
                     throw; 
                 }
             }
 
-            std::shared_ptr<TruthInterp> get_interpretation(const Symbol& symbol) const {
+            std::shared_ptr<TruthInterp<CellType>> get_interpretation(const Symbol& symbol) const {
                 return this->_truth_interps.at(symbol);
             }
+
+            friend std::ostream& operator<<(std::ostream& os, const SignatureTruthInterp<CellType>& ti) {
+                for(auto& [s, t] : ti._truth_interps) {
+                    os << (*t) << std::endl;
+                }
+                return os;  
+            }
+    };
+
+    class SignatureTruthInterpGenerator {
+
+        private:
+
+            std::shared_ptr<Signature> _signature;
+            std::map<Symbol, TruthInterpGenerator> _generators;
+            int _nvalues;
+            std::shared_ptr<SignatureTruthInterp<int>> _current;
+
+            void initialize_generators() {
+                for (auto [symbol, connective] : (*_signature)) {
+                    std::cout << "generators for " << symbol << std::endl;
+                    _generators.insert({symbol, TruthInterpGenerator(this->_nvalues, connective)}); 
+                } 
+            }
+            
+            std::shared_ptr<SignatureTruthInterp<int>> truth_interp_from_generators() {
+                auto sti = std::make_shared<SignatureTruthInterp<int>>(_signature);
+                for (auto& [symbol, gen] : _generators) {
+                    std::cout << "interpreting " << symbol << std::endl;
+                    sti->try_interpret(gen.next());
+                }
+                (*(_generators.begin())).second.reset();
+                return sti;
+            }
+    
+        public:
+
+            SignatureTruthInterpGenerator(int nvalues, decltype(_signature) signature) 
+                : _signature {signature}, _nvalues {nvalues} {
+                initialize_generators();    
+                reset();
+            }
+
+            decltype(_current) next() {
+                if (not has_next())
+                    throw std::logic_error("no truth interpretation available");
+
+                for (auto& [symbol, generator] : _generators) {
+                    if (generator.has_next()) {
+                        auto tt = generator.next();
+                        _current->try_interpret(tt, true);
+                        break;
+                    } 
+                    generator.reset();
+                    _current->try_interpret(generator.next(), true);
+                }
+                return _current;
+            }
+
+            decltype(_current) current() { return _current; }
+
+            void reset() {
+                for (auto& [s, g] : _generators)
+                    g.reset();
+                _current = truth_interp_from_generators();
+            }
+
+            bool has_next() {
+                for (auto& [s, g] : _generators) {
+                    if (g.has_next()) 
+                        return true;
+                }
+                return false;
+            }
+    
     };
 
 
@@ -119,7 +213,7 @@ namespace ltsy {
             int _nvalues;
             std::set<int> _dvalues;
             std::shared_ptr<Signature> _signature;
-            std::shared_ptr<SignatureTruthInterp> _interpretation;
+            std::shared_ptr<SignatureTruthInterp<int>> _interpretation;
 
         public:
 
