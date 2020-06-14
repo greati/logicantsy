@@ -72,8 +72,23 @@ namespace {
         ltsy::TruthTableGenerator ttgen {2, 2};
         while (ttgen.has_next()) {
             auto tt = ttgen.next();
-            auto ss = tt.print( [](std::stringstream& ss, const int& t){ ss << t;} );
-            std::cout << ss.str() << std::endl << std::endl;
+            std::cout << (*tt) << std::endl;
+        }
+    }
+
+    TEST(TruthTable, NullaryTableGen) {
+        ltsy::TruthTableGenerator ttgen {2, 0};
+        while (ttgen.has_next()) {
+            auto tt = ttgen.next();
+            std::cout << (*tt) << std::endl;
+        }
+    }
+
+    TEST(TruthTable, UnaryTableGen) {
+        ltsy::TruthTableGenerator ttgen {2, 1};
+        while (ttgen.has_next()) {
+            auto tt = ttgen.next();
+            std::cout << (*tt) << std::endl;
         }
     }
 

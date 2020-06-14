@@ -60,6 +60,11 @@ namespace ltsy {
                     this->add(std::make_shared<Connective>(c.symbol(), c.arity()));
             }
 
+            auto begin() { return _signature.begin(); }
+            auto end() { return _signature.end(); }
+            auto cbegin() { return _signature.cbegin(); }
+            auto cend() { return _signature.cend(); }
+
             void add(std::shared_ptr<Connective> connective) {
                 _signature.insert({connective->symbol(), connective});
             }

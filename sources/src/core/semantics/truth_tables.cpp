@@ -37,7 +37,7 @@ namespace ltsy {
     template<typename CellType>
     std::stringstream TruthTable<CellType>::print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const {
         std::stringstream ss;
-        for (auto i = 0; i < _number_of_rows; ++i) {
+        for (auto i = 0; i < _images.size(); ++i) {
             auto row = utils::tuple_from_position(_nvalues, _arity, i);
             for (auto it = row.cbegin(); it != row.cend(); it++) {
                 ss << (*it);

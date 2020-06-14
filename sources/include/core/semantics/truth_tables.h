@@ -2,12 +2,14 @@
 #define __TRUTH_TABLES__
 
 #include <cmath>
+#include <iostream>
 #include <vector>
 #include <unordered_set>
 #include "core/utils.h"
 #include <functional>
 #include <stdexcept>
 #include <set>
+#include <memory>
 
 namespace ltsy {
 
@@ -125,11 +127,26 @@ namespace ltsy {
 
             std::set<Determinant<CellType>> get_determinants() const {
                 std::set<Determinant<CellType>> result;
-                for (auto i {0}; i < _number_of_rows; ++i){
+                for (auto i {0}; i < _images.size(); ++i){
                     Determinant<CellType> d (_nvalues, _arity, i, at(i));
                     result.insert(d);
                 }
                 return result;
+            }
+
+            friend std::ostream& operator<<(std::ostream& os, const TruthTable<CellType>& tt) {
+                for (auto i = 0; i < tt._images.size(); ++i) {
+                    auto row = utils::tuple_from_position(tt._nvalues, tt._arity, i);
+                    for (auto it = row.cbegin(); it != row.cend(); it++) {
+                        os << (*it);
+                        if (std::next(it) != row.cend())
+                            os << std::string(" ");
+                    }
+                    os << std::string(" -> ");
+                    os << tt._images[i];
+                    os << std::endl;
+                }
+                return os;  
             }
 
             std::stringstream print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const;
@@ -146,23 +163,38 @@ namespace ltsy {
             int _arity;
             int _quantity;
             int _number_of_rows;
+            std::shared_ptr<TruthTable<int>> _current;
 
         public:
+
+            TruthTableGenerator() {}
 
             TruthTableGenerator(int nvalues, int arity) 
                 : _nvalues {nvalues}, _arity {arity} {
                 _number_of_rows = utils::compute_number_of_rows(nvalues, arity);
-                _quantity = utils::compute_number_of_functions(nvalues, arity);
+                _quantity = _arity > 0 ? utils::compute_number_of_functions(nvalues, arity) : _nvalues;
+                reset();
             }
 
-            TruthTable<int> next() {
+            decltype(_current) current() {
+                return _current;
+            }
+
+            decltype(_current) next() {
                 if (has_next()) {
                     auto images = utils::tuple_from_position(_nvalues, _number_of_rows, _current_index);
+                    _current = std::make_shared<TruthTable<int>>(_nvalues, _arity, images);
                     ++_current_index;
-                    return TruthTable<int> {_nvalues, _arity, images};
+                    return _current;
                 } else {
                     throw std::logic_error("no truth table available to generate");
                 }
+            }
+
+            void reset() {
+                _current_index = 0;
+                auto images = utils::tuple_from_position(_nvalues, _number_of_rows, _current_index);
+                _current = std::make_shared<TruthTable<int>>(_nvalues, _arity, images);
             }
 
             bool has_next() {
