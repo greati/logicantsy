@@ -81,6 +81,23 @@ namespace ltsy {
                 }
                 std::cout << buffer.str();
             };
+
+            bool in_left(Formula& fmla) {
+                for (auto fpointer : _left_side){
+                    EqualityFormulaVisitor eq {fpointer};
+                    if (fmla.accept(eq))
+                        return true;
+                }
+                return false;
+            }
+            bool in_right(Formula& fmla) {
+                for (auto fpointer : _right_side){
+                    EqualityFormulaVisitor eq {fpointer};
+                    if (fmla.accept(eq))
+                        return true;
+                }
+                return false;
+            }
     };
 
     class SetFmlaSequent : public Sequent<std::unordered_set<std::shared_ptr<Formula>>, std::shared_ptr<Formula>> {

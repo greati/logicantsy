@@ -34,6 +34,10 @@ namespace ltsy {
             bool operator==(const Connective& other) const {
                 return (_symbol == other._symbol) and (_arity == other._arity);
             }
+
+            bool operator!=(const Connective& other) const {
+                return not (*this == other);
+            }
     };
 
     /**
@@ -115,7 +119,7 @@ namespace ltsy {
             virtual ReturnT visit_compound(Compound* compound) = 0;
     };
 
-
+    class EqualityFormulaVisitor;
 
     /**
      * Represents a general formula.
@@ -123,9 +127,24 @@ namespace ltsy {
      * @author Vitor Greati
      * */
     class Formula {
+
+        public:
+
+            enum class FmlaType {
+                PROP,
+                COMPOUND,
+                UNKNOWN
+            };
+
+        protected:
+
+            FmlaType _type = FmlaType::UNKNOWN;
+
         public:
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
+            virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
+            inline FmlaType type() { return _type; }
     };
 
     /**
@@ -137,7 +156,9 @@ namespace ltsy {
         private:
             Symbol _symbol;
         public:
-            Prop(const Symbol& _symbol) : _symbol {_symbol} {}
+            Prop(const Symbol& _symbol) : _symbol {_symbol} {
+                _type = FmlaType::PROP;
+            }
 
             inline Symbol symbol() const { return _symbol; };
 
@@ -150,6 +171,10 @@ namespace ltsy {
             }
 
             inline int accept(FormulaVisitor<int>& visitor) {
+                return visitor.visit_prop(this);
+            }
+
+            inline bool accept(FormulaVisitor<bool>& visitor) {
                 return visitor.visit_prop(this);
             }
 
@@ -173,10 +198,10 @@ namespace ltsy {
                 if (_components.size() != _connective->arity())
                     throw std::invalid_argument(WRONG_NUMBER_ARGUMENTS_FMLA_EXCEPTION);
                 else {
-                    //this->_connective = _connective;
                     std::atomic_store(&this->_connective, std::move(_connective));
                     this->_components = _components;
                 }
+                _type = FmlaType::COMPOUND;
             }
 
             decltype(_connective) connective() const {
@@ -190,10 +215,50 @@ namespace ltsy {
             inline int accept(FormulaVisitor<int>& visitor) {
                 return visitor.visit_compound(this);
             }
+            inline bool accept(FormulaVisitor<bool>& visitor) {
+                return visitor.visit_compound(this);
+            }
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_compound(this);
             }
     };
+
+    /**
+     * A visitor that tests formula equality.
+     */
+    class EqualityFormulaVisitor : public FormulaVisitor<bool> {
+        private:
+
+            std::shared_ptr<Formula> _left;
+
+        public:
+            EqualityFormulaVisitor(decltype(_left) left) : _left {left} {};
+
+            virtual bool visit_prop(Prop* prop) override {
+                if (_left->type() != Formula::FmlaType::PROP)
+                    return false;
+                auto left_prop = std::dynamic_pointer_cast<Prop>(_left);
+                return left_prop->symbol() == prop->symbol();
+            }
+
+            virtual bool visit_compound(Compound* compound) override {
+                if (_left->type() != Formula::FmlaType::COMPOUND)
+                   return false; 
+                auto left = std::dynamic_pointer_cast<Compound>(_left);
+                auto left_conn = left->connective();
+                if (*(compound->connective()) != *(left_conn))
+                    return false;
+                auto left_comps = left->components();
+                auto right_comps = compound->components();
+                for (int i = 0; i < left_comps.size(); ++i) {
+                    EqualityFormulaVisitor eqvis {left_comps[i]}; 
+                    if (not right_comps[i]->accept(eqvis))
+                        return false;
+                }
+                return true;
+            }
+    };
+
 
     /**
      * A visitor that collects all variables in a formula.

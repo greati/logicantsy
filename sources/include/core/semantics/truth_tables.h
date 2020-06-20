@@ -117,6 +117,8 @@ namespace ltsy {
              * */
             inline CellType at(int i) const { return _images[i]; }
 
+            inline void set(int i, const CellType& v) { _images[i] = v; }
+
             /* Return the image at a given input tuple.
              * */
             CellType at(const std::vector<int>& input) const;
@@ -154,6 +156,8 @@ namespace ltsy {
 
     template class TruthTable<int>;
     template class TruthTable<std::unordered_set<int>>;
+
+    TruthTable<std::unordered_set<int>> generate_fully_nd_table(int nvalues, int arity);
         
     class TruthTableGenerator {
         
