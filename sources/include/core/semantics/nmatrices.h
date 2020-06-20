@@ -2,6 +2,8 @@
 #define __NMATRICES__
 
 #include "core/syntax.h"
+#include "core/common.h"
+#include "core/combinatorics/combinations.h"
 #include "core/semantics/truth_tables.h"
 #include <set>
 
@@ -217,10 +219,10 @@ namespace ltsy {
 
         public:
 
-            NMatrix(int _nvalues, decltype(_dvalues), decltype(_signature) _signature,
-                    decltype(_interpretation) _interpretation)
-                : _nvalues {_nvalues}, _dvalues {_dvalues}, 
-                _signature {_signature}, _interpretation {_interpretation} {
+            NMatrix(int nvalues, decltype(_dvalues) dvalues, decltype(_signature) signature,
+                    decltype(_interpretation) interpretation)
+                : _nvalues {nvalues}, _dvalues {dvalues}, 
+                _signature {signature}, _interpretation {interpretation} {
             }
 
             inline int nvalues() const { return _nvalues; }
@@ -229,6 +231,77 @@ namespace ltsy {
 
             inline decltype(_interpretation) interpretation() const {
                 return _interpretation;
+            }
+             
+            inline decltype(_signature) signature() const { return _signature; }
+
+            friend std::ostream& operator<<(std::ostream& os, const NMatrix& nm) {
+                os << std::string("<");
+                os << nm.nvalues();
+                os << std::string(",");
+                os << nm.dvalues();
+                os << std::string(">") << std::endl;
+                os << *nm.interpretation();
+                return os;  
+            }
+    };
+
+    /**
+     * A generator of NMatrices.
+     *
+     * */
+    class NMatrixGenerator {
+
+        private:
+
+            int _nvalues;
+            std::shared_ptr<Signature> _signature;
+            std::shared_ptr<CombinationGenerator> _combination_gen;
+            std::shared_ptr<SignatureTruthInterpGenerator> _sig_truth_int_gen;
+            std::shared_ptr<NMatrix> _current;
+
+            std::set<int> _vec_to_set(std::shared_ptr<std::vector<int>> vec) {
+                return std::set<int>(vec->begin(), vec->end());
+            }
+
+        public:
+
+            NMatrixGenerator(int nvalues, decltype(_signature) signature)
+                : _nvalues {nvalues}, _signature {signature} {
+                _combination_gen = std::make_shared<DiscretureCombinationGenerator>(nvalues);    
+                _sig_truth_int_gen = std::make_shared<SignatureTruthInterpGenerator>(nvalues, _signature);
+            }
+
+            decltype(_current) next() {
+                if (not has_next())
+                    throw std::logic_error("no next nmatrix to generate");
+                if (_combination_gen->has_next()) {
+                    auto next_comb = _combination_gen->next();
+                    return std::make_shared<NMatrix>(_nvalues,
+                                                     _vec_to_set(next_comb),
+                                                     _signature,
+                                                     _sig_truth_int_gen->current());
+
+                } else {
+                    _combination_gen->reset();
+                    auto next_sig_truth_int = _sig_truth_int_gen->next();
+                    return std::make_shared<NMatrix>(_nvalues,
+                            _vec_to_set(_combination_gen->first()),
+                            _signature,
+                            next_sig_truth_int);
+                }
+            
+            }
+
+            decltype(_current) first() {
+                return std::make_shared<NMatrix>(_nvalues,
+                        _vec_to_set(_combination_gen->first()),
+                        _signature,
+                        _sig_truth_int_gen->current());
+            }
+            
+            bool has_next() {
+                return _sig_truth_int_gen->has_next() or _combination_gen->has_next();
             }
     };
 
