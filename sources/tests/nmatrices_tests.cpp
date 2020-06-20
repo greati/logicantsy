@@ -65,6 +65,25 @@ namespace {
         auto v = fmla.accept(evaluator);
     }
 
+    TEST(NMatrices, NMatrixGenerator) {
+        ltsy::Signature cl_sig {
+            {"&", 2},
+            {"|", 2},
+            {"->", 2},
+            {"~", 1},
+            {"1", 0},
+            {"0", 0},
+        };
+        ltsy::NMatrixGenerator gen {2, std::make_shared<ltsy::Signature>(cl_sig)};
+        int i = 0;
+        while (gen.has_next()) {
+            i++;
+            auto m = gen.next();
+            std::cout << *m << std::endl;
+        }
+        std::cout << i << std::endl;
+    }
+
     TEST(NMatrices, ValGenerator) {
         ltsy::Signature cl_sig {
             {"&", 2},
@@ -121,7 +140,7 @@ namespace {
         ltsy::NMatrixValuationGenerator generator {cl_matrix, {ltsy::Prop{"p"}, ltsy::Prop{"q"}, ltsy::Prop{"r"}}};
         while (generator.has_next()) {
             auto val = generator.next();
-            std::cout << val.print().str() << std::endl;
+            //std::cout << val.print().str() << std::endl;
         }
     };
 
@@ -138,14 +157,14 @@ namespace {
             ltsy::TruthInterpGenerator landgen {2, cl_sig["&"]};
             while(landgen.has_next()) {
                 auto tt = landgen.next();
-                std::cout << (*tt) << std::endl;
+                //std::cout << (*tt) << std::endl;
             }
         }
         {
             ltsy::TruthInterpGenerator landgen {2, cl_sig["1"]};
             while(landgen.has_next()) {
                 auto tt = landgen.next();
-                std::cout << (*tt) << std::endl;
+                //std::cout << (*tt) << std::endl;
             }
         }
     };
@@ -154,14 +173,14 @@ namespace {
         ltsy::Signature cl_sig {
             {"->", 2},
             {"~", 1},
-            //{"1", 0},
+            {"1", 0},
         };
         auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
         {
             ltsy::SignatureTruthInterpGenerator landgen {2, sig_ptr};
             while(landgen.has_next()) {
                 auto tt = landgen.next();
-                std::cout << (*tt) << std::endl;
+                //std::cout << (*tt) << std::endl;
             }
         }
     };

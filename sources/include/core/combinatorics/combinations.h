@@ -38,8 +38,9 @@ namespace ltsy {
             }
 
             void reset() {
-                _combinator = decltype(_combinator) {0, 0};
+                _combinator = decltype(_combinator) {_n, 0};
                 _current_it = _combinator.begin();
+                _current_k = 0;
             }
 
             decltype(_current) next() override {
