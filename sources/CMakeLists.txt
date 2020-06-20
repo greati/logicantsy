@@ -63,6 +63,7 @@ set(test_sources ${test_sources}
     tests/nmatrices_tests.cpp
     tests/proof_theory_tests.cpp
     tests/truth_table_determination.cpp
+    tests/combinatorics_tests.cpp
 )
 
 add_executable(maintest ${test_sources})

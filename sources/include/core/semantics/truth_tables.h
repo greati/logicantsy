@@ -44,9 +44,15 @@ namespace ltsy {
 
             inline CellType get_last() const { return _data.second; }
 
+            inline CellType& get_last() { return _data.second; }
+
+            inline void set_last(CellType& value) { _data.second = value; }
+
             inline std::vector<int> get_args() const { 
                 return utils::tuple_from_position(_nvalues, _arity, _data.first); 
             }
+
+            inline int get_args_pos() const { return _data.first; }
 
             bool operator==(const Determinant<CellType>& other) const {
                 return _data == other._data;
@@ -94,6 +100,8 @@ namespace ltsy {
 
         public:
 
+            TruthTable() {/*empty*/}
+
             TruthTable(int _nvalues, int _arity) : 
                 _nvalues {_nvalues},
                 _arity {_arity},
@@ -127,7 +135,12 @@ namespace ltsy {
 
             inline int nvalues() const { return _nvalues; }
 
-            std::set<Determinant<CellType>> get_determinants() const {
+            void update(const std::set<Determinant<CellType>>& dets) {
+                for (auto e : dets)
+                    set(e.get_args_pos(), e.get_last()); 
+            }
+
+            std::set<Determinant<CellType>> get_determinants() {
                 std::set<Determinant<CellType>> result;
                 for (auto i {0}; i < _images.size(); ++i){
                     Determinant<CellType> d (_nvalues, _arity, i, at(i));

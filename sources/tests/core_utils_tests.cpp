@@ -3,6 +3,14 @@
 
 namespace {
 
+    TEST(CoreUtils, SetDifference) {
+        std::unordered_set<int> s1  {0, 1, 2, 3};
+        std::unordered_set<int> s2  {1, 2};
+        std::unordered_set<int> expdiff  {0, 3};
+        auto diff = ltsy::utils::set_difference(s1, s2);
+        ASSERT_EQ(diff, expdiff);
+    }
+
     TEST(CoreUtils, TupleAndPosition) {
         {
             {

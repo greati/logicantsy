@@ -52,7 +52,6 @@ namespace ltsy {
              * Print the sequent.
              * */
             virtual void print() const = 0;
-
     };
 
 
