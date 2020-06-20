@@ -69,10 +69,10 @@ namespace {
         ltsy::Signature cl_sig {
             {"&", 2},
             {"|", 2},
-            {"->", 2},
+            //{"->", 2},
             {"~", 1},
-            {"1", 0},
-            {"0", 0},
+            //{"1", 0},
+            //{"0", 0},
         };
         ltsy::NMatrixGenerator gen {2, std::make_shared<ltsy::Signature>(cl_sig)};
         int i = 0;
