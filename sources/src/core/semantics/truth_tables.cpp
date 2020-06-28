@@ -80,4 +80,12 @@ namespace ltsy {
             tt.set(i, s);
         return tt;
     }
+
+    TruthTable<std::unordered_set<int>> generate_fully_partial_table(int nvalues, int arity) {
+        auto nrows = utils::compute_number_of_rows(nvalues, arity);
+        TruthTable<std::unordered_set<int>> tt {nvalues, arity};
+        for (int i = 0; i < nrows; ++i)
+            tt.set(i, std::unordered_set<int>{});
+        return tt;
+    }
 };

@@ -6,7 +6,7 @@
 
 namespace ltsy {
     /**
-     * Represents a sequent. The framework (Set-Set, Set-Fmla, Fmla-Fmla...)
+     * Represents a typical sequent. The framework (Set-Set, Set-Fmla, Fmla-Fmla...)
      * is determined by the chosen template parameters.
      * */
     template<typename LeftType, typename RightType>

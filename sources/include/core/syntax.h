@@ -4,9 +4,12 @@
 #include <string>
 #include <atomic>
 #include <memory>
+#include <map>
 #include "core/exception.h"
 #include "core/common.h"
 #include <unordered_set>
+#include <algorithm>
+#include <sstream>
 
 namespace ltsy {
     
@@ -145,6 +148,7 @@ namespace ltsy {
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
             virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
             inline FmlaType type() { return _type; }
+            friend std::ostream& operator<<(std::ostream& os, Formula& f);
     };
 
     /**
@@ -329,6 +333,5 @@ namespace ltsy {
             }
             std::string get_string() { return buffer.str(); }
     };
-
 }
 #endif

@@ -140,6 +140,14 @@ namespace ltsy {
                     set(e.get_args_pos(), e.get_last()); 
             }
 
+            void update(const std::set<Determinant<CellType>>& dets,
+                    std::function<CellType(const CellType&, const CellType&)> f) {
+                for (auto e : dets) {
+                    auto current_result = at(e.get_args_pos());
+                    set(e.get_args_pos(), f(current_result, e.get_last()));
+                } 
+            }
+
             std::set<Determinant<CellType>> get_determinants() {
                 std::set<Determinant<CellType>> result;
                 for (auto i {0}; i < _images.size(); ++i){
@@ -171,6 +179,7 @@ namespace ltsy {
     template class TruthTable<std::unordered_set<int>>;
 
     TruthTable<std::unordered_set<int>> generate_fully_nd_table(int nvalues, int arity);
+    TruthTable<std::unordered_set<int>> generate_fully_partial_table(int nvalues, int arity);
         
     class TruthTableGenerator {
         
