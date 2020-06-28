@@ -103,4 +103,26 @@ namespace {
         std::cout << table << std::endl;
     }
 
+    TEST(Determinants, TonkOverDetermination) {
+        auto p = std::make_shared<ltsy::Prop>("p");
+        auto q = std::make_shared<ltsy::Prop>("q");
+        auto conn = std::make_shared<ltsy::Connective>("TONK", 2);
+        auto p_conn_q = std::make_shared<ltsy::Compound>(conn, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
+
+        ltsy::NdSequent<std::set> seq1 ({{p},{p_conn_q}});
+        ltsy::NdSequent<std::set> seq2 ({{p_conn_q},{q}});
+        std::vector<ltsy::NdSequent<std::set>> sequents = {seq1, seq2};
+
+        ltsy::CognitiveAttitude a {"A", {1}};
+        ltsy::CognitiveAttitude r {"R", {0}};
+
+        ltsy::NdSequentTruthTableDeterminizer determinizer {2, {*p, *q}, *conn, {a, r}};
+
+        determinizer.determine(sequents);
+
+        auto table = determinizer.table();
+
+        std::cout << table << std::endl;
+    }
+
 };
