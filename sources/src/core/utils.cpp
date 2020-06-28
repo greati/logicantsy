@@ -1,5 +1,6 @@
 #include "core/utils.h"
 #include "core/exception.h"
+#include <algorithm>
 #include <iostream>
 #include <cmath>
 
@@ -48,4 +49,14 @@ namespace ltsy::utils {
     }
 
     template bool is_subset<int>(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
+
+    template<typename T>
+    std::unordered_set<T> set_difference(const std::unordered_set<T>& s1, const std::unordered_set<T>& s2){
+        std::unordered_set<T> result;
+        std::copy_if(s1.begin(), s1.end(), std::inserter(result, result.end()),
+            [&s2] (int needle) { return s2.find(needle) == s2.end(); });
+        return result;
+    }
+
+    template std::unordered_set<int> set_difference<int>(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
 };

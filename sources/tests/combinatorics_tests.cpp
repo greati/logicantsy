@@ -10,8 +10,6 @@ namespace {
         ltsy::DiscretureCombinationGenerator gen {5};
         while (gen.has_next()) {
             auto s = *(gen.next());
-            std::copy(s.begin(), s.end(), std::ostream_iterator<int>(std::cout, " "));
-            std::cout << std::endl;
         }
 
     }

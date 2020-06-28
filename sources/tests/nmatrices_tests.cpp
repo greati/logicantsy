@@ -79,7 +79,7 @@ namespace {
         while (gen.has_next()) {
             i++;
             auto m = gen.next();
-            std::cout << *m << std::endl;
+            //std::cout << *m << std::endl;
         }
         std::cout << i << std::endl;
     }

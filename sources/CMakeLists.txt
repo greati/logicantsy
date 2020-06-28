@@ -33,6 +33,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(logicantsy 
     src/core/utils.cpp 
     src/core/common.cpp 
+    src/core/syntax.cpp 
     src/core/semantics/truth_tables.cpp
     )
 target_include_directories(logicantsy PUBLIC include)
@@ -62,6 +63,7 @@ set(test_sources ${test_sources}
     tests/core_utils_tests.cpp
     tests/nmatrices_tests.cpp
     tests/proof_theory_tests.cpp
+    tests/truth_table_determination.cpp
     tests/combinatorics_tests.cpp
 )
 

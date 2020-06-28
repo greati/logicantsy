@@ -69,4 +69,23 @@ namespace ltsy {
         else
             return _data.first < other._data.first;
     }
+
+    TruthTable<std::unordered_set<int>> generate_fully_nd_table(int nvalues, int arity) {
+        auto nrows = utils::compute_number_of_rows(nvalues, arity);
+        TruthTable<std::unordered_set<int>> tt {nvalues, arity};
+        std::unordered_set<int> s;
+        for (int i = 0; i < nvalues; ++i)
+            s.insert(i);
+        for (int i = 0; i < nrows; ++i)
+            tt.set(i, s);
+        return tt;
+    }
+
+    TruthTable<std::unordered_set<int>> generate_fully_partial_table(int nvalues, int arity) {
+        auto nrows = utils::compute_number_of_rows(nvalues, arity);
+        TruthTable<std::unordered_set<int>> tt {nvalues, arity};
+        for (int i = 0; i < nrows; ++i)
+            tt.set(i, std::unordered_set<int>{});
+        return tt;
+    }
 };
