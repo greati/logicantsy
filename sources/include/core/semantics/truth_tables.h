@@ -176,10 +176,12 @@ namespace ltsy {
     };
 
     template class TruthTable<int>;
-    template class TruthTable<std::unordered_set<int>>;
+    template class TruthTable<std::set<int>>;
 
-    TruthTable<std::unordered_set<int>> generate_fully_nd_table(int nvalues, int arity);
-    TruthTable<std::unordered_set<int>> generate_fully_partial_table(int nvalues, int arity);
+    using NDTruthTable = TruthTable<std::set<int>>;
+
+    NDTruthTable generate_fully_nd_table(int nvalues, int arity);
+    NDTruthTable generate_fully_partial_table(int nvalues, int arity);
         
     class TruthTableGenerator {
         
