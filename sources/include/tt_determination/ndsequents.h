@@ -51,12 +51,9 @@ namespace ltsy {
                     if (sequent.is_in(dimension, p))
                         _remove_determinants_by_pos_attitude(_attitudes[dimension], i, determinants);
                 }
-                std::cout << "After propositional" << std::endl;
-                std::cout << determinants << std::endl;
                 if (sequent.is_in(dimension, *_compound)) {
                     for (auto it = determinants.begin(); it != determinants.end();) {
                         auto det = (*it);
-                        //det.get_last().insert(_attitudes[dimension].values.begin(), _attitudes[dimension].values.end());
                         std::set<int> cm_set;
                         std::set_difference(_all_values.begin(), _all_values.end(),
                                             _attitudes[dimension].values.begin(), 
@@ -71,8 +68,6 @@ namespace ltsy {
                                 det_val_set.begin(), det_val_set.end(),
                                 cm_set.begin(), cm_set.end(),
                                 std::inserter(new_cm_set, new_cm_set.end()));
-                        std::cout << cm_set << std::endl;
-                        std::cout << new_cm_set << std::endl;
                         std::set<int> s (new_cm_set.begin(), new_cm_set.end());
                         det.set_last(s);
                         it = determinants.erase(it);
@@ -85,24 +80,12 @@ namespace ltsy {
 
             void _determine_by_sequent(const NdSequent<std::set>& sequent) {
                 auto dimension = sequent.dimension();     
-                //auto counter_model_determinants = generate_fully_partial_table(_nvalues, _connective.arity()).get_determinants();
-                auto counter_model_determinants = generate_fully_nd_table(_nvalues, _connective.arity()).get_determinants();
+                auto counter_model_determinants = 
+                    generate_fully_nd_table(_nvalues, _connective.arity()).get_determinants();
                 bool compound_has_appeared = false;
                 // produce counter-model determinants
                 for (auto i = 0; i < dimension; ++i)
                     compound_has_appeared |= _determine_by_dimension(i, sequent, counter_model_determinants); 
-                // if the compound has not appeared, set the counter-model determinants to be fully ND
-               //if (not compound_has_appeared)
-               //    for (auto it = counter_model_determinants.begin(); it != counter_model_determinants.end();) {
-               //        auto det = (*it);
-               //        std::set<int> s;
-               //        for (int i = 0; i < _nvalues; ++i)
-               //            s.insert(i);
-               //        det.set_last(s);
-               //        it = counter_model_determinants.erase(it);
-               //        counter_model_determinants.insert(it, det);
-               //    }
-                // update table based on determination
                 _table.update(counter_model_determinants, 
                         [](std::set<int> current, std::set<int> counter_models) -> std::set<int> {
                             return utils::set_difference(current, counter_models);
