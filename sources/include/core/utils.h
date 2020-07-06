@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 #include <unordered_set>
+#include <set>
 
 namespace ltsy::utils {
 
@@ -20,9 +21,16 @@ namespace ltsy::utils {
     extern template bool is_subset<int>(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
 
     template<typename T>
+    bool is_subset(const std::set<T>& s1, const std::set<T>& s2);
+    extern template bool is_subset<int>(const std::set<int>& s1, const std::set<int>& s2);
+
+    template<typename T>
     std::unordered_set<T> set_difference(const std::unordered_set<T>& s1, const std::unordered_set<T>& s2);
     extern template std::unordered_set<int> set_difference<int>(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
 
+    template<typename T>
+    std::set<T> set_difference(const std::set<T>& s1, const std::set<T>& s2);
+    extern template std::set<int> set_difference<int>(const std::set<int>& s1, const std::set<int>& s2);
 
 };
 

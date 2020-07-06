@@ -10,7 +10,7 @@ namespace {
     }
 
     TEST(Determinants, InstantiationUnordSet) {
-        ltsy::Determinant<std::unordered_set<int>> det {3, 2, 3, {1,2}};
+        ltsy::Determinant<std::set<int>> det {3, 2, 3, {1,2}};
         std::cout << det;
     }
 
@@ -28,7 +28,7 @@ namespace {
     }
 
     TEST(Determinants, NondeterministicTT) {
-        auto tt_nondet = ltsy::TruthTable<std::unordered_set<int>> {2,
+        auto tt_nondet = ltsy::TruthTable<std::set<int>> {2,
             {
                 {{0, 0},{0, 1}},
                 {{0, 1},{0, 1}},
@@ -42,7 +42,7 @@ namespace {
     }
 
     TEST(TruthTable, NondeterministicTT) {
-        auto tt_nondet = ltsy::TruthTable<std::unordered_set<int>> {2,
+        auto tt_nondet = ltsy::TruthTable<std::set<int>> {2,
             {
                 {{0, 0},{0, 1}},
                 {{0, 1},{0, 1}},

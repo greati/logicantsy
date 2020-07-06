@@ -1,7 +1,7 @@
 #ifndef __SEQUENTS__
 #define __SEQUENTS__
 
-#include <unordered_set>
+#include <set>
 #include "core/syntax.h"
 
 namespace ltsy {
@@ -55,10 +55,10 @@ namespace ltsy {
     };
 
 
-    class SetSetSequent : public Sequent<std::unordered_set<std::shared_ptr<Formula>>, std::unordered_set<std::shared_ptr<Formula>>> {
+    class SetSetSequent : public Sequent<std::set<std::shared_ptr<Formula>>, std::set<std::shared_ptr<Formula>>> {
         public:
             SetSetSequent() : Sequent {} {/*empty*/};
-            SetSetSequent(std::unordered_set<std::shared_ptr<Formula>> left, std::unordered_set<std::shared_ptr<Formula>> right) :
+            SetSetSequent(std::set<std::shared_ptr<Formula>> left, std::set<std::shared_ptr<Formula>> right) :
                 Sequent {left, right} {/*empty*/};    
 
             void print() const override {
@@ -99,10 +99,10 @@ namespace ltsy {
             }
     };
 
-    class SetFmlaSequent : public Sequent<std::unordered_set<std::shared_ptr<Formula>>, std::shared_ptr<Formula>> {
+    class SetFmlaSequent : public Sequent<std::set<std::shared_ptr<Formula>>, std::shared_ptr<Formula>> {
         public:
             SetFmlaSequent() : Sequent {} {/*empty*/};
-            SetFmlaSequent(std::unordered_set<std::shared_ptr<Formula>> left, std::shared_ptr<Formula> right) :
+            SetFmlaSequent(std::set<std::shared_ptr<Formula>> left, std::shared_ptr<Formula> right) :
                 Sequent {left, right} {/*empty*/};    
 
             void print() const override {

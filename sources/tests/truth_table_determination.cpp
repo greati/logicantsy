@@ -11,8 +11,8 @@ namespace {
         auto q = std::make_shared<ltsy::Prop>("q");
         auto conn = std::make_shared<ltsy::Connective>("&", 2);
         auto p_conn_q = std::make_shared<ltsy::Compound>(conn, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
-        std::unordered_set<int> leftCounterModel {1};
-        std::unordered_set<int> rightCounterModel {0};
+        std::set<int> leftCounterModel {1};
+        std::set<int> rightCounterModel {0};
         
         // Land
         ltsy::SetSetSequent landI {{p, q}, {p_conn_q}}; 
@@ -62,12 +62,12 @@ namespace {
 
         ltsy::SetSetTruthTableDetermination determinator {4, {*p, *q}, *conn};
 
-        std::unordered_set<int> acceptValues {2, 3};
-        std::unordered_set<int> nonAcceptValues {0, 1};
+        std::set<int> acceptValues {2, 3};
+        std::set<int> nonAcceptValues {0, 1};
         determinator.determine(sequents, acceptValues, nonAcceptValues);
 
-        std::unordered_set<int> nonRejectValues {1, 3};
-        std::unordered_set<int> rejectValues {0, 2};
+        std::set<int> nonRejectValues {1, 3};
+        std::set<int> rejectValues {0, 2};
         determinator.determine(sequents, nonRejectValues, rejectValues);
 
         auto land_table = determinator.table();

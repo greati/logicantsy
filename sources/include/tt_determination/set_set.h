@@ -15,7 +15,7 @@ namespace ltsy {
             Connective _connective;
             std::vector<Prop> _props;
             std::shared_ptr<Compound> _compound;
-            TruthTable<std::unordered_set<int>> _table;
+            TruthTable<std::set<int>> _table;
 
             enum class IndicatorValue {
                 NONE=0,
@@ -46,8 +46,8 @@ namespace ltsy {
             }
 
             void determinant_from_indicator(DeterminantIndicator& indicator,
-                    std::unordered_set<int>& leftCounterModelValues,
-                    std::unordered_set<int>& rightCounterModelValues) {
+                    std::set<int>& leftCounterModelValues,
+                    std::set<int>& rightCounterModelValues) {
                 auto det_set = _table.get_determinants();
                 // keep only determinant that would give rise to a counter-model
                 for (int i = 0; i < _connective.arity(); ++i) {
@@ -121,8 +121,8 @@ namespace ltsy {
             }
 
             void determine(const std::vector<SetSetSequent>& sequents,
-                    std::unordered_set<int>& leftCounterModelValues,
-                    std::unordered_set<int>& rightCounterModelValues) {
+                    std::set<int>& leftCounterModelValues,
+                    std::set<int>& rightCounterModelValues) {
                 for (auto sequent : sequents) {
                     auto indicator = process(sequent);
                     determinant_from_indicator(indicator, leftCounterModelValues, rightCounterModelValues);

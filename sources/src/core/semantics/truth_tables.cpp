@@ -53,7 +53,7 @@ namespace ltsy {
     }
 
     template<>
-    bool Determinant<std::unordered_set<int>>::operator<(const Determinant<std::unordered_set<int>>& other) const {
+    bool Determinant<std::set<int>>::operator<(const Determinant<std::set<int>>& other) const {
         if (_data.first != other._data.first)
             return _data.first < other._data.first;
         else {
@@ -70,10 +70,10 @@ namespace ltsy {
             return _data.first < other._data.first;
     }
 
-    TruthTable<std::unordered_set<int>> generate_fully_nd_table(int nvalues, int arity) {
+    NDTruthTable generate_fully_nd_table(int nvalues, int arity) {
         auto nrows = utils::compute_number_of_rows(nvalues, arity);
-        TruthTable<std::unordered_set<int>> tt {nvalues, arity};
-        std::unordered_set<int> s;
+        NDTruthTable tt {nvalues, arity};
+        std::set<int> s;
         for (int i = 0; i < nvalues; ++i)
             s.insert(i);
         for (int i = 0; i < nrows; ++i)
@@ -81,11 +81,11 @@ namespace ltsy {
         return tt;
     }
 
-    TruthTable<std::unordered_set<int>> generate_fully_partial_table(int nvalues, int arity) {
+    NDTruthTable generate_fully_partial_table(int nvalues, int arity) {
         auto nrows = utils::compute_number_of_rows(nvalues, arity);
-        TruthTable<std::unordered_set<int>> tt {nvalues, arity};
+        NDTruthTable tt {nvalues, arity};
         for (int i = 0; i < nrows; ++i)
-            tt.set(i, std::unordered_set<int>{});
+            tt.set(i, std::set<int>{});
         return tt;
     }
 };
