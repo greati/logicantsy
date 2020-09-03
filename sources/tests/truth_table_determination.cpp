@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "core/common.h"
 #include "tt_determination/ndsequents.h"
+#include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
 
 namespace {
