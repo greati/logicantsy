@@ -80,4 +80,44 @@ namespace {
         std::cout << table << std::endl;
     }
 
+
+    TEST(Determinants, BillaticeJudgements) {
+        ltsy::CognitiveAttitude a {"A", {2, 3}};
+        ltsy::CognitiveAttitude na {"NA", {0, 1}};
+        ltsy::CognitiveAttitude nr {"NR", {1, 3}};
+        ltsy::CognitiveAttitude r {"R", {0, 2}};
+        auto billatice = ltsy::BillaticeJudgementValueCorrespondence(
+           {
+            {0, {{1, r}, {2, a}}},
+            {1, {{0, r}, {3, na}}},
+            {2, {{0, a}, {3, nr}}},
+            {3, {{1, na}, {2, nr}}}
+           }
+        );
+        std::cout << billatice.judgements_from_value(0) << std::endl;
+        std::cout << billatice.judgements_from_value(1) << std::endl;
+        std::cout << billatice.judgements_from_value(2) << std::endl;
+        std::cout << billatice.judgements_from_value(3) << std::endl;
+        std::cout << billatice.value_from_judgements({a, r}) << std::endl;
+        std::cout << billatice.value_from_judgements({na, r}) << std::endl;
+        std::cout << billatice.value_from_judgements({a, nr}) << std::endl;
+        std::cout << billatice.value_from_judgements({na, nr}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({1}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({2}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,1}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,2}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({1,2}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({1,3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({2,3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,1,2}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,1,3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({1,2,3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,2,3}) << std::endl;
+        std::cout << billatice.judgements_from_set_values({0,1,2,3}) << std::endl;
+    }
+
 };

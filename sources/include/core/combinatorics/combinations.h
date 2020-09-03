@@ -9,11 +9,13 @@ namespace ltsy {
     
         protected:
             int _n;
+            int _k = 0;
             std::shared_ptr<std::vector<int>> _current;
 
         public:
 
             CombinationGenerator(int n) : _n {n} {/* empty */}
+            CombinationGenerator(int n, int k) : _n {n}, _k {k} {/* empty */}
            
             virtual decltype(_current) first() = 0;
             virtual decltype(_current) next() = 0;
@@ -31,16 +33,22 @@ namespace ltsy {
     
         public:
 
-            DiscretureCombinationGenerator(int n) : CombinationGenerator{n} {/* empty */}
+            DiscretureCombinationGenerator(int n) : CombinationGenerator{n} {/* empty */
+                reset(); 
+            }
+
+            DiscretureCombinationGenerator(int n, int k) : CombinationGenerator{n, k} {/* empty */
+                reset();
+            }
             
             decltype(_current) first() override {
-                return std::make_shared<std::vector<int>>(0);
+                return std::make_shared<std::vector<int>>(_k, 0);
             }
 
             void reset() {
-                _combinator = decltype(_combinator) {_n, 0};
+                _combinator = decltype(_combinator) {_n, _k};
                 _current_it = _combinator.begin();
-                _current_k = 0;
+                _current_k = _k;
             }
 
             decltype(_current) next() override {
