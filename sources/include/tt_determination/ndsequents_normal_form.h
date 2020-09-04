@@ -92,7 +92,6 @@ namespace ltsy {
                         auto js = judgements_from_value(v);
                         atts.push_back(js);
                     }
-                    return atts;
                 } else {
                     for (const auto& a : inducedSubgraph)
                         atts.push_back({a});
@@ -118,10 +117,35 @@ namespace ltsy {
             Connective _connective;
             std::vector<std::shared_ptr<Prop>> _props;
             std::shared_ptr<Compound> _compound;
-            std::map<std::string, CognitiveAttitude> _attitudes;
             std::map<CognitiveAttitude, int> _judg_position;
-            NDTruthTable _table;
+            std::vector<CognitiveAttitude> _judgements;
             std::shared_ptr<JudgementValueCorrespondence> _judg_value_correspondence;
+
+        public:
+
+            NdSequentsFromTruthTable(const decltype(_all_values)& all_values,
+                    const decltype(_connective)& connective,
+                    const decltype(_props)& props,
+                    const decltype(_compound)& compound,
+                    const decltype(_judgements)& judgements,
+                    const decltype(_judg_value_correspondence)& judg_value_correspondence)
+                : _all_values {all_values}, _props {props}, _compound {compound},
+                _judgements {judgements}, _judg_value_correspondence {judg_value_correspondence} 
+            {
+                for (size_t i {0}; i < _judgements.size(); ++i)
+                    _judg_position[_judgements[i]] = i;
+            }
+
+
+            std::vector<NdSequent<std::set>> axiomatize(const NDTruthTable& table) {
+                std::vector<NdSequent<std::set>> sequents;
+                for (const auto& d : table.get_determinants()) {
+                   sequents_from_determinants(d, sequents); 
+                } 
+                return sequents;
+            } 
+
+        private:
 
             void sequents_from_determinants(const Determinant<std::set<int>>& det,
                     std::vector<NdSequent<std::set>>& sequents) {
@@ -144,6 +168,7 @@ namespace ltsy {
                     for (const auto& judgs : judgs_from_set) {
                         NdSequent<std::set> seq {_sequent_dim, {}};
                         place_in_sequent(seq, _compound, judgs); 
+                        place_variables(seq, det);
                         sequents.push_back(seq);
                     }
                 }
