@@ -81,9 +81,11 @@ set(test_sources ${test_sources}
 add_executable(maintest ${test_sources} ${BISON_bison_fmla_parser_OUTPUTS} ${FLEX_flex_fmla_lexer_OUTPUTS})
 target_link_libraries(maintest PRIVATE gtest logicantsy)
 target_include_directories(maintest PRIVATE include)
-
-
-
 gtest_discover_tests(maintest)
+
+add_executable(ltsy src/cli/cli.cpp ${BISON_bison_fmla_parser_OUTPUTS} ${FLEX_flex_fmla_lexer_OUTPUTS})
+target_link_libraries(ltsy PRIVATE logicantsy)
+target_include_directories(ltsy PRIVATE include)
+
 
 enable_testing()

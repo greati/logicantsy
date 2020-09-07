@@ -1,0 +1,20 @@
+semantics:
+  values: [f, bot, top, t]
+  judgements:
+    NR: [bot, t]
+    NA: [bot, f]
+    A:  [top, t]
+    R:  [top, f]
+connectives:
+  and: 2
+  ~: 1
+sequents:
+  and:
+    - [[], [p and q], [p, q], []]
+    - [[], [p], [p and q], []]
+    - [[], [q], [p and q], []]
+    - [[], [p, q], [p and q], []]
+    - [[p and q], [], [], [p]]
+    - [[p and q], [], [], [q]]
+  ~:
+    - [[~p], [], [], [p]]
