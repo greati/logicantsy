@@ -26,16 +26,18 @@ namespace ltsy {
 
 // Forward declare interpreter to avoid include. Header is added inimplementation file.
 //? class Interpreter; 
+//
+class BisonFmlaParser;
     
 class FlexFmlaLexer : public yyFlexLexer {
 public:
         //?Scanner(Interpreter &driver) : m_driver(driver) {}
-    FlexFmlaLexer() {}
+    FlexFmlaLexer(BisonFmlaParser& _parserwrapper) : parserwrapper (_parserwrapper) {}
 	virtual ~FlexFmlaLexer() {}
 	virtual ltsy::BisonFmlaParserGen::symbol_type get_next_token();
         
-//?private:
-    //?Interpreter &m_driver;
+private:
+    BisonFmlaParser &parserwrapper;
 };
 
 }

@@ -14,7 +14,7 @@ namespace {
         std::string str2 = "~(p \/\ q) \\/ r";
         std::cout << *parser.parse(str2) << std::endl;
 
-        std::string str3 = "p `#` q `#` _";
+        std::string str3 = "p -> 2 q `#` 1 _";
         std::cout << *parser.parse(str3) << std::endl;
     }
 

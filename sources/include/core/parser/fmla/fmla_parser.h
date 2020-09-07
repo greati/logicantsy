@@ -28,7 +28,9 @@ namespace ltsy {
 
         public:
 
-            BisonFmlaParser() : parser(lexer, *this) {}
+            ltsy::location location;
+
+            BisonFmlaParser() : lexer (*this), parser(lexer, *this) {}
 
             void reset_stream(std::istream *is) {
                 lexer.switch_streams(is, NULL);
@@ -38,7 +40,14 @@ namespace ltsy {
                 this->parsed_fmla = parsed_fmla;
             }
 
+            void clean() {
+                //this->parsed_fmla = nullptr;
+                location = ltsy::location();
+
+            }
+
             std::shared_ptr<Formula> parse(const std::string& str) override {
+                clean();
                 std::istringstream is {str};
                 reset_stream(&is);
                 parser.parse(); 

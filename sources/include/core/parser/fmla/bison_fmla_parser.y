@@ -40,7 +40,7 @@
     #include "location.hh"
     
     // yylex() arguments are defined in parser.y
-    static ltsy::BisonFmlaParserGen::symbol_type yylex(ltsy::FlexFmlaLexer &scanner/*, ltsy::Interpreter &driver*/) {
+    static ltsy::BisonFmlaParserGen::symbol_type yylex(ltsy::FlexFmlaLexer &scanner, ltsy::BisonFmlaParser &parserwrapper) {
         return scanner.get_next_token();
     }
     
@@ -59,7 +59,7 @@
 }
 
 %lex-param { ltsy::FlexFmlaLexer &scanner }
-//%lex-param { ltsy::Interpreter &driver }
+%lex-param { ltsy::BisonFmlaParser &parserwrapper }
 %parse-param { ltsy::FlexFmlaLexer &scanner }
 %parse-param { ltsy::BisonFmlaParser &parserwrapper }
 %locations
@@ -147,10 +147,6 @@ term_list_comma : term { $$ = std::vector<std::shared_ptr<ltsy::Formula>> {$1}; 
 
 // Bison expects us to provide implementation - otherwise linker complains
 void ltsy::BisonFmlaParserGen::error(const location &loc , const std::string &message) {
-        
-        // Location should be initialized inside scanner action, but is not in this example.
-        // Let's grab location directly from driver class.
-	// cout << "Error: " << message << endl << "Location: " << loc << endl;
-	
-        cout << "Error: " << message << endl << "Error location: ";// << driver.location() << endl;
+    std::cout << "(ERROR at [" << loc.begin.line << "," << loc.begin.column << 
+        "]) " << message << endl;
 }
