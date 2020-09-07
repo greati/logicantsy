@@ -4,6 +4,8 @@ project(cppmathlib VERSION 0.1.0 LANGUAGES CXX)
 
 include(FetchContent)
 
+find_package(BISON)
+find_package(FLEX)
 
 # define build types and configurations
 # --------------------------------------- #
@@ -28,8 +30,15 @@ set(CMAKE_TEST_POSTFIX _tests)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+BISON_TARGET(bison_fmla_parser include/core/parser/fmla/bison_fmla_parser.y ${CMAKE_CURRENT_BINARY_DIR}/bison_fmla_parser.cpp)
+FLEX_TARGET(flex_fmla_lexer include/core/parser/fmla/flex_fmla_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/flex_fmla_lexer.cpp)
+ADD_FLEX_BISON_DEPENDENCY(flex_fmla_lexer bison_fmla_parser)
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 # libraries
 # --------------------------------------- #
+
 add_library(logicantsy 
     src/core/utils.cpp 
     src/core/common.cpp 
@@ -65,11 +74,15 @@ set(test_sources ${test_sources}
     tests/proof_theory_tests.cpp
     tests/truth_table_determination.cpp
     tests/combinatorics_tests.cpp
+    tests/fmla_parser_tests.cpp
 )
 
-add_executable(maintest ${test_sources})
+
+add_executable(maintest ${test_sources} ${BISON_bison_fmla_parser_OUTPUTS} ${FLEX_flex_fmla_lexer_OUTPUTS})
 target_link_libraries(maintest PRIVATE gtest logicantsy)
 target_include_directories(maintest PRIVATE include)
+
+
 
 gtest_discover_tests(maintest)
 

@@ -148,7 +148,7 @@ namespace ltsy {
                 } 
             }
 
-            std::set<Determinant<CellType>> get_determinants() {
+            std::set<Determinant<CellType>> get_determinants() const {
                 std::set<Determinant<CellType>> result;
                 for (auto i {0}; i < _images.size(); ++i){
                     Determinant<CellType> d (_nvalues, _arity, i, at(i));

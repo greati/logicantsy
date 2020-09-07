@@ -16,7 +16,7 @@ namespace ltsy {
 
         private:
             std::vector<FmlaContainerT<std::shared_ptr<Formula>>> _sequent_fmlas;
-            int _dimension;
+            size_t _dimension;
 
         public:
 
@@ -25,9 +25,13 @@ namespace ltsy {
                 _dimension = sequent_fmlas.size();
             }
 
+            NdSequent(size_t dimension, const FmlaContainerT<std::shared_ptr<Formula>>& def) : _dimension {dimension} {
+                _sequent_fmlas = decltype(_sequent_fmlas) {_dimension, def};
+            }
+
             inline int dimension() const { return _dimension; }
 
-            FmlaContainerT<std::shared_ptr<Formula>> operator[](int i) { return _sequent_fmlas[i]; }
+            FmlaContainerT<std::shared_ptr<Formula>>& operator[](int i) { return _sequent_fmlas[i]; }
 
             FmlaContainerT<std::shared_ptr<Formula>> operator[](int i) const { return _sequent_fmlas[i]; }
 
