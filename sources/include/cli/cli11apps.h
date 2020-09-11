@@ -3,6 +3,7 @@
 
 #include "external/CLI11/CLI11.hpp"
 #include "cli/clidefs.h"
+#include "cli/clihandlers.h"
 
 namespace ltsy {
 
@@ -29,6 +30,10 @@ namespace ltsy {
                 this->add_option("-f,--file", _file_path, "YAML input file")
                    ->required()
                    ->check(CLI::ExistingFile);
+                this->callback([&]() {
+                    TTDeterminizerCLIHandler handler;
+                    handler.handle(_file_path);
+                });
             }
     };
 

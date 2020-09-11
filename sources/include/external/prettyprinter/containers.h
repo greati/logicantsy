@@ -77,7 +77,7 @@ template<typename T> struct is_container : public std::false_type { };
 template<typename T, typename TAllocator> struct is_container<std::vector<T, TAllocator> > : public std::true_type { };
 
 // Mark list as a container
-template<typename T, typename TAllocator> struct is_container<std::list<T, TAllocator> > : public std::true_type { };
+//template<typename T, typename TAllocator> struct is_container<std::list<T, TAllocator> > : public std::true_type { };
 
 // Mark set as a container
 template<typename T, typename TTraits, typename TAllocator> struct is_container<std::set<T, TTraits, TAllocator> > : public std::true_type { };

@@ -36,6 +36,30 @@ ADD_FLEX_BISON_DEPENDENCY(flex_fmla_lexer bison_fmla_parser)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+# yamlcpp
+# -----------------------------------------#
+FetchContent_Declare(yamlcpp
+    GIT_REPOSITORY  https://github.com/jbeder/yaml-cpp
+    GIT_TAG         9a3624205e8774953ef18f57067b3426c1c5ada6 # 0.6.3
+)
+FetchContent_GetProperties(yamlcpp)
+if (NOT yamlcpp_POPULATED)
+    FetchContent_Populate(yamlcpp)
+    add_subdirectory(${yamlcpp_SOURCE_DIR} ${yamlcpp_BINARY_DIR})
+endif()
+
+# spdlog
+# ----------------------------------------#
+FetchContent_Declare(spdlog
+    GIT_REPOSITORY  https://github.com/gabime/spdlog
+    GIT_TAG         4a9ccf7e38e257feecce0c579a782741254eaeef # 1.8.0
+)
+FetchContent_GetProperties(spdlog)
+if (NOT spdlog_POPULATED)
+    FetchContent_Populate(spdlog)
+    add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
+endif()
+
 # libraries
 # --------------------------------------- #
 
@@ -84,8 +108,8 @@ target_include_directories(maintest PRIVATE include)
 gtest_discover_tests(maintest)
 
 add_executable(ltsy src/cli/cli.cpp ${BISON_bison_fmla_parser_OUTPUTS} ${FLEX_flex_fmla_lexer_OUTPUTS})
-target_link_libraries(ltsy PRIVATE logicantsy)
-target_include_directories(ltsy PRIVATE include)
+target_link_libraries(ltsy PRIVATE logicantsy PUBLIC yaml-cpp)
+target_include_directories(ltsy PRIVATE include PUBLIC ${yamlcpp_SOURCE_DIR}/include ${spdlog_SOURCE_DIR}/include)
 
 
 enable_testing()
