@@ -50,10 +50,10 @@
     
     using namespace ltsy;
 
-    auto and_con = std::make_shared<ltsy::Connective>("/\\", 2);
-    auto or_con = std::make_shared<ltsy::Connective>("\\/", 2);
+    auto and_con = std::make_shared<ltsy::Connective>("and", 2);
+    auto or_con = std::make_shared<ltsy::Connective>("or", 2);
     auto imp_con = std::make_shared<ltsy::Connective>("->", 2);
-    auto neg_con = std::make_shared<ltsy::Connective>("~", 1);
+    auto neg_con = std::make_shared<ltsy::Connective>("neg", 1);
     auto bot_con = std::make_shared<ltsy::Connective>("_", 0);
     auto top_con = std::make_shared<ltsy::Connective>("^", 0);
 }

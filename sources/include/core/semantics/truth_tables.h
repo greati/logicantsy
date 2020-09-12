@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <set>
 #include <memory>
+#include <map>
 
 namespace ltsy {
 
@@ -174,6 +175,7 @@ namespace ltsy {
             }
 
             std::stringstream print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const;
+            std::stringstream print(const std::map<int, std::string>& values_map) const;
     };
 
     template class TruthTable<int>;

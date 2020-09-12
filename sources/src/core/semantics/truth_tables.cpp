@@ -4,6 +4,7 @@
 #include "core/common.h"
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 namespace ltsy {
 
@@ -32,6 +33,28 @@ namespace ltsy {
             throw std::invalid_argument(ltsy::WRONG_ARITY_INPUT_EXCEPTION);
         auto position = utils::position_from_tuple(_nvalues, _arity, input);
         return _images[position];
+    }
+
+    template<>
+    std::stringstream TruthTable<std::set<int>>::print(const std::map<int, std::string>& values_map) const {
+        auto get_or_default = [&](const int& v){ 
+            return values_map.find(v) != values_map.end() ? values_map.find(v)->second : std::to_string(v); 
+        };
+        std::stringstream ss;
+        for (auto i = 0; i < _images.size(); ++i) {
+            auto row = utils::tuple_from_position(_nvalues, _arity, i);
+            for (auto it = row.cbegin(); it != row.cend(); it++) {
+                ss << std::setw(5) << get_or_default(*it);
+                if (std::next(it) != row.cend())
+                    ss << " ";
+            }
+            ss << " -> ";
+            for (const auto& img : _images[i])
+                ss << get_or_default(img) << " ";
+            if (i < _number_of_rows - 1)
+                ss << std::endl;
+        }
+        return ss;   
     }
 
     template<typename CellType>

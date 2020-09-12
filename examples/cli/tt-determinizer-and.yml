@@ -5,16 +5,17 @@ semantics:
     NA: [bot, f]
     A:  [top, t]
     R:  [top, f]
-connectives:
-  and: 2
-  neg: 1
-sequents:
-  and:
+conditions:
+  p and q:
     - [[], [p and q], [p, q], []]
     - [[], [p], [p and q], []]
     - [[], [q], [p and q], []]
-    - [[], [p, q], [p and q], []]
+    - [[p, q], [], [], [p and q]]
     - [[p and q], [], [], [p]]
     - [[p and q], [], [], [q]]
-  neg:
+  neg p:
     - [[neg p], [], [], [p]]
+  p `yourpartialconnective` q:
+    - [[],[],[],[]]
+  yourternary(p, q, r):
+    - [[p, r],["yourternary(p, q, r)"],[],[]]

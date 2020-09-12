@@ -78,8 +78,14 @@ namespace ltsy {
                 return false;
             }
 
+            /**
+             * Impose conditions over the table given by a sequent.
+             *
+             * @param sequent the sequent
+             * */
             void _determine_by_sequent(const NdSequent<std::set>& sequent) {
                 auto dimension = sequent.dimension();     
+                // work to find the determinants that lead to counter-models
                 auto counter_model_determinants = 
                     generate_fully_nd_table(_nvalues, _connective.arity()).get_determinants();
                 bool compound_has_appeared = false;
@@ -101,12 +107,17 @@ namespace ltsy {
                     decltype(_connective) connective,
                     decltype(_attitudes) attitudes) 
                 : _nvalues {nvalues}, _props {props}, _connective {connective}, _attitudes {attitudes} {
+                // convert propositions into formulas, in order to produce the compound
                 std::vector<std::shared_ptr<Formula>> props_args;
                 for (auto p : props)
                     props_args.push_back(std::dynamic_pointer_cast<Formula>(std::make_shared<Prop>(p)));
+                // produce the compound
                 _compound = std::make_shared<Compound>(std::make_shared<Connective>(_connective), props_args);
+                // start from a fully nd table
                 _table = generate_fully_nd_table(_nvalues, _connective.arity());
-                for (auto i = 0; i < _nvalues; ++i) _all_values.insert(i);
+                // populate set of values
+                for (auto i = 0; i < _nvalues; ++i) 
+                    _all_values.insert(i);
             }
 
             void determine(const std::vector<NdSequent<std::set>>& sequents) {

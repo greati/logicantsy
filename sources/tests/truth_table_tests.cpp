@@ -7,6 +7,7 @@ namespace {
     TEST(Determinants, InstantiationInt) {
         ltsy::Determinant<int> det {3, 2, 3, 2};
         std::cout << det;
+        std::set<int> kkk {1, 2, 3};
     }
 
     TEST(Determinants, InstantiationUnordSet) {
