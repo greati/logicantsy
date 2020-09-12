@@ -7,6 +7,7 @@
 #include <map>
 #include "core/exception.h"
 #include "core/common.h"
+#include "core/utils.h"
 #include <unordered_set>
 #include <algorithm>
 #include <sstream>
@@ -269,7 +270,7 @@ namespace ltsy {
      */
     class VariableCollector : public FormulaVisitor<void> {
         private:
-            std::unordered_set<Prop*> collected_variables;
+            std::set<Prop*, utils::DeepPointerComp<Prop>> collected_variables;
 
         public:
             virtual void visit_prop(Prop* prop) override {
@@ -282,7 +283,7 @@ namespace ltsy {
                            return fmla->accept(*this); 
                         });
             }
-            virtual std::unordered_set<Prop*> get_collected_variables() {
+            virtual decltype(collected_variables) get_collected_variables() {
                 return this->collected_variables;
             }
     };

@@ -45,10 +45,10 @@ id          ({alpha}|{symbol})({alpha}|{digit}|{symbol})*
 <<EOF>>     { return yyterminate(); }
 {ignore}    { loc.step(); }
 \n+         { loc.lines(yyleng); loc.step(); }
-\\\/        { return ltsy::BisonFmlaParserGen::make_TOK_OR_CON(loc); }
-\/\         { return ltsy::BisonFmlaParserGen::make_TOK_AND_CON(loc); }
+or          { return ltsy::BisonFmlaParserGen::make_TOK_OR_CON(loc); }
+and         { return ltsy::BisonFmlaParserGen::make_TOK_AND_CON(loc); }
 ->          { return ltsy::BisonFmlaParserGen::make_TOK_IMP_CON(loc); }
-~           { return ltsy::BisonFmlaParserGen::make_TOK_NEG_CON(loc); }
+neg         { return ltsy::BisonFmlaParserGen::make_TOK_NEG_CON(loc); }
 _           { return ltsy::BisonFmlaParserGen::make_TOK_BOT_CON(loc); }
 \^          { return ltsy::BisonFmlaParserGen::make_TOK_TOP_CON(loc); }
 \(          { return ltsy::BisonFmlaParserGen::make_TOK_LPAR(loc); }

@@ -32,7 +32,7 @@ namespace {
         ltsy::Compound f {land, {p, q}};
         ltsy::VariableCollector var_collector;
         f.accept(var_collector);
-        std::unordered_set<ltsy::Prop*> expected;
+        std::set<ltsy::Prop*, ltsy::utils::DeepPointerComp<ltsy::Prop>> expected;
         expected.insert(p.get()); expected.insert(q.get());
         ASSERT_EQ(var_collector.get_collected_variables(), expected);
     }

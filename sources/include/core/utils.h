@@ -8,6 +8,13 @@
 
 namespace ltsy::utils {
 
+    template<typename T>
+    struct DeepPointerComp {
+        bool operator()(const T* lhs, const T* rhs) const {
+            return *lhs < *rhs; 
+        }
+    };
+
     std::vector<int> tuple_from_position(int nvalues, int arity, int position);
 
     int position_from_tuple(int nvalues, int arity, const std::vector<int>& tuple);

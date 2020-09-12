@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_set>
 #include "core/utils.h"
+#include "core/common.h"
 #include <functional>
 #include <stdexcept>
 #include <set>

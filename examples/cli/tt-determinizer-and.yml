@@ -7,7 +7,7 @@ semantics:
     R:  [top, f]
 connectives:
   and: 2
-  ~: 1
+  neg: 1
 sequents:
   and:
     - [[], [p and q], [p, q], []]
@@ -16,5 +16,5 @@ sequents:
     - [[], [p, q], [p and q], []]
     - [[p and q], [], [], [p]]
     - [[p and q], [], [], [q]]
-  ~:
-    - [[~p], [], [], [p]]
+  neg:
+    - [[neg p], [], [], [p]]
