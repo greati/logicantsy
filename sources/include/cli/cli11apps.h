@@ -49,6 +49,10 @@ namespace ltsy {
                 this->add_option("-f,--file", _file_path, "YAML input file")
                    ->required()
                    ->check(CLI::ExistingFile);
+                this->callback([&]() {
+                    TTAxiomatizerCLIHandler handler;
+                    handler.handle(_file_path);
+                });
             }
     };
 

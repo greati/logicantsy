@@ -1,0 +1,15 @@
+semantics:
+  type: four-billatice
+  values: [f, bot, top, t]
+truth-tables:
+  p and q:
+    default: [t]
+    restrictions:
+      - [f, _]: [f]
+      - [_, f]: [f]
+  p -> q:
+    restrictions:
+      - [_, _]: [t, top]
+      - [t, f]: [f]
+
+

@@ -114,6 +114,13 @@ namespace ltsy {
             /**
              * Build truth table giving its images array.
              * */
+            TruthTable(int _nvalues, int _arity, const CellType& default_value) : 
+                TruthTable {_nvalues, _arity}
+                { this->_images = std::vector<CellType>(_number_of_rows, default_value); } 
+
+            /**
+             * Build truth table giving its images array.
+             * */
             TruthTable(int _nvalues, int _arity, const decltype(_images)& _images) : 
                 TruthTable {_nvalues, _arity}
                 { this->_images = _images; } 

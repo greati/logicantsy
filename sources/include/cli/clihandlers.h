@@ -11,6 +11,59 @@
 
 namespace ltsy {
 
+    class TTAxiomatizerCLIHandler {
+        private:
+            const std::string SEMANTICS_TITLE = "semantics";
+            const std::string SEMANTICS_VALUES_TITLE = "values";
+            const std::string TRUTH_TABLE_TITLE = "truth-tables";
+            std::map<int, std::string> _val_to_str;
+            std::map<std::string, int> _str_to_val;
+            std::map<std::string, std::shared_ptr<Connective>> _connectives;
+            std::map<std::string, std::vector<Prop>> _props;
+        public:
+            void handle(const std::string& yaml_path) {
+                YAMLCppParser parser;
+                auto root = parser.load_from_file(yaml_path);
+                try {
+                    auto semantics_node = parser.hard_require(root, SEMANTICS_TITLE);
+                    // parse values
+                    auto values_node = parser.hard_require(semantics_node, SEMANTICS_VALUES_TITLE);
+                    auto values = values_node.as<std::vector<std::string>>();
+                    std::set<int> real_values;
+                    auto nvalues = values.size();
+                    for (int i {0}; i < nvalues; ++i) {
+                        _str_to_val[values[i]] = i;
+                        _val_to_str[i] = values[i];
+                        real_values.insert(i);
+                    }
+                    //parse tts
+                    auto tt_root = parser.hard_require(root, TRUTH_TABLE_TITLE);
+                    for (const auto& tt_node : tt_root) {
+                        // capture connective and variables
+                        BisonFmlaParser fmla_parser;
+                        auto conn_compound = tt_node.first.as<std::string>();
+                        auto compound = std::dynamic_pointer_cast<Compound>(fmla_parser.parse(conn_compound));
+                        auto conn_name = compound->connective()->symbol(); 
+                        VariableCollector var_collector;
+                        compound->accept(var_collector);
+                        auto collected_vars = var_collector.get_collected_variables();
+                        std::vector<Prop> vars;
+                        for (const auto& v : collected_vars)
+                            vars.push_back(*v);
+                        _connectives[conn_name] = compound->connective();
+                        _props[conn_name] = vars;
+                        // parse tt
+                        NDTruthTable tt = parser.parse_nd_truth_table(tt_node.second, real_values,
+                                2, _str_to_val);
+                        auto table_print = tt.print(_val_to_str).str();
+                        spdlog::info("Input table for connective " + conn_name + " is\n" + table_print);
+                    }
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                }
+            }
+    };
+
     class TTDeterminizerCLIHandler {
 
         private:
