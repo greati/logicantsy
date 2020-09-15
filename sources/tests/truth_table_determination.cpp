@@ -3,6 +3,7 @@
 #include "tt_determination/ndsequents.h"
 #include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
+#include "core/semantics/attitude_semantics.h"
 
 namespace {
 
@@ -166,6 +167,11 @@ namespace {
         auto bsequents_for_conj_fde = axiomatizer.axiomatize(tt_nondet);
         std::cout << bsequents_for_conj_fde;
     
+    }
+
+
+    TEST(Determinants, SequentsFromTruthTableFourLattice) {
+        ltsy::FourBillatice billatice; 
     }
 
 };

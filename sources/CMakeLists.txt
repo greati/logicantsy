@@ -95,6 +95,7 @@ set(test_sources ${test_sources}
     tests/truth_table_tests.cpp
     tests/core_utils_tests.cpp
     tests/nmatrices_tests.cpp
+    tests/genmatrices_tests.cpp
     tests/proof_theory_tests.cpp
     tests/truth_table_determination.cpp
     tests/combinatorics_tests.cpp
