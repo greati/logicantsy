@@ -1,11 +1,11 @@
 #ifndef __NMATRICES__
 #define __NMATRICES__
 
+#include <set>
 #include "core/syntax.h"
-#include "core/common.h"
 #include "core/combinatorics/combinations.h"
 #include "core/semantics/truth_tables.h"
-#include <set>
+#include "core/common.h"
 
 namespace ltsy {
 
@@ -239,7 +239,7 @@ namespace ltsy {
                 os << std::string("<");
                 os << nm.nvalues();
                 os << std::string(",");
-                os << nm.dvalues();
+                //os << nm.dvalues();
                 os << std::string(">") << std::endl;
                 os << *nm.interpretation();
                 return os;  

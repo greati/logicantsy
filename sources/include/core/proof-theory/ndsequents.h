@@ -44,6 +44,23 @@ namespace ltsy {
                 return false; 
             }
 
+            std::string to_string() const {
+                std::stringstream os;
+                auto& seq = *this;
+                os << std::string("[ ");
+                for (auto i = 0; i < seq._sequent_fmlas.size(); ++i) {
+                    for (auto it = seq._sequent_fmlas[i].begin(); it != seq._sequent_fmlas[i].end(); ++it) {
+                        os << (*(*it));
+                        if (std::next(it) != seq._sequent_fmlas[i].end())
+                            os << ",";
+                    }
+                    if (i < seq._sequent_fmlas.size() - 1)
+                        os << std::string(" | ");
+                }
+                os << std::string(" ]");
+                return os.str();           
+            }
+
             friend std::ostream& operator<<(std::ostream& os, const NdSequent<FmlaContainerT>& seq) {
                 os << std::string("[ ");
                 for (auto i = 0; i < seq._sequent_fmlas.size(); ++i) {

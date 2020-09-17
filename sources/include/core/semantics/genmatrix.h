@@ -9,7 +9,17 @@
 #include <set>
 
 namespace ltsy {
-
+    
+    /**
+     * Represents a generalized version of
+     * matrices, in the following sense:
+     * - we may define more than one distinguished set (thus allowing
+     *   the creation of q-matrices, p-matrices, B-matrices...)
+     * - we may interpret the connectives using (partial) non-deterministic
+     *   truth-tables.
+     *
+     * @author Vitor Greati
+     * */
     class GenMatrix {
     
         private:

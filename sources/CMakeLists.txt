@@ -67,6 +67,8 @@ add_library(logicantsy
     src/core/utils.cpp 
     src/core/common.cpp 
     src/core/syntax.cpp 
+    src/core/semantics/attitudes.cpp
+    src/core/semantics/judgment_values_corr.cpp
     src/core/semantics/truth_tables.cpp
     )
 target_include_directories(logicantsy PUBLIC include)

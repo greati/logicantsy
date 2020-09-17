@@ -1,7 +1,12 @@
 #include "gtest/gtest.h"
 #include "core/semantics/genmatrix.h"
+#include "core/semantics/attitude_semantics.h"
 
 namespace {
+
+    TEST(GenMatrices, FourBillatice) {
+        ltsy::FourBillatice four; 
+    }
 
     TEST(GenMatrices, Construct) {
         ltsy::Signature cl_sig {

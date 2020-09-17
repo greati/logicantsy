@@ -22,6 +22,20 @@ namespace ltsy {
                 determinizer.determine(sequents);
                 return determinizer.table(); 
             }
+
+            std::vector<NdSequent<std::set>> axiomatize_truth_table(
+                    std::set<int> all_values,
+                    Connective connective,
+                    std::vector<std::shared_ptr<Prop>> props,
+                    std::shared_ptr<Compound> compound,
+                    std::vector<CognitiveAttitude> judgements,
+                    std::shared_ptr<JudgementValueCorrespondence> judg_value_correspondence,
+                    const NDTruthTable& table) {
+
+                NdSequentsFromTruthTable axiomatizer {all_values, connective, props,
+                compound, judgements, judg_value_correspondence};
+                return axiomatizer.axiomatize(table); 
+            }
     };
 
 }

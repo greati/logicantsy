@@ -7,6 +7,7 @@
 #include "tt_determination/ndsequents.h"
 #include "core/parser/fmla/fmla_parser.h"
 #include "apps/apps_facade.h"
+#include "core/semantics/attitude_semantics.h"
 #include "core/common.h"
 
 namespace ltsy {
@@ -15,11 +16,12 @@ namespace ltsy {
         private:
             const std::string SEMANTICS_TITLE = "semantics";
             const std::string SEMANTICS_VALUES_TITLE = "values";
+            const std::string SEMANTICS_JUDGMENTS_TITLE = "judgements";
             const std::string TRUTH_TABLE_TITLE = "truth-tables";
             std::map<int, std::string> _val_to_str;
             std::map<std::string, int> _str_to_val;
             std::map<std::string, std::shared_ptr<Connective>> _connectives;
-            std::map<std::string, std::vector<Prop>> _props;
+            std::map<std::string, std::vector<std::shared_ptr<Prop>>> _props;
         public:
             void handle(const std::string& yaml_path) {
                 YAMLCppParser parser;
@@ -36,7 +38,17 @@ namespace ltsy {
                         _val_to_str[i] = values[i];
                         real_values.insert(i);
                     }
-                    //parse tts
+                    // parse judgement names
+                    auto judgements_node = parser.hard_require(semantics_node, SEMANTICS_JUDGMENTS_TITLE);
+                    auto judgements_names = judgements_node.as<std::vector<std::string>>();
+                    // semantics
+                    std::shared_ptr<JudgementValueCorrespondence> jvc =
+                        std::make_shared<FourBillatice>();
+                    // semantics judgements
+                    std::vector<CognitiveAttitude> judgements_in_semantics;
+                    for (const auto& s : judgements_names)
+                        judgements_in_semantics.push_back(jvc->get_judgement(s));
+                    //parse tts and run app
                     auto tt_root = parser.hard_require(root, TRUTH_TABLE_TITLE);
                     for (const auto& tt_node : tt_root) {
                         // capture connective and variables
@@ -47,17 +59,30 @@ namespace ltsy {
                         VariableCollector var_collector;
                         compound->accept(var_collector);
                         auto collected_vars = var_collector.get_collected_variables();
-                        std::vector<Prop> vars;
-                        for (const auto& v : collected_vars)
-                            vars.push_back(*v);
+                        std::vector<std::shared_ptr<Prop>> vars;
+                        for (const auto v : collected_vars)
+                            vars.push_back(std::make_shared<Prop>(*v));
                         _connectives[conn_name] = compound->connective();
                         _props[conn_name] = vars;
                         // parse tt
                         NDTruthTable tt = parser.parse_nd_truth_table(tt_node.second, real_values,
-                                2, _str_to_val);
+                                compound->connective()->arity(), _str_to_val);
                         auto table_print = tt.print(_val_to_str).str();
                         spdlog::info("Input table for connective " + conn_name + " is\n" + table_print);
+                        AppsFacade apps_facade;
+                        auto sequents = apps_facade.axiomatize_truth_table(real_values,
+                                *compound->connective(),
+                                vars,
+                                compound,
+                                judgements_in_semantics,
+                                jvc,
+                                tt);
+                        std::string out = "";
+                        for (const auto& seq : sequents)
+                            out += seq.to_string() + "\n"; 
+                        spdlog::info("Here is your axiomatization for " + conn_name + ":\n" + out);
                     }
+                    spdlog::info("Done.");
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());
                 }

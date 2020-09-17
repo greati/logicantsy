@@ -4,6 +4,7 @@
 #include "core/syntax.h"
 #include "core/semantics/truth_tables.h"
 #include "core/semantics/attitudes.h"
+#include "core/semantics/judgment_values_corr.h"
 #include "core/proof-theory/ndsequents.h"
 #include "core/utils.h"
 
@@ -25,8 +26,8 @@ namespace ltsy {
             Connective _connective;
             std::vector<std::shared_ptr<Prop>> _props;
             std::shared_ptr<Compound> _compound;
-            std::map<CognitiveAttitude, int> _judg_position;
             std::vector<CognitiveAttitude> _judgements;
+            std::map<CognitiveAttitude, int> _judg_position;
             std::shared_ptr<JudgementValueCorrespondence> _judg_value_correspondence;
 
         public:

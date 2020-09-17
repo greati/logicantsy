@@ -1,6 +1,7 @@
 semantics:
   type: four-billatice
   values: [f, bot, top, t]
+  judgements: [NR, NA, A, R]
 truth-tables:
   p and q:
     default: [t]
@@ -11,5 +12,3 @@ truth-tables:
     restrictions:
       - [_, _]: [t, top]
       - [t, f]: [f]
-
-
