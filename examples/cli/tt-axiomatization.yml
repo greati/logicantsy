@@ -8,7 +8,16 @@ truth-tables:
     restrictions:
       - [f, _]: [f]
       - [_, f]: [f]
+      - [top, t]: [top]
+      - [t, top]: [top]
+      - [bot, t]: [bot]
+      - [t, bot]: [bot]
+      - [top, bot]: [f]
+      - [bot, top]: [f]
+      - [bot, bot]: [bot]
+      - [top, top]: [top]
+      - [t, t]: [t]
   p -> q:
     restrictions:
-      - [_, _]: [t, top]
+      - [_, _]: []
       - [t, f]: [f]

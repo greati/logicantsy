@@ -80,7 +80,7 @@ namespace ltsy {
                         std::string out = "";
                         for (const auto& seq : sequents)
                             out += seq.to_string() + "\n"; 
-                        spdlog::info("Here is your axiomatization for " + conn_name + ":\n" + out);
+                        spdlog::info("Here is an axiomatization for " + conn_name + ", with " + std::to_string(sequents.size()) + " sequents:\n" + out);
                     }
                     spdlog::info("Done.");
                 } catch (ParseException& pe) {

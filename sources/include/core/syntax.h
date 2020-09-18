@@ -323,14 +323,23 @@ namespace ltsy {
                 buffer << prop->symbol();
             }
             virtual void visit_compound(Compound* compound) override {
-                buffer << "(" << compound->connective()->symbol() << "(";
-                auto components = compound->components();
-                for (auto it = components.cbegin(); it != components.cend(); ++it) {
-                    (*it)->accept(*this);
-                    if (std::next(it) != components.cend())
-                        buffer << ",";
+                auto arity = compound->connective()->arity();
+                auto symbol = compound->connective()->symbol();
+                if (arity != 2) {
+                    buffer << symbol << "(";
+                    auto components = compound->components();
+                    for (auto it = components.cbegin(); it != components.cend(); ++it) {
+                        (*it)->accept(*this);
+                        if (std::next(it) != components.cend())
+                            buffer << ",";
+                    }
+                    buffer <<")";
+                } else {
+                    auto components = compound->components();
+                    components[0]->accept(*this);
+                    buffer << " " << symbol << " ";
+                    components[1]->accept(*this);
                 }
-                buffer <<"))";
             }
             std::string get_string() { return buffer.str(); }
     };
