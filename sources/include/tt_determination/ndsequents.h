@@ -5,6 +5,7 @@
 #include "core/semantics/truth_tables.h"
 #include "core/semantics/attitudes.h"
 #include "core/proof-theory/ndsequents.h"
+#include <optional>
 
 namespace ltsy {
 
@@ -105,7 +106,8 @@ namespace ltsy {
                     int nvalues, 
                     decltype(_props) props,
                     decltype(_connective) connective,
-                    decltype(_attitudes) attitudes) 
+                    decltype(_attitudes) attitudes,
+                    const std::optional<NDTruthTable>& start_table) 
                 : _nvalues {nvalues}, _props {props}, _connective {connective}, _attitudes {attitudes} {
                 // convert propositions into formulas, in order to produce the compound
                 std::vector<std::shared_ptr<Formula>> props_args;
@@ -114,11 +116,21 @@ namespace ltsy {
                 // produce the compound
                 _compound = std::make_shared<Compound>(std::make_shared<Connective>(_connective), props_args);
                 // start from a fully nd table
-                _table = generate_fully_nd_table(_nvalues, _connective.arity());
+                if (start_table == std::nullopt)
+                    _table = generate_fully_nd_table(_nvalues, _connective.arity());
+                else
+                    _table = start_table.value();
                 // populate set of values
                 for (auto i = 0; i < _nvalues; ++i) 
                     _all_values.insert(i);
             }
+
+            NdSequentTruthTableDeterminizer(
+                    int nvalues, 
+                    decltype(_props) props,
+                    decltype(_connective) connective,
+                    decltype(_attitudes) attitudes)
+                : NdSequentTruthTableDeterminizer {nvalues, props, connective, attitudes, std::nullopt} { /* empty */}
 
             void determine(const std::vector<NdSequent<std::set>>& sequents) {
                 for (const auto& s : sequents)

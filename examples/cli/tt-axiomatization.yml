@@ -21,3 +21,7 @@ truth-tables:
     restrictions:
       - [_, _]: []
       - [t, f]: [f]
+  foo(p, q, r):
+    default: [t, f, bot, top]
+    restrictions:
+      - [t, t, t]: []

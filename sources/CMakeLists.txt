@@ -71,7 +71,7 @@ add_library(logicantsy
     src/core/semantics/judgment_values_corr.cpp
     src/core/semantics/truth_tables.cpp
     )
-target_include_directories(logicantsy PUBLIC include)
+target_include_directories(logicantsy PUBLIC include ${spdlog_SOURCE_DIR}/include)
 
 # executables
 # --------------------------------------- #

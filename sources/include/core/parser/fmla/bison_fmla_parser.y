@@ -14,14 +14,12 @@
     #include <vector>
     #include <stdint.h>
     #include "core/syntax.h"
-//    #include "command.h"
 
     using namespace std;
 
     namespace ltsy {
         class FlexFmlaLexer;
         class BisonFmlaParser;
-        //void BisonFmlaParser::set_parsed_formula(std::shared_ptr<ltsy::Formula>);
     }
 }
 
@@ -36,7 +34,7 @@
     #include "core/parser/fmla/flex_fmla_lexer.h"
     #include "bison_fmla_parser.hpp"
     #include "core/parser/fmla/fmla_parser.h"
-//    #include "interpreter.h"
+    #include "spdlog/spdlog.h"
     #include "location.hh"
     
     // yylex() arguments are defined in parser.y
@@ -69,11 +67,11 @@
 %define api.token.prefix {TOK_}
 
 %token TOK_END 0 "end of file"
-%token <std::string> TOK_IDENTIFIER  "id";
-%token <std::string> TOK_CUSTOM_CON "custom_op";
-%token TOK_LPAR "leftpar";
-%token TOK_RPAR "rightpar";
-%token TOK_COMMA "comma";
+%token <std::string> TOK_IDENTIFIER  "identifier";
+%token <std::string> TOK_CUSTOM_CON "custom operation";
+%token TOK_LPAR "(";
+%token TOK_RPAR ")";
+%token TOK_COMMA ",";
 %token TOK_OR_CON "or";
 %token TOK_AND_CON "and";
 %token TOK_IMP_CON "imp";
@@ -147,6 +145,12 @@ term_list_comma : term { $$ = std::vector<std::shared_ptr<ltsy::Formula>> {$1}; 
 
 // Bison expects us to provide implementation - otherwise linker complains
 void ltsy::BisonFmlaParserGen::error(const location &loc , const std::string &message) {
-    std::cout << "(ERROR at [" << loc.begin.line << "," << loc.begin.column << 
-        "]) " << message << endl;
+    auto global_location = parserwrapper.global_location();
+    if (global_location != std::nullopt) {
+        std::string error_msg = "near (" + std::to_string(global_location.value().row) + "," + std::to_string(global_location.value().col) + ")" + 
+            ", at (" + std::to_string(loc.begin.line) + "," + std::to_string(loc.begin.column) + "), " + message;
+        spdlog::error(error_msg);
+    } else {
+        spdlog::error("at (" + std::to_string(loc.begin.line) + "," + std::to_string(loc.begin.column) + "), " + message);
+    }
 }

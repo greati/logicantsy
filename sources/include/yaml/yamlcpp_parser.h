@@ -4,7 +4,9 @@
 #include "yaml-cpp/yaml.h"
 #include "core/exception/exceptions.h"
 #include "core/semantics/truth_tables.h"
+#include "core/parser/fmla/fmla_parser.h"
 #include "spdlog/spdlog.h"
+#include <tuple>
 
 namespace ltsy {
 
@@ -44,6 +46,11 @@ namespace ltsy {
 
         const std::string TT_DEFAULT_VALUE_NAME = "default";
         const std::string TT_RESTRICTIONS_NAME = "restrictions";
+
+        std::shared_ptr<FmlaParser> make_fmla_parser(const YAML::Node& node) const {
+            return std::make_shared<BisonFmlaParser>(BisonFmlaParser::Location {node.Mark().line, 
+                                                                                node.Mark().column});
+        }
 
         std::set<int> parse_set_str_to_values(const YAML::Node& node,
                 const std::map<std::string, int>& str_to_val) const {
@@ -100,6 +107,20 @@ namespace ltsy {
             return r;
         }
 
+        std::tuple<std::shared_ptr<Compound>, std::vector<std::shared_ptr<Prop>>> parse_connective_representant(const YAML::Node& node) {
+            auto fmla_parser = make_fmla_parser(node);
+            auto conn_compound = node.as<std::string>();
+            auto compound = std::dynamic_pointer_cast<Compound>(fmla_parser->parse(conn_compound));
+            auto conn_name = compound->connective()->symbol(); 
+            VariableCollector var_collector;
+            compound->accept(var_collector);
+            auto collected_vars = var_collector.get_collected_variables();
+            std::vector<std::shared_ptr<Prop>> vars;
+            for (const auto v : collected_vars)
+                vars.push_back(std::make_shared<Prop>(*v));
+            return std::tuple{compound, vars};
+        }
+
         /* Parse a truth table pattern.
          * */
         std::set<Determinant<std::set<int>>> parse_pattern_str_to_determinant(
@@ -120,27 +141,31 @@ namespace ltsy {
                 const std::set<int>& values, int arity,
                 const std::map<std::string, int>& str_to_val) 
             const {
-            auto nvalues = values.size();
-            // default values and table creation
-            NDTruthTable tt;
-            if (soft_require(ttnode, TT_DEFAULT_VALUE_NAME)) {
-                std::set<int> default_values = parse_set_str_to_values(ttnode[TT_DEFAULT_VALUE_NAME],
-                        str_to_val);
-                tt = NDTruthTable {nvalues, arity, default_values};
-            } else {
-                tt = generate_fully_nd_table(nvalues, arity);
-            }
-            // restrictions
-            auto restrictions_node = hard_require(ttnode, TT_RESTRICTIONS_NAME);
-            for (const auto& restriction_dummy : restrictions_node) {
-                for (const auto& restriction : restriction_dummy) {
-                    auto det_result = parse_set_str_to_values(restriction.second, str_to_val); 
-                    auto args_pattern = restriction.first.as<std::vector<std::string>>(); 
-                    auto dets = parse_pattern_str_to_determinant(args_pattern, det_result, values, str_to_val);
-                    tt.update(dets);
+            try {
+                auto nvalues = values.size();
+                // default values and table creation
+                NDTruthTable tt;
+                if (soft_require(ttnode, TT_DEFAULT_VALUE_NAME)) {
+                    std::set<int> default_values = parse_set_str_to_values(ttnode[TT_DEFAULT_VALUE_NAME],
+                            str_to_val);
+                    tt = NDTruthTable {nvalues, arity, default_values};
+                } else {
+                    tt = generate_fully_nd_table(nvalues, arity);
                 }
+                // restrictions
+                auto restrictions_node = hard_require(ttnode, TT_RESTRICTIONS_NAME);
+                for (const auto& restriction_dummy : restrictions_node) {
+                    for (const auto& restriction : restriction_dummy) {
+                        auto det_result = parse_set_str_to_values(restriction.second, str_to_val); 
+                        auto args_pattern = restriction.first.as<std::vector<std::string>>(); 
+                        auto dets = parse_pattern_str_to_determinant(args_pattern, det_result, values, str_to_val);
+                        tt.update(dets);
+                    }
+                }
+                return tt;
+            } catch (YAML::ParserException &ye) {
+                throw;
             }
-            return tt;
         }
 
     };

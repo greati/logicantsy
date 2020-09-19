@@ -25,8 +25,8 @@ namespace ltsy {
         public:
             void handle(const std::string& yaml_path) {
                 YAMLCppParser parser;
-                auto root = parser.load_from_file(yaml_path);
                 try {
+                    auto root = parser.load_from_file(yaml_path);
                     auto semantics_node = parser.hard_require(root, SEMANTICS_TITLE);
                     // parse values
                     auto values_node = parser.hard_require(semantics_node, SEMANTICS_VALUES_TITLE);
@@ -52,9 +52,9 @@ namespace ltsy {
                     auto tt_root = parser.hard_require(root, TRUTH_TABLE_TITLE);
                     for (const auto& tt_node : tt_root) {
                         // capture connective and variables
-                        BisonFmlaParser fmla_parser;
+                        auto fmla_parser = parser.make_fmla_parser(tt_node.first);
                         auto conn_compound = tt_node.first.as<std::string>();
-                        auto compound = std::dynamic_pointer_cast<Compound>(fmla_parser.parse(conn_compound));
+                        auto compound = std::dynamic_pointer_cast<Compound>(fmla_parser->parse(conn_compound));
                         auto conn_name = compound->connective()->symbol(); 
                         VariableCollector var_collector;
                         compound->accept(var_collector);
@@ -79,12 +79,15 @@ namespace ltsy {
                                 tt);
                         std::string out = "";
                         for (const auto& seq : sequents)
-                            out += seq.to_string() + "\n"; 
-                        spdlog::info("Here is an axiomatization for " + conn_name + ", with " + std::to_string(sequents.size()) + " sequents:\n" + out);
+                            out += "- " + seq.to_string() + "\n"; 
+                        spdlog::info("Here is an axiomatization for " + conn_name + ", with " 
+                                    + std::to_string(sequents.size()) + " sequent(s):\n" + out);
                     }
                     spdlog::info("Done.");
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());
+                } catch (YAML::ParserException& ye) {
+                    spdlog::critical(ye.what());
                 }
             }
     };
@@ -97,29 +100,33 @@ namespace ltsy {
             const std::string SEMANTICS_VALUES_TITLE = "values";
             const std::string SEMANTICS_JUDGEMENTS_TITLE = "judgements";
             const std::string CONDITIONS_TITLE = "conditions";
+            const std::string TRUTH_TABLES_TITLE = "truth-tables";
+            const std::string TRUTH_TABLES_BASE_TITLE = "base";
 
             std::map<int, std::string> _val_to_str;
             std::map<std::string, int> _str_to_val;
             std::vector<CognitiveAttitude> _judgements;
             std::map<std::string, std::shared_ptr<Connective>> _connectives;
             std::map<std::string, std::vector<Prop>> _props;
-            //std::vector<std::shared_ptr<Prop>> _props;
+            std::map<std::string, NDTruthTable> _start_tts;
             std::map<std::string, std::vector<NdSequent<std::set>>> _sequents_per_connective;
 
         public:
             void handle(const std::string& yaml_path) {
                 YAMLCppParser parser;
-                auto root = parser.load_from_file(yaml_path);
                 try {
+                    auto root = parser.load_from_file(yaml_path);
                     auto semantics_node = parser.hard_require(root, SEMANTICS_TITLE);
 
                     // parse values
                     auto values_node = parser.hard_require(semantics_node, SEMANTICS_VALUES_TITLE);
                     auto values = values_node.as<std::vector<std::string>>();
+                    std::set<int> real_values;
                     auto nvalues = values.size();
                     for (int i {0}; i < nvalues; ++i) {
                         _str_to_val[values[i]] = i;
                         _val_to_str[i] = values[i];
+                        real_values.insert(i);
                     }
                     // parse judgements
                     auto judgements_node = parser.hard_require(semantics_node, SEMANTICS_JUDGEMENTS_TITLE);
@@ -132,35 +139,36 @@ namespace ltsy {
                         }
                         _judgements.push_back({judge_name, judge_values});
                     }
-                    // parse conditions
-                    auto conditions_node = parser.hard_require(root, CONDITIONS_TITLE);
-                    for (auto it = conditions_node.begin(); it != conditions_node.end(); ++it) {
+                    // parse tts
+                    auto truth_tables_node = parser.hard_require(root, TRUTH_TABLES_TITLE);
+                    for (auto it_tt = truth_tables_node.begin(); it_tt != truth_tables_node.end(); ++it_tt) {
                         // capture connective and variables
-                        BisonFmlaParser fmla_parser;
-                        auto conn_compound = it->first.as<std::string>();
-                        auto compound = std::dynamic_pointer_cast<Compound>(fmla_parser.parse(conn_compound));
+                        auto [compound, collected_vars] = parser.parse_connective_representant(it_tt->first);
                         auto conn_name = compound->connective()->symbol(); 
-                        VariableCollector var_collector;
-                        compound->accept(var_collector);
-                        auto collected_vars = var_collector.get_collected_variables();
                         std::vector<Prop> vars;
                         for (const auto& v : collected_vars)
                             vars.push_back(*v);
                         _connectives[conn_name] = compound->connective();
-                        _props[conn_name] = vars;
-
-                        // parse sequents, for each connective
-                        auto conn_seqs = it->second;//parser.hard_require(root, SEQUENTS_TITLE);
+                        _props[conn_name] = vars;                   
+                        // parse base table
+                        std::optional<NDTruthTable> base_tt = std::nullopt;
+                        if (auto base_node = it_tt->second[TRUTH_TABLES_BASE_TITLE]) {
+                            NDTruthTable tt = parser.parse_nd_truth_table(base_node, real_values,
+                                    compound->connective()->arity(), _str_to_val);
+                            base_tt = std::optional<NDTruthTable>(tt);
+                        }
+                        // parse conditions
+                        auto conditions_node = parser.hard_require(it_tt->second, CONDITIONS_TITLE);
                         std::vector<NdSequent<std::set>> conn_parsed_sequents;
-                        for (const auto& seq_node : conn_seqs) {
+                        for (const auto& seq_node : conditions_node) {
                             // each seq_node is a list of lists
                             std::vector<std::set<std::shared_ptr<Formula>>> seq_places_sets;
                             for (const auto& seq_place_node : seq_node) {
                                 std::set<std::shared_ptr<Formula>> fmlas_in_place;
                                 auto fmlas_str = seq_place_node.as<std::vector<std::string>>();
                                 for (const auto& fmla_str : fmlas_str) {
-                                    BisonFmlaParser fmla_parser;
-                                    auto parsed_fmla = fmla_parser.parse(fmla_str);
+                                    auto fmla_parser = parser.make_fmla_parser(seq_place_node);
+                                    auto parsed_fmla = fmla_parser->parse(fmla_str);
                                     fmlas_in_place.insert(parsed_fmla);
                                 }
                                 seq_places_sets.push_back(fmlas_in_place);
@@ -174,12 +182,15 @@ namespace ltsy {
                         AppsFacade apps_facade;
                         auto table = apps_facade.determinize_truth_table(nvalues, _props[conn_name], 
                                 *_connectives[conn_name],
-                                _judgements, _sequents_per_connective[conn_name]);
+                                _judgements, _sequents_per_connective[conn_name], base_tt);
                         auto table_print = table.print(_val_to_str).str();
                         spdlog::info("The table for " + conn_name + " is" + "\n" + table_print);
+                        
                     }
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
                 }
             };
     };

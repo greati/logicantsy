@@ -47,17 +47,19 @@ namespace ltsy {
             std::string to_string() const {
                 std::stringstream os;
                 auto& seq = *this;
-                os << std::string("[ ");
+                os << std::string("[");
                 for (auto i = 0; i < seq._sequent_fmlas.size(); ++i) {
+                    os << std::string("[");
                     for (auto it = seq._sequent_fmlas[i].begin(); it != seq._sequent_fmlas[i].end(); ++it) {
                         os << (*(*it));
                         if (std::next(it) != seq._sequent_fmlas[i].end())
-                            os << ",";
+                            os << ", ";
                     }
+                    os << std::string("]");
                     if (i < seq._sequent_fmlas.size() - 1)
-                        os << std::string(" | ");
+                        os << std::string(", ");
                 }
-                os << std::string(" ]");
+                os << std::string("]");
                 return os.str();           
             }
 

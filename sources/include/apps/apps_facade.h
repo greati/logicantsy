@@ -17,8 +17,9 @@ namespace ltsy {
                     std::vector<Prop> props,
                     Connective connective,
                     std::vector<CognitiveAttitude> judgements,
-                    std::vector<ltsy::NdSequent<std::set>> sequents) const {
-                NdSequentTruthTableDeterminizer determinizer {number_values, props, connective, judgements};
+                    std::vector<ltsy::NdSequent<std::set>> sequents,
+                    const std::optional<NDTruthTable>& start_table) const {
+                NdSequentTruthTableDeterminizer determinizer {number_values, props, connective, judgements, start_table};
                 determinizer.determine(sequents);
                 return determinizer.table(); 
             }

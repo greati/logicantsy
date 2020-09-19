@@ -5,17 +5,18 @@ semantics:
     NA: [bot, f]
     A:  [top, t]
     R:  [top, f]
-conditions:
+truth-tables:
   p and q:
-    - [[], [p and q], [p, q], []]
-    - [[], [p], [p and q], []]
-    - [[], [q], [p and q], []]
-    - [[p, q], [], [], [p and q]]
-    - [[p and q], [], [], [p]]
-    - [[p and q], [], [], [q]]
-  neg p:
-    - [[neg p], [], [], [p]]
-  p `yourpartialconnective` q:
-    - [[],[],[],[]]
-  yourternary(p, q, r):
-    - [[p, r],["yourternary(p, q, r)"],[],[]]
+    base:
+      restrictions:
+        - [f, f]: [f]
+    conditions:
+      - [[], [p and q], [p, q], []]
+      - [[], [p], [p and q], []]
+      - [[], [q], [p and q], []]
+      - [[p, q], [], [], [p and q]]
+      - [[p and q], [], [], [p]]
+      - [[p and q], [], [], [q]]
+  p or q:
+    conditions:
+      - [[],[],[],[]] 
