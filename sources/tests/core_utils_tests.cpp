@@ -11,6 +11,16 @@ namespace {
         ASSERT_EQ(diff, expdiff);
     }
 
+
+    TEST(CoreUtils, CartesianProduct) {
+        std::vector<std::set<int>> ss {
+            {1, 3, 4}, {1, 5}, {7}
+        }; 
+        auto r = ltsy::utils::cartesian_product(ss);
+        auto a = std::vector<std::vector<int>>{{1,1,7},{1,5,7},{3,1,7},{3,5,7},{4,1,7},{4,5,7}};
+        ASSERT_EQ(r, a);
+    }
+
     TEST(CoreUtils, TupleAndPosition) {
         {
             {

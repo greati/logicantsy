@@ -24,6 +24,18 @@ namespace ltsy::utils {
     int compute_number_of_rows(int nvalues, int arity);
 
     template<typename T>
+    std::vector<std::vector<T>> cartesian_product(const std::set<T>& s1, const std::set<T>& s2);
+    extern template std::vector<std::vector<int>> cartesian_product(const std::set<int>& s1, const std::set<int>& s2);
+
+    template<typename T>
+    std::vector<std::vector<T>> cartesian_product(const std::vector<std::vector<T>>& s1, const std::set<T>& s2);
+    extern template std::vector<std::vector<int>> cartesian_product(const std::vector<std::vector<int>>& s1, const std::set<int>& s2);
+
+    template<typename T>
+    std::vector<std::vector<T>> cartesian_product(const std::vector<std::set<T>>& sets);
+    extern template std::vector<std::vector<int>> cartesian_product(const std::vector<std::set<int>>& sets);
+
+    template<typename T>
     bool is_subset(const std::unordered_set<T>& s1, const std::unordered_set<T>& s2);
     extern template bool is_subset<int>(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
 

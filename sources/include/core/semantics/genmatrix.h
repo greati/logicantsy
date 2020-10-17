@@ -51,6 +51,112 @@ namespace ltsy {
             inline decltype(_signature) signature() const { return _signature; }
     };
 
+    /**
+     * A valuation over an generalized matrix, specified
+     * by assignments to each propositional variable.
+     * Although it is formally expected of such
+     * a valuation to provide a single truth-value
+     * to each formula, we implement this visitor
+     * to answer with all possible values, since we
+     * are dealing here with non-truth-funcional semantics
+     * (see the theory of NMatrices).
+     *
+     * @author Vitor Greati
+     * */
+    class GenMatrixValuation {
+        private:
+
+            std::shared_ptr<GenMatrix> _nmatrix_ptr;
+            std::map<Prop, int> _valuation_map;
+            
+        public:
+            
+            /**
+             * Initialize a valuation, by indicating
+             * the corresponding generalized matrix
+             * and the map that assigns to each propositional
+             * variable a truth-value.
+             * */
+            GenMatrixValuation(decltype(_nmatrix_ptr) nmatrix_ptr,
+                    const std::vector<std::pair<Prop, int>>& mappings)
+                {
+
+                std::atomic_store(&(this->_nmatrix_ptr), std::move(nmatrix_ptr));
+
+                auto values = _nmatrix_ptr->values();
+               
+                for (auto& mapping : mappings) {
+                    auto [p, v] = mapping;
+                    if (v >= 0 and v < values.size()) {
+                        _valuation_map.insert(mapping);
+                    } else {
+                        std::cout << v;
+                        throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
+                    }
+                } 
+            }
+
+            std::stringstream print() {
+                std::stringstream ss;
+                for (auto& [k, v] : _valuation_map) {
+                    ss << k.symbol() << " -> " << v << std::endl;
+                }
+                return ss;
+            }
+
+            inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
+                return _nmatrix_ptr;
+            }
+            
+            inline int operator()(const Prop& p) {
+                return _valuation_map[p];
+            }
+    };
+
+    /* Based on a valuation, visit a formula to
+     * determine its truth value (it is the 
+     * unique homomorphic extension of the 
+     * given valuation).
+     *
+     * @author Vitor Greati
+     * */
+    class GenMatrixEvaluator : public FormulaVisitor<std::set<int>> {
+        private:
+            std::shared_ptr<GenMatrixValuation> _matrix_valuation_ptr;
+
+        public:
+
+            GenMatrixEvaluator(decltype(_matrix_valuation_ptr) matrix_valuation_ptr) :
+                _matrix_valuation_ptr {matrix_valuation_ptr} {/* empty */}
+
+            std::set<int> visit_prop(Prop* prop) override {
+                if (prop != nullptr) {
+                    return std::set<int>{(*_matrix_valuation_ptr)(*prop)};
+                } else throw std::logic_error("proposition points to null");
+            }
+
+            std::set<int> visit_compound(Compound* compound) override {
+               if (compound != nullptr) {
+                   auto connective = compound->connective();
+                   auto conn_interp = 
+                       _matrix_valuation_ptr->nmatrix_ptr()->interpretation()
+                           ->get_interpretation(connective->symbol());
+                   auto components = compound->components();
+                   std::vector<std::set<int>> args;
+                   for (auto component : components) {
+                        args.push_back(component->accept(*this));
+                   }
+                   auto possible_arguments = utils::cartesian_product(args);
+                   std::set<int> result;
+                   for (const auto& arg : possible_arguments) {
+                      auto conn_values = conn_interp->at(arg);
+                      result.insert(conn_values.begin(), conn_values.end());
+                   }
+                   return result;
+               } else throw std::logic_error("compound points to null");
+            }
+    };
+
 };
 
 #endif

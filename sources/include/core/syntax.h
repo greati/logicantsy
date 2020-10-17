@@ -14,8 +14,7 @@
 
 namespace ltsy {
     
-    /**
-     * Represents a connective, with a symbol
+    /* Represents a connective, with a symbol
      * and an arity.
      *
      * @author Vitor Greati
@@ -25,21 +24,45 @@ namespace ltsy {
             Symbol _symbol;       //< Connective symbol
             Arity _arity;         //< Connective arity
         public:
+
+            /* Empty constructor.
+             * */
             Connective() {}
+
+            /* Construct a connective from its symbol and its
+             * arity.
+             *
+             * @param symbol
+             * @param arity
+             * */
             Connective(const Symbol& _symbol, Arity _arity) : _symbol {_symbol} {
                 if (_arity < 0)
                    throw std::invalid_argument(NEGATIVE_ARITY_EXCEPTION); 
                 this->_arity = _arity;
             }
             
+            /* Get symbol.
+             *
+             * @return the symbol of the connective
+             * */
             inline Symbol symbol() const { return _symbol; }
+
+            /* Get connective arity.
+             *
+             * @return the arity of the connective
+             * */
             inline Arity arity() const { return _arity; }
 
-            bool operator==(const Connective& other) const {
+            /* Equality occurs with respect to the symbol
+             * and the arity.
+             * */
+            inline bool operator==(const Connective& other) const {
                 return (_symbol == other._symbol) and (_arity == other._arity);
             }
 
-            bool operator!=(const Connective& other) const {
+            /* Different is not equal.
+             * */
+            inline bool operator!=(const Connective& other) const {
                 return not (*this == other);
             }
     };
@@ -146,6 +169,7 @@ namespace ltsy {
 
         public:
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
+            virtual std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
             virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
             inline FmlaType type() { return _type; }
@@ -186,6 +210,10 @@ namespace ltsy {
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_prop(this);
             }
+
+            inline std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) {
+                return visitor.visit_prop(this);
+            }
     };
 
 
@@ -225,6 +253,9 @@ namespace ltsy {
             }
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_compound(this);
+            }
+            inline std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) {
+                return visitor.visit_compound(this);
             }
     };
 
