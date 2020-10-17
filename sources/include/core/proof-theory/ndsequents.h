@@ -35,6 +35,25 @@ namespace ltsy {
 
             FmlaContainerT<std::shared_ptr<Formula>> operator[](int i) const { return _sequent_fmlas[i]; }
 
+            /* Collect the propositional variables that appear in the
+             * formulas present in the sequent.
+             * */
+            std::set<std::shared_ptr<Prop>> collect_props() const {
+                std::set<Prop*, utils::DeepPointerComp<Prop>> collected_variables;
+                for (const auto& fmla_set : _sequent_fmlas) {
+                    for (const auto& fmla : fmla_set) {
+                        VariableCollector var_collector;
+                        fmla->accept(var_collector);
+                        auto collected_vars = var_collector.get_collected_variables();
+                        collected_variables.insert(collected_vars.begin(), collected_vars.end());
+                    }
+                } 
+                std::set<std::shared_ptr<Prop>> result;
+                for (auto p : collected_variables)
+                    result.insert(std::make_shared<Prop>(*p));
+                return result;
+            };
+
             bool is_in(int i, Formula& fmla) const {
                 for (auto fpointer : _sequent_fmlas[i]){
                     EqualityFormulaVisitor eq {fpointer};

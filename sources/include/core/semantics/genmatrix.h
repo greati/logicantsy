@@ -6,6 +6,7 @@
 #include "core/combinatorics/combinations.h"
 #include "core/semantics/truth_tables.h"
 #include "core/semantics/nmatrices.h"
+#include "core/proof-theory/ndsequents.h"
 #include <set>
 
 namespace ltsy {
@@ -155,6 +156,105 @@ namespace ltsy {
                    return result;
                } else throw std::logic_error("compound points to null");
             }
+    };
+
+
+    /**
+     * Generator of generalized matrix valuations.
+     * */
+    class GenMatrixValuationGenerator {
+        
+        private:
+            std::shared_ptr<GenMatrix> _matrix; 
+            std::vector<Prop> _props;
+            int _current_index = 0;
+            int _total_valuations;
+
+        public:
+
+            GenMatrixValuationGenerator(decltype(_matrix) nmatrix, decltype(_props) props) : _props {props} {
+                std::atomic_store(&_matrix, nmatrix);
+                auto number_props = _props.size();
+                auto nvalues = _matrix->values().size();
+                _total_valuations = std::pow(nvalues, number_props); 
+            }
+
+            bool has_next() {
+                return _current_index < _total_valuations;
+            }
+
+            GenMatrixValuation next() {
+                if (not has_next())
+                    throw std::logic_error("no valuations to generate");
+                auto images = utils::tuple_from_position(_matrix->values().size(), _props.size(), _current_index);
+                std::vector<std::pair<Prop, int>> val_map;
+                for (int i = 0; i < _props.size(); ++i)
+                    val_map.push_back({_props[i], images[i]});
+                ++_current_index;
+                return GenMatrixValuation(std::atomic_load(&_matrix), val_map); 
+            }
+    };
+
+    /* Chack if a sequent is valid on a given
+     * generalized matrix. Validity is defined in the form
+     * of: there is no valuation v such that
+     * v(G1) \subseteq S1 and
+     * v(G2) \subseteq S2 ...
+     * and v(GN) \subseteq SN.
+     * So, we must indicate what are the sets
+     * of the matrix that will correspond to each position
+     * of the sequent.
+     *
+     * If the sequent has dimension N, then 
+     * the user must specify a vector P of size N
+     * such that the distinguished set D_i will be in position P[i]
+     * of the sequent, then V\D_i will be in position P[i+1],
+     * for i even.
+     * */
+    template<template<class...> typename FmlaContainerT>
+    class NdSequentGenMatrixValidator {
+
+        private:
+            std::shared_ptr<GenMatrix> _matrix; 
+            std::vector<int> _sequent_set_correspondence;
+    
+        public:
+            struct CounterExample {
+                GenMatrixValuation val; 
+                std::shared_ptr<Formula> fmla;
+
+                CounterExample(const decltype(val)& val,
+                        decltype(fmla) fmla) : val {val}, fmla {fmla} {}
+                CounterExample(const decltype(val)& val) : val {val} {}
+            };
+
+            NdSequentGenMatrixValidator(decltype(_matrix) matrix,
+                    const decltype(_sequent_set_correspondence)& sequent_set_correspondence) :
+               _matrix {matrix}, _sequent_set_correspondence {sequent_set_correspondence} {}
+
+            std::pair<bool, std::optional<std::vector<CounterExample>>> 
+            is_valid(const NdSequent<FmlaContainerT>& seq, int max_counter_examples=1) const { 
+                std::vector<CounterExample> counter_examples;
+                auto props_set = seq.collect_props();
+                std::vector<Prop> props {props_set.begin(), props_set.end()};
+                ltsy::GenMatrixValuationGenerator generator {_matrix, props};
+                while (generator.has_next()) {
+                    auto val = generator.next();
+                    std::vector<std::set<int>> values_per_position; 
+                    for (int i {0}; i < seq.dimension(); ++i) {
+                        std::set<int> values_in_position;
+                        for (const auto& fmla : seq[i]) {
+                            auto fmla_vals = fmla->accept(val);
+                            values_in_position.insert(fmla_vals.begin(), fmla_vals.end());
+                        }  
+                    }
+                }
+                if (counter_examples.empty())
+                    return {true, std::nullopt};
+                else
+                    return {false, counter_examples};
+            }
+    
     };
 
 };
