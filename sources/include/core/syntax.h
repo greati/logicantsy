@@ -185,6 +185,9 @@ namespace ltsy {
         private:
             Symbol _symbol;
         public:
+            Prop() : _symbol {"?"} {
+                _type = FmlaType::PROP;
+            }
             Prop(const Symbol& _symbol) : _symbol {_symbol} {
                 _type = FmlaType::PROP;
             }

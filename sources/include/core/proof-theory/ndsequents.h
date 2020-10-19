@@ -102,5 +102,44 @@ namespace ltsy {
     template class NdSequent<std::set>;
     template class NdSequent<std::unordered_set>;
 
+    /* NdSequent-to-NdSequent bidimensional rule representation.
+     * It contains a set of NdSequent-premisses,
+     * and a set of NdSequent-conclusions.
+     * */
+    template<template<class...> typename FmlaContainerT>
+    class NdSequentRule {
+    
+        private:
+            std::vector<NdSequent<FmlaContainerT>> _premisses;
+            std::vector<NdSequent<FmlaContainerT>> _conclusions;
+
+        public:
+
+            NdSequentRule(const decltype(_premisses)& premisses,
+                    const decltype(_conclusions)& conclusions) :
+                _premisses {premisses}, _conclusions {conclusions} {/* empty */}
+
+            inline decltype(_premisses) premisses() const { return _premisses; };
+            inline decltype(_conclusions) conclusions() const { return _conclusions; };
+
+            std::set<std::shared_ptr<Prop>> collect_props() const {
+                std::set<std::shared_ptr<Prop>> props;
+                for (const auto& p : _premisses) {
+                    auto collected_props = p.collect_props();
+                    props.insert(collected_props.begin(), collected_props.end());
+                }
+                for (const auto& c : _conclusions) {
+                    auto collected_props = c.collect_props();
+                    props.insert(collected_props.begin(), collected_props.end());
+                }
+                return props;
+            }
+
+    };
+
+    template class NdSequentRule<std::vector>;
+    template class NdSequentRule<std::set>;
+    template class NdSequentRule<std::unordered_set>;
+
 };
 #endif

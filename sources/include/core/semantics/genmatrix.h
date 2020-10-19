@@ -64,13 +64,15 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
-    class GenMatrixValuation {
+    class GenMatrixValuation : public std::enable_shared_from_this<GenMatrixValuation> {
         private:
 
             std::shared_ptr<GenMatrix> _nmatrix_ptr;
             std::map<Prop, int> _valuation_map;
             
         public:
+
+            GenMatrixValuation() : _nmatrix_ptr {nullptr} {/**/}
             
             /**
              * Initialize a valuation, by indicating
@@ -80,9 +82,9 @@ namespace ltsy {
              * */
             GenMatrixValuation(decltype(_nmatrix_ptr) nmatrix_ptr,
                     const std::vector<std::pair<Prop, int>>& mappings)
+                : _nmatrix_ptr {nmatrix_ptr}
                 {
-
-                std::atomic_store(&(this->_nmatrix_ptr), std::move(nmatrix_ptr));
+                //std::atomic_store(&(this->_nmatrix_ptr), std::move(nmatrix_ptr));
 
                 auto values = _nmatrix_ptr->values();
                
@@ -91,7 +93,6 @@ namespace ltsy {
                     if (v >= 0 and v < values.size()) {
                         _valuation_map.insert(mapping);
                     } else {
-                        std::cout << v;
                         throw std::invalid_argument(INVALID_TRUTH_VALUE_EXCEPTION);
                     }
                 } 
@@ -112,6 +113,18 @@ namespace ltsy {
             inline int operator()(const Prop& p) {
                 return _valuation_map[p];
             }
+
+            /* Checks if the valuation is a model for the given set
+             * of formulas. The criteria is that, for each formula,
+             * one of the possible values is inside a given
+             * distinguished set.
+             *
+             * @param fmls set of formulas
+             * @param dset distinguished set
+             * */
+            std::pair<bool, std::optional<std::set<std::shared_ptr<Formula>>>> 
+            is_model(const std::set<std::shared_ptr<Formula>>& fmls,
+                    const std::set<int>& dset);
     };
 
     /* Based on a valuation, visit a formula to
@@ -166,7 +179,7 @@ namespace ltsy {
         
         private:
             std::shared_ptr<GenMatrix> _matrix; 
-            std::vector<Prop> _props;
+            std::vector<std::shared_ptr<Prop>> _props;
             int _current_index = 0;
             int _total_valuations;
 
@@ -188,10 +201,12 @@ namespace ltsy {
                     throw std::logic_error("no valuations to generate");
                 auto images = utils::tuple_from_position(_matrix->values().size(), _props.size(), _current_index);
                 std::vector<std::pair<Prop, int>> val_map;
-                for (int i = 0; i < _props.size(); ++i)
-                    val_map.push_back({_props[i], images[i]});
+                for (int i = 0; i < _props.size(); ++i) {
+                    Prop p = *_props[i];
+                    val_map.push_back({p, images[i]});
+                }
                 ++_current_index;
-                return GenMatrixValuation(std::atomic_load(&_matrix), val_map); 
+                return GenMatrixValuation(_matrix, val_map); 
             }
     };
 
@@ -201,10 +216,10 @@ namespace ltsy {
      * v(G1) \subseteq S1 and
      * v(G2) \subseteq S2 ...
      * and v(GN) \subseteq SN.
-     * So, we must indicate what are the sets
+     *
+     * We must indicate what are the sets
      * of the matrix that will correspond to each position
      * of the sequent.
-     *
      * If the sequent has dimension N, then 
      * the user must specify a vector P of size N
      * such that the distinguished set D_i will be in position P[i]
@@ -217,20 +232,46 @@ namespace ltsy {
         private:
             std::shared_ptr<GenMatrix> _matrix; 
             std::vector<int> _sequent_set_correspondence;
+            std::vector<std::set<int>> _d_sets;
     
         public:
+            /**
+             * Represents a counter-example for
+             * a given sequent.
+             * */
             struct CounterExample {
                 GenMatrixValuation val; 
-                std::shared_ptr<Formula> fmla;
-
-                CounterExample(const decltype(val)& val,
-                        decltype(fmla) fmla) : val {val}, fmla {fmla} {}
-                CounterExample(const decltype(val)& val) : val {val} {}
+                CounterExample(decltype(val) _val) : val {_val} {}
             };
 
+            /* Constructor.
+             *
+             * @param matrix pointer to generalized matrix
+             * @param sequent_set_correspondence map indicating the link between
+             * sequent positions and matrix sets
+             * @param infer_complements if true, modify sequent_set_correspondence 
+             * such the odd positions points to the complement of
+             * the sets.
+             * */
             NdSequentGenMatrixValidator(decltype(_matrix) matrix,
-                    const decltype(_sequent_set_correspondence)& sequent_set_correspondence) :
-               _matrix {matrix}, _sequent_set_correspondence {sequent_set_correspondence} {}
+                    const decltype(_sequent_set_correspondence)& sequent_set_correspondence,
+                    bool infer_complements=true) :
+               _matrix {matrix}, _sequent_set_correspondence {sequent_set_correspondence} {
+                for (int i = 0; i < sequent_set_correspondence.size(); ++i) {
+                    _d_sets.push_back(matrix->distinguished_sets()[i]);
+                    if (infer_complements)
+                        _d_sets.push_back(utils::set_difference(matrix->values(), matrix->distinguished_sets()[i]));
+                }
+            }
+
+            bool
+            is_satisfied(GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
+                 for (int i {0}; i < seq.dimension(); ++i) {
+                     auto [is_model, counter_fmlas_opt] = val.is_model(seq[i], _matrix->distinguished_sets()[i]);
+                     if (not is_model) return true;
+                 }
+                 return false;
+            }
 
             std::pair<bool, std::optional<std::vector<CounterExample>>> 
             is_valid(const NdSequent<FmlaContainerT>& seq, int max_counter_examples=1) const { 
@@ -240,19 +281,52 @@ namespace ltsy {
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props};
                 while (generator.has_next()) {
                     auto val = generator.next();
-                    std::vector<std::set<int>> values_per_position; 
-                    for (int i {0}; i < seq.dimension(); ++i) {
-                        std::set<int> values_in_position;
-                        for (const auto& fmla : seq[i]) {
-                            auto fmla_vals = fmla->accept(val);
-                            values_in_position.insert(fmla_vals.begin(), fmla_vals.end());
-                        }  
+                    if (not is_satisfied(val, seq)) {
+                        counter_examples.push_back({val});
+                        if (counter_examples.size() >= max_counter_examples)
+                            break;
                     }
                 }
                 if (counter_examples.empty())
                     return {true, std::nullopt};
                 else
                     return {false, counter_examples};
+            }
+
+            //std::pair<bool, GenMatrixValuation> 
+            //std::pair<bool, std::vector<GenMatrixValuation>> 
+            GenMatrixValuation is_rule_sound(int max_counter_examples=1) const { 
+                //std::vector<CounterExample> counter_examples;
+                //auto props_set = rule.collect_props();
+                //std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
+               // ltsy::GenMatrixValuationGenerator generator {_matrix, props};
+               //while (generator.has_next()) {
+               //    // check satisfiability of premisses
+               //    bool premisses_satisfied = true;
+               //    auto val = generator.next();
+               //    for (const auto& p : rule.premisses()) {
+               //        if (not is_satisfied(val, p)) {
+               //            premisses_satisfied = false;
+               //            break;
+               //        }
+               //    }
+               //    // check non-validity of conclusions
+               //    bool conclusions_not_satisfied = true;
+               //    if (premisses_satisfied) {
+               //        for (const auto& c : rule.conclusions()) {
+               //            if (is_satisfied(val, c)) {
+               //                conclusions_not_satisfied = false;
+               //                break;
+               //            }
+               //        }
+               //    }
+               //    if (premisses_satisfied and conclusions_not_satisfied)
+               //        counter_examples.push_back(CounterExample{val});
+               //}
+               //if (counter_examples.empty())
+               //    return {true, std::nullopt};
+               //else
+               //    return {false, std::make_optional<std::vector<CounterExample>>(counter_examples)};
             }
     
     };
