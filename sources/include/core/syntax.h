@@ -168,6 +168,8 @@ namespace ltsy {
             FmlaType _type = FmlaType::UNKNOWN;
 
         public:
+            Formula() {}
+            virtual ~Formula() {}
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
             virtual std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
@@ -191,6 +193,7 @@ namespace ltsy {
             Prop(const Symbol& _symbol) : _symbol {_symbol} {
                 _type = FmlaType::PROP;
             }
+            ~Prop() {}
 
             inline Symbol symbol() const { return _symbol; };
 
@@ -239,6 +242,7 @@ namespace ltsy {
                 }
                 _type = FmlaType::COMPOUND;
             }
+            ~Compound() {}
 
             decltype(_connective) connective() const {
                 return _connective;

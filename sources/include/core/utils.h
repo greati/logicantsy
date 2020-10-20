@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 #include <unordered_set>
+#include <memory>
 #include <set>
 
 namespace ltsy::utils {
@@ -11,6 +12,13 @@ namespace ltsy::utils {
     template<typename T>
     struct DeepPointerComp {
         bool operator()(const T* lhs, const T* rhs) const {
+            return *lhs < *rhs; 
+        }
+    };
+
+    template<typename T>
+    struct DeepSharedPointerComp {
+        bool operator()(const std::shared_ptr<T> lhs, const std::shared_ptr<T> rhs) const {
             return *lhs < *rhs; 
         }
     };

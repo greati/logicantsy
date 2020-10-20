@@ -72,8 +72,7 @@ namespace ltsy {
             
         public:
 
-            GenMatrixValuation() : _nmatrix_ptr {nullptr} {/**/}
-            
+            GenMatrixValuation() : _nmatrix_ptr {nullptr} {}
             /**
              * Initialize a valuation, by indicating
              * the corresponding generalized matrix
@@ -98,7 +97,11 @@ namespace ltsy {
                 } 
             }
 
-            std::stringstream print() {
+            bool operator==(const GenMatrixValuation& other) const {
+                return _valuation_map == other._valuation_map;
+            }
+
+            std::stringstream print() const {
                 std::stringstream ss;
                 for (auto& [k, v] : _valuation_map) {
                     ss << k.symbol() << " -> " << v << std::endl;
@@ -196,7 +199,7 @@ namespace ltsy {
                 return _current_index < _total_valuations;
             }
 
-            GenMatrixValuation next() {
+            std::shared_ptr<GenMatrixValuation> next() {
                 if (not has_next())
                     throw std::logic_error("no valuations to generate");
                 auto images = utils::tuple_from_position(_matrix->values().size(), _props.size(), _current_index);
@@ -206,7 +209,7 @@ namespace ltsy {
                     val_map.push_back({p, images[i]});
                 }
                 ++_current_index;
-                return GenMatrixValuation(_matrix, val_map); 
+                return std::make_shared<GenMatrixValuation>(_matrix, val_map); 
             }
     };
 
@@ -264,11 +267,27 @@ namespace ltsy {
                 }
             }
 
+            std::pair<bool, std::optional<std::set<std::shared_ptr<Formula>>>> 
+            is_model(const GenMatrixValuation val, 
+                            const std::set<std::shared_ptr<Formula>>& fmls, const std::set<int>& dset) const {
+                std::set<std::shared_ptr<Formula>> fail_fmls;
+                for (const auto& f : fmls) {
+                   GenMatrixEvaluator evaluator {std::make_shared<GenMatrixValuation>(val)};
+                   auto fmla_values = f->accept(evaluator);     
+                   std::set<int> inters;
+                   std::set_intersection(dset.begin(), dset.end(), fmla_values.begin(), fmla_values.end(), std::inserter(inters,inters.begin()));
+                   if (inters.empty())
+                       fail_fmls.insert(f);
+                }
+                if (fail_fmls.empty()) return {true, std::nullopt};
+                else return std::pair{false, fail_fmls};               
+            }
+
             bool
-            is_satisfied(GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
+            is_satisfied(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
-                     auto [is_model, counter_fmlas_opt] = val.is_model(seq[i], _matrix->distinguished_sets()[i]);
-                     if (not is_model) return true;
+                     auto is_model_result = is_model(val, seq[i], _d_sets[i]);
+                     if (not is_model_result.first) return true;
                  }
                  return false;
             }
@@ -281,8 +300,8 @@ namespace ltsy {
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props};
                 while (generator.has_next()) {
                     auto val = generator.next();
-                    if (not is_satisfied(val, seq)) {
-                        counter_examples.push_back({val});
+                    if (not is_satisfied(*val, seq)) {
+                        counter_examples.push_back({*val});
                         if (counter_examples.size() >= max_counter_examples)
                             break;
                     }
@@ -293,40 +312,42 @@ namespace ltsy {
                     return {false, counter_examples};
             }
 
-            //std::pair<bool, GenMatrixValuation> 
-            //std::pair<bool, std::vector<GenMatrixValuation>> 
-            GenMatrixValuation is_rule_sound(int max_counter_examples=1) const { 
-                //std::vector<CounterExample> counter_examples;
-                //auto props_set = rule.collect_props();
-                //std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
-               // ltsy::GenMatrixValuationGenerator generator {_matrix, props};
-               //while (generator.has_next()) {
-               //    // check satisfiability of premisses
-               //    bool premisses_satisfied = true;
-               //    auto val = generator.next();
-               //    for (const auto& p : rule.premisses()) {
-               //        if (not is_satisfied(val, p)) {
-               //            premisses_satisfied = false;
-               //            break;
-               //        }
-               //    }
-               //    // check non-validity of conclusions
-               //    bool conclusions_not_satisfied = true;
-               //    if (premisses_satisfied) {
-               //        for (const auto& c : rule.conclusions()) {
-               //            if (is_satisfied(val, c)) {
-               //                conclusions_not_satisfied = false;
-               //                break;
-               //            }
-               //        }
-               //    }
-               //    if (premisses_satisfied and conclusions_not_satisfied)
-               //        counter_examples.push_back(CounterExample{val});
-               //}
-               //if (counter_examples.empty())
-               //    return {true, std::nullopt};
-               //else
-               //    return {false, std::make_optional<std::vector<CounterExample>>(counter_examples)};
+            std::pair<bool, std::optional<std::vector<CounterExample>>> 
+            is_rule_sound(const NdSequentRule<FmlaContainerT>& rule, int max_counter_examples=1) const { 
+                std::vector<CounterExample> counter_examples;
+                auto props_set = rule.collect_props();
+                std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
+                ltsy::GenMatrixValuationGenerator generator {_matrix, props};
+                while (generator.has_next()) {
+                    // check satisfiability of premisses
+                    bool premisses_satisfied = true;
+                    auto val = generator.next();
+                    for (const auto& p : rule.premisses()) {
+                        if (not is_satisfied(*val, p)) {
+                            premisses_satisfied = false;
+                            break;
+                        }
+                    }
+                    // check non-validity of conclusions
+                    bool conclusions_not_satisfied = true;
+                    if (premisses_satisfied) {
+                        for (const auto& c : rule.conclusions()) {
+                            if (is_satisfied(*val, c)) {
+                                conclusions_not_satisfied = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (premisses_satisfied and conclusions_not_satisfied)
+                        counter_examples.push_back(CounterExample{*val});
+                    if (counter_examples.size() >= max_counter_examples)
+                        break;
+                }
+                if (counter_examples.empty())
+                    return std::make_pair<bool, std::optional<std::vector<CounterExample>>>(true, std::nullopt);
+                else
+                    return std::make_pair<bool, std::optional<std::vector<CounterExample>>>(false, 
+                        std::make_optional<std::vector<CounterExample>>(counter_examples));
             }
     
     };

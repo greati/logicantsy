@@ -123,7 +123,7 @@ namespace ltsy {
             inline decltype(_conclusions) conclusions() const { return _conclusions; };
 
             std::set<std::shared_ptr<Prop>> collect_props() const {
-                std::set<std::shared_ptr<Prop>> props;
+                std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>> props;
                 for (const auto& p : _premisses) {
                     auto collected_props = p.collect_props();
                     props.insert(collected_props.begin(), collected_props.end());
@@ -132,7 +132,8 @@ namespace ltsy {
                     auto collected_props = c.collect_props();
                     props.insert(collected_props.begin(), collected_props.end());
                 }
-                return props;
+                std::set<std::shared_ptr<Prop>> result {props.begin(), props.end()};
+                return result;
             }
 
     };
