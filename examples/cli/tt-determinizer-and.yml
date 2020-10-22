@@ -1,0 +1,22 @@
+semantics:
+  values: [f, bot, top, t]
+  judgements:
+    NR: [bot, t]
+    NA: [bot, f]
+    A:  [top, t]
+    R:  [top, f]
+truth-tables:
+  p and q:
+    base:
+      restrictions:
+        - [f, f]: [f]
+    conditions:
+      - [[], [p and q], [p, q], []]
+      - [[], [p], [p and q], []]
+      - [[], [q], [p and q], []]
+      - [[p, q], [], [], [p and q]]
+      - [[p and q], [], [], [p]]
+      - [[p and q], [], [], [q]]
+  p or q:
+    conditions:
+      - [[],[],[],[]] 

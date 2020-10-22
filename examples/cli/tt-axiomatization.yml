@@ -1,0 +1,27 @@
+semantics:
+  type: four-billatice
+  values: [f, bot, top, t]
+  judgements: [NR, NA, A, R]
+truth-tables:
+  p and q:
+    default: [t]
+    restrictions:
+      - [f, _]: [f]
+      - [_, f]: [f]
+      - [top, t]: [top]
+      - [t, top]: [top]
+      - [bot, t]: [bot]
+      - [t, bot]: [bot]
+      - [top, bot]: [f]
+      - [bot, top]: [f]
+      - [bot, bot]: [bot]
+      - [top, top]: [top]
+      - [t, t]: [t]
+  p -> q:
+    restrictions:
+      - [_, _]: []
+      - [t, f]: [f]
+  foo(p, q, r):
+    default: [t, f, bot, top]
+    restrictions:
+      - [t, t, t]: []

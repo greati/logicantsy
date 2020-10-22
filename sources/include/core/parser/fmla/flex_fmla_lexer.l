@@ -5,6 +5,7 @@
 	#include "core/parser/fmla/fmla_parser.h"
 	#include "bison_fmla_parser.hpp"
 	#include "location.hh"
+    #include "spdlog/spdlog.h"
 
 	using namespace std;
 
@@ -15,7 +16,7 @@
     // Track current scanner location
     #define YY_USER_ACTION loc.columns (yyleng);
 
-    void lexer_error(const char*, ltsy::location&);
+    void lexer_error(const char*, ltsy::location&, std::optional<ltsy::FmlaParser::Location> global_location);
 %}
 
 %option nodefault
@@ -37,6 +38,8 @@ id          ({alpha}|{symbol})({alpha}|{digit}|{symbol})*
 %{
     // A handy shortcut to the location held by the driver.
     ltsy::location& loc = parserwrapper.location;
+    // Global location (from an outside parser, like YAML parser)
+    auto global_location = parserwrapper.global_location();
     // Code run each time yylex is called.
     loc.step();
 
@@ -45,10 +48,10 @@ id          ({alpha}|{symbol})({alpha}|{digit}|{symbol})*
 <<EOF>>     { return yyterminate(); }
 {ignore}    { loc.step(); }
 \n+         { loc.lines(yyleng); loc.step(); }
-\\\/        { return ltsy::BisonFmlaParserGen::make_TOK_OR_CON(loc); }
-\/\         { return ltsy::BisonFmlaParserGen::make_TOK_AND_CON(loc); }
+or          { return ltsy::BisonFmlaParserGen::make_TOK_OR_CON(loc); }
+and         { return ltsy::BisonFmlaParserGen::make_TOK_AND_CON(loc); }
 ->          { return ltsy::BisonFmlaParserGen::make_TOK_IMP_CON(loc); }
-~           { return ltsy::BisonFmlaParserGen::make_TOK_NEG_CON(loc); }
+neg         { return ltsy::BisonFmlaParserGen::make_TOK_NEG_CON(loc); }
 _           { return ltsy::BisonFmlaParserGen::make_TOK_BOT_CON(loc); }
 \^          { return ltsy::BisonFmlaParserGen::make_TOK_TOP_CON(loc); }
 \(          { return ltsy::BisonFmlaParserGen::make_TOK_LPAR(loc); }
@@ -57,13 +60,18 @@ _           { return ltsy::BisonFmlaParserGen::make_TOK_BOT_CON(loc); }
 `{id}`      { return ltsy::BisonFmlaParserGen::make_TOK_CUSTOM_CON(yytext, loc); }
 {id}        { return ltsy::BisonFmlaParserGen::make_TOK_IDENTIFIER(yytext, loc); }
 .           { 
-                lexer_error(yytext, loc);
+                lexer_error(yytext, loc, global_location);
             }
 %%
 
-void lexer_error(const char* text, ltsy::location& loc) {
-    std::cout << "(WARNING at [" << loc.begin.line << "," << loc.begin.column << 
-        "]) unknown sequence " << text << endl;
+void lexer_error(const char* text, ltsy::location& loc, std::optional<ltsy::FmlaParser::Location> global_location) {
+    if (global_location != std::nullopt) {
+        std::string error_msg = "near (" + std::to_string(global_location.value().row) + "," + std::to_string(global_location.value().col) + ")" + 
+            ", at (" + std::to_string(loc.begin.line) + "," + std::to_string(loc.begin.column) + "), unknown sequence " + text;
+        spdlog::warn(error_msg);
+    } else {
+        spdlog::warn("at (" + std::to_string(loc.begin.line) + "," + std::to_string(loc.begin.column) + "), unknown sequence " + text);
+    }
 }
 
 

@@ -1,40 +1,58 @@
 #ifndef __NMATRICES__
 #define __NMATRICES__
 
+#include <set>
 #include "core/syntax.h"
-#include "core/common.h"
 #include "core/combinatorics/combinations.h"
 #include "core/semantics/truth_tables.h"
-#include <set>
+#include "core/common.h"
 
 namespace ltsy {
 
     /**
-     * Holds the interpreation relation between a connective
+     * Holds the interpretation relation between a connective
      * and a truth table.
      *
      * Main purpose is to guarantee that this relation is
      * well set up.
+     *
+     * Notice that CellType will define if the interpretation
+     * is deterministic or not.
+     *
+     * @author Vitor Greati
      * */
     template<typename CellType = int>
     class TruthInterp {
+
         private:
-            std::shared_ptr<Connective> _connective;
-            std::shared_ptr<TruthTable<CellType>> _truth_table;
+            std::shared_ptr<Connective> _connective; //< a pointer to the connective
+            std::shared_ptr<TruthTable<CellType>> _truth_table; //< a pointer to the truth table
+
         public:
-            TruthInterp(
-                    decltype(_connective) connective,
-                    decltype(_truth_table) truth_table) 
-            : _connective {connective}, _truth_table {truth_table} {
+
+            /* Construct a truth interpretation for a connective.
+             * */
+            TruthInterp(decltype(_connective) connective,
+                        decltype(_truth_table) truth_table) 
+                            : _connective {connective}, _truth_table {truth_table} {
                 if (_connective == nullptr or _truth_table == nullptr)
                     throw std::invalid_argument(NULL_IN_CONNECTIVE_INTERP_EXCEPTION);
                 if (_connective->arity() != _truth_table->arity())
                     throw std::invalid_argument(INVALID_CONNECTIVE_INTERP_EXCEPTION);
             }
 
+            /* A pointer to the interpreted connective.
+             *
+             * @return a pointer to the connective
+             * */
             inline decltype(_connective) connective() const { return _connective; }
 
-            inline int at(const std::vector<int>& args) const {
+            /* Access a truth table position.
+             *
+             * @param args arguments to pass to the truth table
+             * @return the value
+             * */
+            inline CellType at(const std::vector<int>& args) const {
                 return _truth_table->at(args);
             }
 
@@ -239,7 +257,7 @@ namespace ltsy {
                 os << std::string("<");
                 os << nm.nvalues();
                 os << std::string(",");
-                os << nm.dvalues();
+                //os << nm.dvalues();
                 os << std::string(">") << std::endl;
                 os << *nm.interpretation();
                 return os;  
@@ -386,7 +404,7 @@ namespace ltsy {
                     auto components = compound->components();
                     std::vector<int> args;
                     for (auto component : components) {
-                        return component->accept(*this);
+                        args.push_back(component->accept(*this));
                     }
                     return conn_interp->at(args);
                 } else throw std::logic_error("compound points to null");

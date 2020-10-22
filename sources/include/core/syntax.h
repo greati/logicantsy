@@ -7,14 +7,14 @@
 #include <map>
 #include "core/exception.h"
 #include "core/common.h"
+#include "core/utils.h"
 #include <unordered_set>
 #include <algorithm>
 #include <sstream>
 
 namespace ltsy {
     
-    /**
-     * Represents a connective, with a symbol
+    /* Represents a connective, with a symbol
      * and an arity.
      *
      * @author Vitor Greati
@@ -24,21 +24,45 @@ namespace ltsy {
             Symbol _symbol;       //< Connective symbol
             Arity _arity;         //< Connective arity
         public:
+
+            /* Empty constructor.
+             * */
             Connective() {}
+
+            /* Construct a connective from its symbol and its
+             * arity.
+             *
+             * @param symbol
+             * @param arity
+             * */
             Connective(const Symbol& _symbol, Arity _arity) : _symbol {_symbol} {
                 if (_arity < 0)
                    throw std::invalid_argument(NEGATIVE_ARITY_EXCEPTION); 
                 this->_arity = _arity;
             }
             
+            /* Get symbol.
+             *
+             * @return the symbol of the connective
+             * */
             inline Symbol symbol() const { return _symbol; }
+
+            /* Get connective arity.
+             *
+             * @return the arity of the connective
+             * */
             inline Arity arity() const { return _arity; }
 
-            bool operator==(const Connective& other) const {
+            /* Equality occurs with respect to the symbol
+             * and the arity.
+             * */
+            inline bool operator==(const Connective& other) const {
                 return (_symbol == other._symbol) and (_arity == other._arity);
             }
 
-            bool operator!=(const Connective& other) const {
+            /* Different is not equal.
+             * */
+            inline bool operator!=(const Connective& other) const {
                 return not (*this == other);
             }
     };
@@ -144,7 +168,10 @@ namespace ltsy {
             FmlaType _type = FmlaType::UNKNOWN;
 
         public:
+            Formula() {}
+            virtual ~Formula() {}
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
+            virtual std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
             virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
             inline FmlaType type() { return _type; }
@@ -160,9 +187,13 @@ namespace ltsy {
         private:
             Symbol _symbol;
         public:
+            Prop() : _symbol {"?"} {
+                _type = FmlaType::PROP;
+            }
             Prop(const Symbol& _symbol) : _symbol {_symbol} {
                 _type = FmlaType::PROP;
             }
+            ~Prop() {}
 
             inline Symbol symbol() const { return _symbol; };
 
@@ -184,6 +215,10 @@ namespace ltsy {
 
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_prop(this);
+            }
+
+            inline std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) {
+                return visitor.visit_prop(this);
             }
     };
 
@@ -207,6 +242,7 @@ namespace ltsy {
                 }
                 _type = FmlaType::COMPOUND;
             }
+            ~Compound() {}
 
             decltype(_connective) connective() const {
                 return _connective;
@@ -224,6 +260,9 @@ namespace ltsy {
             }
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_compound(this);
+            }
+            inline std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) {
+                return visitor.visit_compound(this);
             }
     };
 
@@ -269,7 +308,7 @@ namespace ltsy {
      */
     class VariableCollector : public FormulaVisitor<void> {
         private:
-            std::unordered_set<Prop*> collected_variables;
+            std::set<Prop*, utils::DeepPointerComp<Prop>> collected_variables;
 
         public:
             virtual void visit_prop(Prop* prop) override {
@@ -282,7 +321,7 @@ namespace ltsy {
                            return fmla->accept(*this); 
                         });
             }
-            virtual std::unordered_set<Prop*> get_collected_variables() {
+            virtual decltype(collected_variables) get_collected_variables() {
                 return this->collected_variables;
             }
     };
@@ -322,14 +361,23 @@ namespace ltsy {
                 buffer << prop->symbol();
             }
             virtual void visit_compound(Compound* compound) override {
-                buffer << "(" << compound->connective()->symbol() << "(";
-                auto components = compound->components();
-                for (auto it = components.cbegin(); it != components.cend(); ++it) {
-                    (*it)->accept(*this);
-                    if (std::next(it) != components.cend())
-                        buffer << ",";
+                auto arity = compound->connective()->arity();
+                auto symbol = compound->connective()->symbol();
+                if (arity != 2) {
+                    buffer << symbol << "(";
+                    auto components = compound->components();
+                    for (auto it = components.cbegin(); it != components.cend(); ++it) {
+                        (*it)->accept(*this);
+                        if (std::next(it) != components.cend())
+                            buffer << ",";
+                    }
+                    buffer <<")";
+                } else {
+                    auto components = compound->components();
+                    components[0]->accept(*this);
+                    buffer << " " << symbol << " ";
+                    components[1]->accept(*this);
                 }
-                buffer <<"))";
             }
             std::string get_string() { return buffer.str(); }
     };

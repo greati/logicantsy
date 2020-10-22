@@ -3,6 +3,7 @@
 #include "tt_determination/ndsequents.h"
 #include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
+#include "core/semantics/attitude_semantics.h"
 
 namespace {
 
@@ -83,10 +84,16 @@ namespace {
 
     TEST(Determinants, BillaticeJudgements) {
         ltsy::CognitiveAttitude a {"A", {2, 3}};
-        ltsy::CognitiveAttitude na {"NA", {0, 1}};
-        ltsy::CognitiveAttitude nr {"NR", {1, 3}};
+        ltsy::CognitiveAttitude na{"NA", {0, 1}};
+        ltsy::CognitiveAttitude nr{"NR", {1, 3}};
         ltsy::CognitiveAttitude r {"R", {0, 2}};
         auto billatice = ltsy::BillaticeJudgementValueCorrespondence(
+                {
+                    {"A", {"A", {2, 3}}},
+                    {"NA",{"NA", {0, 1}}},
+                    {"NR",{"NR", {1, 3}}},
+                    {"R", {"R", {0, 2}}}
+                },
            {
             {0, {{1, r}, {2, a}}},
             {1, {{0, r}, {3, na}}},
@@ -122,11 +129,17 @@ namespace {
 
     TEST(Determinants, SequentsFromTruthTable) {
         std::set<int> all_values = {0,1,2,3};
-        ltsy::CognitiveAttitude a {"A", {0, 2}};
+        ltsy::CognitiveAttitude a  {"A", {0, 2}};
         ltsy::CognitiveAttitude na {"NA", {1, 3}};
         ltsy::CognitiveAttitude nr {"NR", {2, 3}};
-        ltsy::CognitiveAttitude r {"R", {0, 1}};
+        ltsy::CognitiveAttitude r  {"R", {0, 1}};
         auto billatice = std::make_shared<ltsy::BillaticeJudgementValueCorrespondence>(
+                std::map<std::string, ltsy::CognitiveAttitude> {
+                    {"A", {"A", {0, 2}}},
+                    {"NA",{"NA", {1, 3}}},
+                    {"NR",{"NR", {2, 3}}},
+                    {"R", {"R", {0, 1}}},
+                },
            std::map<int, std::vector<std::pair<int, ltsy::CognitiveAttitude>>>{
             {0, {{1, r}, {2, a}}},
             {1, {{0, r}, {3, na}}},
@@ -166,6 +179,11 @@ namespace {
         auto bsequents_for_conj_fde = axiomatizer.axiomatize(tt_nondet);
         std::cout << bsequents_for_conj_fde;
     
+    }
+
+
+    TEST(Determinants, SequentsFromTruthTableFourLattice) {
+        ltsy::FourBillatice billatice; 
     }
 
 };

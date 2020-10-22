@@ -6,10 +6,12 @@
 #include <vector>
 #include <unordered_set>
 #include "core/utils.h"
+#include "core/common.h"
 #include <functional>
 #include <stdexcept>
 #include <set>
 #include <memory>
+#include <map>
 
 namespace ltsy {
 
@@ -112,6 +114,13 @@ namespace ltsy {
             /**
              * Build truth table giving its images array.
              * */
+            TruthTable(int _nvalues, int _arity, const CellType& default_value) : 
+                TruthTable {_nvalues, _arity}
+                { this->_images = std::vector<CellType>(_number_of_rows, default_value); } 
+
+            /**
+             * Build truth table giving its images array.
+             * */
             TruthTable(int _nvalues, int _arity, const decltype(_images)& _images) : 
                 TruthTable {_nvalues, _arity}
                 { this->_images = _images; } 
@@ -173,6 +182,7 @@ namespace ltsy {
             }
 
             std::stringstream print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const;
+            std::stringstream print(const std::map<int, std::string>& values_map) const;
     };
 
     template class TruthTable<int>;

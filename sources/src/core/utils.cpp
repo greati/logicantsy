@@ -40,6 +40,47 @@ namespace ltsy::utils {
     };
 
     template<typename T>
+    std::vector<std::vector<T>> cartesian_product(const std::set<T>& s1, const std::set<T>& s2){
+        std::vector<std::vector<T>> result;
+        for (auto it1 = s1.begin(); it1 != s1.end(); ++it1) {
+            for (auto it2 = s2.begin(); it2 != s2.end(); ++it2) {
+                result.push_back({*it1, *it2});
+            } 
+        }
+        return result; 
+    }
+    template std::vector<std::vector<int>> cartesian_product(const std::set<int>& s1, const std::set<int>& s2);
+
+    template<typename T>
+    std::vector<std::vector<T>> cartesian_product(const std::vector<std::vector<T>>& s1, const std::set<T>& s2){
+        std::vector<std::vector<T>> result;
+        for (auto it1 = s1.begin(); it1 != s1.end(); ++it1) {
+            for (auto it2 = s2.begin(); it2 != s2.end(); ++it2) {
+                auto v = *it1;
+                v.push_back(*it2);
+                result.push_back(v);
+            } 
+        }
+        return result; 
+    }
+    template std::vector<std::vector<int>> cartesian_product(const std::vector<std::vector<int>>& s1, const std::set<int>& s2);
+
+    template<typename T>
+    std::vector<std::vector<T>> cartesian_product(const std::vector<std::set<T>>& sets){
+        std::vector<std::vector<T>> result;
+        auto sets_amount = sets.size();
+        if (sets_amount == 1) {
+            for (auto s : sets[0]) result.push_back({s});
+        } else if (sets_amount >= 2) {
+            result = cartesian_product(sets[0], sets[1]);
+            for (int i = 2; i < sets_amount; ++i)
+                result = cartesian_product(result, sets[i]);
+        }
+        return result;
+    }
+    template std::vector<std::vector<int>> cartesian_product(const std::vector<std::set<int>>& sets);
+
+    template<typename T>
     bool is_subset(const std::unordered_set<T>& s1, const std::unordered_set<T>& s2){
         if (s1.size() > s2.size())
             return false;
