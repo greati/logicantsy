@@ -47,6 +47,12 @@ namespace ltsy {
              * */
             inline decltype(_connective) connective() const { return _connective; }
 
+            /* A pointer to the truth table.
+             *
+             * @return a pointer to the connective
+             * */
+            inline decltype(_truth_table) truth_table() const { return _truth_table; }
+
             /* Access a truth table position.
              *
              * @param args arguments to pass to the truth table

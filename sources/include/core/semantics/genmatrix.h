@@ -213,7 +213,114 @@ namespace ltsy {
             }
     };
 
-    /* Chack if a sequent is valid on a given
+    /* A generalized matrix valuation. 
+     * Since in such matrices the interpretations may
+     * be non-deterministic or even partial,
+     * a valuation will also point to a 
+     * determinization of an interpretation
+     * (only singleton or empty set in each
+     * position). Then, an evaluator will
+     * use such an interpretation
+     * for evaluating a formula.
+     *
+     * @author Vitor Greati
+     * */
+    class GenMatrixValuation {
+    
+        private:
+
+            std::shared_ptr<GenMatrixVarAssignment> _var_assignment; /* an assignment to variables */
+            std::shared_ptr<GenMatrix> _nmatrix_ptr; /* pointer to a PNmatrix */
+            std::shared_ptr<SignatureTruthInterp<std::set<int>>> 
+                _interpretation; /* pointer to a determinized truth interpretation*/
+
+        public:
+
+            GenMatrixValuation(decltype(_var_assignment) var_assignment,
+                    decltype(_nmatrix_ptr) nmatrix_ptr, 
+                    decltype(_interpretation) interpretation) :
+            _var_assignment {var_assignment}, _nmatrix_ptr {nmatrix_ptr}, _interpretation {interpretation} 
+            {/* empty */}
+
+            inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
+                return _nmatrix_ptr;
+            }
+    
+    };
+
+    /* Determinizer for a given (partial) non-deterministic interpretation.
+     *
+     * Given a (partial) non-deterministic truth-table, generate
+     * all possible (partial) deterministic interpretations.
+     *
+     * @author Vitor Greati
+     * */
+    class PartialDeterministicTruthTableGenerator {
+    
+        private:
+            std::shared_ptr<TruthTable<std::set<int>>> _tt_start;
+            std::shared_ptr<TruthTable<std::set<int>>> _current;
+            std::vector<std::vector<std::set<int>>> _possible_images;
+            std::vector<int> _current_indices;
+            bool finished = false;
+
+        public:
+
+            PartialDeterministicTruthTableGenerator(decltype(_tt_start) tt_start)
+                : _tt_start {tt_start} {
+                // fill in the possible images
+                auto determinants = _tt_start->get_determinants();
+                for (const auto& d : determinants) {
+                    std::vector<std::set<int>> imgs;
+                    if (d.get_last().empty())
+                        imgs.push_back({});
+                    else
+                        for (const auto& e : d.get_last())
+                            imgs.push_back({e});
+                    _possible_images.push_back(imgs);
+                    _current_indices.push_back(0);
+                }
+                reset();
+            }
+
+            bool has_next() {
+                return not finished;
+            }
+
+            decltype(_current) next() {
+                if (has_next()) {
+                    int k = _possible_images.size() - 1;
+                    auto has_next_in_position = [&](int k) { 
+                        return _current_indices[k] < (_possible_images[k].size() - 1);
+                    };
+                    while (k >= 0 and not has_next_in_position(k)) {
+                        if (_possible_images[k].size() > 1) {
+                            _current_indices[k] = 0;
+                            _current->set(k, _possible_images[k][0]);
+                        }
+                        --k;
+                    }
+                    if (k == -1) {
+                        finished = true;
+                    } else {
+                        ++_current_indices[k]; 
+                        _current->set(k, _possible_images[k][_current_indices[k]]);
+                    }
+                    return _current;
+                }
+                throw std::logic_error("next called in finished generator");
+            }
+            void reset() {
+                finished = false;
+                // create first element
+                for (int i = 0; i < _possible_images.size(); ++i) {
+                    _current->set(i, _possible_images[i][0]);
+                }
+            }
+    };
+
+
+    /* Check if a sequent is valid on a given
      * generalized matrix. Validity is defined in the form
      * of: there is no valuation v such that
      * v(G1) \subseteq S1 and
