@@ -64,7 +64,7 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
-    class GenMatrixValuation : public std::enable_shared_from_this<GenMatrixValuation> {
+    class GenMatrixVarAssignment : public std::enable_shared_from_this<GenMatrixVarAssignment> {
         private:
 
             std::shared_ptr<GenMatrix> _nmatrix_ptr;
@@ -72,14 +72,14 @@ namespace ltsy {
             
         public:
 
-            GenMatrixValuation() : _nmatrix_ptr {nullptr} {}
+            GenMatrixVarAssignment() : _nmatrix_ptr {nullptr} {}
             /**
              * Initialize a valuation, by indicating
              * the corresponding generalized matrix
              * and the map that assigns to each propositional
              * variable a truth-value.
              * */
-            GenMatrixValuation(decltype(_nmatrix_ptr) nmatrix_ptr,
+            GenMatrixVarAssignment(decltype(_nmatrix_ptr) nmatrix_ptr,
                     const std::vector<std::pair<Prop, int>>& mappings)
                 : _nmatrix_ptr {nmatrix_ptr}
                 {
@@ -97,7 +97,7 @@ namespace ltsy {
                 } 
             }
 
-            bool operator==(const GenMatrixValuation& other) const {
+            bool operator==(const GenMatrixVarAssignment& other) const {
                 return _valuation_map == other._valuation_map;
             }
 
@@ -130,20 +130,20 @@ namespace ltsy {
                     const std::set<int>& dset);
     };
 
-    /* Based on a valuation, visit a formula to
-     * determine its truth value (it is the 
-     * unique homomorphic extension of the 
-     * given valuation).
+    /* Based on a variable assignment, visit a formula to
+     * determine the set of all truth values it
+     * may assume, considering every possible
+     * valuation.
      *
      * @author Vitor Greati
      * */
-    class GenMatrixEvaluator : public FormulaVisitor<std::set<int>> {
+    class GenMatrixPossibleValuesCollector : public FormulaVisitor<std::set<int>> {
         private:
-            std::shared_ptr<GenMatrixValuation> _matrix_valuation_ptr;
+            std::shared_ptr<GenMatrixVarAssignment> _matrix_valuation_ptr;
 
         public:
 
-            GenMatrixEvaluator(decltype(_matrix_valuation_ptr) matrix_valuation_ptr) :
+            GenMatrixPossibleValuesCollector(decltype(_matrix_valuation_ptr) matrix_valuation_ptr) :
                 _matrix_valuation_ptr {matrix_valuation_ptr} {/* empty */}
 
             std::set<int> visit_prop(Prop* prop) override {
@@ -178,7 +178,7 @@ namespace ltsy {
     /**
      * Generator of generalized matrix valuations.
      * */
-    class GenMatrixValuationGenerator {
+    class GenMatrixVarAssignmentGenerator {
         
         private:
             std::shared_ptr<GenMatrix> _matrix; 
@@ -188,7 +188,7 @@ namespace ltsy {
 
         public:
 
-            GenMatrixValuationGenerator(decltype(_matrix) nmatrix, decltype(_props) props) : _props {props} {
+            GenMatrixVarAssignmentGenerator(decltype(_matrix) nmatrix, decltype(_props) props) : _props {props} {
                 std::atomic_store(&_matrix, nmatrix);
                 auto number_props = _props.size();
                 auto nvalues = _matrix->values().size();
@@ -199,7 +199,7 @@ namespace ltsy {
                 return _current_index < _total_valuations;
             }
 
-            std::shared_ptr<GenMatrixValuation> next() {
+            std::shared_ptr<GenMatrixVarAssignment> next() {
                 if (not has_next())
                     throw std::logic_error("no valuations to generate");
                 auto images = utils::tuple_from_position(_matrix->values().size(), _props.size(), _current_index);
@@ -209,7 +209,7 @@ namespace ltsy {
                     val_map.push_back({p, images[i]});
                 }
                 ++_current_index;
-                return std::make_shared<GenMatrixValuation>(_matrix, val_map); 
+                return std::make_shared<GenMatrixVarAssignment>(_matrix, val_map); 
             }
     };
 
@@ -243,7 +243,7 @@ namespace ltsy {
              * a given sequent.
              * */
             struct CounterExample {
-                GenMatrixValuation val; 
+                GenMatrixVarAssignment val; 
                 CounterExample(decltype(val) _val) : val {_val} {}
             };
 
@@ -267,16 +267,21 @@ namespace ltsy {
                 }
             }
 
+            /* Given a variable assignment, determines
+             * whether all possible values given
+             * such assignment are contained in a given
+             * distinguished set.
+             *
+             * @author Vitor Greati
+             * */
             std::pair<bool, std::optional<std::set<std::shared_ptr<Formula>>>> 
-            is_model(const GenMatrixValuation val, 
+            is_fmla_set_valid_under_assignment(const GenMatrixVarAssignment val, 
                             const std::set<std::shared_ptr<Formula>>& fmls, const std::set<int>& dset) const {
                 std::set<std::shared_ptr<Formula>> fail_fmls;
                 for (const auto& f : fmls) {
-                   GenMatrixEvaluator evaluator {std::make_shared<GenMatrixValuation>(val)};
-                   auto fmla_values = f->accept(evaluator);     
-                   std::set<int> inters;
-                   std::set_intersection(dset.begin(), dset.end(), fmla_values.begin(), fmla_values.end(), std::inserter(inters,inters.begin()));
-                   if (inters.empty())
+                   GenMatrixPossibleValuesCollector collector {std::make_shared<GenMatrixVarAssignment>(val)};
+                   auto fmla_values = f->accept(collector);     
+                   if (!utils::is_subset(fmla_values, dset))
                        fail_fmls.insert(f);
                 }
                 if (fail_fmls.empty()) return {true, std::nullopt};
@@ -284,9 +289,9 @@ namespace ltsy {
             }
 
             bool
-            is_satisfied(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
+            is_valid_under_assignment(const GenMatrixVarAssignment& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
-                     auto is_model_result = is_model(val, seq[i], _d_sets[i]);
+                     auto is_model_result = is_fmla_set_valid_under_assignment(val, seq[i], _d_sets[i]);
                      if (not is_model_result.first) return true;
                  }
                  return false;
@@ -297,10 +302,10 @@ namespace ltsy {
                 std::vector<CounterExample> counter_examples;
                 auto props_set = seq.collect_props();
                 std::vector<Prop> props {props_set.begin(), props_set.end()};
-                ltsy::GenMatrixValuationGenerator generator {_matrix, props};
+                ltsy::GenMatrixVarAssignmentGenerator generator {_matrix, props};
                 while (generator.has_next()) {
                     auto val = generator.next();
-                    if (not is_satisfied(*val, seq)) {
+                    if (not is_valid_under_assignment(*val, seq)) {
                         counter_examples.push_back({*val});
                         if (counter_examples.size() >= max_counter_examples)
                             break;
@@ -313,32 +318,40 @@ namespace ltsy {
             }
 
             std::pair<bool, std::optional<std::vector<CounterExample>>> 
-            is_rule_sound(const NdSequentRule<FmlaContainerT>& rule, int max_counter_examples=1) const { 
+            is_rule_satisfiability_preserving(const NdSequentRule<FmlaContainerT>& rule, 
+                    int max_counter_examples=1) const { }
+
+            /* Test if a rule preserves validity under
+             * every possible valuations.
+             * */
+            std::pair<bool, std::optional<std::vector<CounterExample>>> 
+            is_rule_validity_preserving(const NdSequentRule<FmlaContainerT>& rule, 
+                    int max_counter_examples=1) const { 
                 std::vector<CounterExample> counter_examples;
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
-                ltsy::GenMatrixValuationGenerator generator {_matrix, props};
+                ltsy::GenMatrixVarAssignmentGenerator generator {_matrix, props};
                 while (generator.has_next()) {
-                    // check satisfiability of premisses
-                    bool premisses_satisfied = true;
+                    // check validity of premisses
+                    bool premisses_valid = true;
                     auto val = generator.next();
                     for (const auto& p : rule.premisses()) {
-                        if (not is_satisfied(*val, p)) {
-                            premisses_satisfied = false;
+                        if (not is_valid_under_assignment(*val, p)) {
+                            premisses_valid = false;
                             break;
                         }
                     }
                     // check non-validity of conclusions
-                    bool conclusions_not_satisfied = true;
-                    if (premisses_satisfied) {
+                    bool conclusions_not_valid = true;
+                    if (premisses_valid) {
                         for (const auto& c : rule.conclusions()) {
-                            if (is_satisfied(*val, c)) {
-                                conclusions_not_satisfied = false;
+                            if (is_valid_under_assignment(*val, c)) {
+                                conclusions_not_valid = false;
                                 break;
                             }
                         }
                     }
-                    if (premisses_satisfied and conclusions_not_satisfied)
+                    if (premisses_valid and conclusions_not_valid)
                         counter_examples.push_back(CounterExample{*val});
                     if (counter_examples.size() >= max_counter_examples)
                         break;

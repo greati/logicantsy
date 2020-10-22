@@ -54,11 +54,11 @@ namespace {
        auto q = std::make_shared<ltsy::Prop>("q");
 
        //// an M-valuation
-       auto val = std::make_shared<ltsy::GenMatrixValuation>(cl_matrix, 
+       auto val = std::make_shared<ltsy::GenMatrixVarAssignment>(cl_matrix, 
           std::vector<std::pair<ltsy::Prop, int>> {{*p, 1}, {*q, 0}});
 
        //// an evaluator
-       ltsy::GenMatrixEvaluator evaluator {val};
+       ltsy::GenMatrixPossibleValuesCollector evaluator {val};
 
        ltsy::Compound fmla ((*sig_ptr)["->"], std::vector<std::shared_ptr<ltsy::Formula>> {p, q});
 
@@ -116,7 +116,7 @@ namespace {
 
         std::shared_ptr<ltsy::Prop> p = std::make_shared<ltsy::Prop>("p");
         std::shared_ptr<ltsy::Prop> q = std::make_shared<ltsy::Prop>("q");
-        ltsy::GenMatrixValuationGenerator generator {cl_matrix, std::vector<std::shared_ptr<ltsy::Prop>>{p, q}};
+        ltsy::GenMatrixVarAssignmentGenerator generator {cl_matrix, std::vector<std::shared_ptr<ltsy::Prop>>{p, q}};
         while (generator.has_next()) {
             auto val = generator.next();
         }
@@ -174,9 +174,9 @@ namespace {
        ltsy::NdSequentRule<std::set> seqrule1 ({seq21},{seq22});
        ltsy::NdSequentRule<std::set> seqrule2 ({seq31},{seq22});
         ltsy::NdSequentGenMatrixValidator<std::set> sequent_validator {cl_matrix, {0}};
-        auto [con_test, con_ce] = sequent_validator.is_rule_sound(seqrule1);
+        auto [con_test, con_ce] = sequent_validator.is_rule_validity_preserving(seqrule1);
         std::cout << con_test << std::endl;
-        auto [disj_test, disj_ce] = sequent_validator.is_rule_sound(seqrule2);
+        auto [disj_test, disj_ce] = sequent_validator.is_rule_validity_preserving(seqrule2);
         std::cout << disj_test << std::endl;
         std::vector<ltsy::NdSequentGenMatrixValidator<std::set>::CounterExample> ce_list = *disj_ce;
         for (const auto& e : ce_list) {

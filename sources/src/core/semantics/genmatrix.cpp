@@ -2,12 +2,12 @@
 
 namespace ltsy {
     std::pair<bool, std::optional<std::set<std::shared_ptr<Formula>>>> 
-    GenMatrixValuation::is_model(const std::set<std::shared_ptr<Formula>>& fmls,
+    GenMatrixVarAssignment::is_model(const std::set<std::shared_ptr<Formula>>& fmls,
             const std::set<int>& dset) {
         std::set<std::shared_ptr<Formula>> fail_fmls;
         for (const auto& f : fmls) {
-           GenMatrixEvaluator evaluator {shared_from_this()};
-           auto fmla_values = f->accept(evaluator);     
+           GenMatrixPossibleValuesCollector collector {shared_from_this()};
+           auto fmla_values = f->accept(collector);     
            std::set<int> inters;
            std::set_intersection(dset.begin(), dset.end(), fmla_values.begin(), fmla_values.end(), std::inserter(inters,inters.begin()));
            if (inters.empty())
