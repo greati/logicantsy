@@ -17,3 +17,10 @@ cmake --build .
 make test
 ```
 
+## Use
+
+```
+cd build
+./ltsy --help
+```
+
