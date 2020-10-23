@@ -150,6 +150,8 @@ namespace ltsy {
                 return this->_truth_interps.at(symbol);
             }
 
+            decltype(_signature) signature() const {return _signature; }
+
             friend std::ostream& operator<<(std::ostream& os, const SignatureTruthInterp<CellType>& ti) {
                 for(auto& [s, t] : ti._truth_interps) {
                     os << (*t) << std::endl;

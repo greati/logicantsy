@@ -248,6 +248,7 @@ namespace ltsy {
     
     };
 
+
     /* Determinizer for a given (partial) non-deterministic interpretation.
      *
      * Given a (partial) non-deterministic truth-table, generate
@@ -262,12 +263,16 @@ namespace ltsy {
             std::shared_ptr<TruthTable<std::set<int>>> _current;
             std::vector<std::vector<std::set<int>>> _possible_images;
             std::vector<int> _current_indices;
+            int qtd_in_max = 0;
             bool finished = false;
+            bool first = true;
 
         public:
 
             PartialDeterministicTruthTableGenerator(decltype(_tt_start) tt_start)
                 : _tt_start {tt_start} {
+                 _current = std::make_shared<TruthTable<std::set<int>>>(tt_start->nvalues(),
+                         tt_start->arity());
                 // fill in the possible images
                 auto determinants = _tt_start->get_determinants();
                 for (const auto& d : determinants) {
@@ -283,12 +288,27 @@ namespace ltsy {
                 reset();
             }
 
+            /* Inform if there is a next truth table
+             * to be generated.
+             * */
             bool has_next() {
                 return not finished;
             }
 
+            /* Ask for next truth table.
+             *
+             * Uses a binary counter algorithm to generate
+             * the next element. Throws an exception
+             * if there is no next table.
+             *
+             * @return the next truth table
+             * */
             decltype(_current) next() {
-                if (has_next()) {
+                if (not has_next())
+                    throw std::logic_error("next called in finished generator");
+                if (first) {
+                    first = false;
+                } else {
                     int k = _possible_images.size() - 1;
                     auto has_next_in_position = [&](int k) { 
                         return _current_indices[k] < (_possible_images[k].size() - 1);
@@ -297,28 +317,120 @@ namespace ltsy {
                         if (_possible_images[k].size() > 1) {
                             _current_indices[k] = 0;
                             _current->set(k, _possible_images[k][0]);
+                            --qtd_in_max;
                         }
                         --k;
                     }
-                    if (k == -1) {
-                        finished = true;
-                    } else {
+                    if (k != -1) {
                         ++_current_indices[k]; 
+                        if (not has_next_in_position(k)) 
+                            ++qtd_in_max;
                         _current->set(k, _possible_images[k][_current_indices[k]]);
                     }
-                    return _current;
                 }
-                throw std::logic_error("next called in finished generator");
+                if (qtd_in_max == _current_indices.size())
+                    finished = true;
+                return _current;
             }
+
+            /* Reset the generator.
+             * */
             void reset() {
                 finished = false;
+                first = true;
+                qtd_in_max = 0;
                 // create first element
                 for (int i = 0; i < _possible_images.size(); ++i) {
                     _current->set(i, _possible_images[i][0]);
+                    _current_indices[i] = 0;
+                    if (_possible_images[i].size() == 1) qtd_in_max++;
                 }
             }
     };
 
+    /* Determinize an entire (partial) non-deterministic 
+     * truth interpretation for a given signature.
+     *
+     * Given a (partial) non-deterministic truth-table, generate
+     * all possible (partial) deterministic interpretations.
+     * */
+    class PartialDeterministicTruthInterpGenerator {
+        private:
+            std::shared_ptr<SignatureTruthInterp<std::set<int>>> _start_truth_interp;
+            std::map<Symbol, PartialDeterministicTruthTableGenerator> _generators;
+            std::shared_ptr<SignatureTruthInterp<std::set<int>>> _current;
+
+            void initialize_generators() {
+                auto signature = _start_truth_interp->signature();
+                for (auto [symbol, connective] : (*signature)) {
+                    _generators.insert({symbol, 
+                            PartialDeterministicTruthTableGenerator(
+                                    this->_start_truth_interp->get_interpretation(symbol)->truth_table())}); 
+                } 
+            }
+
+            std::shared_ptr<SignatureTruthInterp<std::set<int>>> truth_interp_from_generators() {
+                auto signature = _start_truth_interp->signature();
+                auto sti = std::make_shared<SignatureTruthInterp<std::set<int>>>(signature);
+                for (auto& [symbol, gen] : _generators)
+                    sti->try_interpret(
+                            std::make_shared<TruthInterp<std::set<int>>>((*signature)[symbol], gen.next()), 
+                            true);
+                (*(_generators.begin())).second.reset();
+                return sti;
+            }
+
+        public:
+
+            PartialDeterministicTruthInterpGenerator(decltype(_start_truth_interp) start_truth_interp) 
+                : _start_truth_interp {start_truth_interp} {
+                initialize_generators();    
+                reset();
+            }
+
+            /* Produce next interpretation.
+             * */
+            decltype(_current) next() {
+                if (not has_next())
+                    throw std::logic_error("no truth interpretation available");
+                
+                auto signature = _start_truth_interp->signature();
+
+                auto make_truth_interp = [&](const Symbol& symbol, 
+                        std::shared_ptr<TruthTable<std::set<int>>> tt) {
+                    return std::make_shared<TruthInterp<std::set<int>>>((*signature)[symbol], tt);
+                };
+
+                for (auto& [symbol, generator] : _generators) {
+                    if (generator.has_next()) {
+                        _current->try_interpret(make_truth_interp(symbol, generator.next()), true);
+                        break;
+                    } 
+                    generator.reset();
+                    _current->try_interpret(make_truth_interp(symbol, generator.next()), true);
+                }
+                return _current;
+            }
+
+            /* Reset the generator.
+             * */
+            void reset() {
+                for (auto& [s, g] : _generators)
+                    g.reset();
+                _current = truth_interp_from_generators();
+            }
+            
+            /* Check if there is a next interpretation
+             * to produce.
+             * */
+            bool has_next() {
+                for (auto& [s, g] : _generators) {
+                    if (g.has_next()) 
+                        return true;
+                }
+                return false;
+            }
+    };
 
     /* Check if a sequent is valid on a given
      * generalized matrix. Validity is defined in the form

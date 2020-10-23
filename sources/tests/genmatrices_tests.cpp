@@ -192,4 +192,78 @@ namespace {
        //ltsy::NdSequent<std::set> seq5 ({{p_conn_q}, {}, {p}, {}});
        //ltsy::NdSequent<std::set> seq6 ({{p_conn_q}, {}, {q}, {}});
     }
+
+    TEST(GenMatrices, TTDeterminizationGenerator) {
+        auto tt_or =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0, 1}, {0}, {}, {1,0}});
+        ltsy::PartialDeterministicTruthTableGenerator generator {std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or)};
+        while (generator.has_next()) {
+            auto t = generator.next();
+            std::cout << (*t) << std::endl;
+        }
+        generator.reset();
+        while (generator.has_next()) {
+            auto t = generator.next();
+            std::cout << (*t) << std::endl;
+        }
+
+        auto tt_fp =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{}, {}, {}, {}});
+        ltsy::PartialDeterministicTruthTableGenerator fullpartialgen {std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_fp)};
+        while (fullpartialgen.has_next()) {
+            auto t = fullpartialgen.next();
+            std::cout << (*t) << std::endl;
+        }
+    }
+
+
+    TEST(GenMatrices, TruthInterpDeterminizationGeneratorBinary) {
+        ltsy::Signature cl_sig {
+            {"&", 2},
+            {"|", 2},
+        };
+        auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
+        auto tt_or =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{1}, {}, {}, {0,1}});
+        auto tt_and =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{}, {0,1}, {}, {}});
+
+        auto or_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["|"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or));
+        auto and_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["&"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_and));
+        auto truth_interp = ltsy::SignatureTruthInterp<std::set<int>>(sig_ptr, 
+               {or_int,and_int});
+
+        ltsy::PartialDeterministicTruthInterpGenerator gen {std::make_shared<decltype(truth_interp)>(truth_interp)};
+        int c = 0;
+        while(gen.has_next()) {
+            auto si = gen.next();
+            c++;
+            std::cout << (*si) << std::endl;
+        }
+        std::cout << c << std::endl;
+    }
+
+    TEST(GenMatrices, TruthInterpDeterminizationGeneratorUnary) {
+        ltsy::Signature cl_sig {
+            {"&", 1},
+            {"|", 0},
+        };
+        auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
+        auto tt_and =  ltsy::TruthTable<std::set<int>>(2, 1, std::vector<std::set<int>>{{0},{0,1}});
+        auto tt_or =  ltsy::TruthTable<std::set<int>>(2, 0, std::vector<std::set<int>>{{0,1}});
+
+        auto or_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["|"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or));
+        auto and_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["&"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_and));
+        auto truth_interp = ltsy::SignatureTruthInterp<std::set<int>>(sig_ptr, 
+               {or_int,and_int});
+
+        ltsy::PartialDeterministicTruthInterpGenerator gen {std::make_shared<decltype(truth_interp)>(truth_interp)};
+        int c = 0;
+        while(gen.has_next()) {
+            auto si = gen.next();
+            c++;
+            std::cout << (*si) << std::endl;
+        }
+        std::cout << c << std::endl;
+    }
 };
