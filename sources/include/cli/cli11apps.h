@@ -57,6 +57,25 @@ namespace ltsy {
     };
 
     /**
+     * Soundness check app.
+     * */
+    class SequentRuleSoundnessCLI11App : public CLI11App {
+        private:
+            std::string _file_path;
+
+        public:
+            SequentRuleSoundnessCLI11App() : CLI11App {CLIDefs::RSOUND_APP_NAME, CLIDefs::RSOUND_APP_DESC} {
+                this->add_option("-f,--file", _file_path, "YAML input file")
+                   ->required()
+                   ->check(CLI::ExistingFile);
+                this->callback([&]() {
+                    //TTAxiomatizerCLIHandler handler;
+                    //handler.handle(_file_path);
+                });
+            }
+    };
+
+    /**
      * Main CLI App.
      * */
     class MainCLI11App : public CLI11App {
@@ -65,6 +84,7 @@ namespace ltsy {
             MainCLI11App() : CLI11App {CLIDefs::CLI_APP_NAME} {
                 this->add_subcommand(std::make_shared<TTDeterminizerCLI11App>());
                 this->add_subcommand(std::make_shared<TTAxiomatizerCLI11App>());
+                this->add_subcommand(std::make_shared<SequentRuleSoundnessCLI11App>());
             }
     };
 
