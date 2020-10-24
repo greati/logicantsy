@@ -65,7 +65,7 @@ namespace ltsy {
             friend std::ostream& operator<<(std::ostream& os, const TruthInterp<CellType>& ti) {
                 os << ti._connective->symbol();
                 os << std::string(":") << std::endl;
-                os << (*ti._truth_table);
+                //os << (*ti._truth_table);
                 return os;  
             }
     };

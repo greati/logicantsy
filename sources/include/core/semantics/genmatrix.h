@@ -528,12 +528,14 @@ namespace ltsy {
                 : _nmatrix_ptr {nmatrix_ptr}, _props {props} {
                 _var_assign_generator = GenMatrixVarAssignmentGenerator {nmatrix_ptr, props};     
                 _truth_interp_generator = PartialDeterministicTruthInterpGenerator {nmatrix_ptr->interpretation()};
-                _current = std::make_shared<GenMatrixValuation>();
+                reset();
             }
 
             inline void reset() {
+                _current = std::make_shared<GenMatrixValuation>();
                 _var_assign_generator.reset();
                 _truth_interp_generator.reset();
+                _current->set_interpretation(_truth_interp_generator.next());
                 finish = false;
             }
 
@@ -548,7 +550,7 @@ namespace ltsy {
                 if (not _var_assign_generator.has_next()) {
                     _var_assign_generator.reset();
                     _current->set_interpretation(_truth_interp_generator.next());
-                }
+                } 
 
                 auto assign = _var_assign_generator.next();
                 _current->set_var_assignment(assign);
