@@ -122,36 +122,25 @@ namespace {
         }
     }
 
-    TEST(GenMatrices, NdSequentValidityCheck) {
+    TEST(GenMatrices, NdSequentSoundnessCheck) {
         ltsy::Signature cl_sig {
             {"&", 2},
             {"|", 2},
-            //{"~", 1},
-            //{"0", 0},
         };
         auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
 
         auto tt_or =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0}, {1}, {1}, {1}});
         auto tt_and = ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0}, {0}, {0}, {1}});
-        //auto tt_neg = ltsy::TruthTable<std::set<int>>(4, 1, std::vector<std::set<int>>{{1}, {0}});
-        //auto tt_bot = ltsy::TruthTable<std::set<int>>(4, 0, std::vector<std::set<int>>{{0}});
 
-        //auto bot_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["0"], 
-        //        std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_bot));
         auto or_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["|"], 
                 std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or));
         auto and_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["&"], 
                 std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_and));
-        //auto neg_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["~"], 
-        //       std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_neg));
-
 
        auto truth_interp = ltsy::SignatureTruthInterp<std::set<int>>(sig_ptr, 
                {
-                   //bot_int,
                    or_int,
                    and_int,
-                   //neg_int
                });
 
         auto cl_matrix = 
@@ -174,16 +163,14 @@ namespace {
        ltsy::NdSequentRule<std::set> seqrule1 ({seq21},{seq22});
        ltsy::NdSequentRule<std::set> seqrule2 ({seq31},{seq22});
         ltsy::NdSequentGenMatrixValidator<std::set> sequent_validator {cl_matrix, {0}};
-        auto [con_test, con_ce] = sequent_validator.is_rule_validity_preserving(seqrule1);
+        auto [con_test, con_ce] = sequent_validator.is_rule_satisfiability_preserving(seqrule1);
         std::cout << con_test << std::endl;
-        auto [disj_test, disj_ce] = sequent_validator.is_rule_validity_preserving(seqrule2);
+        auto [disj_test, disj_ce] = sequent_validator.is_rule_satisfiability_preserving(seqrule2);
         std::cout << disj_test << std::endl;
         std::vector<ltsy::NdSequentGenMatrixValidator<std::set>::CounterExample> ce_list = *disj_ce;
         for (const auto& e : ce_list) {
             std::cout << e.val.print().str() << std::endl;
         }
-
-
 
        //ltsy::NdSequent<std::set> seq1 ({{}, {p_conn_q},{}, {p,q}});
        //ltsy::NdSequent<std::set> seq2 ({{}, {p},{}, {p_conn_q}});
@@ -323,8 +310,6 @@ namespace {
          ltsy::Signature cl_sig {
             {"&", 2},
             {"|", 2},
-            //{"~", 1},
-            //{"0", 0},
         };
         auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
 

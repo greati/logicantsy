@@ -271,6 +271,13 @@ namespace ltsy {
             inline int operator()(const Prop& p) {
                 return (*_var_assignment)(p);
             }
+
+            std::stringstream print() const {
+                std::stringstream ss;
+                ss << *(_interpretation) << std::endl;
+                ss << _var_assignment->print().str() << std::endl;
+                return ss;
+            }
     
     };
 
@@ -594,7 +601,7 @@ namespace ltsy {
              * a given sequent.
              * */
             struct CounterExample {
-                GenMatrixVarAssignment val; 
+                GenMatrixValuation val; 
                 CounterExample(decltype(val) _val) : val {_val} {}
             };
 
@@ -626,11 +633,11 @@ namespace ltsy {
              * @author Vitor Greati
              * */
             std::pair<bool, std::optional<std::set<std::shared_ptr<Formula>>>> 
-            is_fmla_set_valid_under_assignment(const GenMatrixVarAssignment val, 
+            is_fmla_set_valid_under_valuation(const GenMatrixValuation val, 
                             const std::set<std::shared_ptr<Formula>>& fmls, const std::set<int>& dset) const {
                 std::set<std::shared_ptr<Formula>> fail_fmls;
                 for (const auto& f : fmls) {
-                   GenMatrixPossibleValuesCollector collector {std::make_shared<GenMatrixVarAssignment>(val)};
+                   GenMatrixEvaluator collector {std::make_shared<GenMatrixValuation>(val)};
                    auto fmla_values = f->accept(collector);     
                    if (!utils::is_subset(fmla_values, dset))
                        fail_fmls.insert(f);
@@ -640,54 +647,30 @@ namespace ltsy {
             }
 
             bool
-            is_valid_under_assignment(const GenMatrixVarAssignment& val, const NdSequent<FmlaContainerT>& seq) const {
+            is_valid_under_valuation(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
-                     auto is_model_result = is_fmla_set_valid_under_assignment(val, seq[i], _d_sets[i]);
+                     auto is_model_result = is_fmla_set_valid_under_valuation(val, seq[i], _d_sets[i]);
                      if (not is_model_result.first) return true;
                  }
                  return false;
             }
 
-            std::pair<bool, std::optional<std::vector<CounterExample>>> 
-            is_valid(const NdSequent<FmlaContainerT>& seq, int max_counter_examples=1) const { 
-                std::vector<CounterExample> counter_examples;
-                auto props_set = seq.collect_props();
-                std::vector<Prop> props {props_set.begin(), props_set.end()};
-                ltsy::GenMatrixVarAssignmentGenerator generator {_matrix, props};
-                while (generator.has_next()) {
-                    auto val = generator.next();
-                    if (not is_valid_under_assignment(*val, seq)) {
-                        counter_examples.push_back({*val});
-                        if (counter_examples.size() >= max_counter_examples)
-                            break;
-                    }
-                }
-                if (counter_examples.empty())
-                    return {true, std::nullopt};
-                else
-                    return {false, counter_examples};
-            }
-
-            std::pair<bool, std::optional<std::vector<CounterExample>>> 
-            is_rule_satisfiability_preserving(const NdSequentRule<FmlaContainerT>& rule, 
-                    int max_counter_examples=1) const { }
-
-            /* Test if a rule preserves validity under
-             * every possible valuations.
+            /* Test if a rule preserves satisfaction under
+             * every possible valuation (aka rule soundness).
              * */
             std::pair<bool, std::optional<std::vector<CounterExample>>> 
-            is_rule_validity_preserving(const NdSequentRule<FmlaContainerT>& rule, 
+            is_rule_satisfiability_preserving(const NdSequentRule<FmlaContainerT>& rule, 
                     int max_counter_examples=1) const { 
                 std::vector<CounterExample> counter_examples;
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
-                ltsy::GenMatrixVarAssignmentGenerator generator {_matrix, props};
+                ltsy::GenMatrixValuationGenerator generator {_matrix, props};
                 while (generator.has_next()) {
                     // check validity of premisses
                     bool premisses_valid = true;
                     auto val = generator.next();
                     for (const auto& p : rule.premisses()) {
-                        if (not is_valid_under_assignment(*val, p)) {
+                        if (not is_valid_under_valuation(*val, p)) {
                             premisses_valid = false;
                             break;
                         }
@@ -696,7 +679,7 @@ namespace ltsy {
                     bool conclusions_not_valid = true;
                     if (premisses_valid) {
                         for (const auto& c : rule.conclusions()) {
-                            if (is_valid_under_assignment(*val, c)) {
+                            if (is_valid_under_valuation(*val, c)) {
                                 conclusions_not_valid = false;
                                 break;
                             }
@@ -713,7 +696,6 @@ namespace ltsy {
                     return std::make_pair<bool, std::optional<std::vector<CounterExample>>>(false, 
                         std::make_optional<std::vector<CounterExample>>(counter_examples));
             }
-    
     };
 
 };
