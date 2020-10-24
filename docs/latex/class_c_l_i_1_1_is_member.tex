@@ -1,0 +1,60 @@
+\hypertarget{class_c_l_i_1_1_is_member}{}\doxysection{C\+LI\+::Is\+Member Class Reference}
+\label{class_c_l_i_1_1_is_member}\index{CLI::IsMember@{CLI::IsMember}}
+
+
+Verify items are in a set.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Is\+Member\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_l_i_1_1_is_member}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_is_member_af0f5e865fff0bcca6faaa1a7cf825997}\label{class_c_l_i_1_1_is_member_af0f5e865fff0bcca6faaa1a7cf825997}} 
+using {\bfseries filter\+\_\+fn\+\_\+t} = std\+::function$<$ std\+::string(std\+::string)$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_is_member_abb1f2767188a5c8ded100fc2dc85a3b2}\label{class_c_l_i_1_1_is_member_abb1f2767188a5c8ded100fc2dc85a3b2}} 
+{\footnotesize template$<$typename T , typename... Args$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_is_member_abb1f2767188a5c8ded100fc2dc85a3b2}{Is\+Member}} (std\+::initializer\+\_\+list$<$ T $>$ values, Args \&\&... args)
+\begin{DoxyCompactList}\small\item\em This allows in-\/place construction using an initializer list. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_is_member_a049497214ca79cde3e198d700a7280d2}\label{class_c_l_i_1_1_is_member_a049497214ca79cde3e198d700a7280d2}} 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_is_member_a049497214ca79cde3e198d700a7280d2}{Is\+Member}} (T \&\&set)
+\begin{DoxyCompactList}\small\item\em This checks to see if an item is in a set (empty function) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , typename F $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_is_member_a778da19fa2481912c7fcfe6b3c8b453a}{Is\+Member}} (T set, F filter\+\_\+function)
+\begin{DoxyCompactList}\small\item\em This checks to see if an item is in a set\+: pointer or copy version. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_is_member_a8254fb3a00a351e43ba6e0ab93c183c0}\label{class_c_l_i_1_1_is_member_a8254fb3a00a351e43ba6e0ab93c183c0}} 
+{\footnotesize template$<$typename T , typename... Args$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_is_member_a8254fb3a00a351e43ba6e0ab93c183c0}{Is\+Member}} (T \&\&set, filter\+\_\+fn\+\_\+t filter\+\_\+fn\+\_\+1, filter\+\_\+fn\+\_\+t filter\+\_\+fn\+\_\+2, Args \&\&... other)
+\begin{DoxyCompactList}\small\item\em You can pass in as many filter functions as you like, they nest (string only currently) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Verify items are in a set. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_is_member_a778da19fa2481912c7fcfe6b3c8b453a}\label{class_c_l_i_1_1_is_member_a778da19fa2481912c7fcfe6b3c8b453a}} 
+\index{CLI::IsMember@{CLI::IsMember}!IsMember@{IsMember}}
+\index{IsMember@{IsMember}!CLI::IsMember@{CLI::IsMember}}
+\doxysubsubsection{\texorpdfstring{IsMember()}{IsMember()}}
+{\footnotesize\ttfamily template$<$typename T , typename F $>$ \\
+C\+L\+I\+::\+Is\+Member\+::\+Is\+Member (\begin{DoxyParamCaption}\item[{T}]{set,  }\item[{F}]{filter\+\_\+function }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+This checks to see if an item is in a set\+: pointer or copy version. 
+
+You can pass in a function that will filter both sides of the comparison before computing the comparison. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,81 @@
+\hypertarget{class_c_l_i_1_1_option__group}{}\doxysection{C\+LI\+::Option\+\_\+group Class Reference}
+\label{class_c_l_i_1_1_option__group}\index{CLI::Option\_group@{CLI::Option\_group}}
+
+
+Extension of \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} to better manage groups of options.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Option\+\_\+group\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_l_i_1_1_option__group}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a4440d3849d0c46d01a37b84c301b148a}\label{class_c_l_i_1_1_option__group_a4440d3849d0c46d01a37b84c301b148a}} 
+{\bfseries Option\+\_\+group} (std\+::string group\+\_\+description, std\+::string group\+\_\+name, \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$parent)
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_ab54d0a714810cc16623a6658d44383ca}\label{class_c_l_i_1_1_option__group_ab54d0a714810cc16623a6658d44383ca}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_ab54d0a714810cc16623a6658d44383ca}{add\+\_\+option}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Add an existing option to the \mbox{\hyperlink{class_c_l_i_1_1_option__group}{Option\+\_\+group}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_afdc8b0b76fcc2ef4df8fbf2218edfd20}\label{class_c_l_i_1_1_option__group_afdc8b0b76fcc2ef4df8fbf2218edfd20}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_option__group_afdc8b0b76fcc2ef4df8fbf2218edfd20}{add\+\_\+options}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Add an existing option to the \mbox{\hyperlink{class_c_l_i_1_1_option__group}{Option\+\_\+group}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a449fcf469561e36a9276707097fd9935}\label{class_c_l_i_1_1_option__group_a449fcf469561e36a9276707097fd9935}} 
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_c_l_i_1_1_option__group_a449fcf469561e36a9276707097fd9935}{add\+\_\+options}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt, Args... args)
+\begin{DoxyCompactList}\small\item\em Add a bunch of options to the group. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_af3379042e0b45c8c42f1f3f7c4c1d988}\label{class_c_l_i_1_1_option__group_af3379042e0b45c8c42f1f3f7c4c1d988}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_af3379042e0b45c8c42f1f3f7c4c1d988}{add\+\_\+subcommand}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$subcom)
+\begin{DoxyCompactList}\small\item\em Add an existing subcommand to be a member of an option\+\_\+group. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_a1f9503a8cdceb4e5b42c9fd4ae6b7b10}{add\+\_\+option}} (std\+::string option\+\_\+name, callback\+\_\+t option\+\_\+callback, std\+::string option\+\_\+description=\char`\"{}\char`\"{}, bool defaulted=false, std\+::function$<$ std\+::string()$>$ func=\{\})
+\begin{DoxyCompactList}\small\item\em Add an option, will automatically understand the type for common types. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_ad1273eccb5c318a5253c3e8cad4724d2}\label{class_c_l_i_1_1_option__group_ad1273eccb5c318a5253c3e8cad4724d2}} 
+{\footnotesize template$<$typename Assign\+To , typename Convert\+To  = Assign\+To, enable\+\_\+if\+\_\+t$<$!std\+::is\+\_\+const$<$ Convert\+To $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_ad1273eccb5c318a5253c3e8cad4724d2}{add\+\_\+option}} (std\+::string option\+\_\+name, Assign\+To \&variable, std\+::string option\+\_\+description=\char`\"{}\char`\"{}, bool defaulted=false)
+\begin{DoxyCompactList}\small\item\em Add option for assigning to a variable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a0c62e8c76bdded7014554c9f417fa45d}\label{class_c_l_i_1_1_option__group_a0c62e8c76bdded7014554c9f417fa45d}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_a0c62e8c76bdded7014554c9f417fa45d}{add\+\_\+option}} (std\+::string option\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Add option with no description or variable assignment. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a57784f44a9e43f55d176b5fd1910a12f}\label{class_c_l_i_1_1_option__group_a57784f44a9e43f55d176b5fd1910a12f}} 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+const$<$ T $>$\+::value \&\&std\+::is\+\_\+constructible$<$ std\+::string, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_a57784f44a9e43f55d176b5fd1910a12f}{add\+\_\+option}} (std\+::string option\+\_\+name, T \&option\+\_\+description)
+\begin{DoxyCompactList}\small\item\em Add option with description but with no variable assignment or callback. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a7ad6eb4ec4c5f4a0a9593af9f3fcf9cc}\label{class_c_l_i_1_1_option__group_a7ad6eb4ec4c5f4a0a9593af9f3fcf9cc}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_a7ad6eb4ec4c5f4a0a9593af9f3fcf9cc}{add\+\_\+subcommand}} (std\+::string subcommand\+\_\+name=\char`\"{}\char`\"{}, std\+::string subcommand\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add a subcommand. Inherits I\+N\+H\+E\+R\+I\+T\+A\+B\+LE and \mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}}, and help flag. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a9add649c4bc409afcb6b99650417b68d}\label{class_c_l_i_1_1_option__group_a9add649c4bc409afcb6b99650417b68d}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option__group_a9add649c4bc409afcb6b99650417b68d}{add\+\_\+subcommand}} (C\+L\+I\+::\+App\+\_\+p subcom)
+\begin{DoxyCompactList}\small\item\em Add a previously created app as a subcommand. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Extension of \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} to better manage groups of options. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_option__group_a1f9503a8cdceb4e5b42c9fd4ae6b7b10}\label{class_c_l_i_1_1_option__group_a1f9503a8cdceb4e5b42c9fd4ae6b7b10}} 
+\index{CLI::Option\_group@{CLI::Option\_group}!add\_option@{add\_option}}
+\index{add\_option@{add\_option}!CLI::Option\_group@{CLI::Option\_group}}
+\doxysubsubsection{\texorpdfstring{add\_option()}{add\_option()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+option\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add an option, will automatically understand the type for common types. 
+
+To use, create a variable with the expected type, and pass it in after the name. After start is called, you can use count to see if the value was passed, and the value will be initialized properly. Numbers, vectors, and strings are supported.
+
+-\/$>$\mbox{\hyperlink{class_c_l_i_1_1_app_a33c3eb125a4e70d387dd9fc49c25432b}{required()}}, -\/$>$default, and the validators are options, The positional options take an optional number of arguments.
+
+For example, \begin{DoxyVerb}std::string filename;
+program.add_option("filename", filename, "description of filename");
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

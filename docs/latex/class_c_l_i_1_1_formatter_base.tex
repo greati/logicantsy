@@ -1,0 +1,78 @@
+\hypertarget{class_c_l_i_1_1_formatter_base}{}\doxysection{C\+LI\+::Formatter\+Base Class Reference}
+\label{class_c_l_i_1_1_formatter_base}\index{CLI::FormatterBase@{CLI::FormatterBase}}
+
+
+This is the minimum requirements to run a formatter.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Formatter\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_l_i_1_1_formatter_base}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{Indent}\textbf{ Basic}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a85811a9afbc33d19fb1d8d1a0553f2b1}\label{class_c_l_i_1_1_formatter_base_a85811a9afbc33d19fb1d8d1a0553f2b1}} 
+{\bfseries Formatter\+Base} ()=default
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_abd363023789788a8242d2c8ccf394c48}\label{class_c_l_i_1_1_formatter_base_abd363023789788a8242d2c8ccf394c48}} 
+{\bfseries Formatter\+Base} (const \mbox{\hyperlink{class_c_l_i_1_1_formatter_base}{Formatter\+Base}} \&)=default
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a5552e960c2f477a570ee67541e15e8ea}\label{class_c_l_i_1_1_formatter_base_a5552e960c2f477a570ee67541e15e8ea}} 
+{\bfseries Formatter\+Base} (\mbox{\hyperlink{class_c_l_i_1_1_formatter_base}{Formatter\+Base}} \&\&)=default
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_ac634fe340a7679a3f4add85c969e4d98}\label{class_c_l_i_1_1_formatter_base_ac634fe340a7679a3f4add85c969e4d98}} 
+virtual \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_ac634fe340a7679a3f4add85c969e4d98}{$\sim$\+Formatter\+Base}} () noexcept
+\begin{DoxyCompactList}\small\item\em Adding a destructor in this form to work around bug in G\+CC 4.\+7. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_ac8ab93655a645352634709e15087080b}\label{class_c_l_i_1_1_formatter_base_ac8ab93655a645352634709e15087080b}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_ac8ab93655a645352634709e15087080b}{make\+\_\+help}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, std\+::string, App\+Format\+Mode) const =0
+\begin{DoxyCompactList}\small\item\em This is the key method that puts together help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Setters}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a73a17d81d04f5ee02a2cab32a59a8551}\label{class_c_l_i_1_1_formatter_base_a73a17d81d04f5ee02a2cab32a59a8551}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_a73a17d81d04f5ee02a2cab32a59a8551}{label}} (std\+::string key, std\+::string val)
+\begin{DoxyCompactList}\small\item\em Set the \char`\"{}\+R\+E\+Q\+U\+I\+R\+E\+D\char`\"{} label. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_acd8c03570a48e5937ab748bf6103ca2d}\label{class_c_l_i_1_1_formatter_base_acd8c03570a48e5937ab748bf6103ca2d}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_acd8c03570a48e5937ab748bf6103ca2d}{column\+\_\+width}} (std\+::size\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Set the column width. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Getters}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a7e8f9d7896c599f7befd84a9947d4cab}\label{class_c_l_i_1_1_formatter_base_a7e8f9d7896c599f7befd84a9947d4cab}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_a7e8f9d7896c599f7befd84a9947d4cab}{get\+\_\+label}} (std\+::string key) const
+\begin{DoxyCompactList}\small\item\em Get the current value of a name (R\+E\+Q\+U\+I\+R\+ED, etc.) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a41e32517e27b98dcf85acfb0fd169c97}\label{class_c_l_i_1_1_formatter_base_a41e32517e27b98dcf85acfb0fd169c97}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_a41e32517e27b98dcf85acfb0fd169c97}{get\+\_\+column\+\_\+width}} () const
+\begin{DoxyCompactList}\small\item\em Get the current column width. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Protected Attributes}
+\begin{Indent}\textbf{ Options}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a2427b2199dd9654b050d00c89d764332}\label{class_c_l_i_1_1_formatter_base_a2427b2199dd9654b050d00c89d764332}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_a2427b2199dd9654b050d00c89d764332}{column\+\_\+width\+\_\+}} \{30\}
+\begin{DoxyCompactList}\small\item\em The width of the first column. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_base_a2ee79421fa339b227d6cb9ca1bce4ad1}\label{class_c_l_i_1_1_formatter_base_a2ee79421fa339b227d6cb9ca1bce4ad1}} 
+\mbox{\hyperlink{classstd_1_1map}{std\+::map}}$<$ std\+::string, std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_formatter_base_a2ee79421fa339b227d6cb9ca1bce4ad1}{labels\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em The required help printout labels (user changeable) Values are Needs, Excludes, etc. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+This is the minimum requirements to run a formatter. 
+
+A user can subclass this is if they do not care at all about the structure in \mbox{\hyperlink{class_c_l_i_1_1_formatter}{C\+L\+I\+::\+Formatter}}. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

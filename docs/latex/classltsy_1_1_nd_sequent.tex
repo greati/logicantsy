@@ -1,0 +1,55 @@
+\hypertarget{classltsy_1_1_nd_sequent}{}\doxysection{ltsy\+::Nd\+Sequent$<$ Fmla\+ContainerT $>$ Class Template Reference}
+\label{classltsy_1_1_nd_sequent}\index{ltsy::NdSequent$<$ FmlaContainerT $>$@{ltsy::NdSequent$<$ FmlaContainerT $>$}}
+
+
+Represents an N-\/\+Dimensional sequent.  
+
+
+
+
+{\ttfamily \#include $<$ndsequents.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_ac097f95eb50e47baa70dee4f843f67c7}\label{classltsy_1_1_nd_sequent_ac097f95eb50e47baa70dee4f843f67c7}} 
+{\bfseries Nd\+Sequent} (const decltype(\+\_\+sequent\+\_\+fmlas)\&sequent\+\_\+fmlas)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_a61da16f8a300f12ccac35e4885a35154}\label{classltsy_1_1_nd_sequent_a61da16f8a300f12ccac35e4885a35154}} 
+{\bfseries Nd\+Sequent} (size\+\_\+t dimension, const Fmla\+ContainerT$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$$>$ \&def)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_a4f8b8e9c0e498b1ddaab35a76bc9c3ce}\label{classltsy_1_1_nd_sequent_a4f8b8e9c0e498b1ddaab35a76bc9c3ce}} 
+int {\bfseries dimension} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_a9d5540c018865613683fd4ff1db7a7fd}\label{classltsy_1_1_nd_sequent_a9d5540c018865613683fd4ff1db7a7fd}} 
+Fmla\+ContainerT$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$ $>$ \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int i)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_ac6f426177f5f64c20b0dedc9df3f9e87}\label{classltsy_1_1_nd_sequent_ac6f426177f5f64c20b0dedc9df3f9e87}} 
+Fmla\+ContainerT$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$ $>$ {\bfseries operator\mbox{[}$\,$\mbox{]}} (int i) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_ae845d99960dc39a49701d21b53aae154}\label{classltsy_1_1_nd_sequent_ae845d99960dc39a49701d21b53aae154}} 
+std\+::set$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_prop}{Prop}} $>$ $>$ {\bfseries collect\+\_\+props} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_afffa10dcf2bb464f3ef111c6e76d9912}\label{classltsy_1_1_nd_sequent_afffa10dcf2bb464f3ef111c6e76d9912}} 
+bool {\bfseries is\+\_\+in} (int i, \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} \&fmla) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_a4f9df4fd6079e20d76b768be6cf9cba9}\label{classltsy_1_1_nd_sequent_a4f9df4fd6079e20d76b768be6cf9cba9}} 
+std\+::string {\bfseries to\+\_\+string} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_a973f2df87c38df6fbd3a09910b0bffb5}\label{classltsy_1_1_nd_sequent_a973f2df87c38df6fbd3a09910b0bffb5}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classltsy_1_1_nd_sequent}{Nd\+Sequent}}$<$ Fmla\+ContainerT $>$ \&seq)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$template$<$ class... $>$ typename Fmla\+ContainerT$>$\newline
+class ltsy\+::\+Nd\+Sequent$<$ Fmla\+Container\+T $>$}
+
+Represents an N-\/\+Dimensional sequent. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/proof-\/theory/ndsequents.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,1239 @@
+\hypertarget{class_c_l_i_1_1_app}{}\doxysection{C\+LI\+::App Class Reference}
+\label{class_c_l_i_1_1_app}\index{CLI::App@{CLI::App}}
+
+
+Creates a command line program, with very few defaults.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::App\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_c_l_i_1_1_app}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aaabfb31d7fb10ee7465716b948b376dc}\label{class_c_l_i_1_1_app_aaabfb31d7fb10ee7465716b948b376dc}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_aaabfb31d7fb10ee7465716b948b376dc}{\+\_\+move\+\_\+option}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt, \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app)
+\begin{DoxyCompactList}\small\item\em function that could be used by subclasses of \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} to shift options around into subcommands \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Basic}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a61fe9472ef81b1503159511bb8e76430}\label{class_c_l_i_1_1_app_a61fe9472ef81b1503159511bb8e76430}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app_a61fe9472ef81b1503159511bb8e76430}{App}} (std\+::string app\+\_\+description=\char`\"{}\char`\"{}, std\+::string app\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Create a new program. Pass in the same arguments as main(), along with a help string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5a64699da9234ec6e3b260f212602d34}\label{class_c_l_i_1_1_app_a5a64699da9234ec6e3b260f212602d34}} 
+{\bfseries App} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} \&)=delete
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a379b496023da38cc91fa184b494e658e}\label{class_c_l_i_1_1_app_a379b496023da38cc91fa184b494e658e}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} \&)=delete
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a8180d86b6a163d270f69ce6dd1c12e35}\label{class_c_l_i_1_1_app_a8180d86b6a163d270f69ce6dd1c12e35}} 
+virtual \mbox{\hyperlink{class_c_l_i_1_1_app_a8180d86b6a163d270f69ce6dd1c12e35}{$\sim$\+App}} ()=default
+\begin{DoxyCompactList}\small\item\em virtual destructor \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab77e4c2f88388a9cc715c3e9d8ad37bc}{callback}} (std\+::function$<$ void()$>$ app\+\_\+callback)
+\begin{DoxyCompactList}\small\item\em Set a callback for execution when all parsing and processing has completed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a8ca317ef8d0401067748a1b9b4f6a74c}\label{class_c_l_i_1_1_app_a8ca317ef8d0401067748a1b9b4f6a74c}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a8ca317ef8d0401067748a1b9b4f6a74c}{final\+\_\+callback}} (std\+::function$<$ void()$>$ app\+\_\+callback)
+\begin{DoxyCompactList}\small\item\em Set a callback for execution when all parsing and processing has completed aliased as callback. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7672af4238f27c1a6d8fad77f0507e53}\label{class_c_l_i_1_1_app_a7672af4238f27c1a6d8fad77f0507e53}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a7672af4238f27c1a6d8fad77f0507e53}{parse\+\_\+complete\+\_\+callback}} (std\+::function$<$ void()$>$ pc\+\_\+callback)
+\begin{DoxyCompactList}\small\item\em Set a callback to execute when parsing has completed for the app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a385b883066431fd34fe847311729fd5f}\label{class_c_l_i_1_1_app_a385b883066431fd34fe847311729fd5f}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a385b883066431fd34fe847311729fd5f}{preparse\+\_\+callback}} (std\+::function$<$ void(std\+::size\+\_\+t)$>$ pp\+\_\+callback)
+\begin{DoxyCompactList}\small\item\em Set a callback to execute prior to parsing. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aff6ec09062edd6024c3f29a7792da554}\label{class_c_l_i_1_1_app_aff6ec09062edd6024c3f29a7792da554}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aff6ec09062edd6024c3f29a7792da554}{name}} (std\+::string app\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Set a name for the app (empty will use parser to set the name) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a1bdb54630537e40bcdcf4b80a809dc1c}\label{class_c_l_i_1_1_app_a1bdb54630537e40bcdcf4b80a809dc1c}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a1bdb54630537e40bcdcf4b80a809dc1c}{alias}} (std\+::string app\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Set an alias for the app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4a9c762c56b6ff0f5b3505bcb75d0bbe}\label{class_c_l_i_1_1_app_a4a9c762c56b6ff0f5b3505bcb75d0bbe}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a4a9c762c56b6ff0f5b3505bcb75d0bbe}{allow\+\_\+extras}} (bool allow=true)
+\begin{DoxyCompactList}\small\item\em Remove the error when extras are left over on the command line. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a33c3eb125a4e70d387dd9fc49c25432b}\label{class_c_l_i_1_1_app_a33c3eb125a4e70d387dd9fc49c25432b}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a33c3eb125a4e70d387dd9fc49c25432b}{required}} (bool require=true)
+\begin{DoxyCompactList}\small\item\em Remove the error when extras are left over on the command line. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_abafac323b1dac58044509a62938daa9a}\label{class_c_l_i_1_1_app_abafac323b1dac58044509a62938daa9a}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_abafac323b1dac58044509a62938daa9a}{disabled}} (bool disable=true)
+\begin{DoxyCompactList}\small\item\em Disable the subcommand or option group. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a8aa17ef86c76df64bb67dc87b7e0f4bf}\label{class_c_l_i_1_1_app_a8aa17ef86c76df64bb67dc87b7e0f4bf}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a8aa17ef86c76df64bb67dc87b7e0f4bf}{disabled\+\_\+by\+\_\+default}} (bool disable=true)
+\begin{DoxyCompactList}\small\item\em Set the subcommand to be disabled by default, so on \mbox{\hyperlink{class_c_l_i_1_1_app_a6b5a085a039cab7e5906b3cd4407fdc8}{clear()}}, at the start of each parse it is disabled. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_afce0e89d19f39a0ba4532bb82315b817}\label{class_c_l_i_1_1_app_afce0e89d19f39a0ba4532bb82315b817}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_afce0e89d19f39a0ba4532bb82315b817}{enabled\+\_\+by\+\_\+default}} (bool enable=true)
+\begin{DoxyCompactList}\small\item\em Set the subcommand to be enabled by default, so on \mbox{\hyperlink{class_c_l_i_1_1_app_a6b5a085a039cab7e5906b3cd4407fdc8}{clear()}}, at the start of each parse it is enabled (not disabled) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae280d400d92cbca79c057036099f0b7f}\label{class_c_l_i_1_1_app_ae280d400d92cbca79c057036099f0b7f}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ae280d400d92cbca79c057036099f0b7f}{immediate\+\_\+callback}} (bool immediate=true)
+\begin{DoxyCompactList}\small\item\em Set the subcommand callback to be executed immediately on subcommand completion. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad107f40cfb9d4301a47713465e6c66e7}\label{class_c_l_i_1_1_app_ad107f40cfb9d4301a47713465e6c66e7}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ad107f40cfb9d4301a47713465e6c66e7}{validate\+\_\+positionals}} (bool validate=true)
+\begin{DoxyCompactList}\small\item\em Set the subcommand to validate positional arguments before assigning. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab79c8db4726b90b6fef32998b56931df}\label{class_c_l_i_1_1_app_ab79c8db4726b90b6fef32998b56931df}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab79c8db4726b90b6fef32998b56931df}{allow\+\_\+config\+\_\+extras}} (bool allow=true)
+\begin{DoxyCompactList}\small\item\em ignore extras in config files \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_acfc30379cf3cb10ff49f7471ab87add5}\label{class_c_l_i_1_1_app_acfc30379cf3cb10ff49f7471ab87add5}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_acfc30379cf3cb10ff49f7471ab87add5}{allow\+\_\+config\+\_\+extras}} (config\+\_\+extras\+\_\+mode mode)
+\begin{DoxyCompactList}\small\item\em ignore extras in config files \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab8c668b5d28db6faed5716ab8feeb6ad}\label{class_c_l_i_1_1_app_ab8c668b5d28db6faed5716ab8feeb6ad}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab8c668b5d28db6faed5716ab8feeb6ad}{prefix\+\_\+command}} (bool allow=true)
+\begin{DoxyCompactList}\small\item\em Do not parse anything after the first unrecognized option and return. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_abc06fa2dcf43b1eb2da3fc013c5336f4}\label{class_c_l_i_1_1_app_abc06fa2dcf43b1eb2da3fc013c5336f4}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_abc06fa2dcf43b1eb2da3fc013c5336f4}{ignore\+\_\+case}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Ignore case. Subcommands inherit value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a7d8c3ab60b46e4ac79fbdba0d473e97b}{allow\+\_\+windows\+\_\+style\+\_\+options}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Allow windows style options, such as {\ttfamily /opt}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af536e72074301adc697fd8f06cd7d6f5}\label{class_c_l_i_1_1_app_af536e72074301adc697fd8f06cd7d6f5}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_af536e72074301adc697fd8f06cd7d6f5}{positionals\+\_\+at\+\_\+end}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Specify that the positional arguments are only at the end of the sequence. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_abb3478595ba469884249b28b3f39b737}\label{class_c_l_i_1_1_app_abb3478595ba469884249b28b3f39b737}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_abb3478595ba469884249b28b3f39b737}{configurable}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Specify that the subcommand can be triggered by a config file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aed1c005724aa987ef6d9a375ec90c6ed}\label{class_c_l_i_1_1_app_aed1c005724aa987ef6d9a375ec90c6ed}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aed1c005724aa987ef6d9a375ec90c6ed}{ignore\+\_\+underscore}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Ignore underscore. Subcommands inherit value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ada603686fffbfb31bc76d77a62d11a0e}\label{class_c_l_i_1_1_app_ada603686fffbfb31bc76d77a62d11a0e}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ada603686fffbfb31bc76d77a62d11a0e}{formatter}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_formatter_base}{Formatter\+Base}} $>$ fmt)
+\begin{DoxyCompactList}\small\item\em Set the help formatter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa38148af0f7a368e03610a0590fbb406}\label{class_c_l_i_1_1_app_aa38148af0f7a368e03610a0590fbb406}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aa38148af0f7a368e03610a0590fbb406}{formatter\+\_\+fn}} (std\+::function$<$ std\+::string(const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, std\+::string, App\+Format\+Mode)$>$ fmt)
+\begin{DoxyCompactList}\small\item\em Set the help formatter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa6f22ec4216f4e44833df281d95cb124}\label{class_c_l_i_1_1_app_aa6f22ec4216f4e44833df281d95cb124}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aa6f22ec4216f4e44833df281d95cb124}{config\+\_\+formatter}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_config}{Config}} $>$ fmt)
+\begin{DoxyCompactList}\small\item\em Set the config formatter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a31f30e3313c5d0d2646556b0e232bbbc}\label{class_c_l_i_1_1_app_a31f30e3313c5d0d2646556b0e232bbbc}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a31f30e3313c5d0d2646556b0e232bbbc}{parsed}} () const
+\begin{DoxyCompactList}\small\item\em Check to see if this subcommand was parsed, true only if received on command line. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2aee3915a2e24fc7806e25b9bbc2b37c}\label{class_c_l_i_1_1_app_a2aee3915a2e24fc7806e25b9bbc2b37c}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a2aee3915a2e24fc7806e25b9bbc2b37c}{option\+\_\+defaults}} ()
+\begin{DoxyCompactList}\small\item\em Get the Option\+Default object, to set option defaults. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Extras for subclassing}\par
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_c_l_i_1_1_app_a5d74be8e210e779874584a3336aaf506}{pre\+\_\+callback}} ()
+\begin{DoxyCompactList}\small\item\em This allows subclasses to inject code before callbacks but after parse. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Post parsing}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a89776486006cb61d112ae1cdd73848e1}\label{class_c_l_i_1_1_app_a89776486006cb61d112ae1cdd73848e1}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a89776486006cb61d112ae1cdd73848e1}{count}} (std\+::string option\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em Counts the number of times the given option was passed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_adf5b6792ad7849c6966825320fc9b85d}\label{class_c_l_i_1_1_app_adf5b6792ad7849c6966825320fc9b85d}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_adf5b6792ad7849c6966825320fc9b85d}{get\+\_\+subcommands}} () const
+\begin{DoxyCompactList}\small\item\em Get a subcommand pointer list to the currently selected subcommands (after parsing by default, in command line order; use parsed = false to get the original definition list.) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ac03e5e9ca00d2d0b5d20c362e6dcbe9f}{get\+\_\+subcommands}} (const std\+::function$<$ bool(const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$)$>$ \&filter) const
+\begin{DoxyCompactList}\small\item\em Get a filtered subcommand pointer list from the original definition list. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a9dca85c30eb14dd7e3f02f07e4f68c5c}{get\+\_\+subcommands}} (const std\+::function$<$ bool(\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$)$>$ \&filter)
+\begin{DoxyCompactList}\small\item\em Get a filtered subcommand pointer list from the original definition list. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad07c68d1fcede041fa7fed647e5e3d84}\label{class_c_l_i_1_1_app_ad07c68d1fcede041fa7fed647e5e3d84}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ad07c68d1fcede041fa7fed647e5e3d84}{got\+\_\+subcommand}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$subcom) const
+\begin{DoxyCompactList}\small\item\em Check to see if given subcommand was selected. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5afd7a600223bae58b46aaff670e2d25}\label{class_c_l_i_1_1_app_a5afd7a600223bae58b46aaff670e2d25}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a5afd7a600223bae58b46aaff670e2d25}{got\+\_\+subcommand}} (std\+::string subcommand\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em Check with name instead of pointer to see if subcommand was selected. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af8af6e58e767ec987d5ca0ee9fad16b9}\label{class_c_l_i_1_1_app_af8af6e58e767ec987d5ca0ee9fad16b9}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_af8af6e58e767ec987d5ca0ee9fad16b9}{excludes}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Sets excluded options for the subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4ccf4cf49a8e221507a56224a353b860}\label{class_c_l_i_1_1_app_a4ccf4cf49a8e221507a56224a353b860}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a4ccf4cf49a8e221507a56224a353b860}{excludes}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app)
+\begin{DoxyCompactList}\small\item\em Sets excluded subcommands for the subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7c43c76fb672075be04a24ecbb6c5d7c}\label{class_c_l_i_1_1_app_a7c43c76fb672075be04a24ecbb6c5d7c}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ {\bfseries needs} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac05c29fe17d83419f415ddef5057e9ea}\label{class_c_l_i_1_1_app_ac05c29fe17d83419f415ddef5057e9ea}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ {\bfseries needs} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app)
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a9ea4153f3081d8424e772254135237fd}\label{class_c_l_i_1_1_app_a9ea4153f3081d8424e772254135237fd}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a9ea4153f3081d8424e772254135237fd}{remove\+\_\+excludes}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Removes an option from the excludes list of this subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a1c0670f27afe97a4e7ba12fcfb65a81c}\label{class_c_l_i_1_1_app_a1c0670f27afe97a4e7ba12fcfb65a81c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a1c0670f27afe97a4e7ba12fcfb65a81c}{remove\+\_\+excludes}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app)
+\begin{DoxyCompactList}\small\item\em Removes a subcommand from the excludes list of this subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aaa7bc9f48fc24b24742fd2fbe01c13f6}\label{class_c_l_i_1_1_app_aaa7bc9f48fc24b24742fd2fbe01c13f6}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_aaa7bc9f48fc24b24742fd2fbe01c13f6}{remove\+\_\+needs}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Removes an option from the needs list of this subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a73a87ddd7511abb67e5f293817e5df73}\label{class_c_l_i_1_1_app_a73a87ddd7511abb67e5f293817e5df73}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a73a87ddd7511abb67e5f293817e5df73}{remove\+\_\+needs}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app)
+\begin{DoxyCompactList}\small\item\em Removes a subcommand from the needs list of this subcommand. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Getters}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a342b67dba58e624e7e5aad2274ad53a3}\label{class_c_l_i_1_1_app_a342b67dba58e624e7e5aad2274ad53a3}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_formatter_base}{Formatter\+Base}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a342b67dba58e624e7e5aad2274ad53a3}{get\+\_\+formatter}} () const
+\begin{DoxyCompactList}\small\item\em Access the formatter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac43ddaae03c02145cccdc268f2e6d38e}\label{class_c_l_i_1_1_app_ac43ddaae03c02145cccdc268f2e6d38e}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_config}{Config}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ac43ddaae03c02145cccdc268f2e6d38e}{get\+\_\+config\+\_\+formatter}} () const
+\begin{DoxyCompactList}\small\item\em Access the config formatter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a577368be9856f4b2e39f8c4c13626577}\label{class_c_l_i_1_1_app_a577368be9856f4b2e39f8c4c13626577}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_config_base}{Config\+Base}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a577368be9856f4b2e39f8c4c13626577}{get\+\_\+config\+\_\+formatter\+\_\+base}} () const
+\begin{DoxyCompactList}\small\item\em Access the config formatter as a config\+Base pointer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab7637441b1cd7fb2fcf5e7e095e779a7}\label{class_c_l_i_1_1_app_ab7637441b1cd7fb2fcf5e7e095e779a7}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_ab7637441b1cd7fb2fcf5e7e095e779a7}{get\+\_\+description}} () const
+\begin{DoxyCompactList}\small\item\em Get the app or subcommand description. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5c26c64a49536e623739685f42475fc2}\label{class_c_l_i_1_1_app_a5c26c64a49536e623739685f42475fc2}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a5c26c64a49536e623739685f42475fc2}{description}} (std\+::string app\+\_\+description)
+\begin{DoxyCompactList}\small\item\em Set the description of the app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a75712a759ad90c77df128c01844b75fb}\label{class_c_l_i_1_1_app_a75712a759ad90c77df128c01844b75fb}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a75712a759ad90c77df128c01844b75fb}{get\+\_\+options}} (const std\+::function$<$ bool(const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$)$>$ filter=\{\}) const
+\begin{DoxyCompactList}\small\item\em Get the list of options (user facing function, so returns raw pointers), has optional filter function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af5ee1dea56dac6986063871536b4eba3}\label{class_c_l_i_1_1_app_af5ee1dea56dac6986063871536b4eba3}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_af5ee1dea56dac6986063871536b4eba3}{get\+\_\+options}} (const std\+::function$<$ bool(\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$)$>$ filter=\{\})
+\begin{DoxyCompactList}\small\item\em Non-\/const version of the above. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a965d588ba3c90c8dbd7708bf4dd1f53a}\label{class_c_l_i_1_1_app_a965d588ba3c90c8dbd7708bf4dd1f53a}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a965d588ba3c90c8dbd7708bf4dd1f53a}{get\+\_\+option\+\_\+no\+\_\+throw}} (std\+::string option\+\_\+name) noexcept
+\begin{DoxyCompactList}\small\item\em Get an option by name (noexcept non-\/const version) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab411f7f4dc22684f795fbdda4b8639ee}\label{class_c_l_i_1_1_app_ab411f7f4dc22684f795fbdda4b8639ee}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab411f7f4dc22684f795fbdda4b8639ee}{get\+\_\+option\+\_\+no\+\_\+throw}} (std\+::string option\+\_\+name) const noexcept
+\begin{DoxyCompactList}\small\item\em Get an option by name (noexcept const version) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a947c36b1f8acad786a30d8b26edf4116}\label{class_c_l_i_1_1_app_a947c36b1f8acad786a30d8b26edf4116}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a947c36b1f8acad786a30d8b26edf4116}{get\+\_\+option}} (std\+::string option\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em Get an option by name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa781566f8028b97d0c26fd973d880864}\label{class_c_l_i_1_1_app_aa781566f8028b97d0c26fd973d880864}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aa781566f8028b97d0c26fd973d880864}{get\+\_\+option}} (std\+::string option\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Get an option by name (non-\/const version) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a9d9a4dbfc968456b1ba9e988d27c3bc9}\label{class_c_l_i_1_1_app_a9d9a4dbfc968456b1ba9e988d27c3bc9}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a9d9a4dbfc968456b1ba9e988d27c3bc9}{operator\mbox{[}$\,$\mbox{]}}} (const std\+::string \&option\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em Shortcut bracket operator for getting a pointer to an option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa52aa8786d2be70543e36d1c668f49c3}\label{class_c_l_i_1_1_app_aa52aa8786d2be70543e36d1c668f49c3}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aa52aa8786d2be70543e36d1c668f49c3}{operator\mbox{[}$\,$\mbox{]}}} (const char $\ast$option\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em Shortcut bracket operator for getting a pointer to an option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a590129f76003fcf849eeb18d05e4571c}\label{class_c_l_i_1_1_app_a590129f76003fcf849eeb18d05e4571c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a590129f76003fcf849eeb18d05e4571c}{get\+\_\+ignore\+\_\+case}} () const
+\begin{DoxyCompactList}\small\item\em Check the status of ignore\+\_\+case. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad6af9821d55785a8d56744db78057cdd}\label{class_c_l_i_1_1_app_ad6af9821d55785a8d56744db78057cdd}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ad6af9821d55785a8d56744db78057cdd}{get\+\_\+ignore\+\_\+underscore}} () const
+\begin{DoxyCompactList}\small\item\em Check the status of ignore\+\_\+underscore. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab89a4979a6e0ea340188f28556136a6b}\label{class_c_l_i_1_1_app_ab89a4979a6e0ea340188f28556136a6b}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ab89a4979a6e0ea340188f28556136a6b}{get\+\_\+fallthrough}} () const
+\begin{DoxyCompactList}\small\item\em Check the status of fallthrough. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a3620a019821239f7d8be472cead88cd2}\label{class_c_l_i_1_1_app_a3620a019821239f7d8be472cead88cd2}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a3620a019821239f7d8be472cead88cd2}{get\+\_\+allow\+\_\+windows\+\_\+style\+\_\+options}} () const
+\begin{DoxyCompactList}\small\item\em Check the status of the allow windows style options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af77a6cd4835a53b0446576fdbe8ac39c}\label{class_c_l_i_1_1_app_af77a6cd4835a53b0446576fdbe8ac39c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_af77a6cd4835a53b0446576fdbe8ac39c}{get\+\_\+positionals\+\_\+at\+\_\+end}} () const
+\begin{DoxyCompactList}\small\item\em Check the status of the allow windows style options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2976c5b0cccca69d24ed5ad52924ab54}\label{class_c_l_i_1_1_app_a2976c5b0cccca69d24ed5ad52924ab54}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a2976c5b0cccca69d24ed5ad52924ab54}{get\+\_\+configurable}} () const
+\begin{DoxyCompactList}\small\item\em Check the status of the allow windows style options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa109e6eeffd6ac72c1ec7e5c9c234f21}\label{class_c_l_i_1_1_app_aa109e6eeffd6ac72c1ec7e5c9c234f21}} 
+const std\+::string \& \mbox{\hyperlink{class_c_l_i_1_1_app_aa109e6eeffd6ac72c1ec7e5c9c234f21}{get\+\_\+group}} () const
+\begin{DoxyCompactList}\small\item\em Get the group of this subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad1a6871e4384311fae85e5e03fdcd3fa}\label{class_c_l_i_1_1_app_ad1a6871e4384311fae85e5e03fdcd3fa}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_ad1a6871e4384311fae85e5e03fdcd3fa}{get\+\_\+footer}} () const
+\begin{DoxyCompactList}\small\item\em Generate and return the footer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af990c1f077d815768ca3d2f250d058d9}\label{class_c_l_i_1_1_app_af990c1f077d815768ca3d2f250d058d9}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_af990c1f077d815768ca3d2f250d058d9}{get\+\_\+require\+\_\+subcommand\+\_\+min}} () const
+\begin{DoxyCompactList}\small\item\em Get the required min subcommand value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a76fa6784188f97df35ceb6b8207accd2}\label{class_c_l_i_1_1_app_a76fa6784188f97df35ceb6b8207accd2}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a76fa6784188f97df35ceb6b8207accd2}{get\+\_\+require\+\_\+subcommand\+\_\+max}} () const
+\begin{DoxyCompactList}\small\item\em Get the required max subcommand value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a242b3d549b70e9f8785b727703371d40}\label{class_c_l_i_1_1_app_a242b3d549b70e9f8785b727703371d40}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a242b3d549b70e9f8785b727703371d40}{get\+\_\+require\+\_\+option\+\_\+min}} () const
+\begin{DoxyCompactList}\small\item\em Get the required min option value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac0458768d5cd311ef361e039ce58c45a}\label{class_c_l_i_1_1_app_ac0458768d5cd311ef361e039ce58c45a}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_ac0458768d5cd311ef361e039ce58c45a}{get\+\_\+require\+\_\+option\+\_\+max}} () const
+\begin{DoxyCompactList}\small\item\em Get the required max option value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a60e3e9d4198e855cd721887502acca54}\label{class_c_l_i_1_1_app_a60e3e9d4198e855cd721887502acca54}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a60e3e9d4198e855cd721887502acca54}{get\+\_\+prefix\+\_\+command}} () const
+\begin{DoxyCompactList}\small\item\em Get the prefix command status. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a82efdb6d3d77d2faff51a4960034a133}\label{class_c_l_i_1_1_app_a82efdb6d3d77d2faff51a4960034a133}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a82efdb6d3d77d2faff51a4960034a133}{get\+\_\+allow\+\_\+extras}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of allow extras. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a74fa8829acfe2311724ecad5bdb91dce}\label{class_c_l_i_1_1_app_a74fa8829acfe2311724ecad5bdb91dce}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a74fa8829acfe2311724ecad5bdb91dce}{get\+\_\+required}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of required. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a770812d1989ce390b1919080d55a65d3}\label{class_c_l_i_1_1_app_a770812d1989ce390b1919080d55a65d3}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a770812d1989ce390b1919080d55a65d3}{get\+\_\+disabled}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of disabled. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_affb7cd37fada9a7470e5bf2f7444249f}\label{class_c_l_i_1_1_app_affb7cd37fada9a7470e5bf2f7444249f}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_affb7cd37fada9a7470e5bf2f7444249f}{get\+\_\+immediate\+\_\+callback}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of disabled. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a025af752c08a28736d5f6d3c10d6ca35}\label{class_c_l_i_1_1_app_a025af752c08a28736d5f6d3c10d6ca35}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a025af752c08a28736d5f6d3c10d6ca35}{get\+\_\+disabled\+\_\+by\+\_\+default}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of disabled by default. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af35ca552ab4b1ee3ea975183c94e2f9c}\label{class_c_l_i_1_1_app_af35ca552ab4b1ee3ea975183c94e2f9c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_af35ca552ab4b1ee3ea975183c94e2f9c}{get\+\_\+enabled\+\_\+by\+\_\+default}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of disabled by default. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7563b3694b8ee4b14e7183966dc77f69}\label{class_c_l_i_1_1_app_a7563b3694b8ee4b14e7183966dc77f69}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a7563b3694b8ee4b14e7183966dc77f69}{get\+\_\+validate\+\_\+positionals}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of validating positionals. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aeab6a6f6ddc3540f56a7494be5281a5a}\label{class_c_l_i_1_1_app_aeab6a6f6ddc3540f56a7494be5281a5a}} 
+config\+\_\+extras\+\_\+mode \mbox{\hyperlink{class_c_l_i_1_1_app_aeab6a6f6ddc3540f56a7494be5281a5a}{get\+\_\+allow\+\_\+config\+\_\+extras}} () const
+\begin{DoxyCompactList}\small\item\em Get the status of allow extras. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae3ed738a07047fd1d76c228d41804a76}\label{class_c_l_i_1_1_app_ae3ed738a07047fd1d76c228d41804a76}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ae3ed738a07047fd1d76c228d41804a76}{get\+\_\+help\+\_\+ptr}} ()
+\begin{DoxyCompactList}\small\item\em Get a pointer to the help flag. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad3b89865119fcdaf213880e25f7cff87}\label{class_c_l_i_1_1_app_ad3b89865119fcdaf213880e25f7cff87}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ad3b89865119fcdaf213880e25f7cff87}{get\+\_\+help\+\_\+ptr}} () const
+\begin{DoxyCompactList}\small\item\em Get a pointer to the help flag. (const) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a9afd276477475cfddc1f1d8f3af6e095}\label{class_c_l_i_1_1_app_a9afd276477475cfddc1f1d8f3af6e095}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a9afd276477475cfddc1f1d8f3af6e095}{get\+\_\+help\+\_\+all\+\_\+ptr}} () const
+\begin{DoxyCompactList}\small\item\em Get a pointer to the help all flag. (const) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa516fbfd33a220af66deccd8e6a465a0}\label{class_c_l_i_1_1_app_aa516fbfd33a220af66deccd8e6a465a0}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aa516fbfd33a220af66deccd8e6a465a0}{get\+\_\+config\+\_\+ptr}} ()
+\begin{DoxyCompactList}\small\item\em Get a pointer to the config option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa3108b9777788e910610454f06ecfaf6}\label{class_c_l_i_1_1_app_aa3108b9777788e910610454f06ecfaf6}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_aa3108b9777788e910610454f06ecfaf6}{get\+\_\+config\+\_\+ptr}} () const
+\begin{DoxyCompactList}\small\item\em Get a pointer to the config option. (const) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a31c5906bfb17ef02514367d09c83aa0d}\label{class_c_l_i_1_1_app_a31c5906bfb17ef02514367d09c83aa0d}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a31c5906bfb17ef02514367d09c83aa0d}{get\+\_\+parent}} ()
+\begin{DoxyCompactList}\small\item\em Get the parent of this subcommand (or nullptr if master app) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a661f95dc902304bbabe8d6e31eb7d9fc}\label{class_c_l_i_1_1_app_a661f95dc902304bbabe8d6e31eb7d9fc}} 
+const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a661f95dc902304bbabe8d6e31eb7d9fc}{get\+\_\+parent}} () const
+\begin{DoxyCompactList}\small\item\em Get the parent of this subcommand (or nullptr if master app) (const version) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae0ce655e69580d2d8439a0f3c993821c}\label{class_c_l_i_1_1_app_ae0ce655e69580d2d8439a0f3c993821c}} 
+const std\+::string \& \mbox{\hyperlink{class_c_l_i_1_1_app_ae0ce655e69580d2d8439a0f3c993821c}{get\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em Get the name of the current app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a19470326ecaff474ad37e4904edaff55}\label{class_c_l_i_1_1_app_a19470326ecaff474ad37e4904edaff55}} 
+const \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \& \mbox{\hyperlink{class_c_l_i_1_1_app_a19470326ecaff474ad37e4904edaff55}{get\+\_\+aliases}} () const
+\begin{DoxyCompactList}\small\item\em Get the aliases of the current app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a76622f9e42441e154b7cf642aead799f}\label{class_c_l_i_1_1_app_a76622f9e42441e154b7cf642aead799f}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a76622f9e42441e154b7cf642aead799f}{clear\+\_\+aliases}} ()
+\begin{DoxyCompactList}\small\item\em clear all the aliases of the current \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae29f7783c9d8725a6262b1f025f6a4d4}\label{class_c_l_i_1_1_app_ae29f7783c9d8725a6262b1f025f6a4d4}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_ae29f7783c9d8725a6262b1f025f6a4d4}{get\+\_\+display\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em Get a display name for an app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a3ba6eb33f3ee9cd1a126385fa44f2c16}\label{class_c_l_i_1_1_app_a3ba6eb33f3ee9cd1a126385fa44f2c16}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a3ba6eb33f3ee9cd1a126385fa44f2c16}{check\+\_\+name}} (std\+::string name\+\_\+to\+\_\+check) const
+\begin{DoxyCompactList}\small\item\em Check the name, case insensitive and underscore insensitive if set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aaf87132f47c738652b6d281c1e3c717a}\label{class_c_l_i_1_1_app_aaf87132f47c738652b6d281c1e3c717a}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_aaf87132f47c738652b6d281c1e3c717a}{get\+\_\+groups}} () const
+\begin{DoxyCompactList}\small\item\em Get the groups available directly from this option (in order) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a6a350a9b89b87e35e83b390bc34f71d4}\label{class_c_l_i_1_1_app_a6a350a9b89b87e35e83b390bc34f71d4}} 
+const \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \& \mbox{\hyperlink{class_c_l_i_1_1_app_a6a350a9b89b87e35e83b390bc34f71d4}{parse\+\_\+order}} () const
+\begin{DoxyCompactList}\small\item\em This gets a vector of pointers with the original parse order. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a0474d71afa5672f645d2b645723c9818}\label{class_c_l_i_1_1_app_a0474d71afa5672f645d2b645723c9818}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a0474d71afa5672f645d2b645723c9818}{remaining}} (bool recurse=false) const
+\begin{DoxyCompactList}\small\item\em This returns the missing options from the current subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab3b93e0ab2e848b5160e932bd62de8eb}\label{class_c_l_i_1_1_app_ab3b93e0ab2e848b5160e932bd62de8eb}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab3b93e0ab2e848b5160e932bd62de8eb}{remaining\+\_\+for\+\_\+passthrough}} (bool recurse=false) const
+\begin{DoxyCompactList}\small\item\em This returns the missing options in a form ready for processing by another command line program. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7a94b729128d22a6cc3e4998149d7101}\label{class_c_l_i_1_1_app_a7a94b729128d22a6cc3e4998149d7101}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a7a94b729128d22a6cc3e4998149d7101}{remaining\+\_\+size}} (bool recurse=false) const
+\begin{DoxyCompactList}\small\item\em This returns the number of remaining options, minus the -- separator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app_aaa53fda3b6aa477158ea8b1768342cc0}{App}} (std\+::string app\+\_\+description, std\+::string app\+\_\+name, \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Special private constructor for subcommand. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_ae2908ce3eded7e3d6bb2e6fdd2410576}{\+\_\+validate}} () const
+\begin{DoxyCompactList}\small\item\em Check the options to make sure there are no conflicts. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_acd99119433fcca2901ad13714d3acb0a}\label{class_c_l_i_1_1_app_acd99119433fcca2901ad13714d3acb0a}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_acd99119433fcca2901ad13714d3acb0a}{\+\_\+configure}} ()
+\begin{DoxyCompactList}\small\item\em configure subcommands to enable parsing through the current object set the correct fallthrough and prefix for nameless subcommands and manage the automatic enable or disable makes sure parent is set correctly \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae42bbb6618616072e520a0cebe62d240}\label{class_c_l_i_1_1_app_ae42bbb6618616072e520a0cebe62d240}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_ae42bbb6618616072e520a0cebe62d240}{run\+\_\+callback}} (bool final\+\_\+mode=false)
+\begin{DoxyCompactList}\small\item\em Internal function to run (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}}) callback, bottom up. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2c9093efb2ffc55224f2acf2239fd5ce}\label{class_c_l_i_1_1_app_a2c9093efb2ffc55224f2acf2239fd5ce}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a2c9093efb2ffc55224f2acf2239fd5ce}{\+\_\+valid\+\_\+subcommand}} (const std\+::string \&current, bool ignore\+\_\+used=true) const
+\begin{DoxyCompactList}\small\item\em Check to see if a subcommand is valid. Give up immediately if subcommand max has been reached. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_addab9d99dce6a2f96b5c8748d20ebea8}\label{class_c_l_i_1_1_app_addab9d99dce6a2f96b5c8748d20ebea8}} 
+detail\+::\+Classifier \mbox{\hyperlink{class_c_l_i_1_1_app_addab9d99dce6a2f96b5c8748d20ebea8}{\+\_\+recognize}} (const std\+::string \&current, bool ignore\+\_\+used\+\_\+subcommands=true) const
+\begin{DoxyCompactList}\small\item\em Selects a Classifier enum based on the type of the current argument. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7a15e5743d4a8eccac57955ed5a6a3b6}\label{class_c_l_i_1_1_app_a7a15e5743d4a8eccac57955ed5a6a3b6}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a7a15e5743d4a8eccac57955ed5a6a3b6}{\+\_\+process\+\_\+config\+\_\+file}} ()
+\begin{DoxyCompactList}\small\item\em Read and process a configuration file (main app only) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a0a367021eca99facc7968bb24333a8fb}\label{class_c_l_i_1_1_app_a0a367021eca99facc7968bb24333a8fb}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a0a367021eca99facc7968bb24333a8fb}{\+\_\+process\+\_\+env}} ()
+\begin{DoxyCompactList}\small\item\em Get envname options if not yet passed. Runs on {\itshape all} subcommands. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad9e5d41a1efd28da92235b72682cbf74}\label{class_c_l_i_1_1_app_ad9e5d41a1efd28da92235b72682cbf74}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_ad9e5d41a1efd28da92235b72682cbf74}{\+\_\+process\+\_\+callbacks}} ()
+\begin{DoxyCompactList}\small\item\em Process callbacks. Runs on {\itshape all} subcommands. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a3d04865bf341cea82bcb164b10db578b}{\+\_\+process\+\_\+help\+\_\+flags}} (bool trigger\+\_\+help=false, bool trigger\+\_\+all\+\_\+help=false) const
+\begin{DoxyCompactList}\small\item\em Run help flag processing if any are found. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4e0c00ce18bbfca1ae890a653bbd2b93}\label{class_c_l_i_1_1_app_a4e0c00ce18bbfca1ae890a653bbd2b93}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a4e0c00ce18bbfca1ae890a653bbd2b93}{\+\_\+process\+\_\+requirements}} ()
+\begin{DoxyCompactList}\small\item\em Verify required options and cross requirements. Subcommands too (only if selected). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a0fec24c804daf5b458bb5762e4e75a73}\label{class_c_l_i_1_1_app_a0fec24c804daf5b458bb5762e4e75a73}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a0fec24c804daf5b458bb5762e4e75a73}{\+\_\+process}} ()
+\begin{DoxyCompactList}\small\item\em Process callbacks and such. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4d57bf638f00715cbf27dcf055580398}\label{class_c_l_i_1_1_app_a4d57bf638f00715cbf27dcf055580398}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a4d57bf638f00715cbf27dcf055580398}{\+\_\+process\+\_\+extras}} ()
+\begin{DoxyCompactList}\small\item\em Throw an error if anything is left over and should not be. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a7e8e59098befcc1f10969b9e5c88e0f9}{\+\_\+process\+\_\+extras}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args)
+\begin{DoxyCompactList}\small\item\em Throw an error if anything is left over and should not be. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae8d614e3f5c703216da768dd85d98d8f}\label{class_c_l_i_1_1_app_ae8d614e3f5c703216da768dd85d98d8f}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_ae8d614e3f5c703216da768dd85d98d8f}{increment\+\_\+parsed}} ()
+\begin{DoxyCompactList}\small\item\em Internal function to recursively increment the parsed counter on the current app as well unnamed subcommands. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a241ba75a6c98b36349ae2f71a9137291}\label{class_c_l_i_1_1_app_a241ba75a6c98b36349ae2f71a9137291}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a241ba75a6c98b36349ae2f71a9137291}{\+\_\+parse}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args)
+\begin{DoxyCompactList}\small\item\em Internal parse function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a26a92886a7d7f10a9afbd39b6535f42b}\label{class_c_l_i_1_1_app_a26a92886a7d7f10a9afbd39b6535f42b}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a26a92886a7d7f10a9afbd39b6535f42b}{\+\_\+parse}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&\&args)
+\begin{DoxyCompactList}\small\item\em Internal parse function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_aee09795046c3b47948e6c2fa45349eca}{\+\_\+parse\+\_\+config}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} $>$ \&args)
+\begin{DoxyCompactList}\small\item\em Parse one config param, return false if not found in any subcommand, remove if it is. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a1f7a70f4bc4c375a7de10073a5de709d}\label{class_c_l_i_1_1_app_a1f7a70f4bc4c375a7de10073a5de709d}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a1f7a70f4bc4c375a7de10073a5de709d}{\+\_\+parse\+\_\+single\+\_\+config}} (const \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} \&item, std\+::size\+\_\+t level=0)
+\begin{DoxyCompactList}\small\item\em Fill in a single config option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a02368e2fe89470ab9b4131c7e3288349}\label{class_c_l_i_1_1_app_a02368e2fe89470ab9b4131c7e3288349}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a02368e2fe89470ab9b4131c7e3288349}{\+\_\+parse\+\_\+single}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args, bool \&positional\+\_\+only)
+\begin{DoxyCompactList}\small\item\em Parse \char`\"{}one\char`\"{} argument (some may eat more than one), delegate to parent if fails, add to missing if missing from master return false if the parse has failed and needs to return to parent. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a6e3eedf148351dabd1868bd7e63d24bc}\label{class_c_l_i_1_1_app_a6e3eedf148351dabd1868bd7e63d24bc}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a6e3eedf148351dabd1868bd7e63d24bc}{\+\_\+count\+\_\+remaining\+\_\+positionals}} (bool required\+\_\+only=false) const
+\begin{DoxyCompactList}\small\item\em Count the required remaining positional arguments. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af15231547d53a51458059588a1c34a0b}\label{class_c_l_i_1_1_app_af15231547d53a51458059588a1c34a0b}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_af15231547d53a51458059588a1c34a0b}{\+\_\+has\+\_\+remaining\+\_\+positionals}} () const
+\begin{DoxyCompactList}\small\item\em Count the required remaining positional arguments. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a3b564aa8c90f25152f5379c661ab82b1}{\+\_\+parse\+\_\+positional}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args, bool halt\+On\+Subcommand)
+\begin{DoxyCompactList}\small\item\em Parse a positional, go up the tree to check. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a9670591ce14529c3a153c972c76e9eef}\label{class_c_l_i_1_1_app_a9670591ce14529c3a153c972c76e9eef}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a9670591ce14529c3a153c972c76e9eef}{\+\_\+find\+\_\+subcommand}} (const std\+::string \&subc\+\_\+name, bool ignore\+\_\+disabled, bool ignore\+\_\+used) const noexcept
+\begin{DoxyCompactList}\small\item\em Locate a subcommand by name with two conditions, should disabled subcommands be ignored, and should used subcommands be ignored. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_af20c05b97b9de2a4543a2de9bcc0993d}{\+\_\+parse\+\_\+subcommand}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args)
+\begin{DoxyCompactList}\small\item\em Parse a subcommand, modify args and continue. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a73c9decd5eb2b0c7eeda63cc4bd5048e}\label{class_c_l_i_1_1_app_a73c9decd5eb2b0c7eeda63cc4bd5048e}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a73c9decd5eb2b0c7eeda63cc4bd5048e}{\+\_\+parse\+\_\+arg}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args, detail\+::\+Classifier current\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Parse a short (false) or long (true) argument, must be at the top of the list return true if the argument was processed or false if nothing was done. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_adec0b4c1ae96c8ea1a031b416772e87c}\label{class_c_l_i_1_1_app_adec0b4c1ae96c8ea1a031b416772e87c}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_adec0b4c1ae96c8ea1a031b416772e87c}{\+\_\+trigger\+\_\+pre\+\_\+parse}} (std\+::size\+\_\+t remaining\+\_\+args)
+\begin{DoxyCompactList}\small\item\em Trigger the pre\+\_\+parse callback if needed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2234b83d2e7e62866e73b3d698426406}\label{class_c_l_i_1_1_app_a2234b83d2e7e62866e73b3d698426406}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a2234b83d2e7e62866e73b3d698426406}{\+\_\+get\+\_\+fallthrough\+\_\+parent}} ()
+\begin{DoxyCompactList}\small\item\em Get the appropriate parent to fallthrough to which is the first one that has a name or the main app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa3cd2a87739421210d0b2a457d38e5bc}\label{class_c_l_i_1_1_app_aa3cd2a87739421210d0b2a457d38e5bc}} 
+const std\+::string \& \mbox{\hyperlink{class_c_l_i_1_1_app_aa3cd2a87739421210d0b2a457d38e5bc}{\+\_\+compare\+\_\+subcommand\+\_\+names}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} \&subcom, const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} \&base) const
+\begin{DoxyCompactList}\small\item\em Helper function to run through all possible comparisons of subcommand names to check there is no overlap. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_afe454e935514c0acd6bd81e68d908206}\label{class_c_l_i_1_1_app_afe454e935514c0acd6bd81e68d908206}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_afe454e935514c0acd6bd81e68d908206}{\+\_\+move\+\_\+to\+\_\+missing}} (detail\+::\+Classifier val\+\_\+type, const std\+::string \&val)
+\begin{DoxyCompactList}\small\item\em Helper function to place extra values in the most appropriate position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{Indent}\textbf{ Basics}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a61a36f7297a3199b9e789887510fa3fa}\label{class_c_l_i_1_1_app_a61a36f7297a3199b9e789887510fa3fa}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_a61a36f7297a3199b9e789887510fa3fa}{name\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Subcommand name or program name (from parser if name is empty) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa6a2e79e0a5990b44bc5d76504437fcd}\label{class_c_l_i_1_1_app_aa6a2e79e0a5990b44bc5d76504437fcd}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_aa6a2e79e0a5990b44bc5d76504437fcd}{description\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Description of the current program/subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae994679fee098b93cbc654a99b8019ee}\label{class_c_l_i_1_1_app_ae994679fee098b93cbc654a99b8019ee}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ae994679fee098b93cbc654a99b8019ee}{allow\+\_\+extras\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If true, allow extra arguments (ie, don\textquotesingle{}t throw an error). I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+config\+\_\+extras\+\_\+mode \mbox{\hyperlink{class_c_l_i_1_1_app_a4ff932cdfe4237c0f63a00216d0d86b9}{allow\+\_\+config\+\_\+extras\+\_\+}} \{config\+\_\+extras\+\_\+mode\+::ignore\}
+\begin{DoxyCompactList}\small\item\em If ignore, allow extra arguments in the ini file (ie, don\textquotesingle{}t throw an error). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad9ad6cc617a88525ee966a7d49c6331e}\label{class_c_l_i_1_1_app_ad9ad6cc617a88525ee966a7d49c6331e}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ad9ad6cc617a88525ee966a7d49c6331e}{prefix\+\_\+command\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If true, return immediately on an unrecognized option (implies allow\+\_\+extras) I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a76fcdccb7d70b6104b59390195f80112}\label{class_c_l_i_1_1_app_a76fcdccb7d70b6104b59390195f80112}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a76fcdccb7d70b6104b59390195f80112}{has\+\_\+automatic\+\_\+name\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If set to true the name was automatically generated from the command line vs a user set name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a42e3309983fe836cd26df3d1aadf08d6}\label{class_c_l_i_1_1_app_a42e3309983fe836cd26df3d1aadf08d6}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a42e3309983fe836cd26df3d1aadf08d6}{required\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If set to true the subcommand is required to be processed and used, ignored for main app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a405d0642ba4245a6ea61b230c4854667}\label{class_c_l_i_1_1_app_a405d0642ba4245a6ea61b230c4854667}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a405d0642ba4245a6ea61b230c4854667}{disabled\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If set to true the subcommand is disabled and cannot be used, ignored for main app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac53aba006f3aae0cba0e4e9fd4c264ea}\label{class_c_l_i_1_1_app_ac53aba006f3aae0cba0e4e9fd4c264ea}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ac53aba006f3aae0cba0e4e9fd4c264ea}{pre\+\_\+parse\+\_\+called\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Flag indicating that the pre\+\_\+parse\+\_\+callback has been triggered. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a99175d2ee21f9b1983acf62db0749f56}{immediate\+\_\+callback\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Flag indicating that the callback for the subcommand should be executed immediately on parse completion which is before help or ini files are processed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac296d0ff15f240ffe0a3ff14e49fdf19}\label{class_c_l_i_1_1_app_ac296d0ff15f240ffe0a3ff14e49fdf19}} 
+std\+::function$<$ void(std\+::size\+\_\+t)$>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ac296d0ff15f240ffe0a3ff14e49fdf19}{pre\+\_\+parse\+\_\+callback\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a function that runs prior to the start of parsing. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5cbd4b05946428eefe79041bbafb7f0a}\label{class_c_l_i_1_1_app_a5cbd4b05946428eefe79041bbafb7f0a}} 
+std\+::function$<$ void()$>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a5cbd4b05946428eefe79041bbafb7f0a}{parse\+\_\+complete\+\_\+callback\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a function that runs when parsing has finished. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a8c798351bee01da305e7b9570ac7dab2}\label{class_c_l_i_1_1_app_a8c798351bee01da305e7b9570ac7dab2}} 
+std\+::function$<$ void()$>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a8c798351bee01da305e7b9570ac7dab2}{final\+\_\+callback\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a function that runs when all processing has completed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Options}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a34da062f6cc255048384b72e0ec6c276}\label{class_c_l_i_1_1_app_a34da062f6cc255048384b72e0ec6c276}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}} \mbox{\hyperlink{class_c_l_i_1_1_app_a34da062f6cc255048384b72e0ec6c276}{option\+\_\+defaults\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em The default values for options, customizable and changeable I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a862e55a8c1fe3676452aadc6a222f865}\label{class_c_l_i_1_1_app_a862e55a8c1fe3676452aadc6a222f865}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ Option\+\_\+p $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a862e55a8c1fe3676452aadc6a222f865}{options\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em The list of options, stored locally. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Config}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a16180e7605e07c7a3f8e6b458569bc02}\label{class_c_l_i_1_1_app_a16180e7605e07c7a3f8e6b458569bc02}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a16180e7605e07c7a3f8e6b458569bc02}{config\+\_\+ptr\+\_\+}} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em Pointer to the config option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_afec4182982dfca15a835ee7b3abf8660}\label{class_c_l_i_1_1_app_afec4182982dfca15a835ee7b3abf8660}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_config}{Config}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_afec4182982dfca15a835ee7b3abf8660}{config\+\_\+formatter\+\_\+}} \{new \mbox{\hyperlink{class_c_l_i_1_1_config_base}{Config\+I\+NI}}()\}
+\begin{DoxyCompactList}\small\item\em This is the formatter for help printing. Default provided. I\+N\+H\+E\+R\+I\+T\+A\+B\+LE (same pointer) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Help}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4fbf8b55a33e24d4c5a0532568dd7302}\label{class_c_l_i_1_1_app_a4fbf8b55a33e24d4c5a0532568dd7302}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_a4fbf8b55a33e24d4c5a0532568dd7302}{footer\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Footer to put after all options in the help output I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a585c61650d02a0169122e55811d78d89}\label{class_c_l_i_1_1_app_a585c61650d02a0169122e55811d78d89}} 
+std\+::function$<$ std\+::string()$>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a585c61650d02a0169122e55811d78d89}{footer\+\_\+callback\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a function that generates a footer to put after all other options in help output. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac7ee114dd086a41f0f144416bcdba097}\label{class_c_l_i_1_1_app_ac7ee114dd086a41f0f144416bcdba097}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ac7ee114dd086a41f0f144416bcdba097}{help\+\_\+ptr\+\_\+}} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em A pointer to the help flag if there is one I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a86d617145bbba16f8575159456f4c255}\label{class_c_l_i_1_1_app_a86d617145bbba16f8575159456f4c255}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a86d617145bbba16f8575159456f4c255}{help\+\_\+all\+\_\+ptr\+\_\+}} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em A pointer to the help all flag if there is one I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af55e852ed6e916b2b0182f46d6daabfc}\label{class_c_l_i_1_1_app_af55e852ed6e916b2b0182f46d6daabfc}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_c_l_i_1_1_formatter_base}{Formatter\+Base}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_af55e852ed6e916b2b0182f46d6daabfc}{formatter\+\_\+}} \{new \mbox{\hyperlink{class_c_l_i_1_1_formatter}{Formatter}}()\}
+\begin{DoxyCompactList}\small\item\em This is the formatter for help printing. Default provided. I\+N\+H\+E\+R\+I\+T\+A\+B\+LE (same pointer) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a716e2e750769c9e39c96921caddb1689}\label{class_c_l_i_1_1_app_a716e2e750769c9e39c96921caddb1689}} 
+std\+::function$<$ std\+::string(const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, const \mbox{\hyperlink{class_c_l_i_1_1_error}{Error}} \&e)$>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a716e2e750769c9e39c96921caddb1689}{failure\+\_\+message\+\_\+}} \{Failure\+Message\+::simple\}
+\begin{DoxyCompactList}\small\item\em The error message printing function I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a93df23ce51e932a77601d10f37368609}\label{class_c_l_i_1_1_app_a93df23ce51e932a77601d10f37368609}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a93df23ce51e932a77601d10f37368609}{footer}} (std\+::string footer\+\_\+string)
+\begin{DoxyCompactList}\small\item\em Set footer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a745c859437be8fa6d6269774afead766}\label{class_c_l_i_1_1_app_a745c859437be8fa6d6269774afead766}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a745c859437be8fa6d6269774afead766}{footer}} (std\+::function$<$ std\+::string()$>$ footer\+\_\+function)
+\begin{DoxyCompactList}\small\item\em Set footer. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_aca552f0b8af9eec4d079538e9efe0f06}{config\+\_\+to\+\_\+str}} (bool default\+\_\+also=false, bool write\+\_\+description=false) const
+\begin{DoxyCompactList}\small\item\em Produce a string that could be read in as a config of the current values of the \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2d6847ad9eec079214a61d834f29e35f}\label{class_c_l_i_1_1_app_a2d6847ad9eec079214a61d834f29e35f}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_a2d6847ad9eec079214a61d834f29e35f}{help}} (std\+::string prev=\char`\"{}\char`\"{}, App\+Format\+Mode mode=App\+Format\+Mode\+::\+Normal) const
+\begin{DoxyCompactList}\small\item\em Makes a help message, using the currently configured formatter Will only do one subcommand at a time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Parsing}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a51ebef2d1d91383bc76cb9c0f04b90a3}\label{class_c_l_i_1_1_app_a51ebef2d1d91383bc76cb9c0f04b90a3}} 
+using {\bfseries missing\+\_\+t} = \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::pair$<$ detail\+::\+Classifier, std\+::string $>$ $>$
+\item 
+\mbox{\hyperlink{classstd_1_1vector}{missing\+\_\+t}} \mbox{\hyperlink{class_c_l_i_1_1_app_a664a3162461b3121caf5cae7f65a95e6}{missing\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Pair of classifier, string for missing options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_add8dcf3a51639b56a50bf9e1ab983606}\label{class_c_l_i_1_1_app_add8dcf3a51639b56a50bf9e1ab983606}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_add8dcf3a51639b56a50bf9e1ab983606}{parse\+\_\+order\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a list of pointers to options with the original parse order. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a61eae39a2e5238322d21f6ff31aa6f4b}\label{class_c_l_i_1_1_app_a61eae39a2e5238322d21f6ff31aa6f4b}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a61eae39a2e5238322d21f6ff31aa6f4b}{parsed\+\_\+subcommands\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a list of the subcommands collected, in order. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab95644f6cb3babcf2d31b3fea8304a82}\label{class_c_l_i_1_1_app_ab95644f6cb3babcf2d31b3fea8304a82}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab95644f6cb3babcf2d31b3fea8304a82}{exclude\+\_\+subcommands\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em this is a list of subcommands that are exclusionary to this one \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a56990d551dba3360f0f3fb0db10ae510}\label{class_c_l_i_1_1_app_a56990d551dba3360f0f3fb0db10ae510}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a56990d551dba3360f0f3fb0db10ae510}{exclude\+\_\+options\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a list of options which are exclusionary to this \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}, if the options were used this subcommand should not be. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad8d1f603e89a28555a09b754420054ca}\label{class_c_l_i_1_1_app_ad8d1f603e89a28555a09b754420054ca}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ad8d1f603e89a28555a09b754420054ca}{need\+\_\+subcommands\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em this is a list of subcommands or option groups that are required by this one, the list is not mutual, the listed subcommands do not require this one \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad375a844780daa83420f9821434e187d}\label{class_c_l_i_1_1_app_ad375a844780daa83420f9821434e187d}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ad375a844780daa83420f9821434e187d}{need\+\_\+options\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em This is a list of options which are required by this app, the list is not mutual, listed options do not need the subcommand not be. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a6b5a085a039cab7e5906b3cd4407fdc8}\label{class_c_l_i_1_1_app_a6b5a085a039cab7e5906b3cd4407fdc8}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a6b5a085a039cab7e5906b3cd4407fdc8}{clear}} ()
+\begin{DoxyCompactList}\small\item\em Reset the parsed data. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a5ddf139d5fe065289aca7b83d5d045d9}{parse}} (int argc, const char $\ast$const $\ast$argv)
+\begin{DoxyCompactList}\small\item\em Parses the command line -\/ throws errors. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a187f08c5326d89319802162e33faff4e}{parse}} (std\+::string commandline, bool program\+\_\+name\+\_\+included=false)
+\begin{DoxyCompactList}\small\item\em Parse a single string as if it contained command line arguments. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a878c1067ade7145aa11478d64f5173ed}{parse}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&args)
+\begin{DoxyCompactList}\small\item\em The real work is done here. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a8ffb155a1153ee23d442c5bfed21225c}\label{class_c_l_i_1_1_app_a8ffb155a1153ee23d442c5bfed21225c}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a8ffb155a1153ee23d442c5bfed21225c}{parse}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&\&args)
+\begin{DoxyCompactList}\small\item\em The real work is done here. Expects a reversed vector. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a75d7117019ea60a2f83d91f401aa9f4b}\label{class_c_l_i_1_1_app_a75d7117019ea60a2f83d91f401aa9f4b}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_app_a75d7117019ea60a2f83d91f401aa9f4b}{failure\+\_\+message}} (std\+::function$<$ std\+::string(const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, const \mbox{\hyperlink{class_c_l_i_1_1_error}{Error}} \&e)$>$ function)
+\begin{DoxyCompactList}\small\item\em Provide a function to print a help message. The function gets access to the \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} pointer and error. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_c_l_i_1_1_app_aac000657ef11647125ba91af38fd7d9c}{exit}} (const \mbox{\hyperlink{class_c_l_i_1_1_error}{Error}} \&e, std\+::ostream \&out=std\+::cout, std\+::ostream \&err=std\+::cerr) const
+\begin{DoxyCompactList}\small\item\em Print a nice error message and return the exit code. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Subcommands}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a44223dc510ba0f7b680990476828e2e8}\label{class_c_l_i_1_1_app_a44223dc510ba0f7b680990476828e2e8}} 
+enum {\bfseries startup\+\_\+mode} \+: char \{ {\bfseries stable}, 
+{\bfseries enabled}, 
+{\bfseries disabled}
+ \}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2c912598c2a49e41536ca88f2786195b}\label{class_c_l_i_1_1_app_a2c912598c2a49e41536ca88f2786195b}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ App\+\_\+p $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_a2c912598c2a49e41536ca88f2786195b}{subcommands\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Storage for subcommand list. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac0ded9f408801bccc14d6390b99c11b5}\label{class_c_l_i_1_1_app_ac0ded9f408801bccc14d6390b99c11b5}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ac0ded9f408801bccc14d6390b99c11b5}{ignore\+\_\+case\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If true, the program name is not case sensitive I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a632f10cfa5ee5894a67011f7a6097728}\label{class_c_l_i_1_1_app_a632f10cfa5ee5894a67011f7a6097728}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a632f10cfa5ee5894a67011f7a6097728}{ignore\+\_\+underscore\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If true, the program should ignore underscores I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad3196989217de9162ffa0a5c1e81e92c}\label{class_c_l_i_1_1_app_ad3196989217de9162ffa0a5c1e81e92c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ad3196989217de9162ffa0a5c1e81e92c}{fallthrough\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Allow subcommand fallthrough, so that parent commands can collect commands after subcommand. I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_afdcf791220d111363ac12526a693227b}{allow\+\_\+windows\+\_\+style\+\_\+options\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Allow \textquotesingle{}/\textquotesingle{} for options for Windows like options. Defaults to true on Windows, false otherwise. I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a963ce3e24f0652591e5c751083a57670}\label{class_c_l_i_1_1_app_a963ce3e24f0652591e5c751083a57670}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a963ce3e24f0652591e5c751083a57670}{positionals\+\_\+at\+\_\+end\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em specify that positional arguments come at the end of the argument sequence not inheritable \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae55bdb283aa20595c30a0cbb83d833d3}\label{class_c_l_i_1_1_app_ae55bdb283aa20595c30a0cbb83d833d3}} 
+startup\+\_\+mode \mbox{\hyperlink{class_c_l_i_1_1_app_ae55bdb283aa20595c30a0cbb83d833d3}{default\+\_\+startup}} \{startup\+\_\+mode\+::stable\}
+\begin{DoxyCompactList}\small\item\em specify the startup mode for the app stable=no change, enabled= startup enabled, disabled=startup disabled \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aa2b35c6b5a5f471663634f94b7b2337e}\label{class_c_l_i_1_1_app_aa2b35c6b5a5f471663634f94b7b2337e}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_aa2b35c6b5a5f471663634f94b7b2337e}{configurable\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em if set to true the subcommand can be triggered via configuration files I\+N\+H\+E\+R\+I\+T\+A\+B\+LE \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae037cfa9b207f8ae4f17d8e0086c5380}\label{class_c_l_i_1_1_app_ae037cfa9b207f8ae4f17d8e0086c5380}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_ae037cfa9b207f8ae4f17d8e0086c5380}{validate\+\_\+positionals\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em If set to true positional options are validated before assigning I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a557239f7b3a655d0e0d6be8820f3e043}\label{class_c_l_i_1_1_app_a557239f7b3a655d0e0d6be8820f3e043}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a557239f7b3a655d0e0d6be8820f3e043}{parent\+\_\+}} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em A pointer to the parent if this is a subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7f7e05bd10a85f0d7178c004d45b5689}\label{class_c_l_i_1_1_app_a7f7e05bd10a85f0d7178c004d45b5689}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a7f7e05bd10a85f0d7178c004d45b5689}{parsed\+\_\+}} \{0\}
+\begin{DoxyCompactList}\small\item\em Counts the number of times this command/subcommand was parsed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a6b0653a65afed143f774aabf881905a1}\label{class_c_l_i_1_1_app_a6b0653a65afed143f774aabf881905a1}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a6b0653a65afed143f774aabf881905a1}{require\+\_\+subcommand\+\_\+min\+\_\+}} \{0\}
+\begin{DoxyCompactList}\small\item\em Minimum required subcommands (not inheritable!) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a2c55daa71d2e35868f7e192211a801f2}\label{class_c_l_i_1_1_app_a2c55daa71d2e35868f7e192211a801f2}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a2c55daa71d2e35868f7e192211a801f2}{require\+\_\+subcommand\+\_\+max\+\_\+}} \{0\}
+\begin{DoxyCompactList}\small\item\em Max number of subcommands allowed (parsing stops after this number). 0 is unlimited I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a23af1dbdb22e1083c3593157cb9b1bd3}\label{class_c_l_i_1_1_app_a23af1dbdb22e1083c3593157cb9b1bd3}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a23af1dbdb22e1083c3593157cb9b1bd3}{require\+\_\+option\+\_\+min\+\_\+}} \{0\}
+\begin{DoxyCompactList}\small\item\em Minimum required options (not inheritable!) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aaff272565daecbe6eaad738ef21d6ebd}\label{class_c_l_i_1_1_app_aaff272565daecbe6eaad738ef21d6ebd}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_aaff272565daecbe6eaad738ef21d6ebd}{require\+\_\+option\+\_\+max\+\_\+}} \{0\}
+\begin{DoxyCompactList}\small\item\em Max number of options allowed. 0 is unlimited (not inheritable) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac31738f617c3ce7aaf9fd94c3f54fc0f}\label{class_c_l_i_1_1_app_ac31738f617c3ce7aaf9fd94c3f54fc0f}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_app_ac31738f617c3ce7aaf9fd94c3f54fc0f}{group\+\_\+}} \{\char`\"{}Subcommands\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em The group membership I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ab6069c968af1eea4a89980e6f1487464}\label{class_c_l_i_1_1_app_ab6069c968af1eea4a89980e6f1487464}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_app_ab6069c968af1eea4a89980e6f1487464}{aliases\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Alias names for the subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7ad6eb4ec4c5f4a0a9593af9f3fcf9cc}\label{class_c_l_i_1_1_app_a7ad6eb4ec4c5f4a0a9593af9f3fcf9cc}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a7ad6eb4ec4c5f4a0a9593af9f3fcf9cc}{add\+\_\+subcommand}} (std\+::string subcommand\+\_\+name=\char`\"{}\char`\"{}, std\+::string subcommand\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add a subcommand. Inherits I\+N\+H\+E\+R\+I\+T\+A\+B\+LE and \mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}}, and help flag. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a9add649c4bc409afcb6b99650417b68d}\label{class_c_l_i_1_1_app_a9add649c4bc409afcb6b99650417b68d}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a9add649c4bc409afcb6b99650417b68d}{add\+\_\+subcommand}} (C\+L\+I\+::\+App\+\_\+p subcom)
+\begin{DoxyCompactList}\small\item\em Add a previously created app as a subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_acfd0b05943b8acba2a38c58f47140534}\label{class_c_l_i_1_1_app_acfd0b05943b8acba2a38c58f47140534}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_acfd0b05943b8acba2a38c58f47140534}{remove\+\_\+subcommand}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$subcom)
+\begin{DoxyCompactList}\small\item\em Removes a subcommand from the \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}. Takes a subcommand pointer. Returns true if found and removed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_acdd12c32ce380240cbc0184b372c0f30}\label{class_c_l_i_1_1_app_acdd12c32ce380240cbc0184b372c0f30}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_acdd12c32ce380240cbc0184b372c0f30}{get\+\_\+subcommand}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$subcom) const
+\begin{DoxyCompactList}\small\item\em Check to see if a subcommand is part of this command (doesn\textquotesingle{}t have to be in command line) returns the first subcommand if passed a nullptr. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a396b7972923f837f8fe2fd1257799078}\label{class_c_l_i_1_1_app_a396b7972923f837f8fe2fd1257799078}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a396b7972923f837f8fe2fd1257799078}{get\+\_\+subcommand}} (std\+::string subcom) const
+\begin{DoxyCompactList}\small\item\em Check to see if a subcommand is part of this command (text version) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac50486e0c2fdeae950f2d1d701a62560}\label{class_c_l_i_1_1_app_ac50486e0c2fdeae950f2d1d701a62560}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ac50486e0c2fdeae950f2d1d701a62560}{get\+\_\+subcommand}} (int index=0) const
+\begin{DoxyCompactList}\small\item\em Get a pointer to subcommand by index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a63c0110a3e63515e3b9b70b7b560d676}\label{class_c_l_i_1_1_app_a63c0110a3e63515e3b9b70b7b560d676}} 
+C\+L\+I\+::\+App\+\_\+p \mbox{\hyperlink{class_c_l_i_1_1_app_a63c0110a3e63515e3b9b70b7b560d676}{get\+\_\+subcommand\+\_\+ptr}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$subcom) const
+\begin{DoxyCompactList}\small\item\em Check to see if a subcommand is part of this command and get a shared\+\_\+ptr to it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a47a0d67f7d0f856613d45691b8822962}\label{class_c_l_i_1_1_app_a47a0d67f7d0f856613d45691b8822962}} 
+C\+L\+I\+::\+App\+\_\+p \mbox{\hyperlink{class_c_l_i_1_1_app_a47a0d67f7d0f856613d45691b8822962}{get\+\_\+subcommand\+\_\+ptr}} (std\+::string subcom) const
+\begin{DoxyCompactList}\small\item\em Check to see if a subcommand is part of this command (text version) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4b5075daadca7c1f7aa1781bc3c9024f}\label{class_c_l_i_1_1_app_a4b5075daadca7c1f7aa1781bc3c9024f}} 
+C\+L\+I\+::\+App\+\_\+p \mbox{\hyperlink{class_c_l_i_1_1_app_a4b5075daadca7c1f7aa1781bc3c9024f}{get\+\_\+subcommand\+\_\+ptr}} (int index=0) const
+\begin{DoxyCompactList}\small\item\em Get an owning pointer to subcommand by index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ae73a2ea9fc02ab4fdb56682d6a31e34b}\label{class_c_l_i_1_1_app_ae73a2ea9fc02ab4fdb56682d6a31e34b}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ae73a2ea9fc02ab4fdb56682d6a31e34b}{get\+\_\+option\+\_\+group}} (std\+::string group\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em Check to see if an option group is part of this \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_ac882ae7b667d460501d77aebfd9a5d26}{count}} () const
+\begin{DoxyCompactList}\small\item\em No argument version of count counts the number of times this subcommand was passed in. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4933a7e5603ab5eaa9705d4027e6cb12}\label{class_c_l_i_1_1_app_a4933a7e5603ab5eaa9705d4027e6cb12}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_app_a4933a7e5603ab5eaa9705d4027e6cb12}{count\+\_\+all}} () const
+\begin{DoxyCompactList}\small\item\em Get a count of all the arguments processed in options and subcommands, this excludes arguments which were treated as extras. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a190faa07c199753e02dec21652cfc611}\label{class_c_l_i_1_1_app_a190faa07c199753e02dec21652cfc611}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a190faa07c199753e02dec21652cfc611}{group}} (std\+::string group\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Changes the group membership. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a9cb090791a2594ffca877fd6afbf858a}\label{class_c_l_i_1_1_app_a9cb090791a2594ffca877fd6afbf858a}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a9cb090791a2594ffca877fd6afbf858a}{require\+\_\+subcommand}} ()
+\begin{DoxyCompactList}\small\item\em The argumentless form of require subcommand requires 1 or more subcommands. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ae1bb42a7f768d636671552cb345f2d6c}{require\+\_\+subcommand}} (int value)
+\begin{DoxyCompactList}\small\item\em Require a subcommand to be given (does not affect help call) The number required can be given. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a41628b1a9cd4437bb81851fcfe9cdeef}{require\+\_\+subcommand}} (std\+::size\+\_\+t min, std\+::size\+\_\+t max)
+\begin{DoxyCompactList}\small\item\em Explicitly control the number of subcommands required. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad77cd2ce39f74e6bd871d05f377d8cc8}\label{class_c_l_i_1_1_app_ad77cd2ce39f74e6bd871d05f377d8cc8}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ad77cd2ce39f74e6bd871d05f377d8cc8}{require\+\_\+option}} ()
+\begin{DoxyCompactList}\small\item\em The argumentless form of require option requires 1 or more options be used. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a6003073a5ae4904cb27a978282363e99}{require\+\_\+option}} (int value)
+\begin{DoxyCompactList}\small\item\em Require an option to be given (does not affect help call) The number required can be given. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a0e50594ad2ebfe6ce58e1d17398aeaac}{require\+\_\+option}} (std\+::size\+\_\+t min, std\+::size\+\_\+t max)
+\begin{DoxyCompactList}\small\item\em Explicitly control the number of options required. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a2e32bb0c9270c996488cc8dfa28ec8b1}{fallthrough}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Stop subcommand fallthrough, so that parent commands cannot collect commands after subcommand. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_app_a91720aaf4c92c867dc042c723503b74e}{operator bool}} () const
+\begin{DoxyCompactList}\small\item\em Check to see if this subcommand was parsed, true only if received on command line. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Adding options}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a1f9503a8cdceb4e5b42c9fd4ae6b7b10}{add\+\_\+option}} (std\+::string option\+\_\+name, callback\+\_\+t option\+\_\+callback, std\+::string option\+\_\+description=\char`\"{}\char`\"{}, bool defaulted=false, std\+::function$<$ std\+::string()$>$ func=\{\})
+\begin{DoxyCompactList}\small\item\em Add an option, will automatically understand the type for common types. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Assign\+To , typename Convert\+To  = Assign\+To, enable\+\_\+if\+\_\+t$<$!std\+::is\+\_\+const$<$ Convert\+To $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ad1273eccb5c318a5253c3e8cad4724d2}{add\+\_\+option}} (std\+::string option\+\_\+name, Assign\+To \&variable, std\+::string option\+\_\+description=\char`\"{}\char`\"{}, bool defaulted=false)
+\begin{DoxyCompactList}\small\item\em Add option for assigning to a variable. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a10cd073cbf01b99f595c9f10dc2113d3}{add\+\_\+option\+\_\+function}} (std\+::string option\+\_\+name, const std\+::function$<$ void(const T \&)$>$ \&func, std\+::string option\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add option for a callback of a specific type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a0c62e8c76bdded7014554c9f417fa45d}\label{class_c_l_i_1_1_app_a0c62e8c76bdded7014554c9f417fa45d}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a0c62e8c76bdded7014554c9f417fa45d}{add\+\_\+option}} (std\+::string option\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Add option with no description or variable assignment. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a57784f44a9e43f55d176b5fd1910a12f}\label{class_c_l_i_1_1_app_a57784f44a9e43f55d176b5fd1910a12f}} 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+const$<$ T $>$\+::value \&\&std\+::is\+\_\+constructible$<$ std\+::string, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a57784f44a9e43f55d176b5fd1910a12f}{add\+\_\+option}} (std\+::string option\+\_\+name, T \&option\+\_\+description)
+\begin{DoxyCompactList}\small\item\em Add option with description but with no variable assignment or callback. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_abe50e78fd6074cec393102adb9114a14}\label{class_c_l_i_1_1_app_abe50e78fd6074cec393102adb9114a14}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_abe50e78fd6074cec393102adb9114a14}{set\+\_\+help\+\_\+flag}} (std\+::string flag\+\_\+name=\char`\"{}\char`\"{}, const std\+::string \&help\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Set a help flag, replace the existing one if present. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a48b15f921a89e4d7c23fc6c79247d2f7}\label{class_c_l_i_1_1_app_a48b15f921a89e4d7c23fc6c79247d2f7}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a48b15f921a89e4d7c23fc6c79247d2f7}{set\+\_\+help\+\_\+all\+\_\+flag}} (std\+::string help\+\_\+name=\char`\"{}\char`\"{}, const std\+::string \&help\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Set a help all flag, replaced the existing one if present. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a8f7500a81c09b8eecc301226e018ddfe}\label{class_c_l_i_1_1_app_a8f7500a81c09b8eecc301226e018ddfe}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a8f7500a81c09b8eecc301226e018ddfe}{add\+\_\+flag}} (std\+::string flag\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Add a flag with no description or variable assignment. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_afc8f3d442356ee884f007bafaca12015}\label{class_c_l_i_1_1_app_afc8f3d442356ee884f007bafaca12015}} 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+const$<$ T $>$\+::value \&\&std\+::is\+\_\+constructible$<$ std\+::string, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_afc8f3d442356ee884f007bafaca12015}{add\+\_\+flag}} (std\+::string flag\+\_\+name, T \&flag\+\_\+description)
+\begin{DoxyCompactList}\small\item\em Add flag with description but with no variable assignment or callback takes a constant string, if a variable string is passed that variable will be assigned the results from the flag. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+integral$<$ T $>$\+::value \&\&!is\+\_\+bool$<$ T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a0e11ed2467b046bd8ea664152c2a9004}{add\+\_\+flag}} (std\+::string flag\+\_\+name, T \&flag\+\_\+count, std\+::string flag\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add option for flag with integer result -\/ defaults to allowing multiple passings, but can be forced to one if {\ttfamily multi\+\_\+option\+\_\+policy(\+C\+L\+I\+::\+Multi\+Option\+Policy\+::\+Throw)} is used. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$!is\+\_\+vector$<$ T $>$\+::value \&\&!std\+::is\+\_\+const$<$ T $>$\+::value \&\&(!std\+::is\+\_\+integral$<$ T $>$\+::value$\vert$$\vert$is\+\_\+bool$<$ T $>$\+::value) \&\&!std\+::is\+\_\+constructible$<$ std\+::function$<$ void(int)$>$, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a496bc8b2f77bf24c638e4c6c3e018131}{add\+\_\+flag}} (std\+::string flag\+\_\+name, T \&flag\+\_\+result, std\+::string flag\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Other type version accepts all other types that are not vectors such as bool, enum, string or other classes that can be converted from a string. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$!std\+::is\+\_\+assignable$<$ std\+::function$<$ void(std\+::int64\+\_\+t)$>$, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a5b552451fa3f6fe9ef9b802e7b3e46dd}{add\+\_\+flag}} (std\+::string flag\+\_\+name, \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ T $>$ \&flag\+\_\+results, std\+::string flag\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Vector version to capture multiple flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a289fc3770be292724cd8fcd962db4de5}{add\+\_\+flag\+\_\+callback}} (std\+::string flag\+\_\+name, std\+::function$<$ void(void)$>$ function, std\+::string flag\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add option for callback that is triggered with a true flag and takes no arguments. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_af539c225d96090cf1c6dc6ee6ae42985}{add\+\_\+flag\+\_\+function}} (std\+::string flag\+\_\+name, std\+::function$<$ void(std\+::int64\+\_\+t)$>$ function, std\+::string flag\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add option for callback with an integer value. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_af004ba90bbb8ba494e2e13d731d87f98}{add\+\_\+set}} (std\+::string option\+\_\+name, T \&member, \mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$ options, std\+::string option\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add set of options (No default, temp reference, such as an inline set) D\+E\+P\+R\+E\+C\+A\+T\+ED. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a5884b9a50eef3f8f6a1769b52073c57c}{add\+\_\+mutable\+\_\+set}} (std\+::string option\+\_\+name, T \&member, const \mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$ \&options, std\+::string option\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add set of options (No default, set can be changed afterwards -\/ do not destroy the set) D\+E\+P\+R\+E\+C\+A\+T\+ED. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a5371ce3c7ff0e36b2899321aed4d8393}{add\+\_\+set}} (std\+::string option\+\_\+name, T \&member, \mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$ options, std\+::string option\+\_\+description, bool defaulted)
+\begin{DoxyCompactList}\small\item\em Add set of options (with default, static set, such as an inline set) D\+E\+P\+R\+E\+C\+A\+T\+ED. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_ac0052bd76083c47973cdf5944c4547ea}{add\+\_\+mutable\+\_\+set}} (std\+::string option\+\_\+name, T \&member, const \mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$ \&options, std\+::string option\+\_\+description, bool defaulted)
+\begin{DoxyCompactList}\small\item\em Add set of options (with default, set can be changed afterwards -\/ do not destroy the set) D\+E\+P\+R\+E\+C\+A\+T\+ED. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a057a5f76e055a25cdc91c130de8bdf0b}\label{class_c_l_i_1_1_app_a057a5f76e055a25cdc91c130de8bdf0b}} 
+{\footnotesize template$<$typename T , typename XC  = double$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a057a5f76e055a25cdc91c130de8bdf0b}{add\+\_\+complex}} (std\+::string option\+\_\+name, T \&variable, std\+::string option\+\_\+description=\char`\"{}\char`\"{}, bool defaulted=false, std\+::string label=\char`\"{}C\+O\+M\+P\+L\+EX\char`\"{})
+\begin{DoxyCompactList}\small\item\em Add a complex number. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5775e30426fb3eb1c5f244d4e649601b}\label{class_c_l_i_1_1_app_a5775e30426fb3eb1c5f244d4e649601b}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a5775e30426fb3eb1c5f244d4e649601b}{set\+\_\+config}} (std\+::string option\+\_\+name=\char`\"{}\char`\"{}, std\+::string default\+\_\+filename=\char`\"{}\char`\"{}, const std\+::string \&help\+\_\+message=\char`\"{}Read an ini file\char`\"{}, bool config\+\_\+required=false)
+\begin{DoxyCompactList}\small\item\em Set a configuration ini file option, or clear it if no name passed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a3058b128735eec0813589b56c5453115}\label{class_c_l_i_1_1_app_a3058b128735eec0813589b56c5453115}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_app_a3058b128735eec0813589b56c5453115}{remove\+\_\+option}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Removes an option from the \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}. Takes an option pointer. Returns true if found and removed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a07322ccc502028693a1cafa101f4fecd}\label{class_c_l_i_1_1_app_a07322ccc502028693a1cafa101f4fecd}} 
+{\footnotesize template$<$typename T  = Option\+\_\+group$>$ }\\T $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_app_a07322ccc502028693a1cafa101f4fecd}{add\+\_\+option\+\_\+group}} (std\+::string group\+\_\+name, std\+::string group\+\_\+description=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em creates an option group as part of the given app \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Creates a command line program, with very few defaults. 
+
+To use, create a new {\ttfamily Program()} instance with {\ttfamily argc}, {\ttfamily argv}, and a help description. The templated add\+\_\+option methods make it easy to prepare options. Remember to call {\ttfamily .start} before starting your program, so that the options can be evaluated and the help option doesn\textquotesingle{}t accidentally run your program. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aaa53fda3b6aa477158ea8b1768342cc0}\label{class_c_l_i_1_1_app_aaa53fda3b6aa477158ea8b1768342cc0}} 
+\index{CLI::App@{CLI::App}!App@{App}}
+\index{App@{App}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{App()}{App()}}
+{\footnotesize\ttfamily C\+L\+I\+::\+App\+::\+App (\begin{DoxyParamCaption}\item[{std\+::string}]{app\+\_\+description,  }\item[{std\+::string}]{app\+\_\+name,  }\item[{\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$}]{parent }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Special private constructor for subcommand. 
+
+\mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}}
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_aee09795046c3b47948e6c2fa45349eca}\label{class_c_l_i_1_1_app_aee09795046c3b47948e6c2fa45349eca}} 
+\index{CLI::App@{CLI::App}!\_parse\_config@{\_parse\_config}}
+\index{\_parse\_config@{\_parse\_config}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{\_parse\_config()}{\_parse\_config()}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::\+\_\+parse\+\_\+config (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} $>$ \&}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Parse one config param, return false if not found in any subcommand, remove if it is. 
+
+If this has more than one dot.\+separated.\+name, go into the subcommand matching it Returns true if it managed to find the option, if false you\textquotesingle{}ll need to remove the arg manually. \mbox{\Hypertarget{class_c_l_i_1_1_app_a3b564aa8c90f25152f5379c661ab82b1}\label{class_c_l_i_1_1_app_a3b564aa8c90f25152f5379c661ab82b1}} 
+\index{CLI::App@{CLI::App}!\_parse\_positional@{\_parse\_positional}}
+\index{\_parse\_positional@{\_parse\_positional}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{\_parse\_positional()}{\_parse\_positional()}}
+{\footnotesize\ttfamily bool C\+L\+I\+::\+App\+::\+\_\+parse\+\_\+positional (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&}]{args,  }\item[{bool}]{halt\+On\+Subcommand }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Parse a positional, go up the tree to check. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em halt\+On\+Subcommand} & if set to true the operation will not process subcommands merely return false Return true if the positional was used false otherwise \\
+\hline
+\end{DoxyParams}
+Try to find a local subcommand that is repeated
+
+now try one last gasp at subcommands that have been executed before, go to root app and try to find a subcommand in a broader way, if one exists let the parent deal with it
+
+If this is an option group don\textquotesingle{}t deal with it
+
+We are out of other options this goes to missing\mbox{\Hypertarget{class_c_l_i_1_1_app_af20c05b97b9de2a4543a2de9bcc0993d}\label{class_c_l_i_1_1_app_af20c05b97b9de2a4543a2de9bcc0993d}} 
+\index{CLI::App@{CLI::App}!\_parse\_subcommand@{\_parse\_subcommand}}
+\index{\_parse\_subcommand@{\_parse\_subcommand}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{\_parse\_subcommand()}{\_parse\_subcommand()}}
+{\footnotesize\ttfamily bool C\+L\+I\+::\+App\+::\+\_\+parse\+\_\+subcommand (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Parse a subcommand, modify args and continue. 
+
+Unlike the others, this one will always allow fallthrough return true if the subcommand was processed false otherwise \mbox{\Hypertarget{class_c_l_i_1_1_app_a7e8e59098befcc1f10969b9e5c88e0f9}\label{class_c_l_i_1_1_app_a7e8e59098befcc1f10969b9e5c88e0f9}} 
+\index{CLI::App@{CLI::App}!\_process\_extras@{\_process\_extras}}
+\index{\_process\_extras@{\_process\_extras}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{\_process\_extras()}{\_process\_extras()}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::\+\_\+process\+\_\+extras (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Throw an error if anything is left over and should not be. 
+
+Modifies the args to fill in the missing items before throwing. \mbox{\Hypertarget{class_c_l_i_1_1_app_a3d04865bf341cea82bcb164b10db578b}\label{class_c_l_i_1_1_app_a3d04865bf341cea82bcb164b10db578b}} 
+\index{CLI::App@{CLI::App}!\_process\_help\_flags@{\_process\_help\_flags}}
+\index{\_process\_help\_flags@{\_process\_help\_flags}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{\_process\_help\_flags()}{\_process\_help\_flags()}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::\+\_\+process\+\_\+help\+\_\+flags (\begin{DoxyParamCaption}\item[{bool}]{trigger\+\_\+help = {\ttfamily false},  }\item[{bool}]{trigger\+\_\+all\+\_\+help = {\ttfamily false} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Run help flag processing if any are found. 
+
+The flags allow recursive calls to remember if there was a help flag on a parent. \mbox{\Hypertarget{class_c_l_i_1_1_app_ae2908ce3eded7e3d6bb2e6fdd2410576}\label{class_c_l_i_1_1_app_ae2908ce3eded7e3d6bb2e6fdd2410576}} 
+\index{CLI::App@{CLI::App}!\_validate@{\_validate}}
+\index{\_validate@{\_validate}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{\_validate()}{\_validate()}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::\+\_\+validate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Check the options to make sure there are no conflicts. 
+
+Currently checks to see if multiple positionals exist with unlimited args and checks if the min and max options are feasible \mbox{\Hypertarget{class_c_l_i_1_1_app_a5b552451fa3f6fe9ef9b802e7b3e46dd}\label{class_c_l_i_1_1_app_a5b552451fa3f6fe9ef9b802e7b3e46dd}} 
+\index{CLI::App@{CLI::App}!add\_flag@{add\_flag}}
+\index{add\_flag@{add\_flag}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_flag()}{add\_flag()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T , enable\+\_\+if\+\_\+t$<$!std\+::is\+\_\+assignable$<$ std\+::function$<$ void(std\+::int64\+\_\+t)$>$, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+flag (\begin{DoxyParamCaption}\item[{std\+::string}]{flag\+\_\+name,  }\item[{\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ T $>$ \&}]{flag\+\_\+results,  }\item[{std\+::string}]{flag\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Vector version to capture multiple flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag\+\_\+results} & A vector of values with the flag results \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a0e11ed2467b046bd8ea664152c2a9004}\label{class_c_l_i_1_1_app_a0e11ed2467b046bd8ea664152c2a9004}} 
+\index{CLI::App@{CLI::App}!add\_flag@{add\_flag}}
+\index{add\_flag@{add\_flag}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_flag()}{add\_flag()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T , enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+integral$<$ T $>$\+::value \&\&!is\+\_\+bool$<$ T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+flag (\begin{DoxyParamCaption}\item[{std\+::string}]{flag\+\_\+name,  }\item[{T \&}]{flag\+\_\+count,  }\item[{std\+::string}]{flag\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add option for flag with integer result -\/ defaults to allowing multiple passings, but can be forced to one if {\ttfamily multi\+\_\+option\+\_\+policy(\+C\+L\+I\+::\+Multi\+Option\+Policy\+::\+Throw)} is used. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag\+\_\+count} & A variable holding the count \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a496bc8b2f77bf24c638e4c6c3e018131}\label{class_c_l_i_1_1_app_a496bc8b2f77bf24c638e4c6c3e018131}} 
+\index{CLI::App@{CLI::App}!add\_flag@{add\_flag}}
+\index{add\_flag@{add\_flag}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_flag()}{add\_flag()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T , enable\+\_\+if\+\_\+t$<$!is\+\_\+vector$<$ T $>$\+::value \&\&!std\+::is\+\_\+const$<$ T $>$\+::value \&\&(!std\+::is\+\_\+integral$<$ T $>$\+::value$\vert$$\vert$is\+\_\+bool$<$ T $>$\+::value) \&\&!std\+::is\+\_\+constructible$<$ std\+::function$<$ void(int)$>$, T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+flag (\begin{DoxyParamCaption}\item[{std\+::string}]{flag\+\_\+name,  }\item[{T \&}]{flag\+\_\+result,  }\item[{std\+::string}]{flag\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Other type version accepts all other types that are not vectors such as bool, enum, string or other classes that can be converted from a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flag\+\_\+result} & A variable holding true if passed \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a289fc3770be292724cd8fcd962db4de5}\label{class_c_l_i_1_1_app_a289fc3770be292724cd8fcd962db4de5}} 
+\index{CLI::App@{CLI::App}!add\_flag\_callback@{add\_flag\_callback}}
+\index{add\_flag\_callback@{add\_flag\_callback}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_flag\_callback()}{add\_flag\_callback()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+flag\+\_\+callback (\begin{DoxyParamCaption}\item[{std\+::string}]{flag\+\_\+name,  }\item[{std\+::function$<$ void(void)$>$}]{function,  }\item[{std\+::string}]{flag\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add option for callback that is triggered with a true flag and takes no arguments. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function} & A function to call, void(void) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af539c225d96090cf1c6dc6ee6ae42985}\label{class_c_l_i_1_1_app_af539c225d96090cf1c6dc6ee6ae42985}} 
+\index{CLI::App@{CLI::App}!add\_flag\_function@{add\_flag\_function}}
+\index{add\_flag\_function@{add\_flag\_function}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_flag\_function()}{add\_flag\_function()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+flag\+\_\+function (\begin{DoxyParamCaption}\item[{std\+::string}]{flag\+\_\+name,  }\item[{std\+::function$<$ void(std\+::int64\+\_\+t)$>$}]{function,  }\item[{std\+::string}]{flag\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add option for callback with an integer value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function} & A function to call, void(int) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ac0052bd76083c47973cdf5944c4547ea}\label{class_c_l_i_1_1_app_ac0052bd76083c47973cdf5944c4547ea}} 
+\index{CLI::App@{CLI::App}!add\_mutable\_set@{add\_mutable\_set}}
+\index{add\_mutable\_set@{add\_mutable\_set}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_mutable\_set()}{add\_mutable\_set()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+mutable\+\_\+set (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{T \&}]{member,  }\item[{const \mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$ \&}]{options,  }\item[{std\+::string}]{option\+\_\+description,  }\item[{bool}]{defaulted }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add set of options (with default, set can be changed afterwards -\/ do not destroy the set) D\+E\+P\+R\+E\+C\+A\+T\+ED. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em member} & The selected member of the set \\
+\hline
+{\em options} & The set of possibilities \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5884b9a50eef3f8f6a1769b52073c57c}\label{class_c_l_i_1_1_app_a5884b9a50eef3f8f6a1769b52073c57c}} 
+\index{CLI::App@{CLI::App}!add\_mutable\_set@{add\_mutable\_set}}
+\index{add\_mutable\_set@{add\_mutable\_set}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_mutable\_set()}{add\_mutable\_set()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+mutable\+\_\+set (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{T \&}]{member,  }\item[{const \mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$ \&}]{options,  }\item[{std\+::string}]{option\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add set of options (No default, set can be changed afterwards -\/ do not destroy the set) D\+E\+P\+R\+E\+C\+A\+T\+ED. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em member} & The selected member of the set \\
+\hline
+{\em options} & The set of possibilities \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_ad1273eccb5c318a5253c3e8cad4724d2}\label{class_c_l_i_1_1_app_ad1273eccb5c318a5253c3e8cad4724d2}} 
+\index{CLI::App@{CLI::App}!add\_option@{add\_option}}
+\index{add\_option@{add\_option}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_option()}{add\_option()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Assign\+To , typename Convert\+To  = Assign\+To, enable\+\_\+if\+\_\+t$<$!std\+::is\+\_\+const$<$ Convert\+To $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+option (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{Assign\+To \&}]{variable,  }\item[{std\+::string}]{option\+\_\+description = {\ttfamily \char`\"{}\char`\"{}},  }\item[{bool}]{defaulted = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add option for assigning to a variable. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em variable} & The variable to set \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a1f9503a8cdceb4e5b42c9fd4ae6b7b10}\label{class_c_l_i_1_1_app_a1f9503a8cdceb4e5b42c9fd4ae6b7b10}} 
+\index{CLI::App@{CLI::App}!add\_option@{add\_option}}
+\index{add\_option@{add\_option}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_option()}{add\_option()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+option (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{callback\+\_\+t}]{option\+\_\+callback,  }\item[{std\+::string}]{option\+\_\+description = {\ttfamily \char`\"{}\char`\"{}},  }\item[{bool}]{defaulted = {\ttfamily false},  }\item[{std\+::function$<$ std\+::string()$>$}]{func = {\ttfamily \{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add an option, will automatically understand the type for common types. 
+
+To use, create a variable with the expected type, and pass it in after the name. After start is called, you can use count to see if the value was passed, and the value will be initialized properly. Numbers, vectors, and strings are supported.
+
+-\/$>$\mbox{\hyperlink{class_c_l_i_1_1_app_a33c3eb125a4e70d387dd9fc49c25432b}{required()}}, -\/$>$default, and the validators are options, The positional options take an optional number of arguments.
+
+For example, \begin{DoxyVerb}std::string filename;
+program.add_option("filename", filename, "description of filename");
+\end{DoxyVerb}
+ \mbox{\Hypertarget{class_c_l_i_1_1_app_a10cd073cbf01b99f595c9f10dc2113d3}\label{class_c_l_i_1_1_app_a10cd073cbf01b99f595c9f10dc2113d3}} 
+\index{CLI::App@{CLI::App}!add\_option\_function@{add\_option\_function}}
+\index{add\_option\_function@{add\_option\_function}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_option\_function()}{add\_option\_function()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+option\+\_\+function (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{const std\+::function$<$ void(const T \&)$>$ \&}]{func,  }\item[{std\+::string}]{option\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add option for a callback of a specific type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & the callback to execute \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a5371ce3c7ff0e36b2899321aed4d8393}\label{class_c_l_i_1_1_app_a5371ce3c7ff0e36b2899321aed4d8393}} 
+\index{CLI::App@{CLI::App}!add\_set@{add\_set}}
+\index{add\_set@{add\_set}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_set()}{add\_set()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+set (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{T \&}]{member,  }\item[{\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$}]{options,  }\item[{std\+::string}]{option\+\_\+description,  }\item[{bool}]{defaulted }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add set of options (with default, static set, such as an inline set) D\+E\+P\+R\+E\+C\+A\+T\+ED. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em member} & The selected member of the set \\
+\hline
+{\em options} & The set of possibilities \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_af004ba90bbb8ba494e2e13d731d87f98}\label{class_c_l_i_1_1_app_af004ba90bbb8ba494e2e13d731d87f98}} 
+\index{CLI::App@{CLI::App}!add\_set@{add\_set}}
+\index{add\_set@{add\_set}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{add\_set()}{add\_set()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+App\+::add\+\_\+set (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+\_\+name,  }\item[{T \&}]{member,  }\item[{\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ T $>$}]{options,  }\item[{std\+::string}]{option\+\_\+description = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add set of options (No default, temp reference, such as an inline set) D\+E\+P\+R\+E\+C\+A\+T\+ED. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em member} & The selected member of the set \\
+\hline
+{\em options} & The set of possibilities \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a7d8c3ab60b46e4ac79fbdba0d473e97b}\label{class_c_l_i_1_1_app_a7d8c3ab60b46e4ac79fbdba0d473e97b}} 
+\index{CLI::App@{CLI::App}!allow\_windows\_style\_options@{allow\_windows\_style\_options}}
+\index{allow\_windows\_style\_options@{allow\_windows\_style\_options}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{allow\_windows\_style\_options()}{allow\_windows\_style\_options()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::allow\+\_\+windows\+\_\+style\+\_\+options (\begin{DoxyParamCaption}\item[{bool}]{value = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Allow windows style options, such as {\ttfamily /opt}. 
+
+First matching short or long name used. Subcommands inherit value. \mbox{\Hypertarget{class_c_l_i_1_1_app_ab77e4c2f88388a9cc715c3e9d8ad37bc}\label{class_c_l_i_1_1_app_ab77e4c2f88388a9cc715c3e9d8ad37bc}} 
+\index{CLI::App@{CLI::App}!callback@{callback}}
+\index{callback@{callback}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{callback()}{callback()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::callback (\begin{DoxyParamCaption}\item[{std\+::function$<$ void()$>$}]{app\+\_\+callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set a callback for execution when all parsing and processing has completed. 
+
+Due to a bug in c++11, it is not possible to overload on std\+::function (fixed in c++14 and backported to c++11 on newer compilers). Use capture by reference to get a pointer to \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} if needed. \mbox{\Hypertarget{class_c_l_i_1_1_app_aca552f0b8af9eec4d079538e9efe0f06}\label{class_c_l_i_1_1_app_aca552f0b8af9eec4d079538e9efe0f06}} 
+\index{CLI::App@{CLI::App}!config\_to\_str@{config\_to\_str}}
+\index{config\_to\_str@{config\_to\_str}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{config\_to\_str()}{config\_to\_str()}}
+{\footnotesize\ttfamily std\+::string C\+L\+I\+::\+App\+::config\+\_\+to\+\_\+str (\begin{DoxyParamCaption}\item[{bool}]{default\+\_\+also = {\ttfamily false},  }\item[{bool}]{write\+\_\+description = {\ttfamily false} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Produce a string that could be read in as a config of the current values of the \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}. 
+
+Set default\+\_\+also to include default arguments. Prefix will add a string to the beginning of each option. \mbox{\Hypertarget{class_c_l_i_1_1_app_ac882ae7b667d460501d77aebfd9a5d26}\label{class_c_l_i_1_1_app_ac882ae7b667d460501d77aebfd9a5d26}} 
+\index{CLI::App@{CLI::App}!count@{count}}
+\index{count@{count}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{count()}{count()}}
+{\footnotesize\ttfamily std\+::size\+\_\+t C\+L\+I\+::\+App\+::count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+No argument version of count counts the number of times this subcommand was passed in. 
+
+The main app will return 1. Unnamed subcommands will also return 1 unless otherwise modified in a callback \mbox{\Hypertarget{class_c_l_i_1_1_app_aac000657ef11647125ba91af38fd7d9c}\label{class_c_l_i_1_1_app_aac000657ef11647125ba91af38fd7d9c}} 
+\index{CLI::App@{CLI::App}!exit@{exit}}
+\index{exit@{exit}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{exit()}{exit()}}
+{\footnotesize\ttfamily int C\+L\+I\+::\+App\+::exit (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_l_i_1_1_error}{Error}} \&}]{e,  }\item[{std\+::ostream \&}]{out = {\ttfamily std\+:\+:cout},  }\item[{std\+::ostream \&}]{err = {\ttfamily std\+:\+:cerr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Print a nice error message and return the exit code. 
+
+Avoid printing anything if this is a \mbox{\hyperlink{class_c_l_i_1_1_runtime_error}{C\+L\+I\+::\+Runtime\+Error}}\mbox{\Hypertarget{class_c_l_i_1_1_app_a2e32bb0c9270c996488cc8dfa28ec8b1}\label{class_c_l_i_1_1_app_a2e32bb0c9270c996488cc8dfa28ec8b1}} 
+\index{CLI::App@{CLI::App}!fallthrough@{fallthrough}}
+\index{fallthrough@{fallthrough}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{fallthrough()}{fallthrough()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::fallthrough (\begin{DoxyParamCaption}\item[{bool}]{value = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Stop subcommand fallthrough, so that parent commands cannot collect commands after subcommand. 
+
+Default from parent, usually set on parent. \mbox{\Hypertarget{class_c_l_i_1_1_app_a9dca85c30eb14dd7e3f02f07e4f68c5c}\label{class_c_l_i_1_1_app_a9dca85c30eb14dd7e3f02f07e4f68c5c}} 
+\index{CLI::App@{CLI::App}!get\_subcommands@{get\_subcommands}}
+\index{get\_subcommands@{get\_subcommands}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{get\_subcommands()}{get\_subcommands()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$$>$ C\+L\+I\+::\+App\+::get\+\_\+subcommands (\begin{DoxyParamCaption}\item[{const std\+::function$<$ bool(\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$)$>$ \&}]{filter }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a filtered subcommand pointer list from the original definition list. 
+
+An empty function will provide all subcommands \mbox{\Hypertarget{class_c_l_i_1_1_app_ac03e5e9ca00d2d0b5d20c362e6dcbe9f}\label{class_c_l_i_1_1_app_ac03e5e9ca00d2d0b5d20c362e6dcbe9f}} 
+\index{CLI::App@{CLI::App}!get\_subcommands@{get\_subcommands}}
+\index{get\_subcommands@{get\_subcommands}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{get\_subcommands()}{get\_subcommands()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$$>$ C\+L\+I\+::\+App\+::get\+\_\+subcommands (\begin{DoxyParamCaption}\item[{const std\+::function$<$ bool(const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$)$>$ \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a filtered subcommand pointer list from the original definition list. 
+
+An empty function will provide all subcommands (const) \mbox{\Hypertarget{class_c_l_i_1_1_app_a91720aaf4c92c867dc042c723503b74e}\label{class_c_l_i_1_1_app_a91720aaf4c92c867dc042c723503b74e}} 
+\index{CLI::App@{CLI::App}!operator bool@{operator bool}}
+\index{operator bool@{operator bool}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{operator bool()}{operator bool()}}
+{\footnotesize\ttfamily C\+L\+I\+::\+App\+::operator bool (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Check to see if this subcommand was parsed, true only if received on command line. 
+
+This allows the subcommand to be directly checked. \mbox{\Hypertarget{class_c_l_i_1_1_app_a5ddf139d5fe065289aca7b83d5d045d9}\label{class_c_l_i_1_1_app_a5ddf139d5fe065289aca7b83d5d045d9}} 
+\index{CLI::App@{CLI::App}!parse@{parse}}
+\index{parse@{parse}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{parse()}{parse()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::parse (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{const char $\ast$const $\ast$}]{argv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Parses the command line -\/ throws errors. 
+
+This must be called after the options are in but before the rest of the program. \mbox{\Hypertarget{class_c_l_i_1_1_app_a187f08c5326d89319802162e33faff4e}\label{class_c_l_i_1_1_app_a187f08c5326d89319802162e33faff4e}} 
+\index{CLI::App@{CLI::App}!parse@{parse}}
+\index{parse@{parse}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{parse()}{parse()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::parse (\begin{DoxyParamCaption}\item[{std\+::string}]{commandline,  }\item[{bool}]{program\+\_\+name\+\_\+included = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Parse a single string as if it contained command line arguments. 
+
+This function splits the string into arguments then calls \mbox{\hyperlink{class_c_l_i_1_1_app_a878c1067ade7145aa11478d64f5173ed}{parse(std\+::vector$<$std\+::string$>$ \&)}} the function takes an optional boolean argument specifying if the program\+Name is included in the string to process \mbox{\Hypertarget{class_c_l_i_1_1_app_a878c1067ade7145aa11478d64f5173ed}\label{class_c_l_i_1_1_app_a878c1067ade7145aa11478d64f5173ed}} 
+\index{CLI::App@{CLI::App}!parse@{parse}}
+\index{parse@{parse}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{parse()}{parse()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void C\+L\+I\+::\+App\+::parse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \&}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The real work is done here. 
+
+Expects a reversed vector. Changes the vector to the remaining options. \mbox{\Hypertarget{class_c_l_i_1_1_app_a5d74be8e210e779874584a3336aaf506}\label{class_c_l_i_1_1_app_a5d74be8e210e779874584a3336aaf506}} 
+\index{CLI::App@{CLI::App}!pre\_callback@{pre\_callback}}
+\index{pre\_callback@{pre\_callback}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{pre\_callback()}{pre\_callback()}}
+{\footnotesize\ttfamily virtual void C\+L\+I\+::\+App\+::pre\+\_\+callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+This allows subclasses to inject code before callbacks but after parse. 
+
+This does not run if any errors or help is thrown. \mbox{\Hypertarget{class_c_l_i_1_1_app_a6003073a5ae4904cb27a978282363e99}\label{class_c_l_i_1_1_app_a6003073a5ae4904cb27a978282363e99}} 
+\index{CLI::App@{CLI::App}!require\_option@{require\_option}}
+\index{require\_option@{require\_option}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{require\_option()}{require\_option()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::require\+\_\+option (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Require an option to be given (does not affect help call) The number required can be given. 
+
+Negative values indicate maximum number allowed (0 for any number). \mbox{\Hypertarget{class_c_l_i_1_1_app_a0e50594ad2ebfe6ce58e1d17398aeaac}\label{class_c_l_i_1_1_app_a0e50594ad2ebfe6ce58e1d17398aeaac}} 
+\index{CLI::App@{CLI::App}!require\_option@{require\_option}}
+\index{require\_option@{require\_option}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{require\_option()}{require\_option()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::require\+\_\+option (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{min,  }\item[{std\+::size\+\_\+t}]{max }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Explicitly control the number of options required. 
+
+Setting 0 for the max means unlimited number allowed. Max number inheritable. \mbox{\Hypertarget{class_c_l_i_1_1_app_ae1bb42a7f768d636671552cb345f2d6c}\label{class_c_l_i_1_1_app_ae1bb42a7f768d636671552cb345f2d6c}} 
+\index{CLI::App@{CLI::App}!require\_subcommand@{require\_subcommand}}
+\index{require\_subcommand@{require\_subcommand}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{require\_subcommand()}{require\_subcommand()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::require\+\_\+subcommand (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Require a subcommand to be given (does not affect help call) The number required can be given. 
+
+Negative values indicate maximum number allowed (0 for any number). Max number inheritable. \mbox{\Hypertarget{class_c_l_i_1_1_app_a41628b1a9cd4437bb81851fcfe9cdeef}\label{class_c_l_i_1_1_app_a41628b1a9cd4437bb81851fcfe9cdeef}} 
+\index{CLI::App@{CLI::App}!require\_subcommand@{require\_subcommand}}
+\index{require\_subcommand@{require\_subcommand}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{require\_subcommand()}{require\_subcommand()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}$\ast$ C\+L\+I\+::\+App\+::require\+\_\+subcommand (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{min,  }\item[{std\+::size\+\_\+t}]{max }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Explicitly control the number of subcommands required. 
+
+Setting 0 for the max means unlimited number allowed. Max number inheritable. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a4ff932cdfe4237c0f63a00216d0d86b9}\label{class_c_l_i_1_1_app_a4ff932cdfe4237c0f63a00216d0d86b9}} 
+\index{CLI::App@{CLI::App}!allow\_config\_extras\_@{allow\_config\_extras\_}}
+\index{allow\_config\_extras\_@{allow\_config\_extras\_}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{allow\_config\_extras\_}{allow\_config\_extras\_}}
+{\footnotesize\ttfamily config\+\_\+extras\+\_\+mode C\+L\+I\+::\+App\+::allow\+\_\+config\+\_\+extras\+\_\+ \{config\+\_\+extras\+\_\+mode\+::ignore\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+If ignore, allow extra arguments in the ini file (ie, don\textquotesingle{}t throw an error). 
+
+I\+N\+H\+E\+R\+I\+T\+A\+B\+LE if error error on an extra argument, and if capture feed it to the app \mbox{\Hypertarget{class_c_l_i_1_1_app_afdcf791220d111363ac12526a693227b}\label{class_c_l_i_1_1_app_afdcf791220d111363ac12526a693227b}} 
+\index{CLI::App@{CLI::App}!allow\_windows\_style\_options\_@{allow\_windows\_style\_options\_}}
+\index{allow\_windows\_style\_options\_@{allow\_windows\_style\_options\_}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{allow\_windows\_style\_options\_}{allow\_windows\_style\_options\_}}
+{\footnotesize\ttfamily bool C\+L\+I\+::\+App\+::allow\+\_\+windows\+\_\+style\+\_\+options\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{        \textcolor{keyword}{false}}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+Allow \textquotesingle{}/\textquotesingle{} for options for Windows like options. Defaults to true on Windows, false otherwise. I\+N\+H\+E\+R\+I\+T\+A\+B\+LE. 
+
+\mbox{\Hypertarget{class_c_l_i_1_1_app_a99175d2ee21f9b1983acf62db0749f56}\label{class_c_l_i_1_1_app_a99175d2ee21f9b1983acf62db0749f56}} 
+\index{CLI::App@{CLI::App}!immediate\_callback\_@{immediate\_callback\_}}
+\index{immediate\_callback\_@{immediate\_callback\_}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{immediate\_callback\_}{immediate\_callback\_}}
+{\footnotesize\ttfamily bool C\+L\+I\+::\+App\+::immediate\+\_\+callback\+\_\+ \{false\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Flag indicating that the callback for the subcommand should be executed immediately on parse completion which is before help or ini files are processed. 
+
+I\+N\+H\+E\+R\+I\+T\+A\+B\+LE \mbox{\Hypertarget{class_c_l_i_1_1_app_a664a3162461b3121caf5cae7f65a95e6}\label{class_c_l_i_1_1_app_a664a3162461b3121caf5cae7f65a95e6}} 
+\index{CLI::App@{CLI::App}!missing\_@{missing\_}}
+\index{missing\_@{missing\_}!CLI::App@{CLI::App}}
+\doxysubsubsection{\texorpdfstring{missing\_}{missing\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classstd_1_1vector}{missing\+\_\+t}} C\+L\+I\+::\+App\+::missing\+\_\+ \{\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Pair of classifier, string for missing options. 
+
+(extra detail is removed on returning from parse)
+
+This is faster and cleaner than storing just a list of strings and reparsing. This may contain the -- separator. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

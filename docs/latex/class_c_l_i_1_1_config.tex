@@ -1,0 +1,49 @@
+\hypertarget{class_c_l_i_1_1_config}{}\doxysection{C\+LI\+::Config Class Reference}
+\label{class_c_l_i_1_1_config}\index{CLI::Config@{CLI::Config}}
+
+
+This class provides a converter for configuration files.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Config\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_c_l_i_1_1_config}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_a516815ecb20f72816caeab5049d0873d}\label{class_c_l_i_1_1_config_a516815ecb20f72816caeab5049d0873d}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_config_a516815ecb20f72816caeab5049d0873d}{to\+\_\+config}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, bool, bool, std\+::string) const =0
+\begin{DoxyCompactList}\small\item\em Convert an app into a configuration. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_aa1d072db121fac141cb69cb2a32ba642}\label{class_c_l_i_1_1_config_aa1d072db121fac141cb69cb2a32ba642}} 
+virtual \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_config_aa1d072db121fac141cb69cb2a32ba642}{from\+\_\+config}} (std\+::istream \&) const =0
+\begin{DoxyCompactList}\small\item\em Convert a configuration into an app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_affac2102274c1a09c0e08b2c9410b57f}\label{class_c_l_i_1_1_config_affac2102274c1a09c0e08b2c9410b57f}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_config_affac2102274c1a09c0e08b2c9410b57f}{to\+\_\+flag}} (const \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} \&item) const
+\begin{DoxyCompactList}\small\item\em Get a flag value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_ae49535aa8a3e3d5aa80a43eeced9f5da}\label{class_c_l_i_1_1_config_ae49535aa8a3e3d5aa80a43eeced9f5da}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_config_ae49535aa8a3e3d5aa80a43eeced9f5da}{from\+\_\+file}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Parse a config file, throw an error (\mbox{\hyperlink{class_c_l_i_1_1_parse_error}{Parse\+Error}}\+:Config\+Parse\+Error or \mbox{\hyperlink{class_c_l_i_1_1_file_error}{File\+Error}}) on failure. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_adf504285455f78fb1595d2ddad1cb626}\label{class_c_l_i_1_1_config_adf504285455f78fb1595d2ddad1cb626}} 
+virtual \mbox{\hyperlink{class_c_l_i_1_1_config_adf504285455f78fb1595d2ddad1cb626}{$\sim$\+Config}} ()=default
+\begin{DoxyCompactList}\small\item\em Virtual destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_a44be58c62906c58a118d8a3bf0f2a312}\label{class_c_l_i_1_1_config_a44be58c62906c58a118d8a3bf0f2a312}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} $>$ {\bfseries items} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class provides a converter for configuration files. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

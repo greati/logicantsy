@@ -1,0 +1,90 @@
+\hypertarget{class_c_l_i_1_1_formatter}{}\doxysection{C\+LI\+::Formatter Class Reference}
+\label{class_c_l_i_1_1_formatter}\index{CLI::Formatter@{CLI::Formatter}}
+
+
+This is the default \mbox{\hyperlink{class_c_l_i_1_1_formatter}{Formatter}} for C\+L\+I11.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Formatter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_l_i_1_1_formatter}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a5390f944dc43547592101c78b2a5d398}\label{class_c_l_i_1_1_formatter_a5390f944dc43547592101c78b2a5d398}} 
+{\bfseries Formatter} (const \mbox{\hyperlink{class_c_l_i_1_1_formatter}{Formatter}} \&)=default
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a135ec80d7cd0c8ecb0101bff64c55a59}\label{class_c_l_i_1_1_formatter_a135ec80d7cd0c8ecb0101bff64c55a59}} 
+{\bfseries Formatter} (\mbox{\hyperlink{class_c_l_i_1_1_formatter}{Formatter}} \&\&)=default
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Overridables}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_aebbdf79e2615ea7d16fe8f30fb6551fc}\label{class_c_l_i_1_1_formatter_aebbdf79e2615ea7d16fe8f30fb6551fc}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_aebbdf79e2615ea7d16fe8f30fb6551fc}{make\+\_\+group}} (std\+::string group, bool is\+\_\+positional, \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ opts) const
+\begin{DoxyCompactList}\small\item\em This prints out a group of options with title. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_aab5f07a6d3154ace0be4d9dbf85f795b}\label{class_c_l_i_1_1_formatter_aab5f07a6d3154ace0be4d9dbf85f795b}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_aab5f07a6d3154ace0be4d9dbf85f795b}{make\+\_\+positionals}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app) const
+\begin{DoxyCompactList}\small\item\em This prints out just the positionals \char`\"{}group\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_ad48dd6b9432babc0037d6726230221f0}\label{class_c_l_i_1_1_formatter_ad48dd6b9432babc0037d6726230221f0}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_ad48dd6b9432babc0037d6726230221f0}{make\+\_\+groups}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app, App\+Format\+Mode mode) const
+\begin{DoxyCompactList}\small\item\em This prints out all the groups of options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a9e6b7c4c6eee50b11fe1ca785002db04}\label{class_c_l_i_1_1_formatter_a9e6b7c4c6eee50b11fe1ca785002db04}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a9e6b7c4c6eee50b11fe1ca785002db04}{make\+\_\+subcommands}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app, App\+Format\+Mode mode) const
+\begin{DoxyCompactList}\small\item\em This prints out all the subcommands. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a82a62cd4b9833cab20e82c4d099c0c7f}\label{class_c_l_i_1_1_formatter_a82a62cd4b9833cab20e82c4d099c0c7f}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a82a62cd4b9833cab20e82c4d099c0c7f}{make\+\_\+subcommand}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$sub) const
+\begin{DoxyCompactList}\small\item\em This prints out a subcommand. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_ade54fd392e2c9f5364744dca82408e60}\label{class_c_l_i_1_1_formatter_ade54fd392e2c9f5364744dca82408e60}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_ade54fd392e2c9f5364744dca82408e60}{make\+\_\+expanded}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$sub) const
+\begin{DoxyCompactList}\small\item\em This prints out a subcommand in help-\/all. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_ad2c14eb79877613d7049434c10507489}\label{class_c_l_i_1_1_formatter_ad2c14eb79877613d7049434c10507489}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_ad2c14eb79877613d7049434c10507489}{make\+\_\+footer}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app) const
+\begin{DoxyCompactList}\small\item\em This prints out all the groups of options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a0f45c98dab9502d8241c24f9ea250ede}\label{class_c_l_i_1_1_formatter_a0f45c98dab9502d8241c24f9ea250ede}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a0f45c98dab9502d8241c24f9ea250ede}{make\+\_\+description}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app) const
+\begin{DoxyCompactList}\small\item\em This displays the description line. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a3aac4a7ce4ca139704e632915892024c}\label{class_c_l_i_1_1_formatter_a3aac4a7ce4ca139704e632915892024c}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a3aac4a7ce4ca139704e632915892024c}{make\+\_\+usage}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app, std\+::string name) const
+\begin{DoxyCompactList}\small\item\em This displays the usage line. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a838e0f47efa4fbd1b738eedb156887b9}\label{class_c_l_i_1_1_formatter_a838e0f47efa4fbd1b738eedb156887b9}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a838e0f47efa4fbd1b738eedb156887b9}{make\+\_\+help}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, std\+::string, App\+Format\+Mode) const override
+\begin{DoxyCompactList}\small\item\em This puts everything together. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Options}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a1503e498cef1cab66a01d84bac59b5d8}\label{class_c_l_i_1_1_formatter_a1503e498cef1cab66a01d84bac59b5d8}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a1503e498cef1cab66a01d84bac59b5d8}{make\+\_\+option}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt, bool is\+\_\+positional) const
+\begin{DoxyCompactList}\small\item\em This prints out an option help line, either positional or optional form. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_ad29eb726bf961560f0c6419fd74332d0}\label{class_c_l_i_1_1_formatter_ad29eb726bf961560f0c6419fd74332d0}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_ad29eb726bf961560f0c6419fd74332d0}{make\+\_\+option\+\_\+name}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$, bool) const
+\begin{DoxyCompactList}\small\item\em This is the name part of an option, Default\+: left column. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_a9f11b9ee12c8ccb8bf9670be1b47a3b1}\label{class_c_l_i_1_1_formatter_a9f11b9ee12c8ccb8bf9670be1b47a3b1}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_a9f11b9ee12c8ccb8bf9670be1b47a3b1}{make\+\_\+option\+\_\+opts}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$) const
+\begin{DoxyCompactList}\small\item\em This is the options part of the name, Default\+: combined into left column. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_acf6c56689b56533dad59f8e1ff71c7ce}\label{class_c_l_i_1_1_formatter_acf6c56689b56533dad59f8e1ff71c7ce}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_acf6c56689b56533dad59f8e1ff71c7ce}{make\+\_\+option\+\_\+desc}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$) const
+\begin{DoxyCompactList}\small\item\em This is the description. Default\+: Right column, on new line if left column too large. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_formatter_afd69c393a40e9b1212f3552a1f48a414}\label{class_c_l_i_1_1_formatter_afd69c393a40e9b1212f3552a1f48a414}} 
+virtual std\+::string \mbox{\hyperlink{class_c_l_i_1_1_formatter_afd69c393a40e9b1212f3552a1f48a414}{make\+\_\+option\+\_\+usage}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt) const
+\begin{DoxyCompactList}\small\item\em This is used to print the name on the U\+S\+A\+GE line. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+This is the default \mbox{\hyperlink{class_c_l_i_1_1_formatter}{Formatter}} for C\+L\+I11. 
+
+It pretty prints help output, and is broken into quite a few overridable methods, to be highly customizable with minimal effort. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

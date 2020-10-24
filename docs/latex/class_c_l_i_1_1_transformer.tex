@@ -1,0 +1,60 @@
+\hypertarget{class_c_l_i_1_1_transformer}{}\doxysection{C\+LI\+::Transformer Class Reference}
+\label{class_c_l_i_1_1_transformer}\index{CLI::Transformer@{CLI::Transformer}}
+
+
+Translate named items to other or a value set.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Transformer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_l_i_1_1_transformer}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_transformer_aa9af3743205463a69e8c99d3dc335a00}\label{class_c_l_i_1_1_transformer_aa9af3743205463a69e8c99d3dc335a00}} 
+using {\bfseries filter\+\_\+fn\+\_\+t} = std\+::function$<$ std\+::string(std\+::string)$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_transformer_aa6863b5920fff24255d5189c71100304}\label{class_c_l_i_1_1_transformer_aa6863b5920fff24255d5189c71100304}} 
+{\footnotesize template$<$typename... Args$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_transformer_aa6863b5920fff24255d5189c71100304}{Transformer}} (std\+::initializer\+\_\+list$<$ std\+::pair$<$ std\+::string, std\+::string $>$$>$ values, Args \&\&... args)
+\begin{DoxyCompactList}\small\item\em This allows in-\/place construction. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_transformer_ad43c2b6ea0db6273b6ab7be544d55480}\label{class_c_l_i_1_1_transformer_ad43c2b6ea0db6273b6ab7be544d55480}} 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_transformer_ad43c2b6ea0db6273b6ab7be544d55480}{Transformer}} (T \&\&mapping)
+\begin{DoxyCompactList}\small\item\em direct map of std\+::string to std\+::string \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , typename F $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_transformer_aef311ee89c54f64e3e78651bd2db826c}{Transformer}} (T mapping, F filter\+\_\+function)
+\begin{DoxyCompactList}\small\item\em This checks to see if an item is in a set\+: pointer or copy version. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_transformer_ae6f9eebe2836b36f2a771b99d76b7407}\label{class_c_l_i_1_1_transformer_ae6f9eebe2836b36f2a771b99d76b7407}} 
+{\footnotesize template$<$typename T , typename... Args$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_transformer_ae6f9eebe2836b36f2a771b99d76b7407}{Transformer}} (T \&\&mapping, filter\+\_\+fn\+\_\+t filter\+\_\+fn\+\_\+1, filter\+\_\+fn\+\_\+t filter\+\_\+fn\+\_\+2, Args \&\&... other)
+\begin{DoxyCompactList}\small\item\em You can pass in as many filter functions as you like, they nest. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Translate named items to other or a value set. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_transformer_aef311ee89c54f64e3e78651bd2db826c}\label{class_c_l_i_1_1_transformer_aef311ee89c54f64e3e78651bd2db826c}} 
+\index{CLI::Transformer@{CLI::Transformer}!Transformer@{Transformer}}
+\index{Transformer@{Transformer}!CLI::Transformer@{CLI::Transformer}}
+\doxysubsubsection{\texorpdfstring{Transformer()}{Transformer()}}
+{\footnotesize\ttfamily template$<$typename T , typename F $>$ \\
+C\+L\+I\+::\+Transformer\+::\+Transformer (\begin{DoxyParamCaption}\item[{T}]{mapping,  }\item[{F}]{filter\+\_\+function }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+This checks to see if an item is in a set\+: pointer or copy version. 
+
+You can pass in a function that will filter both sides of the comparison before computing the comparison. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

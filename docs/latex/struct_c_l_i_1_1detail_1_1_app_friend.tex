@@ -1,0 +1,31 @@
+\hypertarget{struct_c_l_i_1_1detail_1_1_app_friend}{}\doxysection{C\+LI\+::detail\+::App\+Friend Struct Reference}
+\label{struct_c_l_i_1_1detail_1_1_app_friend}\index{CLI::detail::AppFriend@{CLI::detail::AppFriend}}
+
+
+This class is simply to allow tests access to \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}\textquotesingle{}s protected functions.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1_app_friend_ab82dffa5cf9266f27dffd5ca5b1f2af3}\label{struct_c_l_i_1_1detail_1_1_app_friend_ab82dffa5cf9266f27dffd5ca5b1f2af3}} 
+{\footnotesize template$<$typename... Args$>$ }\\static auto \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1_app_friend_ab82dffa5cf9266f27dffd5ca5b1f2af3}{parse\+\_\+arg}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app, Args \&\&... args) -\/$>$ typename std\+::result\+\_\+of$<$ decltype(\&\mbox{\hyperlink{class_c_l_i_1_1_app_a73c9decd5eb2b0c7eeda63cc4bd5048e}{App\+::\+\_\+parse\+\_\+arg}})(\mbox{\hyperlink{class_c_l_i_1_1_app}{App}}, Args...)$>$\+::type
+\begin{DoxyCompactList}\small\item\em Wrap \+\_\+parse\+\_\+short, perfectly forward arguments and return. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1_app_friend_a45f3935dccd56b5fe50917d47c77c7b2}\label{struct_c_l_i_1_1detail_1_1_app_friend_a45f3935dccd56b5fe50917d47c77c7b2}} 
+{\footnotesize template$<$typename... Args$>$ }\\static auto \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1_app_friend_a45f3935dccd56b5fe50917d47c77c7b2}{parse\+\_\+subcommand}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app, Args \&\&... args) -\/$>$ typename std\+::result\+\_\+of$<$ decltype(\&\mbox{\hyperlink{class_c_l_i_1_1_app_af20c05b97b9de2a4543a2de9bcc0993d}{App\+::\+\_\+parse\+\_\+subcommand}})(\mbox{\hyperlink{class_c_l_i_1_1_app}{App}}, Args...)$>$\+::type
+\begin{DoxyCompactList}\small\item\em Wrap \+\_\+parse\+\_\+subcommand, perfectly forward arguments and return. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1_app_friend_aa4912941b6b4ad8fae08c1beed77e44f}\label{struct_c_l_i_1_1detail_1_1_app_friend_aa4912941b6b4ad8fae08c1beed77e44f}} 
+static \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1_app_friend_aa4912941b6b4ad8fae08c1beed77e44f}{get\+\_\+fallthrough\+\_\+parent}} (\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$app)
+\begin{DoxyCompactList}\small\item\em Wrap the fallthrough parent function to make sure that is working correctly. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class is simply to allow tests access to \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}\textquotesingle{}s protected functions. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

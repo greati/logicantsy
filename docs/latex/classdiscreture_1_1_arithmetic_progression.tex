@@ -1,0 +1,104 @@
+\hypertarget{classdiscreture_1_1_arithmetic_progression}{}\doxysection{discreture\+::Arithmetic\+Progression$<$ Int\+Type $>$ Class Template Reference}
+\label{classdiscreture_1_1_arithmetic_progression}\index{discreture::ArithmeticProgression$<$ IntType $>$@{discreture::ArithmeticProgression$<$ IntType $>$}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}}
+\begin{DoxyCompactList}\small\item\em Random access iterator class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a338b54fd1d585bda1ec17521dee1e5e2}\label{classdiscreture_1_1_arithmetic_progression_a338b54fd1d585bda1ec17521dee1e5e2}} 
+using {\bfseries value\+\_\+type} = Int\+Type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a09aef35f15eafcd4dc180a2403490fb4}\label{classdiscreture_1_1_arithmetic_progression_a09aef35f15eafcd4dc180a2403490fb4}} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_abcded76e326ad7b1b341abbd16bd703d}\label{classdiscreture_1_1_arithmetic_progression_abcded76e326ad7b1b341abbd16bd703d}} 
+using {\bfseries size\+\_\+type} = difference\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a2cd0450326bfeaf1144cc1a56dad045a}\label{classdiscreture_1_1_arithmetic_progression_a2cd0450326bfeaf1144cc1a56dad045a}} 
+using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a742cd36acad21cecd5948ea184a06673}\label{classdiscreture_1_1_arithmetic_progression_a742cd36acad21cecd5948ea184a06673}} 
+using {\bfseries reverse\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a21c084921b6bd3966ae2532debe1f8b9}\label{classdiscreture_1_1_arithmetic_progression_a21c084921b6bd3966ae2532debe1f8b9}} 
+using {\bfseries const\+\_\+reverse\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{reverse\+\_\+iterator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_a301c9f6c737622eec3aeb4747a928b98}{Arithmetic\+Progression}} (Int\+Type n)
+\begin{DoxyCompactList}\small\item\em Single integer constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_ae7c7c6039188af955d74e7605c6c2a10}{Arithmetic\+Progression}} (Int\+Type from, Int\+Type to, Int\+Type step=1)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a70e5ce68bbcd29af84ab465ec96399eb}\label{classdiscreture_1_1_arithmetic_progression_a70e5ce68bbcd29af84ab465ec96399eb}} 
+size\+\_\+type {\bfseries size} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a1717817151bf18a9549f4bdf0ddf105d}\label{classdiscreture_1_1_arithmetic_progression_a1717817151bf18a9549f4bdf0ddf105d}} 
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}} {\bfseries begin} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a84e249bccb807a346f63444a84f98ca1}\label{classdiscreture_1_1_arithmetic_progression_a84e249bccb807a346f63444a84f98ca1}} 
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}} {\bfseries end} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a8838058f5807d54ceef7fc3461afe019}\label{classdiscreture_1_1_arithmetic_progression_a8838058f5807d54ceef7fc3461afe019}} 
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}} {\bfseries rbegin} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a9c444940d64408ad989c35e64ebce571}\label{classdiscreture_1_1_arithmetic_progression_a9c444940d64408ad989c35e64ebce571}} 
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression_1_1iterator}{iterator}} {\bfseries rend} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a0137b0ce0b24f1d3d794b92c4486a1e7}\label{classdiscreture_1_1_arithmetic_progression_a0137b0ce0b24f1d3d794b92c4486a1e7}} 
+Int\+Type {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+type m) const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a51931f5851dc290ff8c8f55d5cee09e2}\label{classdiscreture_1_1_arithmetic_progression_a51931f5851dc290ff8c8f55d5cee09e2}} 
+{\footnotesize template$<$class Pred $>$ }\\Int\+Type {\bfseries partition\+\_\+point} (Pred p)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_a301c9f6c737622eec3aeb4747a928b98}\label{classdiscreture_1_1_arithmetic_progression_a301c9f6c737622eec3aeb4747a928b98}} 
+\index{discreture::ArithmeticProgression$<$ IntType $>$@{discreture::ArithmeticProgression$<$ IntType $>$}!ArithmeticProgression@{ArithmeticProgression}}
+\index{ArithmeticProgression@{ArithmeticProgression}!discreture::ArithmeticProgression$<$ IntType $>$@{discreture::ArithmeticProgression$<$ IntType $>$}}
+\doxysubsubsection{\texorpdfstring{ArithmeticProgression()}{ArithmeticProgression()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class Int\+Type $>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression}{discreture\+::\+Arithmetic\+Progression}}$<$ Int\+Type $>$\+::\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression}{Arithmetic\+Progression}} (\begin{DoxyParamCaption}\item[{Int\+Type}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Single integer constructor. 
+
+It\textquotesingle{}s usually better to use integer\+\_\+interval(n) instead (faster)
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & is an integer $>$= 0\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An abstract random-\/access container whose elements are \{0,1,2,...,n-\/1\} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdiscreture_1_1_arithmetic_progression_ae7c7c6039188af955d74e7605c6c2a10}\label{classdiscreture_1_1_arithmetic_progression_ae7c7c6039188af955d74e7605c6c2a10}} 
+\index{discreture::ArithmeticProgression$<$ IntType $>$@{discreture::ArithmeticProgression$<$ IntType $>$}!ArithmeticProgression@{ArithmeticProgression}}
+\index{ArithmeticProgression@{ArithmeticProgression}!discreture::ArithmeticProgression$<$ IntType $>$@{discreture::ArithmeticProgression$<$ IntType $>$}}
+\doxysubsubsection{\texorpdfstring{ArithmeticProgression()}{ArithmeticProgression()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class Int\+Type $>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression}{discreture\+::\+Arithmetic\+Progression}}$<$ Int\+Type $>$\+::\mbox{\hyperlink{classdiscreture_1_1_arithmetic_progression}{Arithmetic\+Progression}} (\begin{DoxyParamCaption}\item[{Int\+Type}]{from,  }\item[{Int\+Type}]{to,  }\item[{Int\+Type}]{step = {\ttfamily 1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+Automatically detects wheter step size is positive or negative and adjusts accordingly
+\begin{DoxyParams}{Parameters}
+{\em n} & is an integer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an abstract random-\/access container whose elements are \{n,n+step,n+2$\ast$step,...\} up to (and not including) t\+\_\+to. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+Discreture/Arithmetic\+Progression.\+hpp\end{DoxyCompactItemize}

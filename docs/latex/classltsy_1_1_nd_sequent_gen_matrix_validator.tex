@@ -1,0 +1,27 @@
+\hypertarget{classltsy_1_1_nd_sequent_gen_matrix_validator}{}\doxysection{ltsy\+::Nd\+Sequent\+Gen\+Matrix\+Validator$<$ Fmla\+ContainerT $>$ Class Template Reference}
+\label{classltsy_1_1_nd_sequent_gen_matrix_validator}\index{ltsy::NdSequentGenMatrixValidator$<$ FmlaContainerT $>$@{ltsy::NdSequentGenMatrixValidator$<$ FmlaContainerT $>$}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structltsy_1_1_nd_sequent_gen_matrix_validator_1_1_counter_example}{Counter\+Example}}
+\begin{DoxyCompactList}\small\item\em Represents a counter-\/example for a given sequent. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_gen_matrix_validator_a6431f6a3b91983b2dbfba93d453b33c9}\label{classltsy_1_1_nd_sequent_gen_matrix_validator_a6431f6a3b91983b2dbfba93d453b33c9}} 
+{\bfseries Nd\+Sequent\+Gen\+Matrix\+Validator} (decltype(\+\_\+matrix) matrix, const decltype(\+\_\+sequent\+\_\+set\+\_\+correspondence)\&sequent\+\_\+set\+\_\+correspondence, bool infer\+\_\+complements=true)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_gen_matrix_validator_ad7d60094ae07b229db27456fc34a754d}\label{classltsy_1_1_nd_sequent_gen_matrix_validator_ad7d60094ae07b229db27456fc34a754d}} 
+std\+::pair$<$ bool, std\+::optional$<$ std\+::set$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$ $>$ $>$ $>$ {\bfseries is\+\_\+fmla\+\_\+set\+\_\+valid\+\_\+under\+\_\+valuation} (const \mbox{\hyperlink{classltsy_1_1_gen_matrix_valuation}{Gen\+Matrix\+Valuation}} val, const std\+::set$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$$>$ \&fmls, const std\+::set$<$ int $>$ \&dset) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_gen_matrix_validator_a2a640b4a8df9c851e6b297a53c067d9d}\label{classltsy_1_1_nd_sequent_gen_matrix_validator_a2a640b4a8df9c851e6b297a53c067d9d}} 
+bool {\bfseries is\+\_\+valid\+\_\+under\+\_\+valuation} (const \mbox{\hyperlink{classltsy_1_1_gen_matrix_valuation}{Gen\+Matrix\+Valuation}} \&val, const \mbox{\hyperlink{classltsy_1_1_nd_sequent}{Nd\+Sequent}}$<$ Fmla\+ContainerT $>$ \&seq) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_nd_sequent_gen_matrix_validator_a198a1f6351de8115df83e2f6b56faf1e}\label{classltsy_1_1_nd_sequent_gen_matrix_validator_a198a1f6351de8115df83e2f6b56faf1e}} 
+std\+::pair$<$ bool, std\+::optional$<$ std\+::vector$<$ \mbox{\hyperlink{structltsy_1_1_nd_sequent_gen_matrix_validator_1_1_counter_example}{Counter\+Example}} $>$ $>$ $>$ {\bfseries is\+\_\+rule\+\_\+satisfiability\+\_\+preserving} (const \mbox{\hyperlink{classltsy_1_1_nd_sequent_rule}{Nd\+Sequent\+Rule}}$<$ Fmla\+ContainerT $>$ \&rule, int max\+\_\+counter\+\_\+examples=1) const
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/genmatrix.\+h\end{DoxyCompactItemize}

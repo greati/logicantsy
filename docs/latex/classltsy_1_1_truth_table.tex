@@ -1,0 +1,82 @@
+\hypertarget{classltsy_1_1_truth_table}{}\doxysection{ltsy\+::Truth\+Table$<$ Cell\+Type $>$ Class Template Reference}
+\label{classltsy_1_1_truth_table}\index{ltsy::TruthTable$<$ CellType $>$@{ltsy::TruthTable$<$ CellType $>$}}
+
+
+Represents an {\ttfamily N\+Values}-\/valued {\ttfamily Arity}-\/ary truth table.  
+
+
+
+
+{\ttfamily \#include $<$truth\+\_\+tables.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a81fad5e568eed40f1332bbc8154e3ac6}\label{classltsy_1_1_truth_table_a81fad5e568eed40f1332bbc8154e3ac6}} 
+{\bfseries Truth\+Table} (int \+\_\+nvalues, int \+\_\+arity)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_ace158d5a5531edf1cd562463d693ac08}\label{classltsy_1_1_truth_table_ace158d5a5531edf1cd562463d693ac08}} 
+\mbox{\hyperlink{classltsy_1_1_truth_table_ace158d5a5531edf1cd562463d693ac08}{Truth\+Table}} (int \+\_\+nvalues, int \+\_\+arity, const Cell\+Type \&default\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Build truth table giving its images array. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a4db45cb0ec44450193c2b91a82113459}\label{classltsy_1_1_truth_table_a4db45cb0ec44450193c2b91a82113459}} 
+\mbox{\hyperlink{classltsy_1_1_truth_table_a4db45cb0ec44450193c2b91a82113459}{Truth\+Table}} (int \+\_\+nvalues, int \+\_\+arity, const decltype(\+\_\+images)\&\+\_\+images)
+\begin{DoxyCompactList}\small\item\em Build truth table giving its images array. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a0a4302297c6be6fa2294b0335711bfea}\label{classltsy_1_1_truth_table_a0a4302297c6be6fa2294b0335711bfea}} 
+\mbox{\hyperlink{classltsy_1_1_truth_table_a0a4302297c6be6fa2294b0335711bfea}{Truth\+Table}} (int nvalues, const std\+::initializer\+\_\+list$<$ Truth\+Table\+Row $>$ \&rows)
+\begin{DoxyCompactList}\small\item\em Build a truth table from its rows. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a7222fc6539700499b38e23f38b0781f4}\label{classltsy_1_1_truth_table_a7222fc6539700499b38e23f38b0781f4}} 
+Cell\+Type {\bfseries at} (int i) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_ad12d729b3d0d42f77e710883f7f93fee}\label{classltsy_1_1_truth_table_ad12d729b3d0d42f77e710883f7f93fee}} 
+void {\bfseries set} (int i, const Cell\+Type \&v)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_ad4b6964f97674d96a4439464214da09f}\label{classltsy_1_1_truth_table_ad4b6964f97674d96a4439464214da09f}} 
+Cell\+Type {\bfseries at} (const std\+::vector$<$ int $>$ \&input) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a07f74f852ed52977ca167de0d6273748}\label{classltsy_1_1_truth_table_a07f74f852ed52977ca167de0d6273748}} 
+int {\bfseries arity} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a99a20a18dcfe4e6fcc6931866e85ec93}\label{classltsy_1_1_truth_table_a99a20a18dcfe4e6fcc6931866e85ec93}} 
+int {\bfseries nvalues} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_afd57814d4bf77ff1f36118e54fb48919}\label{classltsy_1_1_truth_table_afd57814d4bf77ff1f36118e54fb48919}} 
+void {\bfseries update} (const std\+::set$<$ \mbox{\hyperlink{classltsy_1_1_determinant}{Determinant}}$<$ Cell\+Type $>$$>$ \&dets)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a00a1c799b0adc105d4f1e21721f927c0}\label{classltsy_1_1_truth_table_a00a1c799b0adc105d4f1e21721f927c0}} 
+void {\bfseries update} (const std\+::set$<$ \mbox{\hyperlink{classltsy_1_1_determinant}{Determinant}}$<$ Cell\+Type $>$$>$ \&dets, std\+::function$<$ Cell\+Type(const Cell\+Type \&, const Cell\+Type \&)$>$ f)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_ac679e3794a3f78324d0c3f735077e390}\label{classltsy_1_1_truth_table_ac679e3794a3f78324d0c3f735077e390}} 
+std\+::set$<$ \mbox{\hyperlink{classltsy_1_1_determinant}{Determinant}}$<$ Cell\+Type $>$ $>$ {\bfseries get\+\_\+determinants} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a5e84298edd5628afecdd15040e36a918}\label{classltsy_1_1_truth_table_a5e84298edd5628afecdd15040e36a918}} 
+std\+::stringstream {\bfseries print} (std\+::function$<$ void(std\+::stringstream \&, const Cell\+Type \&)$>$ cell\+\_\+printer) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_ad0e7f5b5088a7861cc53be5e2c19a21b}\label{classltsy_1_1_truth_table_ad0e7f5b5088a7861cc53be5e2c19a21b}} 
+std\+::stringstream {\bfseries print} (const std\+::map$<$ int, std\+::string $>$ \&values\+\_\+map) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_table_a5a9a555dbe919ced8c417c1221ee5dfe}\label{classltsy_1_1_truth_table_a5a9a555dbe919ced8c417c1221ee5dfe}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classltsy_1_1_truth_table}{Truth\+Table}}$<$ Cell\+Type $>$ \&tt)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Cell\+Type = int$>$\newline
+class ltsy\+::\+Truth\+Table$<$ Cell\+Type $>$}
+
+Represents an {\ttfamily N\+Values}-\/valued {\ttfamily Arity}-\/ary truth table. 
+
+Values are taken to be 0,...,{\ttfamily N\+Values}-\/1.
+
+Only the images are stored. Each input tuple is represented by a natural number corresponding to the position of the tuple in the lexicographical order.
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/truth\+\_\+tables.\+h\end{DoxyCompactItemize}

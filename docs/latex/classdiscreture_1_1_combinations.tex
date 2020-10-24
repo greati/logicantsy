@@ -1,0 +1,377 @@
+\hypertarget{classdiscreture_1_1_combinations}{}\doxysection{discreture\+::Combinations$<$ Int\+Type, R\+A\+Container\+Int $>$ Class Template Reference}
+\label{classdiscreture_1_1_combinations}\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+
+
+class of all (n choose k) combinations of size k of the set \{0,1,...,n-\/1\}.  
+
+
+
+
+{\ttfamily \#include $<$Combinations.\+hpp$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}}
+\item 
+class \mbox{\hyperlink{classdiscreture_1_1_combinations_1_1reverse__iterator}{reverse\+\_\+iterator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a72f6ebf947a6e0d9ef234bc19b813aa9}\label{classdiscreture_1_1_combinations_a72f6ebf947a6e0d9ef234bc19b813aa9}} 
+using {\bfseries value\+\_\+type} = R\+A\+Container\+Int
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a645e41b977abfa851b23b2109f821192}\label{classdiscreture_1_1_combinations_a645e41b977abfa851b23b2109f821192}} 
+using {\bfseries combination} = value\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_ae58b1a5674a4767fc0cbaf18b8fe68a9}\label{classdiscreture_1_1_combinations_ae58b1a5674a4767fc0cbaf18b8fe68a9}} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_abc8f5fcec869aef906f9b2996ad0cc59}\label{classdiscreture_1_1_combinations_abc8f5fcec869aef906f9b2996ad0cc59}} 
+using {\bfseries size\+\_\+type} = difference\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_ad6361cb74d8c4e6f6dafe8ff61979c6d}\label{classdiscreture_1_1_combinations_ad6361cb74d8c4e6f6dafe8ff61979c6d}} 
+using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a4889e30a6378f2aa2c26250b73f6d852}\label{classdiscreture_1_1_combinations_a4889e30a6378f2aa2c26250b73f6d852}} 
+using {\bfseries const\+\_\+reverse\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_combinations_1_1reverse__iterator}{reverse\+\_\+iterator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdiscreture_1_1_combinations_aa59bd25d6834f5326e83eeaf0a459591}{Combinations}} (Int\+Type n, Int\+Type k)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+size\+\_\+type \mbox{\hyperlink{classdiscreture_1_1_combinations_a764ec7085f0f341630d20dfbe985f5cc}{size}} () const
+\begin{DoxyCompactList}\small\item\em The total number of combinations. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a6b421d3976dcffee6eac161c88b12993}\label{classdiscreture_1_1_combinations_a6b421d3976dcffee6eac161c88b12993}} 
+Int\+Type {\bfseries get\+\_\+n} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a0c300dc9c0071534dc57980ee5cb46de}\label{classdiscreture_1_1_combinations_a0c300dc9c0071534dc57980ee5cb46de}} 
+Int\+Type {\bfseries get\+\_\+k} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a305bf40c6327e79f2ee1d6919556a456}\label{classdiscreture_1_1_combinations_a305bf40c6327e79f2ee1d6919556a456}} 
+\mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}} {\bfseries begin} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a2f0ee3c9478dffb681ac7d39324b04b5}\label{classdiscreture_1_1_combinations_a2f0ee3c9478dffb681ac7d39324b04b5}} 
+const \mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}} {\bfseries end} () const
+\item 
+combination \mbox{\hyperlink{classdiscreture_1_1_combinations_a0df0a68057fdc04b974853d637f40db4}{operator\mbox{[}$\,$\mbox{]}}} (size\+\_\+type m) const
+\begin{DoxyCompactList}\small\item\em Access to the m-\/th combination (slow for iteration) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}} \mbox{\hyperlink{classdiscreture_1_1_combinations_a6c8ea345cd0be27cd2d5b25707de1a8c}{get\+\_\+iterator}} (const combination \&comb) const
+\begin{DoxyCompactList}\small\item\em Get an iterator whose current value is comb. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a335b009721fd6089daf78dbb5cfc4021}\label{classdiscreture_1_1_combinations_a335b009721fd6089daf78dbb5cfc4021}} 
+\mbox{\hyperlink{classdiscreture_1_1_combinations_1_1reverse__iterator}{reverse\+\_\+iterator}} {\bfseries rbegin} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_ac8ea16bf3457b69d63ba3cc60f10303a}\label{classdiscreture_1_1_combinations_ac8ea16bf3457b69d63ba3cc60f10303a}} 
+const \mbox{\hyperlink{classdiscreture_1_1_combinations_1_1reverse__iterator}{reverse\+\_\+iterator}} {\bfseries rend} () const
+\item 
+{\footnotesize template$<$class Partial\+Predicate $>$ }\\\mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}} \mbox{\hyperlink{classdiscreture_1_1_combinations_ac76d8ebe2f782b67a4c8ee213fad140b}{find\+\_\+if}} (Partial\+Predicate pred)
+\begin{DoxyCompactList}\small\item\em This is an efficient way to construct a combination of size k which fully satisfies a predicate. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Partial\+Predicate $>$ }\\auto \mbox{\hyperlink{classdiscreture_1_1_combinations_a72675472e843bf44ae00014c104ad4c1}{find\+\_\+all}} (Partial\+Predicate pred)
+\begin{DoxyCompactList}\small\item\em This is an efficient way to construct all combination of size k which fully satisfy a predicate. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Func $>$ }\\void \mbox{\hyperlink{classdiscreture_1_1_combinations_a614b06661c7e4b608497be368311a5e9}{for\+\_\+each}} (Func f) const
+\begin{DoxyCompactList}\small\item\em Applies function f to each element of $\ast$this. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_ab9929c070b578d0481b1147a5c4da3c1}\label{classdiscreture_1_1_combinations_ab9929c070b578d0481b1147a5c4da3c1}} 
+static void {\bfseries prev\+\_\+combination} (combination \&data)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a1eb4a3a0ddca4ea4d4f45eee9097d311}\label{classdiscreture_1_1_combinations_a1eb4a3a0ddca4ea4d4f45eee9097d311}} 
+static void {\bfseries prev\+\_\+combination} (combination \&data, Int\+Type last)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a8d5adb0cc7d341cf91f88d03ce02d00a}\label{classdiscreture_1_1_combinations_a8d5adb0cc7d341cf91f88d03ce02d00a}} 
+static void {\bfseries construct\+\_\+combination} (combination \&data, size\+\_\+type m)
+\item 
+static bool \mbox{\hyperlink{classdiscreture_1_1_combinations_a0238338b2fb67ae02035bd9aa7e06682}{compare}} (const combination \&lhs, const combination \&rhs)
+\begin{DoxyCompactList}\small\item\em Combination comparison \char`\"{}less than\char`\"{} operator. \end{DoxyCompactList}\item 
+static size\+\_\+type \mbox{\hyperlink{classdiscreture_1_1_combinations_a7d3753e97ef2fd7cc97b0c2a82d0232e}{get\+\_\+index}} (const combination \&comb)
+\begin{DoxyCompactList}\small\item\em Returns the ID of the iterator whose value is comb. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ next\+\_\+combination}\par
+{\em next\+\_\+combination, which has a few different overloads (depending on how much information you have about the current combination, for performance reasons)
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the current combination \\
+\hline
+{\em hint} & is an integer value that holds which index was last modified (in a previous call to next\+\_\+combination). It serves to speed things up. If unsure, use 0. The overload which only takes data automatically does this. \\
+\hline
+{\em last} & is data.\+size()-\/1. Tests show precomputing this value is highly beneficial to performance. Contrary to what you might be thinking, this is {\itshape N\+OT} premature optimization, since we\textquotesingle{}ve carefully measured the impact. \\
+\hline
+{\em n} & denotes that combinations should be taken from the set \{0,1,...,n-\/1\} \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em void} & is returned if starting with data, and a bool is returned if starting with n, depending on whether or not we are at the last possible combination. Note that n is not needed if you don\textquotesingle{}t need to know if this combination is the \char`\"{}last\char`\"{} one. \\
+\hline
+\end{DoxyRetVals}
+}\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a51f144811b213fbc38d7e037e255ed56}\label{classdiscreture_1_1_combinations_a51f144811b213fbc38d7e037e255ed56}} 
+static void {\bfseries next\+\_\+combination} (combination \&data)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a745e5aedb2dfd47a11741b3e8cc018e5}\label{classdiscreture_1_1_combinations_a745e5aedb2dfd47a11741b3e8cc018e5}} 
+static void {\bfseries next\+\_\+combination} (combination \&data, size\+\_\+type \&hint)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_ac0e310054b8c0b3e20dbd64b913b22cf}\label{classdiscreture_1_1_combinations_ac0e310054b8c0b3e20dbd64b913b22cf}} 
+static void {\bfseries next\+\_\+combination} (combination \&data, size\+\_\+type \&hint, Int\+Type last)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_afb08df70d3f2938752a89551a2bc7b0c}\label{classdiscreture_1_1_combinations_afb08df70d3f2938752a89551a2bc7b0c}} 
+static bool {\bfseries next\+\_\+combination} (Int\+Type n, combination \&data)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_aa6bf1550230ccb94aa649b1f0f999fa0}\label{classdiscreture_1_1_combinations_aa6bf1550230ccb94aa649b1f0f999fa0}} 
+static bool {\bfseries next\+\_\+combination} (Int\+Type n, combination \&data, size\+\_\+type \&hint)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a7489b75b956e4c43c6cc2347cf0f9812}\label{classdiscreture_1_1_combinations_a7489b75b956e4c43c6cc2347cf0f9812}} 
+static bool {\bfseries next\+\_\+combination} (Int\+Type n, combination \&data, size\+\_\+type \&hint, Int\+Type last)
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class Int\+Type = int, class R\+A\+Container\+Int = std\+::vector$<$\+Int\+Type$>$$>$\newline
+class discreture\+::\+Combinations$<$ Int\+Type, R\+A\+Container\+Int $>$}
+
+class of all (n choose k) combinations of size k of the set \{0,1,...,n-\/1\}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Int\+Type} & should be an integral type with enough space to store n and k. \\
+\hline
+{\em n} & the size of the set \\
+\hline
+{\em k} & the size of the combination (subset). Should be an integer such that n choose k is not bigger than the largest 64-\/bit int there is. For example, 70 choose 35 is already larger than the largest long int.\\
+\hline
+\end{DoxyParams}
+\hypertarget{classdiscreture_1_1_combinations_autotoc_md0}{}\doxysubsection{Example\+:}\label{classdiscreture_1_1_combinations_autotoc_md0}
+\begin{DoxyVerb}for (auto&& x : combinations(6,3))
+    cout << '[' << x << "] ";
+\end{DoxyVerb}
+
+
+Prints out\+: \begin{DoxyVerb}[ 0 1 2 ] [ 0 1 3 ] [ 0 2 3 ] [ 1 2 3 ] [ 0 1 4 ] [ 0 2 4 ] [ 1 2 4 ] [
+\end{DoxyVerb}
+ 0 3 4 \mbox{]} \mbox{[} 1 3 4 \mbox{]} \mbox{[} 2 3 4 \mbox{]} \mbox{[} 0 1 5 \mbox{]} \mbox{[} 0 2 5 \mbox{]} \mbox{[} 1 2 5 \mbox{]} \mbox{[} 0 3 5 \mbox{]} \mbox{[} 1 3 5 \mbox{]} \mbox{[} 2 3 5 \mbox{]} \mbox{[} 0 4 5 \mbox{]} \mbox{[} 1 4 5 \mbox{]} \mbox{[} 2 4 5 \mbox{]} \mbox{[} 3 4 5 \mbox{]}\hypertarget{classdiscreture_1_1_combinations_autotoc_md1}{}\doxysubsection{Example 2\+:}\label{classdiscreture_1_1_combinations_autotoc_md1}
+\begin{DoxyVerb}std::string A = "abcde";
+for (auto&& x : combinations(A,3))
+    cout << x << endl;
+Prints out:
+    a b c
+    a b d
+    a c d
+    b c d
+    a b e
+    a c e
+    b c e
+    a d e
+    b d e
+    c d e
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_aa59bd25d6834f5326e83eeaf0a459591}\label{classdiscreture_1_1_combinations_aa59bd25d6834f5326e83eeaf0a459591}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!Combinations@{Combinations}}
+\index{Combinations@{Combinations}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{Combinations()}{Combinations()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::\mbox{\hyperlink{classdiscreture_1_1_combinations}{Combinations}} (\begin{DoxyParamCaption}\item[{Int\+Type}]{n,  }\item[{Int\+Type}]{k }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & is an integer $>$= 0 \\
+\hline
+{\em k} & is an integer with 0 $<$= k $<$= n \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a0238338b2fb67ae02035bd9aa7e06682}\label{classdiscreture_1_1_combinations_a0238338b2fb67ae02035bd9aa7e06682}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!compare@{compare}}
+\index{compare@{compare}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{compare()}{compare()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+static bool \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::compare (\begin{DoxyParamCaption}\item[{const combination \&}]{lhs,  }\item[{const combination \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Combination comparison \char`\"{}less than\char`\"{} operator. 
+
+Assumes lhs and rhs have the same size. \begin{DoxyReturn}{Returns}
+true if lhs would appear before rhs in the normal iteration order, false otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a72675472e843bf44ae00014c104ad4c1}\label{classdiscreture_1_1_combinations_a72675472e843bf44ae00014c104ad4c1}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!find\_all@{find\_all}}
+\index{find\_all@{find\_all}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{find\_all()}{find\_all()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+template$<$class Partial\+Predicate $>$ \\
+auto \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::find\+\_\+all (\begin{DoxyParamCaption}\item[{Partial\+Predicate}]{pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+This is an efficient way to construct all combination of size k which fully satisfy a predicate. 
+
+This function is similar to find\+\_\+if, but it returns an object for which you can iterate over all combinations which satisfy Predicate pred,\hypertarget{classdiscreture_1_1_combinations_autotoc_md3}{}\doxysubsection{Example\+:}\label{classdiscreture_1_1_combinations_autotoc_md3}
+\begin{DoxyVerb}combinations X(30,4);
+auto vall = X.find_all([](const std::vector<int>& comb) -> bool
+{
+    if (comb.size() < 2) return true;
+    int k = comb.size();
+    if (comb[k-2] == 0) return false;
+    return (comb[k-1]%comb[k-2] == 0);
+});
+for (auto&& v : vall)
+    cout << v << endl;
+\end{DoxyVerb}
+
+
+Prints out\+: \mbox{[} 1 2 4 8 \mbox{]} \mbox{[} 1 2 4 12 \mbox{]} \mbox{[} 1 2 4 16 \mbox{]} \mbox{[} 1 2 4 20 \mbox{]} \mbox{[} 1 2 4 24 \mbox{]} \mbox{[} 1 2 4 28 \mbox{]} \mbox{[} 1 2 6 12 \mbox{]} \mbox{[} 1 2 6 18 \mbox{]} \mbox{[} 1 2 6 24 \mbox{]} \mbox{[} 1 2 8 16 \mbox{]} \mbox{[} 1 2 8 24 \mbox{]} \mbox{[} 1 2 10 20 \mbox{]} \mbox{[} 1 2 12 24 \mbox{]} \mbox{[} 1 2 14 28 \mbox{]} \mbox{[} 1 3 6 12 \mbox{]} \mbox{[} 1 3 6 18 \mbox{]} \mbox{[} 1 3 6 24 \mbox{]} \mbox{[} 1 3 9 18 \mbox{]} \mbox{[} 1 3 9 27 \mbox{]} \mbox{[} 1 3 12 24 \mbox{]} \mbox{[} 1 4 8 16 \mbox{]} \mbox{[} 1 4 8 24 \mbox{]} \mbox{[} 1 4 12 24 \mbox{]} \mbox{[} 1 5 10 20 \mbox{]} \mbox{[} 1 6 12 24 \mbox{]} \mbox{[} 1 7 14 28 \mbox{]} \mbox{[} 2 4 8 16 \mbox{]} \mbox{[} 2 4 8 24 \mbox{]} \mbox{[} 2 4 12 24 \mbox{]} \mbox{[} 2 6 12 24 \mbox{]} \mbox{[} 3 6 12 24 \mbox{]} which are all combinations for which every element is a divisor of the next element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pred} & should be a {\itshape partial predicate}\+: It takes a {\itshape partial} combination as a parameter and returns either true or false. At the end only combinations for which every subcombination evaluated to true are returned (the combination tree is prunned when Pred returns false)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An forward-\/iterable object which whose elements are all combinations which satisfy predicate pred. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_ac76d8ebe2f782b67a4c8ee213fad140b}\label{classdiscreture_1_1_combinations_ac76d8ebe2f782b67a4c8ee213fad140b}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!find\_if@{find\_if}}
+\index{find\_if@{find\_if}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{find\_if()}{find\_if()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+template$<$class Partial\+Predicate $>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}} \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::find\+\_\+if (\begin{DoxyParamCaption}\item[{Partial\+Predicate}]{pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+This is an efficient way to construct a combination of size k which fully satisfies a predicate. 
+
+This function is conceptually equivalent to std\+::find\+\_\+if(begin(), end(), Pred), but much faster if the predicate can be evaluated on a partial combination (so as to prune the search tree)\hypertarget{classdiscreture_1_1_combinations_autotoc_md2}{}\doxysubsection{Example\+:}\label{classdiscreture_1_1_combinations_autotoc_md2}
+\begin{DoxyVerb}combinations X(40,6);
+auto it = X.find_if([](const std::vector<int>& comb) -> bool
+{
+    for (int i = 0; i < comb.size()-1; ++i)
+    {
+        if (2*comb[i] + 1 > comb[i+1])
+            return false;
+    }
+    return true;
+});
+cout << *it << endl;
+\end{DoxyVerb}
+
+
+Prints out\+: \mbox{[} 0 1 3 7 15 31 \mbox{]}
+
+
+\begin{DoxyParams}{Parameters}
+{\em Pred} & should be what we call a {\itshape partial predicate}\+: It takes a combination as a parameter and returns either true or false.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An interator to a combination which fully satisfies the predicate. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a614b06661c7e4b608497be368311a5e9}\label{classdiscreture_1_1_combinations_a614b06661c7e4b608497be368311a5e9}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!for\_each@{for\_each}}
+\index{for\_each@{for\_each}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{for\_each()}{for\_each()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+template$<$class Func $>$ \\
+void \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::for\+\_\+each (\begin{DoxyParamCaption}\item[{Func}]{f }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Applies function f to each element of $\ast$this. 
+
+This is faster than doing manual iteration up to size 19. After that it falls back on manual iteration. Equivalent (but faster) to\+: for (auto\& x \+: ($\ast$this)) f(x);
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & is the function to apply. It should take a const combination\& as parameter. You can use lambdas, etc. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a7d3753e97ef2fd7cc97b0c2a82d0232e}\label{classdiscreture_1_1_combinations_a7d3753e97ef2fd7cc97b0c2a82d0232e}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!get\_index@{get\_index}}
+\index{get\_index@{get\_index}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{get\_index()}{get\_index()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+static size\+\_\+type \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::get\+\_\+index (\begin{DoxyParamCaption}\item[{const combination \&}]{comb }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns the ID of the iterator whose value is comb. 
+
+That is, the index of combination comb in the lexicographic order.
+
+Inverse of operator\mbox{[}\mbox{]}. If combination x is the m-\/th combination, then get\+\_\+index(x) is m. If one has a combinations\+::iterator, then the member function I\+D() should return the same value. \begin{DoxyReturn}{Returns}
+the index of combination comb, as if \mbox{\hyperlink{classdiscreture_1_1_combinations}{Combinations}} was a proper data structure 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This constructs the proper index from scratch. If an iterator is already known, calling ID on the iterator is much more efficient. 
+\end{DoxyNote}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a6c8ea345cd0be27cd2d5b25707de1a8c}\label{classdiscreture_1_1_combinations_a6c8ea345cd0be27cd2d5b25707de1a8c}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!get\_iterator@{get\_iterator}}
+\index{get\_iterator@{get\_iterator}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{get\_iterator()}{get\_iterator()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_combinations_1_1iterator}{iterator}} \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::get\+\_\+iterator (\begin{DoxyParamCaption}\item[{const combination \&}]{comb }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get an iterator whose current value is comb. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em comb} & the wanted combination \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator currently pointing at comb. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a0df0a68057fdc04b974853d637f40db4}\label{classdiscreture_1_1_combinations_a0df0a68057fdc04b974853d637f40db4}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+combination \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+type}]{m }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Access to the m-\/th combination (slow for iteration) 
+
+This is equivalent to calling $\ast$(begin()+m) 
+\begin{DoxyParams}{Parameters}
+{\em m} & should be an integer between 0 and \mbox{\hyperlink{classdiscreture_1_1_combinations_a764ec7085f0f341630d20dfbe985f5cc}{size()}}. Undefined behavior otherwise. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The m-\/th combination, as defined in the order of iteration (lexicographic) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdiscreture_1_1_combinations_a764ec7085f0f341630d20dfbe985f5cc}\label{classdiscreture_1_1_combinations_a764ec7085f0f341630d20dfbe985f5cc}} 
+\index{discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}!size@{size}}
+\index{size@{size}!discreture::Combinations$<$ IntType, RAContainerInt $>$@{discreture::Combinations$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+size\+\_\+type \mbox{\hyperlink{classdiscreture_1_1_combinations}{discreture\+::\+Combinations}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The total number of combinations. 
+
+\begin{DoxyReturn}{Returns}
+binomial(n,r) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+Discreture/Combinations.\+hpp\end{DoxyCompactItemize}

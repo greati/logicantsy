@@ -1,0 +1,46 @@
+\hypertarget{classltsy_1_1_combination_generator}{}\doxysection{ltsy\+::Combination\+Generator Class Reference}
+\label{classltsy_1_1_combination_generator}\index{ltsy::CombinationGenerator@{ltsy::CombinationGenerator}}
+Inheritance diagram for ltsy\+::Combination\+Generator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classltsy_1_1_combination_generator}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_ae8db241ae7e27d687b3dd1feb38afd64}\label{classltsy_1_1_combination_generator_ae8db241ae7e27d687b3dd1feb38afd64}} 
+{\bfseries Combination\+Generator} (int n)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_aa2fbf058dda60abd57c1a5c57a53ad1b}\label{classltsy_1_1_combination_generator_aa2fbf058dda60abd57c1a5c57a53ad1b}} 
+{\bfseries Combination\+Generator} (int n, int k)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_af85cd97c803424b45915898c7b15477f}\label{classltsy_1_1_combination_generator_af85cd97c803424b45915898c7b15477f}} 
+virtual decltype(\+\_\+current) {\bfseries first} ()=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_a9b8480820906cf51e8fe214c16199626}\label{classltsy_1_1_combination_generator_a9b8480820906cf51e8fe214c16199626}} 
+virtual decltype(\+\_\+current) {\bfseries next} ()=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_aede3069955ca600ec45e398e3d8f9359}\label{classltsy_1_1_combination_generator_aede3069955ca600ec45e398e3d8f9359}} 
+virtual void {\bfseries reset} ()=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_a26c167010e61f0e4c91904bdbf98a533}\label{classltsy_1_1_combination_generator_a26c167010e61f0e4c91904bdbf98a533}} 
+virtual bool {\bfseries has\+\_\+next} ()=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_ac3e4416462ff7c1337f50782bb876202}\label{classltsy_1_1_combination_generator_ac3e4416462ff7c1337f50782bb876202}} 
+int {\bfseries \+\_\+n}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_a9353bffc1f2c30f83626294a62212a3f}\label{classltsy_1_1_combination_generator_a9353bffc1f2c30f83626294a62212a3f}} 
+int {\bfseries \+\_\+k} = 0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_combination_generator_ab0c657fb3d1f8b959e5378ae37e55eef}\label{classltsy_1_1_combination_generator_ab0c657fb3d1f8b959e5378ae37e55eef}} 
+std\+::shared\+\_\+ptr$<$ std\+::vector$<$ int $>$ $>$ {\bfseries \+\_\+current}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/combinatorics/combinations.\+h\end{DoxyCompactItemize}

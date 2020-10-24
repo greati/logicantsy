@@ -1,0 +1,54 @@
+\hypertarget{classltsy_1_1_sequent}{}\doxysection{ltsy\+::Sequent$<$ Left\+Type, Right\+Type $>$ Class Template Reference}
+\label{classltsy_1_1_sequent}\index{ltsy::Sequent$<$ LeftType, RightType $>$@{ltsy::Sequent$<$ LeftType, RightType $>$}}
+
+
+Represents a typical sequent.  
+
+
+
+
+{\ttfamily \#include $<$sequents.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_afe350dc31892b5da79e7429e9eb9ecdc}\label{classltsy_1_1_sequent_afe350dc31892b5da79e7429e9eb9ecdc}} 
+{\bfseries Sequent} (Left\+Type left\+\_\+side, Right\+Type right\+\_\+side)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_a0f8d40594e464f633bb388d949fb52ba}\label{classltsy_1_1_sequent_a0f8d40594e464f633bb388d949fb52ba}} 
+void \mbox{\hyperlink{classltsy_1_1_sequent_a0f8d40594e464f633bb388d949fb52ba}{apply\+\_\+left}} (std\+::function$<$ void(const Left\+Type \&)$>$ f)
+\begin{DoxyCompactList}\small\item\em Apply function to the left side of the sequent. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_a8cb2ac85bec1e5cce7c942c01d9fb861}\label{classltsy_1_1_sequent_a8cb2ac85bec1e5cce7c942c01d9fb861}} 
+void \mbox{\hyperlink{classltsy_1_1_sequent_a8cb2ac85bec1e5cce7c942c01d9fb861}{apply\+\_\+right}} (std\+::function$<$ void(const Right\+Type \&)$>$ f)
+\begin{DoxyCompactList}\small\item\em Apply function to the right side of the sequent. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_a637f9fd1c4d77d31c117382074ef8cf7}\label{classltsy_1_1_sequent_a637f9fd1c4d77d31c117382074ef8cf7}} 
+Left\+Type \& \mbox{\hyperlink{classltsy_1_1_sequent_a637f9fd1c4d77d31c117382074ef8cf7}{left}} ()
+\begin{DoxyCompactList}\small\item\em Return the left side of the sequent. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_af7d485bfb93edb9db200bdf6230a28dc}\label{classltsy_1_1_sequent_af7d485bfb93edb9db200bdf6230a28dc}} 
+Right\+Type \& \mbox{\hyperlink{classltsy_1_1_sequent_af7d485bfb93edb9db200bdf6230a28dc}{right}} ()
+\begin{DoxyCompactList}\small\item\em Return the right side of the sequent. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_a9593dd3d8222bd0c9ecae5a7b7e84ab1}\label{classltsy_1_1_sequent_a9593dd3d8222bd0c9ecae5a7b7e84ab1}} 
+virtual void \mbox{\hyperlink{classltsy_1_1_sequent_a9593dd3d8222bd0c9ecae5a7b7e84ab1}{print}} () const =0
+\begin{DoxyCompactList}\small\item\em Print the sequent. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_a9643dde7ebf907979fdb8b05b43139f1}\label{classltsy_1_1_sequent_a9643dde7ebf907979fdb8b05b43139f1}} 
+Left\+Type {\bfseries \+\_\+left\+\_\+side}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_sequent_afeb0dd801b762c05ba357913203a3b51}\label{classltsy_1_1_sequent_afeb0dd801b762c05ba357913203a3b51}} 
+Right\+Type {\bfseries \+\_\+right\+\_\+side}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Left\+Type, typename Right\+Type$>$\newline
+class ltsy\+::\+Sequent$<$ Left\+Type, Right\+Type $>$}
+
+Represents a typical sequent. 
+
+The framework (Set-\/\+Set, Set-\/\+Fmla, Fmla-\/\+Fmla...) is determined by the chosen template parameters. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/proof-\/theory/sequents.\+h\end{DoxyCompactItemize}
