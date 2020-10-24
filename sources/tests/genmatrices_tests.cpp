@@ -266,4 +266,61 @@ namespace {
         }
         std::cout << c << std::endl;
     }
+
+
+    TEST(GenMatrices, GenMatrixValuationGenerator) {
+         ltsy::Signature cl_sig {
+            {"&", 2},
+            {"|", 2},
+            //{"~", 1},
+            //{"0", 0},
+        };
+        auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
+
+        auto tt_or =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0}, {0,1}, {1}, {0,1}});
+        auto tt_and = ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0}, {}, {0,1}, {1}});
+        //auto tt_neg = ltsy::TruthTable<std::set<int>>(4, 1, std::vector<std::set<int>>{{1}, {0}});
+        //auto tt_bot = ltsy::TruthTable<std::set<int>>(4, 0, std::vector<std::set<int>>{{0}});
+
+        //auto bot_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["0"], 
+        //        std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_bot));
+        auto or_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["|"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or));
+        auto and_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["&"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_and));
+        //auto neg_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["~"], 
+        //       std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_neg));
+
+
+       auto truth_interp = ltsy::SignatureTruthInterp<std::set<int>>(sig_ptr, 
+               {
+                   //bot_int,
+                   or_int,
+                   and_int,
+                   //neg_int
+               });
+
+        auto cl_matrix = 
+           std::make_shared<ltsy::GenMatrix>(std::set<int>{0,1}, 
+                   std::vector<std::set<int>>{std::set<int> {1}}, sig_ptr, 
+                   std::make_shared<ltsy::SignatureTruthInterp<std::set<int>>>(truth_interp));   
+
+       auto p = std::make_shared<ltsy::Prop>("p");
+       auto q = std::make_shared<ltsy::Prop>("q");
+       auto conn = std::make_shared<ltsy::Connective>("&", 2);
+       auto disj = std::make_shared<ltsy::Connective>("|", 2);
+       auto p_conn_q = std::make_shared<ltsy::Compound>(conn, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
+       auto p_disj_q = std::make_shared<ltsy::Compound>(disj, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
+
+       ltsy::GenMatrixValuationGenerator generator {cl_matrix, {p, q}};
+       int c = 0;
+       while (generator.has_next()) {
+           auto v = generator.next();
+           ltsy::GenMatrixEvaluator evaluator {v};
+           auto res = p_conn_q->accept(evaluator);
+           std::cout << res << std::endl;
+           c++;
+       }
+       std::cout << c << std::endl;
+    }
 };

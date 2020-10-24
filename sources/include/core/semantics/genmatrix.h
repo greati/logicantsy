@@ -109,7 +109,7 @@ namespace ltsy {
                 return ss;
             }
 
-            inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
+            inline decltype(_nmatrix_ptr) nmatrix_ptr() const {
                 return _nmatrix_ptr;
             }
             
@@ -188,6 +188,8 @@ namespace ltsy {
 
         public:
 
+            GenMatrixVarAssignmentGenerator() {/**/}
+
             GenMatrixVarAssignmentGenerator(decltype(_matrix) nmatrix, decltype(_props) props) : _props {props} {
                 std::atomic_store(&_matrix, nmatrix);
                 auto number_props = _props.size();
@@ -197,6 +199,10 @@ namespace ltsy {
 
             bool has_next() {
                 return _current_index < _total_valuations;
+            }
+
+            void reset() {
+                _current_index = 0;
             }
 
             std::shared_ptr<GenMatrixVarAssignment> next() {
@@ -230,22 +236,86 @@ namespace ltsy {
         private:
 
             std::shared_ptr<GenMatrixVarAssignment> _var_assignment; /* an assignment to variables */
-            std::shared_ptr<GenMatrix> _nmatrix_ptr; /* pointer to a PNmatrix */
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> 
                 _interpretation; /* pointer to a determinized truth interpretation*/
 
         public:
 
+            GenMatrixValuation() {}
+
             GenMatrixValuation(decltype(_var_assignment) var_assignment,
-                    decltype(_nmatrix_ptr) nmatrix_ptr, 
                     decltype(_interpretation) interpretation) :
-            _var_assignment {var_assignment}, _nmatrix_ptr {nmatrix_ptr}, _interpretation {interpretation} 
+            _var_assignment {var_assignment}, _interpretation {interpretation} 
             {/* empty */}
 
-            inline const decltype(_nmatrix_ptr) nmatrix_ptr() const {
-                return _nmatrix_ptr;
+            inline std::shared_ptr<GenMatrix> nmatrix_ptr() const {
+                return _var_assignment->nmatrix_ptr();
+            }
+
+            decltype(_interpretation) interpretation() const {
+                return _interpretation;
+            }
+
+            decltype(_var_assignment) var_assignment() const {
+                return _var_assignment;
+            }
+
+            void set_interpretation(decltype(_interpretation) interpretation) {
+                _interpretation = interpretation;
+            }
+
+            void set_var_assignment(decltype(_var_assignment) var_assignment) {
+                _var_assignment = var_assignment;
+            }
+
+            inline int operator()(const Prop& p) {
+                return (*_var_assignment)(p);
             }
     
+    };
+
+    /* Based on a variable assignment, visit a formula to
+     * determine the set of all truth values it
+     * may assume, considering every possible
+     * valuation.
+     *
+     * @author Vitor Greati
+     * */
+    class GenMatrixEvaluator : public FormulaVisitor<std::set<int>> {
+        private:
+            std::shared_ptr<GenMatrixValuation> _matrix_valuation_ptr;
+
+        public:
+
+            GenMatrixEvaluator(decltype(_matrix_valuation_ptr) matrix_valuation_ptr) :
+                _matrix_valuation_ptr {matrix_valuation_ptr} {/* empty */}
+
+            std::set<int> visit_prop(Prop* prop) override {
+                if (prop != nullptr) {
+                    return std::set<int>{(*_matrix_valuation_ptr)(*prop)};
+                } else throw std::logic_error("proposition points to null");
+            }
+
+            std::set<int> visit_compound(Compound* compound) override {
+               if (compound != nullptr) {
+                   auto connective = compound->connective();
+                   auto conn_interp = 
+                       _matrix_valuation_ptr->interpretation()
+                           ->get_interpretation(connective->symbol());
+                   auto components = compound->components();
+                   std::vector<std::set<int>> args;
+                   for (auto component : components) {
+                        args.push_back(component->accept(*this));
+                   }
+                   auto possible_arguments = utils::cartesian_product(args);
+                   std::set<int> result;
+                   for (const auto& arg : possible_arguments) {
+                      auto conn_values = conn_interp->at(arg);
+                      result.insert(conn_values.begin(), conn_values.end());
+                   }
+                   return result;
+               } else throw std::logic_error("compound points to null");
+            }
     };
 
 
@@ -382,6 +452,8 @@ namespace ltsy {
 
         public:
 
+            PartialDeterministicTruthInterpGenerator() {/**/}
+
             PartialDeterministicTruthInterpGenerator(decltype(_start_truth_interp) start_truth_interp) 
                 : _start_truth_interp {start_truth_interp} {
                 initialize_generators();    
@@ -430,6 +502,64 @@ namespace ltsy {
                 }
                 return false;
             }
+
+            inline decltype(_current) current() const { return _current; };
+    };
+
+    /* Given a pointer to a PNmatrix
+     * and a set of propositional variables,
+     *
+     * @author Vitor Greati
+     * */
+    class GenMatrixValuationGenerator {
+        
+        private:
+
+            std::shared_ptr<GenMatrix> _nmatrix_ptr; /* pointer to a PNmatrix */
+            std::vector<std::shared_ptr<Prop>> _props; /* propositional variables */
+            GenMatrixVarAssignmentGenerator _var_assign_generator;
+            PartialDeterministicTruthInterpGenerator _truth_interp_generator;
+            std::shared_ptr<GenMatrixValuation> _current;
+            bool finish = false;
+
+        public:
+
+            GenMatrixValuationGenerator(decltype(_nmatrix_ptr) nmatrix_ptr, const decltype(_props)& props)
+                : _nmatrix_ptr {nmatrix_ptr}, _props {props} {
+                _var_assign_generator = GenMatrixVarAssignmentGenerator {nmatrix_ptr, props};     
+                _truth_interp_generator = PartialDeterministicTruthInterpGenerator {nmatrix_ptr->interpretation()};
+                _current = std::make_shared<GenMatrixValuation>();
+            }
+
+            inline void reset() {
+                _var_assign_generator.reset();
+                _truth_interp_generator.reset();
+                finish = false;
+            }
+
+            inline bool has_next() {
+                return not finish;
+            }
+
+            inline decltype(_current) next() {
+                if (not has_next())
+                    throw std::logic_error("no next valuation to generate");
+
+                if (not _var_assign_generator.has_next()) {
+                    _var_assign_generator.reset();
+                    _current->set_interpretation(_truth_interp_generator.next());
+                }
+
+                auto assign = _var_assign_generator.next();
+                _current->set_var_assignment(assign);
+
+                if (not _var_assign_generator.has_next() and not _truth_interp_generator.has_next()) {
+                    finish = true; 
+                }
+
+                return _current;    
+            }
+    
     };
 
     /* Check if a sequent is valid on a given
