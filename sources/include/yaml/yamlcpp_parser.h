@@ -6,6 +6,7 @@
 #include "core/semantics/truth_tables.h"
 #include "core/parser/fmla/fmla_parser.h"
 #include "spdlog/spdlog.h"
+#include "core/semantics/genmatrix.h"
 #include <tuple>
 
 namespace ltsy {
@@ -46,6 +47,10 @@ namespace ltsy {
 
         const std::string TT_DEFAULT_VALUE_NAME = "default";
         const std::string TT_RESTRICTIONS_NAME = "restrictions";
+        const std::string PNMATRIX_NAME = "pnmatrix";
+        const std::string PNMATRIX_VALUES_NAME = "values";
+        const std::string PNMATRIX_DSETS_NAME = "distinguished_sets";
+        const std::string PNMATRIX_INTERP_NAME = "interpretation";
 
         std::shared_ptr<FmlaParser> make_fmla_parser(const YAML::Node& node) const {
             return std::make_shared<BisonFmlaParser>(BisonFmlaParser::Location {node.Mark().line, 
@@ -107,7 +112,7 @@ namespace ltsy {
             return r;
         }
 
-        std::tuple<std::shared_ptr<Compound>, std::vector<std::shared_ptr<Prop>>> parse_connective_representant(const YAML::Node& node) {
+        std::tuple<std::shared_ptr<Compound>, std::vector<std::shared_ptr<Prop>>> parse_connective_representant(const YAML::Node& node) const {
             auto fmla_parser = make_fmla_parser(node);
             auto conn_compound = node.as<std::string>();
             auto compound = std::dynamic_pointer_cast<Compound>(fmla_parser->parse(conn_compound));
@@ -166,6 +171,50 @@ namespace ltsy {
             } catch (YAML::ParserException &ye) {
                 throw;
             }
+        }
+
+        std::shared_ptr<GenMatrix> parse_gen_matrix(const YAML::Node& root) const {
+            auto pnmatrix_node = hard_require(root, PNMATRIX_NAME);             
+            std::map<int, std::string> _val_to_str;
+            std::map<std::string, int> _str_to_val;
+            // parse values
+            auto values_node = hard_require(pnmatrix_node, PNMATRIX_VALUES_NAME);
+            auto values = values_node.as<std::vector<std::string>>();
+            std::set<int> real_values;
+            auto nvalues = values.size();
+            for (int i {0}; i < nvalues; ++i) {
+                _str_to_val[values[i]] = i;
+                _val_to_str[i] = values[i];
+                real_values.insert(i);
+            }
+            // parse distinguished sets
+            std::vector<std::set<int>> distinguished_sets;
+            auto dsets_node = hard_require(pnmatrix_node, PNMATRIX_DSETS_NAME);
+            for (const auto& dset_node : dsets_node) {
+                std::set<int> dset;
+                auto dset_strs = dset_node.as<std::vector<std::string>>();
+                for (const auto& s : dset_strs) {
+                    dset.insert(_str_to_val[s]);
+                }
+                distinguished_sets.push_back(dset);
+            } 
+            // parse interpretations
+            auto interp_node = hard_require(pnmatrix_node, PNMATRIX_INTERP_NAME);
+            auto signature = std::make_shared<Signature>();
+            auto sig_truth_interp = std::make_shared<SignatureTruthInterp<std::set<int>>>(signature);
+            for (auto it_tt = interp_node.begin(); it_tt != interp_node.end(); ++it_tt) {
+                 // capture connective and variables
+                 auto [compound, collected_vars] = parse_connective_representant(it_tt->first);
+                 signature->add(compound->connective());
+                 // parse tt and interpret connectives
+                 NDTruthTable tt = parse_nd_truth_table(it_tt->second, real_values,
+                         compound->connective()->arity(), _str_to_val);
+                 auto truth_interp = std::make_shared<TruthInterp<std::set<int>>>(compound->connective(), std::make_shared<NDTruthTable>(tt));
+                 sig_truth_interp->try_interpret(truth_interp);
+            }
+            // create matrix
+            auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, signature, sig_truth_interp);
+            return gen_matrix;
         }
 
     };

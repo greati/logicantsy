@@ -69,8 +69,8 @@ namespace ltsy {
                    ->required()
                    ->check(CLI::ExistingFile);
                 this->callback([&]() {
-                    //TTAxiomatizerCLIHandler handler;
-                    //handler.handle(_file_path);
+                    SequentRuleSoundnessCLIHandler handler;
+                    handler.handle(_file_path);
                 });
             }
     };

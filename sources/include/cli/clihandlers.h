@@ -9,6 +9,7 @@
 #include "apps/apps_facade.h"
 #include "core/semantics/attitude_semantics.h"
 #include "core/common.h"
+#include "core/semantics/genmatrix.h"
 
 namespace ltsy {
 
@@ -193,6 +194,23 @@ namespace ltsy {
                     spdlog::critical(ye.what());
                 }
             };
+    };
+
+
+    class SequentRuleSoundnessCLIHandler {
+
+        public:
+            void handle(const std::string& yaml_path) {
+                YAMLCppParser parser;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+                    auto pnmatrix = parser.parse_gen_matrix(root);
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
     };
 
 };
