@@ -163,13 +163,13 @@ namespace {
        ltsy::NdSequentRule<std::set> seqrule1 ({seq21},{seq22});
        ltsy::NdSequentRule<std::set> seqrule2 ({seq31},{seq22});
         ltsy::NdSequentGenMatrixValidator<std::set> sequent_validator {cl_matrix, {0}};
-        auto [con_test, con_ce] = sequent_validator.is_rule_satisfiability_preserving(seqrule1);
-        std::cout << con_test << std::endl;
-        auto [disj_test, disj_ce] = sequent_validator.is_rule_satisfiability_preserving(seqrule2);
-        std::cout << disj_test << std::endl;
-        std::vector<ltsy::NdSequentGenMatrixValidator<std::set>::CounterExample> ce_list = *disj_ce;
-        for (const auto& e : ce_list) {
-            std::cout << e.val.print().str() << std::endl;
+        auto con_ce = sequent_validator.is_rule_satisfiability_preserving(seqrule1);
+        auto disj_ce = sequent_validator.is_rule_satisfiability_preserving(seqrule2);
+        if (disj_ce.has_value()) {
+            std::vector<ltsy::NdSequentGenMatrixValidator<std::set>::CounterExample> ce_list = *disj_ce;
+            for (const auto& e : ce_list) {
+              std::cout << e.val.print().str() << std::endl;
+            }
         }
 
        //ltsy::NdSequent<std::set> seq1 ({{}, {p_conn_q},{}, {p,q}});

@@ -112,8 +112,14 @@ namespace ltsy {
         private:
             std::vector<NdSequent<FmlaContainerT>> _premisses;
             std::vector<NdSequent<FmlaContainerT>> _conclusions;
+            std::string _name;
 
         public:
+
+            NdSequentRule(const std::string& name, const decltype(_premisses)& premisses,
+                    const decltype(_conclusions)& conclusions) : 
+                _name {name},
+                _premisses {premisses}, _conclusions {conclusions} {/* empty */}
 
             NdSequentRule(const decltype(_premisses)& premisses,
                     const decltype(_conclusions)& conclusions) :
@@ -121,6 +127,7 @@ namespace ltsy {
 
             inline decltype(_premisses) premisses() const { return _premisses; };
             inline decltype(_conclusions) conclusions() const { return _conclusions; };
+            inline decltype(_name) name() const { return _name; };
 
             std::set<std::shared_ptr<Prop>> collect_props() const {
                 std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>> props;

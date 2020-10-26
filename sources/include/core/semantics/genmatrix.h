@@ -632,7 +632,7 @@ namespace ltsy {
              *
              * @author Vitor Greati
              * */
-            std::pair<bool, std::optional<std::set<std::shared_ptr<Formula>>>> 
+            std::optional<std::set<std::shared_ptr<Formula>>>
             is_fmla_set_valid_under_valuation(const GenMatrixValuation val, 
                             const std::set<std::shared_ptr<Formula>>& fmls, const std::set<int>& dset) const {
                 std::set<std::shared_ptr<Formula>> fail_fmls;
@@ -642,15 +642,15 @@ namespace ltsy {
                    if (!utils::is_subset(fmla_values, dset))
                        fail_fmls.insert(f);
                 }
-                if (fail_fmls.empty()) return {true, std::nullopt};
-                else return std::pair{false, fail_fmls};               
+                if (fail_fmls.empty()) return std::nullopt;
+                else return std::make_optional<std::set<std::shared_ptr<Formula>>>(fail_fmls);               
             }
 
             bool
             is_valid_under_valuation(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
                      auto is_model_result = is_fmla_set_valid_under_valuation(val, seq[i], _d_sets[i]);
-                     if (not is_model_result.first) return true;
+                     if (is_model_result) return true;
                  }
                  return false;
             }
@@ -658,7 +658,7 @@ namespace ltsy {
             /* Test if a rule preserves satisfaction under
              * every possible valuation (aka rule soundness).
              * */
-            std::pair<bool, std::optional<std::vector<CounterExample>>> 
+            std::optional<std::vector<CounterExample>>
             is_rule_satisfiability_preserving(const NdSequentRule<FmlaContainerT>& rule, 
                     int max_counter_examples=1) const { 
                 std::vector<CounterExample> counter_examples;
@@ -691,10 +691,9 @@ namespace ltsy {
                         break;
                 }
                 if (counter_examples.empty())
-                    return std::make_pair<bool, std::optional<std::vector<CounterExample>>>(true, std::nullopt);
+                    return std::nullopt;
                 else
-                    return std::make_pair<bool, std::optional<std::vector<CounterExample>>>(false, 
-                        std::make_optional<std::vector<CounterExample>>(counter_examples));
+                    return std::make_optional<std::vector<CounterExample>>(counter_examples);
             }
     };
 
