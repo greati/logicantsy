@@ -211,7 +211,7 @@ namespace ltsy {
                     std::vector<NdSequentRule<std::set>> rules;
                     auto rules_node = parser.hard_require(root, RULES_TITLE);
                     for (const auto& rule_node : rules_node) {
-                        auto rule = parser.parse_nd_sequent_rule(rule_node);
+                        auto rule = parser.parse_nd_sequent_rule(rule_node.first.as<std::string>(), rule_node);
                         rules.push_back(*rule);
                     }
                 } catch (ParseException& pe) {

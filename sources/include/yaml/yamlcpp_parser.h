@@ -51,6 +51,8 @@ namespace ltsy {
         const std::string PNMATRIX_VALUES_NAME = "values";
         const std::string PNMATRIX_DSETS_NAME = "distinguished_sets";
         const std::string PNMATRIX_INTERP_NAME = "interpretation";
+        const std::string PREMISSES_SEQRULE_NAME = "premisses";
+        const std::string CONCLUSIONS_SEQRULE_NAME = "conclusions";
 
         std::shared_ptr<FmlaParser> make_fmla_parser(const YAML::Node& node) const {
             return std::make_shared<BisonFmlaParser>(BisonFmlaParser::Location {node.Mark().line, 
@@ -209,20 +211,44 @@ namespace ltsy {
                  // parse tt and interpret connectives
                  NDTruthTable tt = parse_nd_truth_table(it_tt->second, real_values,
                          compound->connective()->arity(), _str_to_val);
-                 auto truth_interp = std::make_shared<TruthInterp<std::set<int>>>(compound->connective(), std::make_shared<NDTruthTable>(tt));
+                 auto truth_interp = std::make_shared<TruthInterp<std::set<int>>>(compound->connective(), 
+                         std::make_shared<NDTruthTable>(tt));
                  sig_truth_interp->try_interpret(truth_interp);
             }
             // create matrix
-            auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, signature, sig_truth_interp);
+            auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, 
+                    signature, sig_truth_interp);
             return gen_matrix;
         }
 
-        std::shared_ptr<NdSequent<std::set>> parse_nd_sequent(const YAML::Node& node) {
-            return nullptr; 
+        std::shared_ptr<NdSequent<std::set>> parse_nd_sequent(const YAML::Node& seq_node) {
+            std::vector<std::set<std::shared_ptr<Formula>>> seq_places_sets;
+            for (const auto& seq_place_node : seq_node) {
+                std::set<std::shared_ptr<Formula>> fmlas_in_place;
+                auto fmlas_str = seq_place_node.as<std::vector<std::string>>();
+                for (const auto& fmla_str : fmlas_str) {
+                    auto fmla_parser = make_fmla_parser(seq_place_node);
+                    auto parsed_fmla = fmla_parser->parse(fmla_str);
+                    fmlas_in_place.insert(parsed_fmla);
+                }
+                seq_places_sets.push_back(fmlas_in_place);
+            }
+            return std::make_shared<NdSequent<std::set>>(seq_places_sets); 
         }
 
-        std::shared_ptr<NdSequentRule<std::set>> parse_nd_sequent_rule(const YAML::Node& node) {
-            return nullptr; 
+        std::shared_ptr<NdSequentRule<std::set>> parse_nd_sequent_rule(const std::string& name, 
+                const YAML::Node& rule_node) {
+            auto premisses_node = hard_require(rule_node, PREMISSES_SEQRULE_NAME);
+            std::vector<NdSequent<std::set>> premisses;
+            for (const auto& p : premisses_node) {
+                premisses.push_back(*parse_nd_sequent(p));
+            }
+            auto conclusions_node = hard_require(rule_node, CONCLUSIONS_SEQRULE_NAME);
+            std::vector<NdSequent<std::set>> conclusions;
+            for (const auto& c : conclusions_node) {
+                conclusions.push_back(*parse_nd_sequent(c));
+            }
+            return std::make_shared<NdSequentRule<std::set>>(name, premisses, conclusions); 
         }
 
     };
