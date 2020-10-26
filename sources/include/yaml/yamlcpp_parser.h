@@ -217,6 +217,14 @@ namespace ltsy {
             return gen_matrix;
         }
 
+        std::shared_ptr<NdSequent<std::set>> parse_nd_sequent(const YAML::Node& node) {
+            return nullptr; 
+        }
+
+        std::shared_ptr<NdSequentRule<std::set>> parse_nd_sequent_rule(const YAML::Node& node) {
+            return nullptr; 
+        }
+
     };
 
 };

@@ -199,12 +199,21 @@ namespace ltsy {
 
     class SequentRuleSoundnessCLIHandler {
 
+        private:
+            const std::string RULES_TITLE = "rules";
+
         public:
             void handle(const std::string& yaml_path) {
                 YAMLCppParser parser;
                 try {
                     auto root = parser.load_from_file(yaml_path);
                     auto pnmatrix = parser.parse_gen_matrix(root);
+                    std::vector<NdSequentRule<std::set>> rules;
+                    auto rules_node = parser.hard_require(root, RULES_TITLE);
+                    for (const auto& rule_node : rules_node) {
+                        auto rule = parser.parse_nd_sequent_rule(rule_node);
+                        rules.push_back(*rule);
+                    }
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());
                 } catch (YAML::Exception& ye) {
