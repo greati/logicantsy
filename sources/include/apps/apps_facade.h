@@ -20,9 +20,8 @@ namespace ltsy {
                     std::shared_ptr<GenMatrix> matrix,
                     const std::vector<int>& sequent_set_correspondence,
                     const std::vector<NdSequentRule<std::set>>& rules, 
-                    bool infer_complements=true,
                     int max_counter_examples=1) const {
-                NdSequentGenMatrixValidator<std::set> validator {matrix, sequent_set_correspondence, infer_complements}; 
+                NdSequentGenMatrixValidator<std::set> validator {matrix, sequent_set_correspondence}; 
                 std::map<std::string, std::optional<std::vector<NdSequentGenMatrixValidator<std::set>::CounterExample>>>
                     result;
                 for (const auto& r : rules) {

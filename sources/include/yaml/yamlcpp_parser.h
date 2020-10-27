@@ -49,6 +49,7 @@ namespace ltsy {
         const std::string TT_RESTRICTIONS_NAME = "restrictions";
         const std::string PNMATRIX_NAME = "pnmatrix";
         const std::string PNMATRIX_VALUES_NAME = "values";
+        const std::string PNMATRIX_INFER_COMPLEMENTS_NAME = "infer_complements";
         const std::string PNMATRIX_DSETS_NAME = "distinguished_sets";
         const std::string PNMATRIX_INTERP_NAME = "interpretation";
         const std::string PREMISSES_SEQRULE_NAME = "premisses";
@@ -215,9 +216,12 @@ namespace ltsy {
                          std::make_shared<NDTruthTable>(tt));
                  sig_truth_interp->try_interpret(truth_interp);
             }
+            // parse infer complements
+            bool infer_complements = hard_require(pnmatrix_node, PNMATRIX_INFER_COMPLEMENTS_NAME).as<bool>();
             // create matrix
             auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, 
-                    signature, sig_truth_interp);
+                    signature, sig_truth_interp, infer_complements);
+            gen_matrix->set_val_to_str(_val_to_str);
             return gen_matrix;
         }
 

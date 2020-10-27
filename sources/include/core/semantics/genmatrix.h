@@ -28,18 +28,30 @@ namespace ltsy {
             std::vector<std::set<int>> _distinguished_sets;
             std::shared_ptr<Signature> _signature;
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> _interpretation;
+            std::map<int, std::string> _val_to_str;
+            std::map<std::string, int> _str_to_val;
 
         public:
 
             GenMatrix(const decltype(_values)& values, const decltype(_distinguished_sets)& distinguished_sets, 
                     decltype(_signature) signature,
-                    decltype(_interpretation) interpretation)
-                : _values {values}, _distinguished_sets {distinguished_sets}, 
-                _signature {signature}, _interpretation {interpretation} {
+                    decltype(_interpretation) interpretation,
+                    bool infer_complements = true)
+                : _values {values}, _signature {signature}, _interpretation {interpretation} {
+                    // filling distinguished sets
+                    for (const auto& dset : distinguished_sets) {
+                        _distinguished_sets.push_back(dset);
+                        if (infer_complements)
+                            _distinguished_sets.push_back(utils::set_difference(values, dset));
+                    }
             }
 
             GenMatrix(const decltype(_values)& values, const decltype(_distinguished_sets)& distinguished_sets)
                     : GenMatrix {values, distinguished_sets, nullptr, nullptr} {}
+
+            inline void set_val_to_str(decltype(_val_to_str) val_to_str) { _val_to_str = val_to_str; }
+
+            inline decltype(_val_to_str) val_to_str() const { return _val_to_str; }
 
             inline decltype(_values) values() const { return _values; }
 
@@ -101,12 +113,20 @@ namespace ltsy {
                 return _valuation_map == other._valuation_map;
             }
 
-            std::stringstream print() const {
+            std::stringstream print(const std::map<int, std::string>& values_map) const {
                 std::stringstream ss;
-                for (auto& [k, v] : _valuation_map) {
-                    ss << k.symbol() << " -> " << v << std::endl;
+                for (const auto& [k, v] : _valuation_map) {
+                    ss << k.symbol() << " -> " << values_map.find(v)->second << std::endl;
                 }
                 return ss;
+            }
+
+            std::stringstream print() const {
+                std::map<int, std::string> values_map;
+                for (const auto& v : _nmatrix_ptr->values()) {
+                    values_map[v] = std::to_string(v); 
+                }
+                return print(values_map);
             }
 
             inline decltype(_nmatrix_ptr) nmatrix_ptr() const {
@@ -272,9 +292,15 @@ namespace ltsy {
                 return (*_var_assignment)(p);
             }
 
+            std::stringstream print(const std::map<int, std::string>& values_map) const {
+                std::stringstream ss;
+                ss << _interpretation->print(values_map).str() << std::endl;
+                ss << _var_assignment->print(values_map).str() << std::endl;
+                return ss;
+            }
+
             std::stringstream print() const {
                 std::stringstream ss;
-                ss << *(_interpretation) << std::endl;
                 ss << _var_assignment->print().str() << std::endl;
                 return ss;
             }
@@ -615,14 +641,9 @@ namespace ltsy {
              * the sets.
              * */
             NdSequentGenMatrixValidator(decltype(_matrix) matrix,
-                    const decltype(_sequent_set_correspondence)& sequent_set_correspondence,
-                    bool infer_complements=true) :
+                    const decltype(_sequent_set_correspondence)& sequent_set_correspondence) :
                _matrix {matrix}, _sequent_set_correspondence {sequent_set_correspondence} {
-                for (int i = 0; i < sequent_set_correspondence.size(); ++i) {
-                    _d_sets.push_back(matrix->distinguished_sets()[i]);
-                    if (infer_complements)
-                        _d_sets.push_back(utils::set_difference(matrix->values(), matrix->distinguished_sets()[i]));
-                }
+                   _d_sets = matrix->distinguished_sets();
             }
 
             /* Given a variable assignment, determines
@@ -666,9 +687,9 @@ namespace ltsy {
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props};
                 while (generator.has_next()) {
+                    auto val = generator.next();
                     // check validity of premisses
                     bool premisses_valid = true;
-                    auto val = generator.next();
                     for (const auto& p : rule.premisses()) {
                         if (not is_valid_under_valuation(*val, p)) {
                             premisses_valid = false;

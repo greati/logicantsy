@@ -2,6 +2,7 @@ pnmatrix:
   values: [0, 1, 2]
   distinguished_sets:
     - [1, 2]
+  infer_complements: true
   interpretation:
     p and q:
       default: [0]
@@ -27,10 +28,16 @@ pnmatrix:
       default: [1,2]
       restrictions:
         - [2]: [0]
-infer_complements: true
+max_counter_models: 1
+sequent_dset_correspondence: [0, 1]
 rules:
   r1:
     premisses:
       - [[], [p and neg p]]
     conclusions:
       - [[], [q]]
+  r2:
+    premisses:
+      - [[], [p and q]]
+    conclusions:
+      - [[], [p]]

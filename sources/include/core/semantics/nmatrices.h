@@ -68,6 +68,14 @@ namespace ltsy {
                 //os << (*ti._truth_table);
                 return os;  
             }
+
+            std::stringstream print(const std::map<int, std::string>& values_map) const {
+                std::stringstream ss;
+                ss << _connective->symbol();
+                ss << std::string(":") << std::endl;
+                ss << _truth_table->print(values_map).str();
+                return ss;
+            }
     };
 
     class TruthInterpGenerator {
@@ -157,6 +165,13 @@ namespace ltsy {
                     os << (*t) << std::endl;
                 }
                 return os;  
+            }
+            std::stringstream print(const std::map<int, std::string>& values_map) const {
+                std::stringstream ss;
+                for(auto& [s, t] : _truth_interps) {
+                    ss << t->print(values_map).str() << std::endl;
+                }
+                return ss;
             }
     };
 
