@@ -8,6 +8,7 @@
 #include "core/semantics/nmatrices.h"
 #include "core/proof-theory/ndsequents.h"
 #include <set>
+#include "external/ProgressBar/ProgressBar.hpp"
 
 namespace ltsy {
     
@@ -204,7 +205,7 @@ namespace ltsy {
             std::shared_ptr<GenMatrix> _matrix; 
             std::vector<std::shared_ptr<Prop>> _props;
             int _current_index = 0;
-            int _total_valuations;
+            unsigned long long int _total_valuations;
 
         public:
 
@@ -237,6 +238,8 @@ namespace ltsy {
                 ++_current_index;
                 return std::make_shared<GenMatrixVarAssignment>(_matrix, val_map); 
             }
+
+            inline decltype(_total_valuations) total() const {return _total_valuations; };
     };
 
     /* A generalized matrix valuation. 
@@ -375,6 +378,7 @@ namespace ltsy {
             int qtd_in_max = 0;
             bool finished = false;
             bool first = true;
+            unsigned long long int _total = 1;
 
         public:
 
@@ -382,6 +386,7 @@ namespace ltsy {
                 : _tt_start {tt_start} {
                  _current = std::make_shared<TruthTable<std::set<int>>>(tt_start->nvalues(),
                          tt_start->arity());
+                _total = 1;
                 // fill in the possible images
                 auto determinants = _tt_start->get_determinants();
                 for (const auto& d : determinants) {
@@ -391,6 +396,7 @@ namespace ltsy {
                     else
                         for (const auto& e : d.get_last())
                             imgs.push_back({e});
+                    _total *= imgs.size();
                     _possible_images.push_back(imgs);
                     _current_indices.push_back(0);
                 }
@@ -455,6 +461,8 @@ namespace ltsy {
                     if (_possible_images[i].size() == 1) qtd_in_max++;
                 }
             }
+
+            inline decltype(_total) total() const {return _total; };
     };
 
     /* Determinize an entire (partial) non-deterministic 
@@ -469,6 +477,7 @@ namespace ltsy {
             std::map<Symbol, PartialDeterministicTruthTableGenerator> _generators;
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> _current;
             std::shared_ptr<Signature> _signature;
+            unsigned long long int _total = 0;
 
             void initialize_generators() {
                 for (auto [symbol, connective] : *(_signature)) {
@@ -480,10 +489,13 @@ namespace ltsy {
 
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> truth_interp_from_generators() {
                 auto sti = std::make_shared<SignatureTruthInterp<std::set<int>>>(_signature);
-                for (auto& [symbol, gen] : _generators)
+                _total = 1;
+                for (auto& [symbol, gen] : _generators) {
                     sti->try_interpret(
                             std::make_shared<TruthInterp<std::set<int>>>((*_signature)[symbol], gen.next()), 
                             true);
+                    _total *= gen.total();
+                }
                 (*(_generators.begin())).second.reset();
                 return sti;
             }
@@ -550,6 +562,8 @@ namespace ltsy {
             }
 
             inline decltype(_current) current() const { return _current; };
+
+            inline decltype(_total) total() const {return _total; };
     };
 
     /* Given a pointer to a PNmatrix
@@ -568,6 +582,7 @@ namespace ltsy {
             std::shared_ptr<GenMatrixValuation> _current;
             bool finish = false;
             std::shared_ptr<Signature> _signature;
+            unsigned long long int _total = 0;
 
         public:
 
@@ -587,9 +602,12 @@ namespace ltsy {
                 _current = std::make_shared<GenMatrixValuation>();
                 _var_assign_generator.reset();
                 _truth_interp_generator.reset();
+                _total = _var_assign_generator.total() * _truth_interp_generator.total();
                 _current->set_interpretation(_truth_interp_generator.next());
                 finish = false;
             }
+
+            inline decltype(_total) total() const { return _total; }
 
             inline bool has_next() {
                 return not finish;
@@ -713,13 +731,21 @@ namespace ltsy {
             is_rule_satisfiability_preserving(
                     const NdSequentRule<FmlaContainerT>& rule, 
                     const Signature& sig,
-                    int max_counter_examples=1) const { 
+                    int max_counter_examples=1,
+                    std::optional<progresscpp::ProgressBar> progress_bar = std::nullopt) const { 
                 std::vector<CounterExample> counter_examples;
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props, std::make_shared<Signature>(sig)};
+                if (progress_bar)
+                    (*progress_bar).set_total_ticks(generator.total());
                 while (generator.has_next()) {
                     auto val = generator.next();
+                    // update progress
+                    if (progress_bar) {
+                        ++(*progress_bar);
+                        (*progress_bar).display();
+                    }
                     // check validity of premisses
                     bool premisses_valid = true;
                     for (const auto& p : rule.premisses()) {
@@ -744,6 +770,8 @@ namespace ltsy {
                     if (counter_examples.size() >= max_counter_examples)
                         break;
                 }
+                if (progress_bar)
+                    (*progress_bar).done();
                 if (counter_examples.empty())
                     return std::nullopt;
                 else

@@ -225,7 +225,8 @@ namespace ltsy {
                     for (const auto& rule : rules) {
                         spdlog::info("Checking for rule " + rule.name() + "...");
                         auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
-                                    pnmatrix, seq_dset_corr, {rule}, max_counter_models
+                                    pnmatrix, seq_dset_corr, {rule}, max_counter_models,
+                                    std::make_optional<progresscpp::ProgressBar>(70)
                                 );
                         auto result = soundness_results[rule.name()];
                         if (not result) {

@@ -20,13 +20,14 @@ namespace ltsy {
                     std::shared_ptr<GenMatrix> matrix,
                     const std::vector<int>& sequent_set_correspondence,
                     const std::vector<NdSequentRule<std::set>>& rules, 
-                    int max_counter_examples=1) const {
+                    int max_counter_examples=1,
+                    std::optional<progresscpp::ProgressBar> progress_bar = std::nullopt) const {
                 NdSequentGenMatrixValidator<std::set> validator {matrix, sequent_set_correspondence}; 
                 std::map<std::string, std::optional<std::vector<NdSequentGenMatrixValidator<std::set>::CounterExample>>>
                     result;
                 for (const auto& r : rules) {
                     Signature sig = r.infer_signature();
-                    result[r.name()] = validator.is_rule_satisfiability_preserving(r, sig, max_counter_examples);  
+                    result[r.name()] = validator.is_rule_satisfiability_preserving(r, sig, max_counter_examples, progress_bar);  
                 }
                 return result;
             }
