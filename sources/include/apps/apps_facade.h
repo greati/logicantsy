@@ -25,7 +25,8 @@ namespace ltsy {
                 std::map<std::string, std::optional<std::vector<NdSequentGenMatrixValidator<std::set>::CounterExample>>>
                     result;
                 for (const auto& r : rules) {
-                    result[r.name()] = validator.is_rule_satisfiability_preserving(r, max_counter_examples);  
+                    Signature sig = r.infer_signature();
+                    result[r.name()] = validator.is_rule_satisfiability_preserving(r, sig, max_counter_examples);  
                 }
                 return result;
             }

@@ -96,6 +96,22 @@ namespace ltsy {
                 os << std::string(" ]");
                 return os; 
             }
+
+            /* Infer a signature from the formulas present
+             * in the sequent.
+             *
+             * @return a signature having connectives appearing in the
+             * sequent
+             * */
+            Signature infer_signature() const {
+                SignatureCollector collector;
+                for (const auto& fmls : _sequent_fmlas) {
+                    for (const auto& fmla : fmls) {
+                        fmla->accept(collector);
+                    }      
+                }
+                return collector.get_collected_signature();
+            }
     };
 
     template class NdSequent<std::vector>;
@@ -141,6 +157,21 @@ namespace ltsy {
                 }
                 std::set<std::shared_ptr<Prop>> result {props.begin(), props.end()};
                 return result;
+            }
+
+            /* Infer a signature from the formulas present
+             * in the rule.
+             *
+             * @return a signature having connectives appearing in the
+             * rule
+             * */
+            Signature infer_signature() const {
+                Signature sig;
+                for (const auto& p : _premisses)
+                    sig.join(p.infer_signature());
+                for (const auto& c : _conclusions) 
+                    sig.join(c.infer_signature());
+                return sig;
             }
 
     };

@@ -462,10 +462,10 @@ namespace ltsy {
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> _start_truth_interp;
             std::map<Symbol, PartialDeterministicTruthTableGenerator> _generators;
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> _current;
+            std::shared_ptr<Signature> _signature;
 
             void initialize_generators() {
-                auto signature = _start_truth_interp->signature();
-                for (auto [symbol, connective] : (*signature)) {
+                for (auto [symbol, connective] : *(_signature)) {
                     _generators.insert({symbol, 
                             PartialDeterministicTruthTableGenerator(
                                     this->_start_truth_interp->get_interpretation(symbol)->truth_table())}); 
@@ -473,11 +473,10 @@ namespace ltsy {
             }
 
             std::shared_ptr<SignatureTruthInterp<std::set<int>>> truth_interp_from_generators() {
-                auto signature = _start_truth_interp->signature();
-                auto sti = std::make_shared<SignatureTruthInterp<std::set<int>>>(signature);
+                auto sti = std::make_shared<SignatureTruthInterp<std::set<int>>>(_signature);
                 for (auto& [symbol, gen] : _generators)
                     sti->try_interpret(
-                            std::make_shared<TruthInterp<std::set<int>>>((*signature)[symbol], gen.next()), 
+                            std::make_shared<TruthInterp<std::set<int>>>((*_signature)[symbol], gen.next()), 
                             true);
                 (*(_generators.begin())).second.reset();
                 return sti;
@@ -487,11 +486,21 @@ namespace ltsy {
 
             PartialDeterministicTruthInterpGenerator() {/**/}
 
-            PartialDeterministicTruthInterpGenerator(decltype(_start_truth_interp) start_truth_interp) 
-                : _start_truth_interp {start_truth_interp} {
+            /* Constructor that accepts an interpretation of
+             * a sub-signature.
+             * */
+            PartialDeterministicTruthInterpGenerator(decltype(_start_truth_interp) start_truth_interp,
+                    decltype(_signature) signature) 
+                : _start_truth_interp {start_truth_interp}, _signature {signature} {
                 initialize_generators();    
                 reset();
             }
+
+            /* Constructor that simply takes an interpretation,
+             * using its signature.
+             * */
+            PartialDeterministicTruthInterpGenerator(decltype(_start_truth_interp) start_truth_interp) 
+                : PartialDeterministicTruthInterpGenerator {start_truth_interp, start_truth_interp->signature()} {}
 
             /* Produce next interpretation.
              * */
@@ -499,11 +508,9 @@ namespace ltsy {
                 if (not has_next())
                     throw std::logic_error("no truth interpretation available");
                 
-                auto signature = _start_truth_interp->signature();
-
                 auto make_truth_interp = [&](const Symbol& symbol, 
                         std::shared_ptr<TruthTable<std::set<int>>> tt) {
-                    return std::make_shared<TruthInterp<std::set<int>>>((*signature)[symbol], tt);
+                    return std::make_shared<TruthInterp<std::set<int>>>((*_signature)[symbol], tt);
                 };
 
                 for (auto& [symbol, generator] : _generators) {
@@ -554,15 +561,21 @@ namespace ltsy {
             PartialDeterministicTruthInterpGenerator _truth_interp_generator;
             std::shared_ptr<GenMatrixValuation> _current;
             bool finish = false;
+            std::shared_ptr<Signature> _signature;
 
         public:
 
-            GenMatrixValuationGenerator(decltype(_nmatrix_ptr) nmatrix_ptr, const decltype(_props)& props)
-                : _nmatrix_ptr {nmatrix_ptr}, _props {props} {
+            GenMatrixValuationGenerator(decltype(_nmatrix_ptr) nmatrix_ptr, 
+                    const decltype(_props)& props, decltype(_signature) signature)
+                : _nmatrix_ptr {nmatrix_ptr}, _props {props}, _signature {signature} {
                 _var_assign_generator = GenMatrixVarAssignmentGenerator {nmatrix_ptr, props};     
-                _truth_interp_generator = PartialDeterministicTruthInterpGenerator {nmatrix_ptr->interpretation()};
+                _truth_interp_generator = PartialDeterministicTruthInterpGenerator {nmatrix_ptr->interpretation(), signature};
                 reset();
             }
+
+            GenMatrixValuationGenerator(decltype(_nmatrix_ptr) nmatrix_ptr, 
+                    const decltype(_props)& props)
+                : GenMatrixValuationGenerator {nmatrix_ptr, props, nmatrix_ptr->signature()} {}
 
             inline void reset() {
                 _current = std::make_shared<GenMatrixValuation>();
@@ -676,16 +689,29 @@ namespace ltsy {
                  return false;
             }
 
+
             /* Test if a rule preserves satisfaction under
              * every possible valuation (aka rule soundness).
              * */
             std::optional<std::vector<CounterExample>>
-            is_rule_satisfiability_preserving(const NdSequentRule<FmlaContainerT>& rule, 
+            is_rule_satisfiability_preserving(
+                    const NdSequentRule<FmlaContainerT>& rule, 
+                    int max_counter_examples=1) const { 
+                return is_rule_satisfiability_preserving(rule, *(_matrix->signature()), max_counter_examples);
+            }
+
+            /* Test if a rule preserves satisfaction under
+             * every possible valuation (aka rule soundness).
+             * */
+            std::optional<std::vector<CounterExample>>
+            is_rule_satisfiability_preserving(
+                    const NdSequentRule<FmlaContainerT>& rule, 
+                    const Signature& sig,
                     int max_counter_examples=1) const { 
                 std::vector<CounterExample> counter_examples;
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
-                ltsy::GenMatrixValuationGenerator generator {_matrix, props};
+                ltsy::GenMatrixValuationGenerator generator {_matrix, props, std::make_shared<Signature>(sig)};
                 while (generator.has_next()) {
                     auto val = generator.next();
                     // check validity of premisses
