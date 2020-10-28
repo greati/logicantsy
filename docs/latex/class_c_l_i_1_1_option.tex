@@ -1,0 +1,477 @@
+\hypertarget{class_c_l_i_1_1_option}{}\doxysection{C\+LI\+::Option Class Reference}
+\label{class_c_l_i_1_1_option}\index{CLI::Option@{CLI::Option}}
+Inheritance diagram for C\+LI\+::Option\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_l_i_1_1_option}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{Indent}\textbf{ Basic}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a72d6fb10f92fb81fc7a10327ce1a7da6}\label{class_c_l_i_1_1_option_a72d6fb10f92fb81fc7a10327ce1a7da6}} 
+{\bfseries Option} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} \&)=delete
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ab98149dd8e47cf117ad0d705ee79c83a}\label{class_c_l_i_1_1_option_ab98149dd8e47cf117ad0d705ee79c83a}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} \&)=delete
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a154543609c45d9c59c69991a08ca272b}\label{class_c_l_i_1_1_option_a154543609c45d9c59c69991a08ca272b}} 
+std\+::size\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_option_a154543609c45d9c59c69991a08ca272b}{count}} () const
+\begin{DoxyCompactList}\small\item\em Count the total number of times an option was passed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af5677ee4a55c2a85784f64198db6b452}\label{class_c_l_i_1_1_option_af5677ee4a55c2a85784f64198db6b452}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_af5677ee4a55c2a85784f64198db6b452}{empty}} () const
+\begin{DoxyCompactList}\small\item\em True if the option was not passed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ab73e846fb3a78ac7eff8b6cd6afb24a1}\label{class_c_l_i_1_1_option_ab73e846fb3a78ac7eff8b6cd6afb24a1}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option_ab73e846fb3a78ac7eff8b6cd6afb24a1}{operator bool}} () const
+\begin{DoxyCompactList}\small\item\em This class is true if option is passed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_abbd36aaff5cdca8b10346bafed51da39}\label{class_c_l_i_1_1_option_abbd36aaff5cdca8b10346bafed51da39}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_option_abbd36aaff5cdca8b10346bafed51da39}{clear}} ()
+\begin{DoxyCompactList}\small\item\em Clear the parsed results (mostly for testing) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Setting options}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af75c26433baa09c7c762bfb9eb466215}\label{class_c_l_i_1_1_option_af75c26433baa09c7c762bfb9eb466215}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_af75c26433baa09c7c762bfb9eb466215}{expected}} (int value)
+\begin{DoxyCompactList}\small\item\em Set the number of expected arguments. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ac471b8485c4df8c0411880a58a6f6e8a}\label{class_c_l_i_1_1_option_ac471b8485c4df8c0411880a58a6f6e8a}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_ac471b8485c4df8c0411880a58a6f6e8a}{expected}} (int value\+\_\+min, int value\+\_\+max)
+\begin{DoxyCompactList}\small\item\em Set the range of expected arguments. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aa49c5dadba733571b8b92e713347329f}\label{class_c_l_i_1_1_option_aa49c5dadba733571b8b92e713347329f}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aa49c5dadba733571b8b92e713347329f}{allow\+\_\+extra\+\_\+args}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Set the value of allow\+\_\+extra\+\_\+args which allows extra value arguments on the flag or option to be included with each instance. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a784f66cb9371753ddeb8df59c85cb490}\label{class_c_l_i_1_1_option_a784f66cb9371753ddeb8df59c85cb490}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a784f66cb9371753ddeb8df59c85cb490}{get\+\_\+allow\+\_\+extra\+\_\+args}} () const
+\begin{DoxyCompactList}\small\item\em Get the current value of allow extra args. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a3f3097fd90b0cf348f95204fd67bc72e}\label{class_c_l_i_1_1_option_a3f3097fd90b0cf348f95204fd67bc72e}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a3f3097fd90b0cf348f95204fd67bc72e}{run\+\_\+callback\+\_\+for\+\_\+default}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Set the value of run\+\_\+callback\+\_\+for\+\_\+default which controls whether the callback function should be called to set the default This is controlled automatically but could be manipulated by the user. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a1ed32a17d1e82cae7ff2419f34994856}\label{class_c_l_i_1_1_option_a1ed32a17d1e82cae7ff2419f34994856}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a1ed32a17d1e82cae7ff2419f34994856}{get\+\_\+run\+\_\+callback\+\_\+for\+\_\+default}} () const
+\begin{DoxyCompactList}\small\item\em Get the current value of run\+\_\+callback\+\_\+for\+\_\+default. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aef9822a0bd4b5f72cf08df196749d3a7}\label{class_c_l_i_1_1_option_aef9822a0bd4b5f72cf08df196749d3a7}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aef9822a0bd4b5f72cf08df196749d3a7}{check}} (\mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} validator, const std\+::string \&validator\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Adds a \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} with a built in type name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_abd43511e4c112352554d12c0f0cbabfc}\label{class_c_l_i_1_1_option_abd43511e4c112352554d12c0f0cbabfc}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_abd43511e4c112352554d12c0f0cbabfc}{check}} (std\+::function$<$ std\+::string(const std\+::string \&)$>$ \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}}, std\+::string Validator\+\_\+description=\char`\"{}\char`\"{}, std\+::string Validator\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Adds a \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}}. Takes a const string\& and returns an error message (empty if conversion/check is okay). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a45be493fced83409e76238b666e2a728}\label{class_c_l_i_1_1_option_a45be493fced83409e76238b666e2a728}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a45be493fced83409e76238b666e2a728}{transform}} (\mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}}, const std\+::string \&Validator\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Adds a transforming \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} with a built in type name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aced6ef12e7b130fa2abf0dace83ac2df}\label{class_c_l_i_1_1_option_aced6ef12e7b130fa2abf0dace83ac2df}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aced6ef12e7b130fa2abf0dace83ac2df}{transform}} (const std\+::function$<$ std\+::string(std\+::string)$>$ \&func, std\+::string transform\+\_\+description=\char`\"{}\char`\"{}, std\+::string transform\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Adds a Validator-\/like function that can change result. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aed167addae1cd83b958d41d67d6a0288}\label{class_c_l_i_1_1_option_aed167addae1cd83b958d41d67d6a0288}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aed167addae1cd83b958d41d67d6a0288}{each}} (const std\+::function$<$ void(std\+::string)$>$ \&func)
+\begin{DoxyCompactList}\small\item\em Adds a user supplied function to run on each item passed in (communicate though lambda capture) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ad1e96836853269210b87d1df0c7bda48}\label{class_c_l_i_1_1_option_ad1e96836853269210b87d1df0c7bda48}} 
+\mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_ad1e96836853269210b87d1df0c7bda48}{get\+\_\+validator}} (const std\+::string \&Validator\+\_\+name=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Get a named \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a49d48d4071a78e1c147ae436e9f2237b}\label{class_c_l_i_1_1_option_a49d48d4071a78e1c147ae436e9f2237b}} 
+\mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a49d48d4071a78e1c147ae436e9f2237b}{get\+\_\+validator}} (int index)
+\begin{DoxyCompactList}\small\item\em Get a \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} by index N\+O\+TE\+: this may not be the order of definition. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a30287b2ec43f5caa03c3c41216f40c6e}\label{class_c_l_i_1_1_option_a30287b2ec43f5caa03c3c41216f40c6e}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a30287b2ec43f5caa03c3c41216f40c6e}{needs}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Sets required options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ab83ac1e75429676631aa8a9223682068}\label{class_c_l_i_1_1_option_ab83ac1e75429676631aa8a9223682068}} 
+{\footnotesize template$<$typename T  = App$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_ab83ac1e75429676631aa8a9223682068}{needs}} (std\+::string opt\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Can find a string if needed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ac2e1015a0d5d0b9719c164fdd9ef3664}\label{class_c_l_i_1_1_option_ac2e1015a0d5d0b9719c164fdd9ef3664}} 
+{\footnotesize template$<$typename A , typename B , typename... A\+RG$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_ac2e1015a0d5d0b9719c164fdd9ef3664}{needs}} (A opt, B opt1, A\+R\+G... args)
+\begin{DoxyCompactList}\small\item\em Any number supported, any mix of string and Opt. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aab72f7fef9aca5eefb25b09c1abffb3c}\label{class_c_l_i_1_1_option_aab72f7fef9aca5eefb25b09c1abffb3c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_aab72f7fef9aca5eefb25b09c1abffb3c}{remove\+\_\+needs}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Remove needs link from an option. Returns true if the option really was in the needs list. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a9597b8271ebc4ad41c2e86f31834a1a3}\label{class_c_l_i_1_1_option_a9597b8271ebc4ad41c2e86f31834a1a3}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a9597b8271ebc4ad41c2e86f31834a1a3}{excludes}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Sets excluded options. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ae18a3913306b0f468c9e13e6046b6ffc}\label{class_c_l_i_1_1_option_ae18a3913306b0f468c9e13e6046b6ffc}} 
+{\footnotesize template$<$typename T  = App$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_ae18a3913306b0f468c9e13e6046b6ffc}{excludes}} (std\+::string opt\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Can find a string if needed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a758ca7c5f8bf8a9fc2ccd4c347f871fb}\label{class_c_l_i_1_1_option_a758ca7c5f8bf8a9fc2ccd4c347f871fb}} 
+{\footnotesize template$<$typename A , typename B , typename... A\+RG$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a758ca7c5f8bf8a9fc2ccd4c347f871fb}{excludes}} (A opt, B opt1, A\+R\+G... args)
+\begin{DoxyCompactList}\small\item\em Any number supported, any mix of string and Opt. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a414e6a8f76443036a9fb096f49165660}\label{class_c_l_i_1_1_option_a414e6a8f76443036a9fb096f49165660}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a414e6a8f76443036a9fb096f49165660}{remove\+\_\+excludes}} (\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$opt)
+\begin{DoxyCompactList}\small\item\em Remove needs link from an option. Returns true if the option really was in the needs list. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aa1969c5f5a525910d761756a6d8e63a8}\label{class_c_l_i_1_1_option_aa1969c5f5a525910d761756a6d8e63a8}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aa1969c5f5a525910d761756a6d8e63a8}{envname}} (std\+::string name)
+\begin{DoxyCompactList}\small\item\em Sets environment variable to read if no option given. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T  = App$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aa8a01bd3a71479b7b57fec05e60cb3dd}{ignore\+\_\+case}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Ignore case. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T  = App$>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aefcd141abec14c6d6ebac24f749c3e6b}{ignore\+\_\+underscore}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Ignore underscores in the option names. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aa4f53c4f43bf3c10f5d160d4a57e757c}\label{class_c_l_i_1_1_option_aa4f53c4f43bf3c10f5d160d4a57e757c}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_aa4f53c4f43bf3c10f5d160d4a57e757c}{multi\+\_\+option\+\_\+policy}} (Multi\+Option\+Policy value=Multi\+Option\+Policy\+::\+Throw)
+\begin{DoxyCompactList}\small\item\em Take the last argument if given multiple times (or another policy) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_abffc5b37b17b35b72b0489fc022e6e78}\label{class_c_l_i_1_1_option_abffc5b37b17b35b72b0489fc022e6e78}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_abffc5b37b17b35b72b0489fc022e6e78}{disable\+\_\+flag\+\_\+override}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Disable flag overrides values, e.\+g. --flag=
+
+is not allowed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accessors}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a88f36e42c1afcf1d4887230cc133f1fa}\label{class_c_l_i_1_1_option_a88f36e42c1afcf1d4887230cc133f1fa}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a88f36e42c1afcf1d4887230cc133f1fa}{get\+\_\+type\+\_\+size}} () const
+\begin{DoxyCompactList}\small\item\em The number of arguments the option expects. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a38a511ab2001c283c06fb31a7ea12501}\label{class_c_l_i_1_1_option_a38a511ab2001c283c06fb31a7ea12501}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a38a511ab2001c283c06fb31a7ea12501}{get\+\_\+type\+\_\+size\+\_\+min}} () const
+\begin{DoxyCompactList}\small\item\em The minimum number of arguments the option expects. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a0c7e5712134a2227301fb50bcc9488c8}\label{class_c_l_i_1_1_option_a0c7e5712134a2227301fb50bcc9488c8}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a0c7e5712134a2227301fb50bcc9488c8}{get\+\_\+type\+\_\+size\+\_\+max}} () const
+\begin{DoxyCompactList}\small\item\em The maximum number of arguments the option expects. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a9657b97545e51cdcda8efd61d13b5ab3}\label{class_c_l_i_1_1_option_a9657b97545e51cdcda8efd61d13b5ab3}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_a9657b97545e51cdcda8efd61d13b5ab3}{get\+\_\+envname}} () const
+\begin{DoxyCompactList}\small\item\em The environment variable associated to this value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a4b1679e5e219ba5fc1849b69531d5c05}\label{class_c_l_i_1_1_option_a4b1679e5e219ba5fc1849b69531d5c05}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_a4b1679e5e219ba5fc1849b69531d5c05}{get\+\_\+needs}} () const
+\begin{DoxyCompactList}\small\item\em The set of options needed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aef5d368ea4ff9b5c3058ee316da00bcc}\label{class_c_l_i_1_1_option_aef5d368ea4ff9b5c3058ee316da00bcc}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_aef5d368ea4ff9b5c3058ee316da00bcc}{get\+\_\+excludes}} () const
+\begin{DoxyCompactList}\small\item\em The set of options excluded. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a3b8410c5366dbbb6781b37d963677101}\label{class_c_l_i_1_1_option_a3b8410c5366dbbb6781b37d963677101}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_a3b8410c5366dbbb6781b37d963677101}{get\+\_\+default\+\_\+str}} () const
+\begin{DoxyCompactList}\small\item\em The default value (for help printing) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a8ab1e8c10d6d6c3b49b71cb0d8e5d3fb}\label{class_c_l_i_1_1_option_a8ab1e8c10d6d6c3b49b71cb0d8e5d3fb}} 
+callback\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_option_a8ab1e8c10d6d6c3b49b71cb0d8e5d3fb}{get\+\_\+callback}} () const
+\begin{DoxyCompactList}\small\item\em Get the callback function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a446a6ff3dbc0cab490dec6fde354fa9b}\label{class_c_l_i_1_1_option_a446a6ff3dbc0cab490dec6fde354fa9b}} 
+const \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \& \mbox{\hyperlink{class_c_l_i_1_1_option_a446a6ff3dbc0cab490dec6fde354fa9b}{get\+\_\+lnames}} () const
+\begin{DoxyCompactList}\small\item\em Get the long names. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ac93a481a512067741d483cccead35b1c}\label{class_c_l_i_1_1_option_ac93a481a512067741d483cccead35b1c}} 
+const \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \& \mbox{\hyperlink{class_c_l_i_1_1_option_ac93a481a512067741d483cccead35b1c}{get\+\_\+snames}} () const
+\begin{DoxyCompactList}\small\item\em Get the short names. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a581991da28e27a1853aa2f9941006f68}\label{class_c_l_i_1_1_option_a581991da28e27a1853aa2f9941006f68}} 
+const \mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \& \mbox{\hyperlink{class_c_l_i_1_1_option_a581991da28e27a1853aa2f9941006f68}{get\+\_\+fnames}} () const
+\begin{DoxyCompactList}\small\item\em Get the flag names with specified default values. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a307543e6e4ddeb6e4ea00438b5b10be3}\label{class_c_l_i_1_1_option_a307543e6e4ddeb6e4ea00438b5b10be3}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a307543e6e4ddeb6e4ea00438b5b10be3}{get\+\_\+expected}} () const
+\begin{DoxyCompactList}\small\item\em The number of times the option expects to be included. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a19c64a02c22d968e834c2aaf13f98f62}\label{class_c_l_i_1_1_option_a19c64a02c22d968e834c2aaf13f98f62}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a19c64a02c22d968e834c2aaf13f98f62}{get\+\_\+expected\+\_\+min}} () const
+\begin{DoxyCompactList}\small\item\em The number of times the option expects to be included. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a21133f27201fa12203567cf0ee40c9c5}\label{class_c_l_i_1_1_option_a21133f27201fa12203567cf0ee40c9c5}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a21133f27201fa12203567cf0ee40c9c5}{get\+\_\+expected\+\_\+max}} () const
+\begin{DoxyCompactList}\small\item\em The max number of times the option expects to be included. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af87dffed2cb245673312c993e563710e}\label{class_c_l_i_1_1_option_af87dffed2cb245673312c993e563710e}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_af87dffed2cb245673312c993e563710e}{get\+\_\+items\+\_\+expected\+\_\+min}} () const
+\begin{DoxyCompactList}\small\item\em The total min number of expected string values to be used. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a996b69fbb68a6d62829855816c30ed38}\label{class_c_l_i_1_1_option_a996b69fbb68a6d62829855816c30ed38}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a996b69fbb68a6d62829855816c30ed38}{get\+\_\+items\+\_\+expected\+\_\+max}} () const
+\begin{DoxyCompactList}\small\item\em Get the maximum number of items expected to be returned and used for the callback. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_afe31a608506cbe75d40d6cced342be11}\label{class_c_l_i_1_1_option_afe31a608506cbe75d40d6cced342be11}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_afe31a608506cbe75d40d6cced342be11}{get\+\_\+items\+\_\+expected}} () const
+\begin{DoxyCompactList}\small\item\em The total min number of expected string values to be used. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_acab7033604b49e314d290b01adea690d}\label{class_c_l_i_1_1_option_acab7033604b49e314d290b01adea690d}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_acab7033604b49e314d290b01adea690d}{get\+\_\+positional}} () const
+\begin{DoxyCompactList}\small\item\em True if the argument can be given directly. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a94cc5149d388be946c449e8ee61cd034}\label{class_c_l_i_1_1_option_a94cc5149d388be946c449e8ee61cd034}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a94cc5149d388be946c449e8ee61cd034}{nonpositional}} () const
+\begin{DoxyCompactList}\small\item\em True if option has at least one non-\/positional name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a6770984498050b33659ce0c14b8f4696}\label{class_c_l_i_1_1_option_a6770984498050b33659ce0c14b8f4696}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a6770984498050b33659ce0c14b8f4696}{has\+\_\+description}} () const
+\begin{DoxyCompactList}\small\item\em True if option has description. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ad79474a3c1cc8a73b12f80c6e31ee3af}\label{class_c_l_i_1_1_option_ad79474a3c1cc8a73b12f80c6e31ee3af}} 
+const std\+::string \& \mbox{\hyperlink{class_c_l_i_1_1_option_ad79474a3c1cc8a73b12f80c6e31ee3af}{get\+\_\+description}} () const
+\begin{DoxyCompactList}\small\item\em Get the description. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_abe8a53dc9fdeab4d74057891520ac3a7}\label{class_c_l_i_1_1_option_abe8a53dc9fdeab4d74057891520ac3a7}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_abe8a53dc9fdeab4d74057891520ac3a7}{description}} (std\+::string option\+\_\+description)
+\begin{DoxyCompactList}\small\item\em Set the description. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Help tools}\par
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_ab84751fbf9037efaed5b64fed17fe57f}{get\+\_\+name}} (bool positional=false, bool all\+\_\+options=false) const
+\begin{DoxyCompactList}\small\item\em Gets a comma separated list of names. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Parser tools}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ab06eb6c31666a4a003aeb2cf3e5cdcd9}\label{class_c_l_i_1_1_option_ab06eb6c31666a4a003aeb2cf3e5cdcd9}} 
+void \mbox{\hyperlink{class_c_l_i_1_1_option_ab06eb6c31666a4a003aeb2cf3e5cdcd9}{run\+\_\+callback}} ()
+\begin{DoxyCompactList}\small\item\em Process the callback. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a994adb867afcdd95283960ab14546aa2}\label{class_c_l_i_1_1_option_a994adb867afcdd95283960ab14546aa2}} 
+const std\+::string \& \mbox{\hyperlink{class_c_l_i_1_1_option_a994adb867afcdd95283960ab14546aa2}{matching\+\_\+name}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} \&other) const
+\begin{DoxyCompactList}\small\item\em If options share any of the same names, find it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ae72ff0b89bebb2987d548c186c577e50}\label{class_c_l_i_1_1_option_ae72ff0b89bebb2987d548c186c577e50}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_ae72ff0b89bebb2987d548c186c577e50}{operator==}} (const \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} \&other) const
+\begin{DoxyCompactList}\small\item\em If options share any of the same names, they are equal (not counting positional) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af457a9a493f06f212cad9f854b281200}\label{class_c_l_i_1_1_option_af457a9a493f06f212cad9f854b281200}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_af457a9a493f06f212cad9f854b281200}{check\+\_\+name}} (std\+::string name) const
+\begin{DoxyCompactList}\small\item\em Check a name. Requires \char`\"{}-\/\char`\"{} or \char`\"{}-\/-\/\char`\"{} for short / long, supports positional name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_acfa639ba77f034615c7e66028da1fc3b}\label{class_c_l_i_1_1_option_acfa639ba77f034615c7e66028da1fc3b}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_acfa639ba77f034615c7e66028da1fc3b}{check\+\_\+sname}} (std\+::string name) const
+\begin{DoxyCompactList}\small\item\em Requires \char`\"{}-\/\char`\"{} to be removed from string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a481001137137be0d6a4e5998866d604a}\label{class_c_l_i_1_1_option_a481001137137be0d6a4e5998866d604a}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a481001137137be0d6a4e5998866d604a}{check\+\_\+lname}} (std\+::string name) const
+\begin{DoxyCompactList}\small\item\em Requires \char`\"{}-\/-\/\char`\"{} to be removed from string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a4d2329268bae134aa58e704fa61f4b57}\label{class_c_l_i_1_1_option_a4d2329268bae134aa58e704fa61f4b57}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a4d2329268bae134aa58e704fa61f4b57}{check\+\_\+fname}} (std\+::string name) const
+\begin{DoxyCompactList}\small\item\em Requires \char`\"{}-\/-\/\char`\"{} to be removed from string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a4eb6212ac30a0b139da52d258a3a1790}\label{class_c_l_i_1_1_option_a4eb6212ac30a0b139da52d258a3a1790}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_a4eb6212ac30a0b139da52d258a3a1790}{get\+\_\+flag\+\_\+value}} (const std\+::string \&name, std\+::string input\+\_\+value) const
+\begin{DoxyCompactList}\small\item\em Get the value that goes for a flag, nominally gets the default value but allows for overrides if not disabled. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a80e429009bbbfd863fba2ebd32e8d391}\label{class_c_l_i_1_1_option_a80e429009bbbfd863fba2ebd32e8d391}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a80e429009bbbfd863fba2ebd32e8d391}{add\+\_\+result}} (std\+::string s)
+\begin{DoxyCompactList}\small\item\em Puts a result at the end. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a7cee28f289492376afd3b196b0880aba}\label{class_c_l_i_1_1_option_a7cee28f289492376afd3b196b0880aba}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a7cee28f289492376afd3b196b0880aba}{add\+\_\+result}} (std\+::string s, int \&results\+\_\+added)
+\begin{DoxyCompactList}\small\item\em Puts a result at the end and get a count of the number of arguments actually added. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a3730500fa0a855cb11433f7dda723e41}\label{class_c_l_i_1_1_option_a3730500fa0a855cb11433f7dda723e41}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a3730500fa0a855cb11433f7dda723e41}{add\+\_\+result}} (\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ s)
+\begin{DoxyCompactList}\small\item\em Puts a result at the end. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af8893fa182750cdb8064ef9230b563bc}\label{class_c_l_i_1_1_option_af8893fa182750cdb8064ef9230b563bc}} 
+\mbox{\hyperlink{classstd_1_1vector}{results\+\_\+t}} \mbox{\hyperlink{class_c_l_i_1_1_option_af8893fa182750cdb8064ef9230b563bc}{results}} () const
+\begin{DoxyCompactList}\small\item\em Get a copy of the results. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a35ae96199e3704c2b4be44bae9be28fa}\label{class_c_l_i_1_1_option_a35ae96199e3704c2b4be44bae9be28fa}} 
+\mbox{\hyperlink{classstd_1_1vector}{results\+\_\+t}} \mbox{\hyperlink{class_c_l_i_1_1_option_a35ae96199e3704c2b4be44bae9be28fa}{reduced\+\_\+results}} () const
+\begin{DoxyCompactList}\small\item\em Get a copy of the results. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a251a3c10c556855c236fddbd419709b1}\label{class_c_l_i_1_1_option_a251a3c10c556855c236fddbd419709b1}} 
+{\footnotesize template$<$typename T , enable\+\_\+if\+\_\+t$<$!std\+::is\+\_\+const$<$ T $>$\+::value, detail\+::enabler $>$  = detail\+::dummy$>$ }\\void \mbox{\hyperlink{class_c_l_i_1_1_option_a251a3c10c556855c236fddbd419709b1}{results}} (T \&output) const
+\begin{DoxyCompactList}\small\item\em Get the results as a specified type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aaf823105782108a6c777b7e0925d2430}\label{class_c_l_i_1_1_option_aaf823105782108a6c777b7e0925d2430}} 
+{\footnotesize template$<$typename T $>$ }\\T \mbox{\hyperlink{class_c_l_i_1_1_option_aaf823105782108a6c777b7e0925d2430}{as}} () const
+\begin{DoxyCompactList}\small\item\em Return the results as the specified type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aae19e4231b0c1ef14cf2f3c7189e453c}\label{class_c_l_i_1_1_option_aae19e4231b0c1ef14cf2f3c7189e453c}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_aae19e4231b0c1ef14cf2f3c7189e453c}{get\+\_\+callback\+\_\+run}} () const
+\begin{DoxyCompactList}\small\item\em See if the callback has been run already. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a35e90f0fc810ccca676f7fa39bf4cc27}\label{class_c_l_i_1_1_option_a35e90f0fc810ccca676f7fa39bf4cc27}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option_a35e90f0fc810ccca676f7fa39bf4cc27}{Option}} (std\+::string option\+\_\+name, std\+::string option\+\_\+description, callback\+\_\+t callback, \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Making an option by hand is not defined, it must be made by the \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{Indent}\textbf{ Names}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a7d8ef1d4012fde878668c943d9b197bc}\label{class_c_l_i_1_1_option_a7d8ef1d4012fde878668c943d9b197bc}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_a7d8ef1d4012fde878668c943d9b197bc}{snames\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A list of the short names ({\ttfamily -\/a}) without the leading dashes. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ae06feaf7ca62a5497514a09f44724430}\label{class_c_l_i_1_1_option_ae06feaf7ca62a5497514a09f44724430}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_ae06feaf7ca62a5497514a09f44724430}{lnames\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A list of the long names ({\ttfamily -\/-\/long}) without the leading dashes. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ad2c7c8c939c6eacfb25ae7a83c0640af}\label{class_c_l_i_1_1_option_ad2c7c8c939c6eacfb25ae7a83c0640af}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::pair$<$ std\+::string, std\+::string $>$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_ad2c7c8c939c6eacfb25ae7a83c0640af}{default\+\_\+flag\+\_\+values\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A list of the flag names with the appropriate default value, the first part of the pair should be duplicates of what is in snames or lnames but will trigger a particular response on a flag. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a56635c9d01c0fde66df3a5edf87b8a31}\label{class_c_l_i_1_1_option_a56635c9d01c0fde66df3a5edf87b8a31}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_a56635c9d01c0fde66df3a5edf87b8a31}{fnames\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em a list of flag names with specified default values; \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a3599a92dde17b22551dcdfcb9798f0f3}\label{class_c_l_i_1_1_option_a3599a92dde17b22551dcdfcb9798f0f3}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_a3599a92dde17b22551dcdfcb9798f0f3}{pname\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A positional name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_acac4bf11cbd933967ced9175946ffbe6}\label{class_c_l_i_1_1_option_acac4bf11cbd933967ced9175946ffbe6}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_acac4bf11cbd933967ced9175946ffbe6}{envname\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em If given, check the environment for this option. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Help}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aa6427b2f3303cc4469cacdc098b9d4bf}\label{class_c_l_i_1_1_option_aa6427b2f3303cc4469cacdc098b9d4bf}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_aa6427b2f3303cc4469cacdc098b9d4bf}{description\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em The description for help strings. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a169893983f2dd0dc840ebca98bb76698}\label{class_c_l_i_1_1_option_a169893983f2dd0dc840ebca98bb76698}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_a169893983f2dd0dc840ebca98bb76698}{default\+\_\+str\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A human readable default value, either manually set, captured, or captured by default. \end{DoxyCompactList}\item 
+std\+::function$<$ std\+::string()$>$ \mbox{\hyperlink{class_c_l_i_1_1_option_a2080c70a11f8935118dffc924824aa87}{type\+\_\+name\+\_\+}} \{\mbox{[}$\,$\mbox{]}() \{ return std\+::string(); \}\}
+\begin{DoxyCompactList}\small\item\em A human readable type value, set when \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} creates this. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_acc7769c9cd48d7c7302dd51aa8fd3bd2}\label{class_c_l_i_1_1_option_acc7769c9cd48d7c7302dd51aa8fd3bd2}} 
+std\+::function$<$ std\+::string()$>$ \mbox{\hyperlink{class_c_l_i_1_1_option_acc7769c9cd48d7c7302dd51aa8fd3bd2}{default\+\_\+function\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Run this function to capture a default (ignore if empty) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Configuration}\par
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_ad9a5a55a8c3fdce89dbf5c167c183ca6}{type\+\_\+size\+\_\+max\+\_\+}} \{1\}
+\begin{DoxyCompactList}\small\item\em The number of arguments that make up one option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a23e5549e7c0490f15018ee84bc39d644}\label{class_c_l_i_1_1_option_a23e5549e7c0490f15018ee84bc39d644}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a23e5549e7c0490f15018ee84bc39d644}{type\+\_\+size\+\_\+min\+\_\+}} \{1\}
+\begin{DoxyCompactList}\small\item\em The minimum number of arguments an option should be expecting. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a35e04622c4de2eab61a04421d0618741}\label{class_c_l_i_1_1_option_a35e04622c4de2eab61a04421d0618741}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a35e04622c4de2eab61a04421d0618741}{expected\+\_\+min\+\_\+}} \{1\}
+\begin{DoxyCompactList}\small\item\em The minimum number of expected values. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a963ed9f9758d938c860bc14bf1db57b6}\label{class_c_l_i_1_1_option_a963ed9f9758d938c860bc14bf1db57b6}} 
+int \mbox{\hyperlink{class_c_l_i_1_1_option_a963ed9f9758d938c860bc14bf1db57b6}{expected\+\_\+max\+\_\+}} \{1\}
+\begin{DoxyCompactList}\small\item\em The maximum number of expected values. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ad406b8299fb243f0caa52a35863c82b7}\label{class_c_l_i_1_1_option_ad406b8299fb243f0caa52a35863c82b7}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_validator}{Validator}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_ad406b8299fb243f0caa52a35863c82b7}{validators\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A list of Validators to run on each value parsed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a3bd8d2ff461e8046b284cdbfcd741dce}\label{class_c_l_i_1_1_option_a3bd8d2ff461e8046b284cdbfcd741dce}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_a3bd8d2ff461e8046b284cdbfcd741dce}{needs\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A list of options that are required with this option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a49c5490dd092599c067833fd0f5c79d3}\label{class_c_l_i_1_1_option_a49c5490dd092599c067833fd0f5c79d3}} 
+\mbox{\hyperlink{classstd_1_1set}{std\+::set}}$<$ \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ $>$ \mbox{\hyperlink{class_c_l_i_1_1_option_a49c5490dd092599c067833fd0f5c79d3}{excludes\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em A list of options that are excluded with this option. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Other}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a9391ef1d3ed3f0607633b36faf72f5c0}\label{class_c_l_i_1_1_option_a9391ef1d3ed3f0607633b36faf72f5c0}} 
+\mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a9391ef1d3ed3f0607633b36faf72f5c0}{parent\+\_\+}} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em Remember the parent app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ab79262b952902ff5e1cba6e3788aca54}\label{class_c_l_i_1_1_option_ab79262b952902ff5e1cba6e3788aca54}} 
+callback\+\_\+t \mbox{\hyperlink{class_c_l_i_1_1_option_ab79262b952902ff5e1cba6e3788aca54}{callback\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em Options store a callback to do all the work. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Parsing results}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7d}{option\+\_\+state}} \{ \mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dadbc77665f51d780a776978e34f065af5}{option\+\_\+state\+::parsing}} = 0, 
+\mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dac9e825f4641cd3bec0ba01a0c2d67755}{option\+\_\+state\+::validated}} = 2, 
+\mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7da282fabc3aa55dcf5a73ad91ea6c62de6}{option\+\_\+state\+::reduced}} = 4, 
+\mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7da3e711527b127cf4c52c3470324bb7a74}{option\+\_\+state\+::callback\+\_\+run}} = 6
+ \}
+\begin{DoxyCompactList}\small\item\em enumeration for the option state machine \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af45b214347a715edf92b1e3de5c4b938}\label{class_c_l_i_1_1_option_af45b214347a715edf92b1e3de5c4b938}} 
+\mbox{\hyperlink{classstd_1_1vector}{results\+\_\+t}} \mbox{\hyperlink{class_c_l_i_1_1_option_af45b214347a715edf92b1e3de5c4b938}{results\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em complete Results of parsing \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a7e1e5e40353f296f4b1f0a5940dc7099}\label{class_c_l_i_1_1_option_a7e1e5e40353f296f4b1f0a5940dc7099}} 
+\mbox{\hyperlink{classstd_1_1vector}{results\+\_\+t}} \mbox{\hyperlink{class_c_l_i_1_1_option_a7e1e5e40353f296f4b1f0a5940dc7099}{proc\+\_\+results\+\_\+}} \{\}
+\begin{DoxyCompactList}\small\item\em results after reduction \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a239c3f2953f88bc9cf1a2bc99af39095}\label{class_c_l_i_1_1_option_a239c3f2953f88bc9cf1a2bc99af39095}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7d}{option\+\_\+state}} \mbox{\hyperlink{class_c_l_i_1_1_option_a239c3f2953f88bc9cf1a2bc99af39095}{current\+\_\+option\+\_\+state\+\_\+}} \{\mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dadbc77665f51d780a776978e34f065af5}{option\+\_\+state\+::parsing}}\}
+\begin{DoxyCompactList}\small\item\em Whether the callback has run (needed for I\+NI parsing) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_adb0563505e82a3932466a23700ce66ba}\label{class_c_l_i_1_1_option_adb0563505e82a3932466a23700ce66ba}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_adb0563505e82a3932466a23700ce66ba}{allow\+\_\+extra\+\_\+args\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Specify that extra args beyond type\+\_\+size\+\_\+max should be allowed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a47712db860c1df802ff0ee51cbc2200e}\label{class_c_l_i_1_1_option_a47712db860c1df802ff0ee51cbc2200e}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a47712db860c1df802ff0ee51cbc2200e}{flag\+\_\+like\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Specify that the option should act like a flag vs regular option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a16ff0fc34306cdd0c51379f16d61eeec}\label{class_c_l_i_1_1_option_a16ff0fc34306cdd0c51379f16d61eeec}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_a16ff0fc34306cdd0c51379f16d61eeec}{run\+\_\+callback\+\_\+for\+\_\+default\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Control option to run the callback to set the default. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Custom options}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a08c4fc3c4d254ac57a48d5756626a03c}\label{class_c_l_i_1_1_option_a08c4fc3c4d254ac57a48d5756626a03c}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a08c4fc3c4d254ac57a48d5756626a03c}{type\+\_\+name\+\_\+fn}} (std\+::function$<$ std\+::string()$>$ typefun)
+\begin{DoxyCompactList}\small\item\em Set the type function to run when displayed on this option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_addaddebd60f66aaedc13e5fb473db902}\label{class_c_l_i_1_1_option_addaddebd60f66aaedc13e5fb473db902}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_addaddebd60f66aaedc13e5fb473db902}{type\+\_\+name}} (std\+::string typeval)
+\begin{DoxyCompactList}\small\item\em Set a custom option typestring. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a490eba9b24865845a0715e4566dcb6cc}\label{class_c_l_i_1_1_option_a490eba9b24865845a0715e4566dcb6cc}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a490eba9b24865845a0715e4566dcb6cc}{type\+\_\+size}} (int option\+\_\+type\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Set a custom option size. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a43c5a35f2db2a8b6a1a02e5dda2a03fa}\label{class_c_l_i_1_1_option_a43c5a35f2db2a8b6a1a02e5dda2a03fa}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a43c5a35f2db2a8b6a1a02e5dda2a03fa}{type\+\_\+size}} (int option\+\_\+type\+\_\+size\+\_\+min, int option\+\_\+type\+\_\+size\+\_\+max)
+\begin{DoxyCompactList}\small\item\em Set a custom option type size range. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a3693531e3da3574fc03185f759f13a83}\label{class_c_l_i_1_1_option_a3693531e3da3574fc03185f759f13a83}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a3693531e3da3574fc03185f759f13a83}{default\+\_\+function}} (const std\+::function$<$ std\+::string()$>$ \&func)
+\begin{DoxyCompactList}\small\item\em Set a capture function for the default. Mostly used by \mbox{\hyperlink{class_c_l_i_1_1_app}{App}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a978a9cc185b82fd45228c2c512ebf188}\label{class_c_l_i_1_1_option_a978a9cc185b82fd45228c2c512ebf188}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a978a9cc185b82fd45228c2c512ebf188}{capture\+\_\+default\+\_\+str}} ()
+\begin{DoxyCompactList}\small\item\em Capture the default value from the original value (if it can be captured) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a446f47a5d6ddf6831defd707394d7c07}\label{class_c_l_i_1_1_option_a446f47a5d6ddf6831defd707394d7c07}} 
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a446f47a5d6ddf6831defd707394d7c07}{default\+\_\+str}} (std\+::string val)
+\begin{DoxyCompactList}\small\item\em Set the default value string representation (does not change the contained value) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a4685cebdb75c6bf8ce0095fd08d8b892}\label{class_c_l_i_1_1_option_a4685cebdb75c6bf8ce0095fd08d8b892}} 
+{\footnotesize template$<$typename X $>$ }\\\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_a4685cebdb75c6bf8ce0095fd08d8b892}{default\+\_\+val}} (const X \&val)
+\begin{DoxyCompactList}\small\item\em Set the default value and validate the results and run the callback if appropriate to set the value into the bound value only available for types that can be converted to a string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a8b8425827ceb852c3cc3f44b9b1c26a4}\label{class_c_l_i_1_1_option_a8b8425827ceb852c3cc3f44b9b1c26a4}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_a8b8425827ceb852c3cc3f44b9b1c26a4}{get\+\_\+type\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em Get the full typename for this option. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7d}\label{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7d}} 
+\index{CLI::Option@{CLI::Option}!option\_state@{option\_state}}
+\index{option\_state@{option\_state}!CLI::Option@{CLI::Option}}
+\doxysubsubsection{\texorpdfstring{option\_state}{option\_state}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7d}{C\+L\+I\+::\+Option\+::option\+\_\+state}}\hspace{0.3cm}{\ttfamily [strong]}, {\ttfamily [protected]}}
+
+
+
+enumeration for the option state machine 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{parsing@{parsing}!CLI::Option@{CLI::Option}}\index{CLI::Option@{CLI::Option}!parsing@{parsing}}}\mbox{\Hypertarget{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dadbc77665f51d780a776978e34f065af5}\label{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dadbc77665f51d780a776978e34f065af5}} 
+parsing&The option is currently collecting parsed results. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{validated@{validated}!CLI::Option@{CLI::Option}}\index{CLI::Option@{CLI::Option}!validated@{validated}}}\mbox{\Hypertarget{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dac9e825f4641cd3bec0ba01a0c2d67755}\label{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7dac9e825f4641cd3bec0ba01a0c2d67755}} 
+validated&the results have been validated \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{reduced@{reduced}!CLI::Option@{CLI::Option}}\index{CLI::Option@{CLI::Option}!reduced@{reduced}}}\mbox{\Hypertarget{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7da282fabc3aa55dcf5a73ad91ea6c62de6}\label{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7da282fabc3aa55dcf5a73ad91ea6c62de6}} 
+reduced&a subset of results has been generated \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{callback\_run@{callback\_run}!CLI::Option@{CLI::Option}}\index{CLI::Option@{CLI::Option}!callback\_run@{callback\_run}}}\mbox{\Hypertarget{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7da3e711527b127cf4c52c3470324bb7a74}\label{class_c_l_i_1_1_option_af0ffb597bb042b6f77f31e11ec3abc7da3e711527b127cf4c52c3470324bb7a74}} 
+callback\+\_\+run&the callback has been executed \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_option_ab84751fbf9037efaed5b64fed17fe57f}\label{class_c_l_i_1_1_option_ab84751fbf9037efaed5b64fed17fe57f}} 
+\index{CLI::Option@{CLI::Option}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!CLI::Option@{CLI::Option}}
+\doxysubsubsection{\texorpdfstring{get\_name()}{get\_name()}}
+{\footnotesize\ttfamily std\+::string C\+L\+I\+::\+Option\+::get\+\_\+name (\begin{DoxyParamCaption}\item[{bool}]{positional = {\ttfamily false},  }\item[{bool}]{all\+\_\+options = {\ttfamily false} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets a comma separated list of names. 
+
+Will include / prefer the positional name if positional is true. If all\+\_\+options is false, pick just the most descriptive name to show. Use {\ttfamily get\+\_\+name(true)} to get the positional name (replaces {\ttfamily get\+\_\+pname}) The all list will never include a positional unless asked or that\textquotesingle{}s the only name.
+\begin{DoxyParams}{Parameters}
+{\em positional} & Show the positional name \\
+\hline
+{\em all\+\_\+options} & Show every option \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_l_i_1_1_option_aa8a01bd3a71479b7b57fec05e60cb3dd}\label{class_c_l_i_1_1_option_aa8a01bd3a71479b7b57fec05e60cb3dd}} 
+\index{CLI::Option@{CLI::Option}!ignore\_case@{ignore\_case}}
+\index{ignore\_case@{ignore\_case}!CLI::Option@{CLI::Option}}
+\doxysubsubsection{\texorpdfstring{ignore\_case()}{ignore\_case()}}
+{\footnotesize\ttfamily template$<$typename T  = App$>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+Option\+::ignore\+\_\+case (\begin{DoxyParamCaption}\item[{bool}]{value = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Ignore case. 
+
+The template hides the fact that we don\textquotesingle{}t have the definition of \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} yet. You are never expected to add an argument to the template here. \mbox{\Hypertarget{class_c_l_i_1_1_option_aefcd141abec14c6d6ebac24f749c3e6b}\label{class_c_l_i_1_1_option_aefcd141abec14c6d6ebac24f749c3e6b}} 
+\index{CLI::Option@{CLI::Option}!ignore\_underscore@{ignore\_underscore}}
+\index{ignore\_underscore@{ignore\_underscore}!CLI::Option@{CLI::Option}}
+\doxysubsubsection{\texorpdfstring{ignore\_underscore()}{ignore\_underscore()}}
+{\footnotesize\ttfamily template$<$typename T  = App$>$ \\
+\mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}$\ast$ C\+L\+I\+::\+Option\+::ignore\+\_\+underscore (\begin{DoxyParamCaption}\item[{bool}]{value = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Ignore underscores in the option names. 
+
+The template hides the fact that we don\textquotesingle{}t have the definition of \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} yet. You are never expected to add an argument to the template here. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_option_a2080c70a11f8935118dffc924824aa87}\label{class_c_l_i_1_1_option_a2080c70a11f8935118dffc924824aa87}} 
+\index{CLI::Option@{CLI::Option}!type\_name\_@{type\_name\_}}
+\index{type\_name\_@{type\_name\_}!CLI::Option@{CLI::Option}}
+\doxysubsubsection{\texorpdfstring{type\_name\_}{type\_name\_}}
+{\footnotesize\ttfamily std\+::function$<$std\+::string()$>$ C\+L\+I\+::\+Option\+::type\+\_\+name\+\_\+ \{\mbox{[}$\,$\mbox{]}() \{ return std\+::string(); \}\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+A human readable type value, set when \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} creates this. 
+
+This is a lambda function so \char`\"{}types\char`\"{} can be dynamic, such as when a set prints its contents. \mbox{\Hypertarget{class_c_l_i_1_1_option_ad9a5a55a8c3fdce89dbf5c167c183ca6}\label{class_c_l_i_1_1_option_ad9a5a55a8c3fdce89dbf5c167c183ca6}} 
+\index{CLI::Option@{CLI::Option}!type\_size\_max\_@{type\_size\_max\_}}
+\index{type\_size\_max\_@{type\_size\_max\_}!CLI::Option@{CLI::Option}}
+\doxysubsubsection{\texorpdfstring{type\_size\_max\_}{type\_size\_max\_}}
+{\footnotesize\ttfamily int C\+L\+I\+::\+Option\+::type\+\_\+size\+\_\+max\+\_\+ \{1\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The number of arguments that make up one option. 
+
+max is the nominal type size, min is the minimum number of strings 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

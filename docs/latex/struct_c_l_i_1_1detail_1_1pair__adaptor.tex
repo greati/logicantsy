@@ -1,0 +1,49 @@
+\hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor}{}\doxysection{C\+LI\+::detail\+::pair\+\_\+adaptor$<$ T, \+\_\+ $>$ Struct Template Reference}
+\label{struct_c_l_i_1_1detail_1_1pair__adaptor}\index{CLI::detail::pair\_adaptor$<$ T, \_ $>$@{CLI::detail::pair\_adaptor$<$ T, \_ $>$}}
+
+
+Adaptor for set-\/like structure\+: This just wraps a normal container in a few utilities that do almost nothing.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::detail\+::pair\+\_\+adaptor$<$ T, \+\_\+ $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_c_l_i_1_1detail_1_1pair__adaptor}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_a024ff3813a5217cc3ce9e9096015b5df}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_a024ff3813a5217cc3ce9e9096015b5df}} 
+using {\bfseries value\+\_\+type} = typename T\+::value\+\_\+type
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_a8bcb95c4adfe14cc502c0446b0f01fc1}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_a8bcb95c4adfe14cc502c0446b0f01fc1}} 
+using {\bfseries first\+\_\+type} = typename std\+::remove\+\_\+const$<$ value\+\_\+type $>$\+::type
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_a5efab96578f39e5d5183aeb23a5ae52b}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_a5efab96578f39e5d5183aeb23a5ae52b}} 
+using {\bfseries second\+\_\+type} = typename std\+::remove\+\_\+const$<$ value\+\_\+type $>$\+::type
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_ab46a8b1544ac182fe15948fe94a75bd6}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_ab46a8b1544ac182fe15948fe94a75bd6}} 
+{\footnotesize template$<$typename Q $>$ }\\static auto \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1pair__adaptor_ab46a8b1544ac182fe15948fe94a75bd6}{first}} (Q \&\&pair\+\_\+value) -\/$>$ decltype(std\+::forward$<$ Q $>$(pair\+\_\+value))
+\begin{DoxyCompactList}\small\item\em Get the first value (really just the underlying value) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_a69f2f87359de8d01c72ac645c6ada8c8}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_a69f2f87359de8d01c72ac645c6ada8c8}} 
+{\footnotesize template$<$typename Q $>$ }\\static auto \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1pair__adaptor_a69f2f87359de8d01c72ac645c6ada8c8}{second}} (Q \&\&pair\+\_\+value) -\/$>$ decltype(std\+::forward$<$ Q $>$(pair\+\_\+value))
+\begin{DoxyCompactList}\small\item\em Get the second value (really just the underlying value) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T, typename \+\_\+ = void$>$\newline
+struct C\+L\+I\+::detail\+::pair\+\_\+adaptor$<$ T, \+\_\+ $>$}
+
+Adaptor for set-\/like structure\+: This just wraps a normal container in a few utilities that do almost nothing. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,65 @@
+\hypertarget{classltsy_1_1_determinant}{}\doxysection{ltsy\+::Determinant$<$ Cell\+Type $>$ Class Template Reference}
+\label{classltsy_1_1_determinant}\index{ltsy::Determinant$<$ CellType $>$@{ltsy::Determinant$<$ CellType $>$}}
+
+
+Represents a determinant.  
+
+
+
+
+{\ttfamily \#include $<$truth\+\_\+tables.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_aaeb53df9a79193ef8a129f6829f7430a}\label{classltsy_1_1_determinant_aaeb53df9a79193ef8a129f6829f7430a}} 
+{\bfseries Determinant} (int nvalues, int arity, int tuple\+\_\+pos, Cell\+Type last)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_a814be63ff6d4872c40c60cadb58f979c}\label{classltsy_1_1_determinant_a814be63ff6d4872c40c60cadb58f979c}} 
+{\bfseries Determinant} (int nvalues, std\+::vector$<$ int $>$ args, Cell\+Type last)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_aa91b2f8ed05ba882553660114e77085b}\label{classltsy_1_1_determinant_aa91b2f8ed05ba882553660114e77085b}} 
+Cell\+Type {\bfseries get\+\_\+last} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_acc46599d721f6986871199d5cd560be3}\label{classltsy_1_1_determinant_acc46599d721f6986871199d5cd560be3}} 
+Cell\+Type \& {\bfseries get\+\_\+last} ()
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_a91d1707aae92007c5ac3f1884e5d202c}\label{classltsy_1_1_determinant_a91d1707aae92007c5ac3f1884e5d202c}} 
+void {\bfseries set\+\_\+last} (Cell\+Type \&value)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_a97abd7eaccd93cc5286802355534bec4}\label{classltsy_1_1_determinant_a97abd7eaccd93cc5286802355534bec4}} 
+std\+::vector$<$ int $>$ {\bfseries get\+\_\+args} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_aa430c8d14a1081f0d61c81f9f892adee}\label{classltsy_1_1_determinant_aa430c8d14a1081f0d61c81f9f892adee}} 
+int {\bfseries get\+\_\+args\+\_\+pos} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_ae48f60d1bf69cdbbce182ba653c34a75}\label{classltsy_1_1_determinant_ae48f60d1bf69cdbbce182ba653c34a75}} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classltsy_1_1_determinant}{Determinant}}$<$ Cell\+Type $>$ \&other) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_a174d7068eec481268cdbcebb3ee534d4}\label{classltsy_1_1_determinant_a174d7068eec481268cdbcebb3ee534d4}} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classltsy_1_1_determinant}{Determinant}}$<$ Cell\+Type $>$ \&other) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_determinant_a2f72d3b16e652926e1a80437d5d0cb6d}\label{classltsy_1_1_determinant_a2f72d3b16e652926e1a80437d5d0cb6d}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classltsy_1_1_determinant}{Determinant}}$<$ Cell\+Type $>$ \&det)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Cell\+Type = int$>$\newline
+class ltsy\+::\+Determinant$<$ Cell\+Type $>$}
+
+Represents a determinant. 
+
+Stores the arguments as an int, from which we can compute the corresponding tuple on demand.
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/truth\+\_\+tables.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,61 @@
+\hypertarget{classltsy_1_1_billatice_judgement_value_correspondence}{}\doxysection{ltsy\+::Billatice\+Judgement\+Value\+Correspondence Class Reference}
+\label{classltsy_1_1_billatice_judgement_value_correspondence}\index{ltsy::BillaticeJudgementValueCorrespondence@{ltsy::BillaticeJudgementValueCorrespondence}}
+
+
+Gives a judgement-\/value correspondence given when they are represented in a billatice, the judgements occuppying the edges of the underlying graph.  
+
+
+
+
+{\ttfamily \#include $<$judgment\+\_\+values\+\_\+corr.\+h$>$}
+
+Inheritance diagram for ltsy\+::Billatice\+Judgement\+Value\+Correspondence\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classltsy_1_1_billatice_judgement_value_correspondence}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_billatice_judgement_value_correspondence_ad4de701ee30640b777d049c3bf92c2d9}\label{classltsy_1_1_billatice_judgement_value_correspondence_ad4de701ee30640b777d049c3bf92c2d9}} 
+{\bfseries Billatice\+Judgement\+Value\+Correspondence} (const decltype(\+\_\+judgements)\&judgements, const decltype(\+\_\+adjs)\&adjs)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_billatice_judgement_value_correspondence_a3285afb684c8b00cb1d93a42f2d3f479}\label{classltsy_1_1_billatice_judgement_value_correspondence_a3285afb684c8b00cb1d93a42f2d3f479}} 
+std\+::set$<$ \mbox{\hyperlink{structltsy_1_1_cognitive_attitude}{Cognitive\+Attitude}} $>$ {\bfseries judgements\+\_\+from\+\_\+value} (int v) override
+\item 
+\mbox{\Hypertarget{classltsy_1_1_billatice_judgement_value_correspondence_ae1464c0b7b48f935ce1877eef2b25f21}\label{classltsy_1_1_billatice_judgement_value_correspondence_ae1464c0b7b48f935ce1877eef2b25f21}} 
+int {\bfseries value\+\_\+from\+\_\+judgements} (const std\+::set$<$ \mbox{\hyperlink{structltsy_1_1_cognitive_attitude}{Cognitive\+Attitude}} $>$ \&judgs) override
+\item 
+std\+::vector$<$ std\+::set$<$ \mbox{\hyperlink{structltsy_1_1_cognitive_attitude}{Cognitive\+Attitude}} $>$ $>$ \mbox{\hyperlink{classltsy_1_1_billatice_judgement_value_correspondence_a49ef8aa8dc298a2114ef79f7cbf0c41a}{judgements\+\_\+from\+\_\+set\+\_\+values}} (const std\+::set$<$ int $>$ \&vals) override
+\begin{DoxyCompactList}\small\item\em Produces a set of lists of judgements. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Gives a judgement-\/value correspondence given when they are represented in a billatice, the judgements occuppying the edges of the underlying graph. 
+
+For example\+:
+
+\{ \{ 0, \{\{1, N\}, \{2, Y\}\}, 1, \{\{0, N\}, \{3, nY\}\}, 2, \{\{0, Y\}, \{3, nN\}\}, 3, \{\{1, nY\}, \{2, nN\}\} \} \} 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classltsy_1_1_billatice_judgement_value_correspondence_a49ef8aa8dc298a2114ef79f7cbf0c41a}\label{classltsy_1_1_billatice_judgement_value_correspondence_a49ef8aa8dc298a2114ef79f7cbf0c41a}} 
+\index{ltsy::BillaticeJudgementValueCorrespondence@{ltsy::BillaticeJudgementValueCorrespondence}!judgements\_from\_set\_values@{judgements\_from\_set\_values}}
+\index{judgements\_from\_set\_values@{judgements\_from\_set\_values}!ltsy::BillaticeJudgementValueCorrespondence@{ltsy::BillaticeJudgementValueCorrespondence}}
+\doxysubsubsection{\texorpdfstring{judgements\_from\_set\_values()}{judgements\_from\_set\_values()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::set$<$\mbox{\hyperlink{structltsy_1_1_cognitive_attitude}{Cognitive\+Attitude}}$>$ $>$ ltsy\+::\+Billatice\+Judgement\+Value\+Correspondence\+::judgements\+\_\+from\+\_\+set\+\_\+values (\begin{DoxyParamCaption}\item[{const std\+::set$<$ int $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Produces a set of lists of judgements. 
+
+Each list represent a configuration of a counter-\/model in terms of judgements. 
+
+Implements \mbox{\hyperlink{classltsy_1_1_judgement_value_correspondence_abca75e27c6e379d3f3c2a3a0eab8ba56}{ltsy\+::\+Judgement\+Value\+Correspondence}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/judgment\+\_\+values\+\_\+corr.\+h\end{DoxyCompactItemize}

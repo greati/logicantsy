@@ -1,0 +1,43 @@
+\hypertarget{struct_c_l_i_1_1detail_1_1type__count_3_01_t_00_01typename_01std_1_1enable__if_3_01is__vector_3_77a9b9ee83edfc354fc46974345ae336}{}\doxysection{C\+LI\+::detail\+::type\+\_\+count$<$ T, typename std\+::enable\+\_\+if$<$ is\+\_\+vector$<$ T $>$\+::value $>$\+::type $>$ Struct Template Reference}
+\label{struct_c_l_i_1_1detail_1_1type__count_3_01_t_00_01typename_01std_1_1enable__if_3_01is__vector_3_77a9b9ee83edfc354fc46974345ae336}\index{CLI::detail::type\_count$<$ T, typename std::enable\_if$<$ is\_vector$<$ T $>$::value $>$::type $>$@{CLI::detail::type\_count$<$ T, typename std::enable\_if$<$ is\_vector$<$ T $>$::value $>$::type $>$}}
+
+
+Type size of types that look like a vector.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr int {\bfseries value}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+struct C\+L\+I\+::detail\+::type\+\_\+count$<$ T, typename std\+::enable\+\_\+if$<$ is\+\_\+vector$<$ T $>$\+::value $>$\+::type $>$}
+
+Type size of types that look like a vector. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1type__count_3_01_t_00_01typename_01std_1_1enable__if_3_01is__vector_3_77a9b9ee83edfc354fc46974345ae336_a94fc190aeb1390467414685d6173e0e0}\label{struct_c_l_i_1_1detail_1_1type__count_3_01_t_00_01typename_01std_1_1enable__if_3_01is__vector_3_77a9b9ee83edfc354fc46974345ae336_a94fc190aeb1390467414685d6173e0e0}} 
+\index{CLI::detail::type\_count$<$ T, typename std::enable\_if$<$ is\_vector$<$ T $>$::value $>$::type $>$@{CLI::detail::type\_count$<$ T, typename std::enable\_if$<$ is\_vector$<$ T $>$::value $>$::type $>$}!value@{value}}
+\index{value@{value}!CLI::detail::type\_count$<$ T, typename std::enable\_if$<$ is\_vector$<$ T $>$::value $>$::type $>$@{CLI::detail::type\_count$<$ T, typename std::enable\_if$<$ is\_vector$<$ T $>$::value $>$::type $>$}}
+\doxysubsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+constexpr int \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1type__count}{C\+L\+I\+::detail\+::type\+\_\+count}}$<$ T, typename std\+::enable\+\_\+if$<$ \mbox{\hyperlink{struct_c_l_i_1_1is__vector}{is\+\_\+vector}}$<$ T $>$\+::value $>$\+::type $>$\+::value\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{is\_vector<typename T::value\_type>::value ? expected\_max\_vector\_size}
+\DoxyCodeLine{                                                                        : type\_count<typename T::value\_type>::value\}}
+
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

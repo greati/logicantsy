@@ -1,0 +1,123 @@
+\hypertarget{class_c_l_i_1_1_option_base}{}\doxysection{C\+LI\+::Option\+Base$<$ C\+R\+TP $>$ Class Template Reference}
+\label{class_c_l_i_1_1_option_base}\index{CLI::OptionBase$<$ CRTP $>$@{CLI::OptionBase$<$ CRTP $>$}}
+
+
+This is the C\+R\+TP base class for \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} and \mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}}.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a4ed4c3d671eb94b110843a3310cb4b30}\label{class_c_l_i_1_1_option_base_a4ed4c3d671eb94b110843a3310cb4b30}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_a4ed4c3d671eb94b110843a3310cb4b30}{group}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Changes the group membership. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a38c0ea47532de712dd8d9803633383b2}\label{class_c_l_i_1_1_option_base_a38c0ea47532de712dd8d9803633383b2}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_a38c0ea47532de712dd8d9803633383b2}{required}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Set the option as required. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a81e5fe4b564f2e576ee9e4966194a682}\label{class_c_l_i_1_1_option_base_a81e5fe4b564f2e576ee9e4966194a682}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_a81e5fe4b564f2e576ee9e4966194a682}{mandatory}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Support Plumbum term. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a3c1499da5244ca58938feda5cda9d166}\label{class_c_l_i_1_1_option_base_a3c1499da5244ca58938feda5cda9d166}} 
+C\+R\+TP $\ast$ {\bfseries always\+\_\+capture\+\_\+default} (bool value=true)
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a341e7df4c2693312609186f036dd923c}\label{class_c_l_i_1_1_option_base_a341e7df4c2693312609186f036dd923c}} 
+const std\+::string \& \mbox{\hyperlink{class_c_l_i_1_1_option_base_a341e7df4c2693312609186f036dd923c}{get\+\_\+group}} () const
+\begin{DoxyCompactList}\small\item\em Get the group of this option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_aa902dee6da6d7f5b083b1c7d5f9c1308}\label{class_c_l_i_1_1_option_base_aa902dee6da6d7f5b083b1c7d5f9c1308}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_aa902dee6da6d7f5b083b1c7d5f9c1308}{get\+\_\+required}} () const
+\begin{DoxyCompactList}\small\item\em True if this is a required option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a12d180bda82c466cfbcd5fbeac27e956}\label{class_c_l_i_1_1_option_base_a12d180bda82c466cfbcd5fbeac27e956}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a12d180bda82c466cfbcd5fbeac27e956}{get\+\_\+ignore\+\_\+case}} () const
+\begin{DoxyCompactList}\small\item\em The status of ignore case. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a321ce55e69252d0b01426480a8c6c894}\label{class_c_l_i_1_1_option_base_a321ce55e69252d0b01426480a8c6c894}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a321ce55e69252d0b01426480a8c6c894}{get\+\_\+ignore\+\_\+underscore}} () const
+\begin{DoxyCompactList}\small\item\em The status of ignore\+\_\+underscore. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a148499af929ff2498d1ef3567fc18dfc}\label{class_c_l_i_1_1_option_base_a148499af929ff2498d1ef3567fc18dfc}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a148499af929ff2498d1ef3567fc18dfc}{get\+\_\+configurable}} () const
+\begin{DoxyCompactList}\small\item\em The status of configurable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a07c4e6b7c4a7c3af4e147613d5e39aa0}\label{class_c_l_i_1_1_option_base_a07c4e6b7c4a7c3af4e147613d5e39aa0}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a07c4e6b7c4a7c3af4e147613d5e39aa0}{get\+\_\+disable\+\_\+flag\+\_\+override}} () const
+\begin{DoxyCompactList}\small\item\em The status of configurable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_ad3057f1f7bdd0473d86aad54a0e36064}\label{class_c_l_i_1_1_option_base_ad3057f1f7bdd0473d86aad54a0e36064}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_option_base_ad3057f1f7bdd0473d86aad54a0e36064}{get\+\_\+delimiter}} () const
+\begin{DoxyCompactList}\small\item\em Get the current delimiter char. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_acf913635549804e222cd309294cdba7a}\label{class_c_l_i_1_1_option_base_acf913635549804e222cd309294cdba7a}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_acf913635549804e222cd309294cdba7a}{get\+\_\+always\+\_\+capture\+\_\+default}} () const
+\begin{DoxyCompactList}\small\item\em Return true if this will automatically capture the default value for help printing. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a67ade2fd6f98b5a77c45b18c3d8ae639}\label{class_c_l_i_1_1_option_base_a67ade2fd6f98b5a77c45b18c3d8ae639}} 
+Multi\+Option\+Policy \mbox{\hyperlink{class_c_l_i_1_1_option_base_a67ade2fd6f98b5a77c45b18c3d8ae639}{get\+\_\+multi\+\_\+option\+\_\+policy}} () const
+\begin{DoxyCompactList}\small\item\em The status of the multi option policy. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a930f24441fb52b8d21f6ad05edc6ee94}\label{class_c_l_i_1_1_option_base_a930f24441fb52b8d21f6ad05edc6ee94}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_a930f24441fb52b8d21f6ad05edc6ee94}{take\+\_\+last}} ()
+\begin{DoxyCompactList}\small\item\em Set the multi option policy to take last. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_abd8b4ebfbff744992a543641cad2b278}\label{class_c_l_i_1_1_option_base_abd8b4ebfbff744992a543641cad2b278}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_abd8b4ebfbff744992a543641cad2b278}{take\+\_\+first}} ()
+\begin{DoxyCompactList}\small\item\em Set the multi option policy to take last. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a5961ef2151ef8bd33054acfa61953c3e}\label{class_c_l_i_1_1_option_base_a5961ef2151ef8bd33054acfa61953c3e}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_a5961ef2151ef8bd33054acfa61953c3e}{take\+\_\+all}} ()
+\begin{DoxyCompactList}\small\item\em Set the multi option policy to take all arguments. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a3bcae56121e74e92ad2de422500c7a6d}\label{class_c_l_i_1_1_option_base_a3bcae56121e74e92ad2de422500c7a6d}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_a3bcae56121e74e92ad2de422500c7a6d}{join}} ()
+\begin{DoxyCompactList}\small\item\em Set the multi option policy to join. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_ad897bf1bd549a598f8d29b2c44a914cb}\label{class_c_l_i_1_1_option_base_ad897bf1bd549a598f8d29b2c44a914cb}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_ad897bf1bd549a598f8d29b2c44a914cb}{join}} (char delim)
+\begin{DoxyCompactList}\small\item\em Set the multi option policy to join with a specific delimiter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_affbb9fb4e20744e377767952507503f0}\label{class_c_l_i_1_1_option_base_affbb9fb4e20744e377767952507503f0}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_affbb9fb4e20744e377767952507503f0}{configurable}} (bool value=true)
+\begin{DoxyCompactList}\small\item\em Allow in a configuration file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_ad99f5bd0df1e736cd6c3478a77507289}\label{class_c_l_i_1_1_option_base_ad99f5bd0df1e736cd6c3478a77507289}} 
+C\+R\+TP $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_option_base_ad99f5bd0df1e736cd6c3478a77507289}{delimiter}} (char value=\textquotesingle{}\textbackslash{}0\textquotesingle{})
+\begin{DoxyCompactList}\small\item\em Allow in a configuration file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_aeccfd835475420d963f2fff446c32003}\label{class_c_l_i_1_1_option_base_aeccfd835475420d963f2fff446c32003}} 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{class_c_l_i_1_1_option_base_aeccfd835475420d963f2fff446c32003}{copy\+\_\+to}} (T $\ast$other) const
+\begin{DoxyCompactList}\small\item\em Copy the contents to another similar class (one based on \mbox{\hyperlink{class_c_l_i_1_1_option_base}{Option\+Base}}) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_ad0d8bd0637023f7d87a8e95315e8fb21}\label{class_c_l_i_1_1_option_base_ad0d8bd0637023f7d87a8e95315e8fb21}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_option_base_ad0d8bd0637023f7d87a8e95315e8fb21}{group\+\_\+}} = std\+::string(\char`\"{}Options\char`\"{})
+\begin{DoxyCompactList}\small\item\em The group membership. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_abad838fd3da11f840a40536a279912ac}\label{class_c_l_i_1_1_option_base_abad838fd3da11f840a40536a279912ac}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_abad838fd3da11f840a40536a279912ac}{required\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em True if this is a required option. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a616d0aa1bd4e540733e24f88bc17cd3a}\label{class_c_l_i_1_1_option_base_a616d0aa1bd4e540733e24f88bc17cd3a}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a616d0aa1bd4e540733e24f88bc17cd3a}{ignore\+\_\+case\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Ignore the case when matching (option, not value) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_adafc24528125977c500b9b0c7b5068bf}\label{class_c_l_i_1_1_option_base_adafc24528125977c500b9b0c7b5068bf}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_adafc24528125977c500b9b0c7b5068bf}{ignore\+\_\+underscore\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Ignore underscores when matching (option, not value) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a86801bb8560b37e40ea60815871a22ee}\label{class_c_l_i_1_1_option_base_a86801bb8560b37e40ea60815871a22ee}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a86801bb8560b37e40ea60815871a22ee}{configurable\+\_\+}} \{true\}
+\begin{DoxyCompactList}\small\item\em Allow this option to be given in a configuration file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_ab62f608c0957e32ccf56f2834aa574c1}\label{class_c_l_i_1_1_option_base_ab62f608c0957e32ccf56f2834aa574c1}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_ab62f608c0957e32ccf56f2834aa574c1}{disable\+\_\+flag\+\_\+override\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Disable overriding flag values with \textquotesingle{}=value\textquotesingle{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_ac4164d93e2b8e59b2de24dad04a9f34b}\label{class_c_l_i_1_1_option_base_ac4164d93e2b8e59b2de24dad04a9f34b}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_option_base_ac4164d93e2b8e59b2de24dad04a9f34b}{delimiter\+\_\+}} \{\textquotesingle{}\textbackslash{}0\textquotesingle{}\}
+\begin{DoxyCompactList}\small\item\em Specify a delimiter character for vector arguments. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a23aca05ffa9c2d3fbba10b5434cdba64}\label{class_c_l_i_1_1_option_base_a23aca05ffa9c2d3fbba10b5434cdba64}} 
+bool \mbox{\hyperlink{class_c_l_i_1_1_option_base_a23aca05ffa9c2d3fbba10b5434cdba64}{always\+\_\+capture\+\_\+default\+\_\+}} \{false\}
+\begin{DoxyCompactList}\small\item\em Automatically capture default value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_option_base_a2c5483d3c992baad97beed3de2b82b05}\label{class_c_l_i_1_1_option_base_a2c5483d3c992baad97beed3de2b82b05}} 
+Multi\+Option\+Policy \mbox{\hyperlink{class_c_l_i_1_1_option_base_a2c5483d3c992baad97beed3de2b82b05}{multi\+\_\+option\+\_\+policy\+\_\+}} \{Multi\+Option\+Policy\+::\+Throw\}
+\begin{DoxyCompactList}\small\item\em Policy for handling multiple arguments beyond the expected Max. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename C\+R\+TP$>$\newline
+class C\+L\+I\+::\+Option\+Base$<$ C\+R\+T\+P $>$}
+
+This is the C\+R\+TP base class for \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}} and \mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}}. 
+
+It was designed this way to share parts of the class; an \mbox{\hyperlink{class_c_l_i_1_1_option_defaults}{Option\+Defaults}} can copy to an \mbox{\hyperlink{class_c_l_i_1_1_option}{Option}}. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

@@ -9,6 +9,7 @@
 #include "apps/apps_facade.h"
 #include "core/semantics/attitude_semantics.h"
 #include "core/common.h"
+#include "core/semantics/genmatrix.h"
 
 namespace ltsy {
 
@@ -193,6 +194,56 @@ namespace ltsy {
                     spdlog::critical(ye.what());
                 }
             };
+    };
+
+
+    class SequentRuleSoundnessCLIHandler {
+
+        private:
+            const std::string RULES_TITLE = "rules";
+            const std::string INFER_COMPLEMENTS_TITLE = "infer_complements";
+            const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
+            const std::string MAX_COUNTER_MODELS_TITLE = "max_counter_models";
+
+        public:
+            void handle(const std::string& yaml_path) {
+                YAMLCppParser parser;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+                    auto pnmatrix = parser.parse_gen_matrix(root);
+                    std::vector<NdSequentRule<std::set>> rules;
+                    auto rules_node = parser.hard_require(root, RULES_TITLE);
+                    for (const auto& rule_node : rules_node) {
+                        auto rule = parser.parse_nd_sequent_rule(rule_node.first.as<std::string>(), 
+                                rule_node.second);
+                        rules.push_back(*rule);
+                    }
+                    int max_counter_models = parser.hard_require(root, MAX_COUNTER_MODELS_TITLE).as<int>();
+                    auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
+                        .as<std::vector<int>>();
+                    AppsFacade apps_facade;
+                    for (const auto& rule : rules) {
+                        spdlog::info("Checking for rule " + rule.name() + "...");
+                        auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
+                                    pnmatrix, seq_dset_corr, {rule}, max_counter_models,
+                                    std::make_optional<progresscpp::ProgressBar>(70)
+                                );
+                        auto result = soundness_results[rule.name()];
+                        if (not result) {
+                            spdlog::info("Sound.");
+                        } else {
+                            spdlog::info("Not sound. Consider the following configuration(s):");
+                            for (const auto& ce : *result) {
+                                spdlog::info("\n" + ce.val.print(pnmatrix->val_to_str()).str());
+                            }
+                        }
+                    }
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
     };
 
 };

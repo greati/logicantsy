@@ -1,0 +1,64 @@
+\hypertarget{class_c_l_i_1_1_config_base}{}\doxysection{C\+LI\+::Config\+Base Class Reference}
+\label{class_c_l_i_1_1_config_base}\index{CLI::ConfigBase@{CLI::ConfigBase}}
+
+
+This converter works with I\+N\+I/\+T\+O\+ML files; to write proper T\+O\+ML files use \mbox{\hyperlink{class_c_l_i_1_1_config_t_o_m_l}{Config\+T\+O\+ML}}.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::Config\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_c_l_i_1_1_config_base}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_a5832f6f03212648fa08a8ff83bc9bc08}\label{class_c_l_i_1_1_config_base_a5832f6f03212648fa08a8ff83bc9bc08}} 
+std\+::string \mbox{\hyperlink{class_c_l_i_1_1_config_base_a5832f6f03212648fa08a8ff83bc9bc08}{to\+\_\+config}} (const \mbox{\hyperlink{class_c_l_i_1_1_app}{App}} $\ast$, bool default\+\_\+also, bool write\+\_\+description, std\+::string prefix) const override
+\begin{DoxyCompactList}\small\item\em Convert an app into a configuration. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_a1395eecde5af65b73e3670529df0e17b}\label{class_c_l_i_1_1_config_base_a1395eecde5af65b73e3670529df0e17b}} 
+\mbox{\hyperlink{classstd_1_1vector}{std\+::vector}}$<$ \mbox{\hyperlink{struct_c_l_i_1_1_config_item}{Config\+Item}} $>$ \mbox{\hyperlink{class_c_l_i_1_1_config_base_a1395eecde5af65b73e3670529df0e17b}{from\+\_\+config}} (std\+::istream \&input) const override
+\begin{DoxyCompactList}\small\item\em Convert a configuration into an app. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_a51aaeda01326fe9fa05056fe3d5596f4}\label{class_c_l_i_1_1_config_base_a51aaeda01326fe9fa05056fe3d5596f4}} 
+\mbox{\hyperlink{class_c_l_i_1_1_config_base}{Config\+Base}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_config_base_a51aaeda01326fe9fa05056fe3d5596f4}{comment}} (char cchar)
+\begin{DoxyCompactList}\small\item\em Specify the configuration for comment characters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_a4b908ce1b5dd91afe112b299d023151a}\label{class_c_l_i_1_1_config_base_a4b908ce1b5dd91afe112b299d023151a}} 
+\mbox{\hyperlink{class_c_l_i_1_1_config_base}{Config\+Base}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_config_base_a4b908ce1b5dd91afe112b299d023151a}{array\+Bounds}} (char a\+Start, char a\+End)
+\begin{DoxyCompactList}\small\item\em Specify the start and end characters for an array. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_ad65f09a4f53efeba44304907180d1eb2}\label{class_c_l_i_1_1_config_base_ad65f09a4f53efeba44304907180d1eb2}} 
+\mbox{\hyperlink{class_c_l_i_1_1_config_base}{Config\+Base}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_config_base_ad65f09a4f53efeba44304907180d1eb2}{array\+Delimiter}} (char a\+Sep)
+\begin{DoxyCompactList}\small\item\em Specify the delimiter character for an array. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_a7245cefabbffb0bce2f2b48d35e24039}\label{class_c_l_i_1_1_config_base_a7245cefabbffb0bce2f2b48d35e24039}} 
+\mbox{\hyperlink{class_c_l_i_1_1_config_base}{Config\+Base}} $\ast$ \mbox{\hyperlink{class_c_l_i_1_1_config_base_a7245cefabbffb0bce2f2b48d35e24039}{value\+Separator}} (char v\+Sep)
+\begin{DoxyCompactList}\small\item\em Specify the delimiter between a name and value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_afd989253b3c1ec6731f0ce21e0343137}\label{class_c_l_i_1_1_config_base_afd989253b3c1ec6731f0ce21e0343137}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_config_base_afd989253b3c1ec6731f0ce21e0343137}{comment\+Char}} = \textquotesingle{};\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em the character used for comments \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_ab55dde43f4fbad4a03d91dd8babd21cb}\label{class_c_l_i_1_1_config_base_ab55dde43f4fbad4a03d91dd8babd21cb}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_config_base_ab55dde43f4fbad4a03d91dd8babd21cb}{array\+Start}} = \textquotesingle{}\textbackslash{}0\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em the character used to start an array \textquotesingle{}\textbackslash{}0\textquotesingle{} is a default to not use \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_ae850866c93a17184acb903fe928a3e6a}\label{class_c_l_i_1_1_config_base_ae850866c93a17184acb903fe928a3e6a}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_config_base_ae850866c93a17184acb903fe928a3e6a}{array\+End}} = \textquotesingle{}\textbackslash{}0\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em the character used to end an array \textquotesingle{}\textbackslash{}0\textquotesingle{} is a default to not use \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_a37d610e93986226f2262f1e774402248}\label{class_c_l_i_1_1_config_base_a37d610e93986226f2262f1e774402248}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_config_base_a37d610e93986226f2262f1e774402248}{array\+Separator}} = \textquotesingle{} \textquotesingle{}
+\begin{DoxyCompactList}\small\item\em the character used to separate elements in an array \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_config_base_aae7e270d0354d4c6540c26da250dc001}\label{class_c_l_i_1_1_config_base_aae7e270d0354d4c6540c26da250dc001}} 
+char \mbox{\hyperlink{class_c_l_i_1_1_config_base_aae7e270d0354d4c6540c26da250dc001}{value\+Delimiter}} = \textquotesingle{}=\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em the character used separate the name from the value \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This converter works with I\+N\+I/\+T\+O\+ML files; to write proper T\+O\+ML files use \mbox{\hyperlink{class_c_l_i_1_1_config_t_o_m_l}{Config\+T\+O\+ML}}. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

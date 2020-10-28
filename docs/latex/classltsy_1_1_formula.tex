@@ -1,0 +1,69 @@
+\hypertarget{classltsy_1_1_formula}{}\doxysection{ltsy\+::Formula Class Reference}
+\label{classltsy_1_1_formula}\index{ltsy::Formula@{ltsy::Formula}}
+
+
+Represents a general formula.  
+
+
+
+
+{\ttfamily \#include $<$syntax.\+h$>$}
+
+Inheritance diagram for ltsy\+::Formula\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classltsy_1_1_formula}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_a86522d1c882957974f530ba8994233d7}\label{classltsy_1_1_formula_a86522d1c882957974f530ba8994233d7}} 
+enum {\bfseries Fmla\+Type} \{ {\bfseries P\+R\+OP}, 
+{\bfseries C\+O\+M\+P\+O\+U\+ND}, 
+{\bfseries U\+N\+K\+N\+O\+WN}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_a6aed20d67ad974e6ea4fad8887432ce0}\label{classltsy_1_1_formula_a6aed20d67ad974e6ea4fad8887432ce0}} 
+virtual int {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ int $>$ \&visitor)=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_aeb68e7d74e3735844c2b3f373f50e09a}\label{classltsy_1_1_formula_aeb68e7d74e3735844c2b3f373f50e09a}} 
+virtual std\+::set$<$ int $>$ {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ std\+::set$<$ int $>$$>$ \&visitor)=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_a3987d81e39c4591795c453eb511b2134}\label{classltsy_1_1_formula_a3987d81e39c4591795c453eb511b2134}} 
+virtual void {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ void $>$ \&visitor)=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_ad4548294edcfaac3b36987f04afc8c10}\label{classltsy_1_1_formula_ad4548294edcfaac3b36987f04afc8c10}} 
+virtual bool {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ bool $>$ \&visitor)=0
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_a2863d39c37b806665891e0cfb1726d71}\label{classltsy_1_1_formula_a2863d39c37b806665891e0cfb1726d71}} 
+Fmla\+Type {\bfseries type} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_a2c86b12bbd37998270c4ea06f489b525}\label{classltsy_1_1_formula_a2c86b12bbd37998270c4ea06f489b525}} 
+Fmla\+Type {\bfseries \+\_\+type} = Fmla\+Type\+::\+U\+N\+K\+N\+O\+WN
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_formula_a1fd3e289b19b19ca7fe23d23e8097e60}\label{classltsy_1_1_formula_a1fd3e289b19b19ca7fe23d23e8097e60}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} \&f)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a general formula. 
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/syntax.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,124 @@
+\hypertarget{classdiscreture_1_1_dyck_paths}{}\doxysection{discreture\+::Dyck\+Paths$<$ Int\+Type, R\+A\+Container\+Int $>$ Class Template Reference}
+\label{classdiscreture_1_1_dyck_paths}\index{discreture::DyckPaths$<$ IntType, RAContainerInt $>$@{discreture::DyckPaths$<$ IntType, RAContainerInt $>$}}
+
+
+Class for iterating through all dyck (dyck) paths.  
+
+
+
+
+{\ttfamily \#include $<$Dyck\+Paths.\+hpp$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classdiscreture_1_1_dyck_paths_1_1iterator}{iterator}}
+\begin{DoxyCompactList}\small\item\em Forward iterator class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_aaaf4cab323782cffb8cad090a72b3f90}\label{classdiscreture_1_1_dyck_paths_aaaf4cab323782cffb8cad090a72b3f90}} 
+using {\bfseries value\+\_\+type} = R\+A\+Container\+Int
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_abd7f4950590c6f26e5e4e483cbe1d246}\label{classdiscreture_1_1_dyck_paths_abd7f4950590c6f26e5e4e483cbe1d246}} 
+using {\bfseries dyck\+\_\+path} = value\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a1d3ad79f5fc902ba9e3a6556adf975a0}\label{classdiscreture_1_1_dyck_paths_a1d3ad79f5fc902ba9e3a6556adf975a0}} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_abfc75951ddb801a2d1e85276cdf4f92f}\label{classdiscreture_1_1_dyck_paths_abfc75951ddb801a2d1e85276cdf4f92f}} 
+using {\bfseries size\+\_\+type} = difference\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_aae0b2e17e7ad2cc031fc467d5c0359b2}\label{classdiscreture_1_1_dyck_paths_aae0b2e17e7ad2cc031fc467d5c0359b2}} 
+using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_dyck_paths_1_1iterator}{iterator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdiscreture_1_1_dyck_paths_a68e98a0b9f8c5baa40be316998ebfb74}{Dyck\+Paths}} (Int\+Type n)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+size\+\_\+type \mbox{\hyperlink{classdiscreture_1_1_dyck_paths_a22a12a0380db242b627680f67a0a5567}{size}} () const
+\begin{DoxyCompactList}\small\item\em The total number of dyck\+\_\+paths. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a0ce2a86c255ee7ab25feb896ef6dd1bd}\label{classdiscreture_1_1_dyck_paths_a0ce2a86c255ee7ab25feb896ef6dd1bd}} 
+Int\+Type {\bfseries get\+\_\+n} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_ad84d091194f1b2a2650cc84f40478aa7}\label{classdiscreture_1_1_dyck_paths_ad84d091194f1b2a2650cc84f40478aa7}} 
+\mbox{\hyperlink{classdiscreture_1_1_dyck_paths_1_1iterator}{iterator}} {\bfseries begin} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a89188563439e20e32aa71627d9e6f579}\label{classdiscreture_1_1_dyck_paths_a89188563439e20e32aa71627d9e6f579}} 
+const \mbox{\hyperlink{classdiscreture_1_1_dyck_paths_1_1iterator}{iterator}} {\bfseries end} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a949ec323b676d3b784f544d7b1472e8f}\label{classdiscreture_1_1_dyck_paths_a949ec323b676d3b784f544d7b1472e8f}} 
+static void {\bfseries next\+\_\+dyck\+\_\+path} (dyck\+\_\+path \&data)
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a74f7311241446756ebf26cb7cdbbe37c}\label{classdiscreture_1_1_dyck_paths_a74f7311241446756ebf26cb7cdbbe37c}} 
+static std\+::string {\bfseries to\+\_\+string} (const dyck\+\_\+path \&data, const std\+::string \&delim=\char`\"{}()\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class Int\+Type = int, class R\+A\+Container\+Int = std\+::vector$<$\+Int\+Type$>$$>$\newline
+class discreture\+::\+Dyck\+Paths$<$ Int\+Type, R\+A\+Container\+Int $>$}
+
+Class for iterating through all dyck (dyck) paths. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Int\+Type} & must be a S\+I\+G\+N\+ED integer type.\\
+\hline
+\end{DoxyParams}
+Dyck paths, also called Catalan Paths, are paths that go from $(0,0)$ to $(0,2n)$, which never go below the $ y=0$ line, in which each step is from $(x,y)$ to either $(x+1,y+1)$ or $(x+1,y-1)$ \#\+Example Usage\+: \begin{DoxyVerb}dyck_paths X(3)
+for (auto&& x : X)
+    cout << x << endl;
+\end{DoxyVerb}
+ Prints out\+: \mbox{[} 1 1 1 -\/1 -\/1 -\/1 \mbox{]} \mbox{[} 1 1 -\/1 1 -\/1 -\/1 \mbox{]} \mbox{[} 1 -\/1 1 1 -\/1 -\/1 \mbox{]} \mbox{[} 1 1 -\/1 -\/1 1 -\/1 \mbox{]} \mbox{[} 1 -\/1 1 -\/1 1 -\/1 \mbox{]}\hypertarget{classdiscreture_1_1_dyck_paths_autotoc_md4}{}\doxysubsection{Example\+: Parenthesis}\label{classdiscreture_1_1_dyck_paths_autotoc_md4}
+\begin{DoxyVerb}dyck_paths X(3)
+for (auto&& x : X)
+    cout << dyck_paths::to_string(x, "()") << endl;
+\end{DoxyVerb}
+
+
+Prints out\+: ((())) (()()) ()(()) (())() ()()() 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a68e98a0b9f8c5baa40be316998ebfb74}\label{classdiscreture_1_1_dyck_paths_a68e98a0b9f8c5baa40be316998ebfb74}} 
+\index{discreture::DyckPaths$<$ IntType, RAContainerInt $>$@{discreture::DyckPaths$<$ IntType, RAContainerInt $>$}!DyckPaths@{DyckPaths}}
+\index{DyckPaths@{DyckPaths}!discreture::DyckPaths$<$ IntType, RAContainerInt $>$@{discreture::DyckPaths$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{DyckPaths()}{DyckPaths()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_dyck_paths}{discreture\+::\+Dyck\+Paths}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::\mbox{\hyperlink{classdiscreture_1_1_dyck_paths}{Dyck\+Paths}} (\begin{DoxyParamCaption}\item[{Int\+Type}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & is an integer $>$= 0 \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classdiscreture_1_1_dyck_paths_a22a12a0380db242b627680f67a0a5567}\label{classdiscreture_1_1_dyck_paths_a22a12a0380db242b627680f67a0a5567}} 
+\index{discreture::DyckPaths$<$ IntType, RAContainerInt $>$@{discreture::DyckPaths$<$ IntType, RAContainerInt $>$}!size@{size}}
+\index{size@{size}!discreture::DyckPaths$<$ IntType, RAContainerInt $>$@{discreture::DyckPaths$<$ IntType, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily template$<$class Int\+Type  = int, class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+size\+\_\+type \mbox{\hyperlink{classdiscreture_1_1_dyck_paths}{discreture\+::\+Dyck\+Paths}}$<$ Int\+Type, R\+A\+Container\+Int $>$\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The total number of dyck\+\_\+paths. 
+
+\begin{DoxyReturn}{Returns}
+binomial(2n,n)/(n+1) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+Discreture/Dyck\+Paths.\+hpp\end{DoxyCompactItemize}

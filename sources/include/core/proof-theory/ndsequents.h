@@ -96,6 +96,22 @@ namespace ltsy {
                 os << std::string(" ]");
                 return os; 
             }
+
+            /* Infer a signature from the formulas present
+             * in the sequent.
+             *
+             * @return a signature having connectives appearing in the
+             * sequent
+             * */
+            Signature infer_signature() const {
+                SignatureCollector collector;
+                for (const auto& fmls : _sequent_fmlas) {
+                    for (const auto& fmla : fmls) {
+                        fmla->accept(collector);
+                    }      
+                }
+                return collector.get_collected_signature();
+            }
     };
 
     template class NdSequent<std::vector>;
@@ -112,8 +128,14 @@ namespace ltsy {
         private:
             std::vector<NdSequent<FmlaContainerT>> _premisses;
             std::vector<NdSequent<FmlaContainerT>> _conclusions;
+            std::string _name;
 
         public:
+
+            NdSequentRule(const std::string& name, const decltype(_premisses)& premisses,
+                    const decltype(_conclusions)& conclusions) : 
+                _name {name},
+                _premisses {premisses}, _conclusions {conclusions} {/* empty */}
 
             NdSequentRule(const decltype(_premisses)& premisses,
                     const decltype(_conclusions)& conclusions) :
@@ -121,6 +143,7 @@ namespace ltsy {
 
             inline decltype(_premisses) premisses() const { return _premisses; };
             inline decltype(_conclusions) conclusions() const { return _conclusions; };
+            inline decltype(_name) name() const { return _name; };
 
             std::set<std::shared_ptr<Prop>> collect_props() const {
                 std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>> props;
@@ -134,6 +157,21 @@ namespace ltsy {
                 }
                 std::set<std::shared_ptr<Prop>> result {props.begin(), props.end()};
                 return result;
+            }
+
+            /* Infer a signature from the formulas present
+             * in the rule.
+             *
+             * @return a signature having connectives appearing in the
+             * rule
+             * */
+            Signature infer_signature() const {
+                Signature sig;
+                for (const auto& p : _premisses)
+                    sig.join(p.infer_signature());
+                for (const auto& c : _conclusions) 
+                    sig.join(c.infer_signature());
+                return sig;
             }
 
     };

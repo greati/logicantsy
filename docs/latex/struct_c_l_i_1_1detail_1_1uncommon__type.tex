@@ -1,0 +1,34 @@
+\hypertarget{struct_c_l_i_1_1detail_1_1uncommon__type}{}\doxysection{C\+LI\+::detail\+::uncommon\+\_\+type$<$ T $>$ Struct Template Reference}
+\label{struct_c_l_i_1_1detail_1_1uncommon__type}\index{CLI::detail::uncommon\_type$<$ T $>$@{CLI::detail::uncommon\_type$<$ T $>$}}
+
+
+Handy helper to contain a bunch of checks that rule out many common types (integers, string like, floating point, vectors, and enumerations.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1uncommon__type_a85a52b819aa8bc307eb088c5bea85c81}\label{struct_c_l_i_1_1detail_1_1uncommon__type_a85a52b819aa8bc307eb088c5bea85c81}} 
+using {\bfseries type} = typename std\+::conditional$<$!std\+::is\+\_\+floating\+\_\+point$<$ T $>$\+::value \&\&!std\+::is\+\_\+integral$<$ T $>$\+::value \&\&!std\+::is\+\_\+assignable$<$ T \&, std\+::string $>$\+::value \&\&!std\+::is\+\_\+constructible$<$ T, std\+::string $>$\+::value \&\&!\mbox{\hyperlink{struct_c_l_i_1_1is__vector}{is\+\_\+vector}}$<$ T $>$\+::value \&\&!std\+::is\+\_\+enum$<$ T $>$\+::value, std\+::true\+\_\+type, std\+::false\+\_\+type $>$\+::type
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1uncommon__type_a9c6f4ec434aa41cd1ddf0b03f907e78a}\label{struct_c_l_i_1_1detail_1_1uncommon__type_a9c6f4ec434aa41cd1ddf0b03f907e78a}} 
+static constexpr bool {\bfseries value} = type\+::value
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+struct C\+L\+I\+::detail\+::uncommon\+\_\+type$<$ T $>$}
+
+Handy helper to contain a bunch of checks that rule out many common types (integers, string like, floating point, vectors, and enumerations. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

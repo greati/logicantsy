@@ -1,0 +1,58 @@
+\hypertarget{classltsy_1_1_prop}{}\doxysection{ltsy\+::Prop Class Reference}
+\label{classltsy_1_1_prop}\index{ltsy::Prop@{ltsy::Prop}}
+
+
+Represents a propositional symbol.  
+
+
+
+
+{\ttfamily \#include $<$syntax.\+h$>$}
+
+Inheritance diagram for ltsy\+::Prop\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classltsy_1_1_prop}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_a4d9522cafd6089bb11488c86a591d4cd}\label{classltsy_1_1_prop_a4d9522cafd6089bb11488c86a591d4cd}} 
+{\bfseries Prop} (const Symbol \&\+\_\+symbol)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_a3319285a15b3f21b6094154f0a9edad6}\label{classltsy_1_1_prop_a3319285a15b3f21b6094154f0a9edad6}} 
+Symbol {\bfseries symbol} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_af20f20454b811fde0305c75e18342833}\label{classltsy_1_1_prop_af20f20454b811fde0305c75e18342833}} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classltsy_1_1_prop}{Prop}} \&p1) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_a006bef53dd0bdaa1ac902970d17bf909}\label{classltsy_1_1_prop_a006bef53dd0bdaa1ac902970d17bf909}} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classltsy_1_1_prop}{Prop}} \&p2) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_a757eae6d780486ff02513b92957cf383}\label{classltsy_1_1_prop_a757eae6d780486ff02513b92957cf383}} 
+int {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ int $>$ \&visitor)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_a40d4aa3b81e254aa82630ad86f1e12b3}\label{classltsy_1_1_prop_a40d4aa3b81e254aa82630ad86f1e12b3}} 
+bool {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ bool $>$ \&visitor)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_aef8d43802d5ccdc05f6e64a2f2a624b6}\label{classltsy_1_1_prop_aef8d43802d5ccdc05f6e64a2f2a624b6}} 
+void {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ void $>$ \&visitor)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_prop_adc8614f2596e56249e05b88ae5c67efc}\label{classltsy_1_1_prop_adc8614f2596e56249e05b88ae5c67efc}} 
+std\+::set$<$ int $>$ {\bfseries accept} (\mbox{\hyperlink{classltsy_1_1_formula_visitor}{Formula\+Visitor}}$<$ std\+::set$<$ int $>$$>$ \&visitor)
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Represents a propositional symbol. 
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/syntax.\+h\end{DoxyCompactItemize}

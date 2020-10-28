@@ -1,0 +1,63 @@
+\hypertarget{class_c_l_i_1_1_as_number_with_unit}{}\doxysection{C\+LI\+::As\+Number\+With\+Unit Class Reference}
+\label{class_c_l_i_1_1_as_number_with_unit}\index{CLI::AsNumberWithUnit@{CLI::AsNumberWithUnit}}
+
+
+Multiply a number by a factor using given mapping.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::As\+Number\+With\+Unit\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_c_l_i_1_1_as_number_with_unit}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_c_l_i_1_1_as_number_with_unit_a4f1b96d1a43a6acb3f85b68dd6f5a321}{Options}} \{ \newline
+{\bfseries C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE} = 0, 
+{\bfseries C\+A\+S\+E\+\_\+\+I\+N\+S\+E\+N\+S\+I\+T\+I\+VE} = 1, 
+{\bfseries U\+N\+I\+T\+\_\+\+O\+P\+T\+I\+O\+N\+AL} = 0, 
+{\bfseries U\+N\+I\+T\+\_\+\+R\+E\+Q\+U\+I\+R\+ED} = 2, 
+\newline
+{\bfseries D\+E\+F\+A\+U\+LT} = C\+A\+S\+E\+\_\+\+I\+N\+S\+E\+N\+S\+I\+T\+I\+VE $\vert$ U\+N\+I\+T\+\_\+\+O\+P\+T\+I\+O\+N\+AL
+ \}
+\begin{DoxyCompactList}\small\item\em Adjust \mbox{\hyperlink{class_c_l_i_1_1_as_number_with_unit}{As\+Number\+With\+Unit}} behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_as_number_with_unit_af5d2fc29cd92c1821e653a97f91b00cb}\label{class_c_l_i_1_1_as_number_with_unit_af5d2fc29cd92c1821e653a97f91b00cb}} 
+{\footnotesize template$<$typename Number $>$ }\\{\bfseries As\+Number\+With\+Unit} (\mbox{\hyperlink{classstd_1_1map}{std\+::map}}$<$ std\+::string, Number $>$ mapping, \mbox{\hyperlink{class_c_l_i_1_1_as_number_with_unit_a4f1b96d1a43a6acb3f85b68dd6f5a321}{Options}} opts=D\+E\+F\+A\+U\+LT, const std\+::string \&unit\+\_\+name=\char`\"{}U\+N\+IT\char`\"{})
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Multiply a number by a factor using given mapping. 
+
+Can be used to write transforms for S\+I\+ZE or D\+U\+R\+A\+T\+I\+ON inputs.
+
+Example\+: With mapping = {\ttfamily \{\char`\"{}b\char`\"{}-\/$>$1, \char`\"{}kb\char`\"{}-\/$>$1024, \char`\"{}mb\char`\"{}-\/$>$1024$\ast$1024\}} one can recognize inputs like \char`\"{}100\char`\"{}, \char`\"{}12kb\char`\"{}, \char`\"{}100 M\+B\char`\"{}, that will be automatically transformed to 100, 14448, 104857600.
+
+Output number type matches the type in the provided mapping. Therefore, if it is required to interpret real inputs like \char`\"{}0.\+42 s\char`\"{}, the mapping should be of a type $<$string, float$>$ or $<$string, double$>$. 
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_as_number_with_unit_a4f1b96d1a43a6acb3f85b68dd6f5a321}\label{class_c_l_i_1_1_as_number_with_unit_a4f1b96d1a43a6acb3f85b68dd6f5a321}} 
+\index{CLI::AsNumberWithUnit@{CLI::AsNumberWithUnit}!Options@{Options}}
+\index{Options@{Options}!CLI::AsNumberWithUnit@{CLI::AsNumberWithUnit}}
+\doxysubsubsection{\texorpdfstring{Options}{Options}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_c_l_i_1_1_as_number_with_unit_a4f1b96d1a43a6acb3f85b68dd6f5a321}{C\+L\+I\+::\+As\+Number\+With\+Unit\+::\+Options}}}
+
+
+
+Adjust \mbox{\hyperlink{class_c_l_i_1_1_as_number_with_unit}{As\+Number\+With\+Unit}} behavior. 
+
+C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+V\+E/\+C\+A\+S\+E\+\_\+\+I\+N\+S\+E\+N\+S\+I\+T\+I\+VE controls how units are matched. U\+N\+I\+T\+\_\+\+O\+P\+T\+I\+O\+N\+A\+L/\+U\+N\+I\+T\+\_\+\+R\+E\+Q\+U\+I\+R\+ED throws \mbox{\hyperlink{class_c_l_i_1_1_validation_error}{Validation\+Error}} if U\+N\+I\+T\+\_\+\+R\+E\+Q\+U\+I\+R\+ED is set and unit literal is not found. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

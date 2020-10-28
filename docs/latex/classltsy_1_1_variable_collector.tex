@@ -1,0 +1,37 @@
+\hypertarget{classltsy_1_1_variable_collector}{}\doxysection{ltsy\+::Variable\+Collector Class Reference}
+\label{classltsy_1_1_variable_collector}\index{ltsy::VariableCollector@{ltsy::VariableCollector}}
+
+
+A visitor that collects all variables in a formula.  
+
+
+
+
+{\ttfamily \#include $<$syntax.\+h$>$}
+
+Inheritance diagram for ltsy\+::Variable\+Collector\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classltsy_1_1_variable_collector}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_variable_collector_a1a6ddee19eafdb33db78ac6de0c8a601}\label{classltsy_1_1_variable_collector_a1a6ddee19eafdb33db78ac6de0c8a601}} 
+virtual void {\bfseries visit\+\_\+prop} (\mbox{\hyperlink{classltsy_1_1_prop}{Prop}} $\ast$prop) override
+\item 
+\mbox{\Hypertarget{classltsy_1_1_variable_collector_a5a0751ba1bf63b22b8603b19a76dd525}\label{classltsy_1_1_variable_collector_a5a0751ba1bf63b22b8603b19a76dd525}} 
+virtual void {\bfseries visit\+\_\+compound} (\mbox{\hyperlink{classltsy_1_1_compound}{Compound}} $\ast$compound) override
+\item 
+\mbox{\Hypertarget{classltsy_1_1_variable_collector_a30c5666b0c04840b926b919411cd1e5d}\label{classltsy_1_1_variable_collector_a30c5666b0c04840b926b919411cd1e5d}} 
+virtual decltype(collected\+\_\+variables) {\bfseries get\+\_\+collected\+\_\+variables} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A visitor that collects all variables in a formula. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/syntax.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,52 @@
+\hypertarget{classltsy_1_1_truth_interp}{}\doxysection{ltsy\+::Truth\+Interp$<$ Cell\+Type $>$ Class Template Reference}
+\label{classltsy_1_1_truth_interp}\index{ltsy::TruthInterp$<$ CellType $>$@{ltsy::TruthInterp$<$ CellType $>$}}
+
+
+Holds the interpretation relation between a connective and a truth table.  
+
+
+
+
+{\ttfamily \#include $<$nmatrices.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_interp_a518d04415313def27ef3147c7f9c0fdc}\label{classltsy_1_1_truth_interp_a518d04415313def27ef3147c7f9c0fdc}} 
+{\bfseries Truth\+Interp} (decltype(\+\_\+connective) connective, decltype(\+\_\+truth\+\_\+table) truth\+\_\+table)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_interp_a45da25fea23ab7510d0d2d729d720489}\label{classltsy_1_1_truth_interp_a45da25fea23ab7510d0d2d729d720489}} 
+decltype(\+\_\+connective) {\bfseries connective} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_interp_ae067c85c7629dd541e901a8e62050cce}\label{classltsy_1_1_truth_interp_ae067c85c7629dd541e901a8e62050cce}} 
+decltype(\+\_\+truth\+\_\+table) {\bfseries truth\+\_\+table} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_interp_aaf795e38c5855ba00034d90cf8684164}\label{classltsy_1_1_truth_interp_aaf795e38c5855ba00034d90cf8684164}} 
+Cell\+Type {\bfseries at} (const std\+::vector$<$ int $>$ \&args) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_truth_interp_a0c9fb92e85c540d64169a01b1911a954}\label{classltsy_1_1_truth_interp_a0c9fb92e85c540d64169a01b1911a954}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classltsy_1_1_truth_interp}{Truth\+Interp}}$<$ Cell\+Type $>$ \&ti)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Cell\+Type = int$>$\newline
+class ltsy\+::\+Truth\+Interp$<$ Cell\+Type $>$}
+
+Holds the interpretation relation between a connective and a truth table. 
+
+Main purpose is to guarantee that this relation is well set up.
+
+Notice that Cell\+Type will define if the interpretation is deterministic or not.
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/nmatrices.\+h\end{DoxyCompactItemize}

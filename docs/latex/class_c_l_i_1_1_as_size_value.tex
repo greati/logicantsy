@@ -1,0 +1,52 @@
+\hypertarget{class_c_l_i_1_1_as_size_value}{}\doxysection{C\+LI\+::As\+Size\+Value Class Reference}
+\label{class_c_l_i_1_1_as_size_value}\index{CLI::AsSizeValue@{CLI::AsSizeValue}}
+
+
+Converts a human-\/readable size string (with unit literal) to uin64\+\_\+t size.  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::As\+Size\+Value\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_c_l_i_1_1_as_size_value}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_l_i_1_1_as_size_value_adb05af0aa99ba3dddbb3548d42e3de26}\label{class_c_l_i_1_1_as_size_value_adb05af0aa99ba3dddbb3548d42e3de26}} 
+using {\bfseries result\+\_\+t} = std\+::uint64\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_l_i_1_1_as_size_value_a2b4907603d2a0539df639bbc468e0ec0}{As\+Size\+Value}} (bool kb\+\_\+is\+\_\+1000)
+\begin{DoxyCompactList}\small\item\em If kb\+\_\+is\+\_\+1000 is true, interpret \textquotesingle{}kb\textquotesingle{}, \textquotesingle{}k\textquotesingle{} as 1000 and \textquotesingle{}kib\textquotesingle{}, \textquotesingle{}ki\textquotesingle{} as 1024 (same applies to higher order units as well). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Converts a human-\/readable size string (with unit literal) to uin64\+\_\+t size. 
+
+Example\+: \char`\"{}100\char`\"{} =$>$ 100 \char`\"{}1 b\char`\"{} =$>$ 100 \char`\"{}10\+Kb\char`\"{} =$>$ 10240 // you can configure this to be interpreted as kilobyte ($\ast$1000) or kibibyte ($\ast$1024) \char`\"{}10 K\+B\char`\"{} =$>$ 10240 \char`\"{}10 kb\char`\"{} =$>$ 10240 \char`\"{}10 kib\char`\"{} =$>$ 10240 // $\ast$i, $\ast$ib are always interpreted as $\ast$bibyte ($\ast$1024) \char`\"{}10kb\char`\"{} =$>$ 10240 \char`\"{}2 M\+B\char`\"{} =$>$ 2097152 \char`\"{}2 Ei\+B\char`\"{} =$>$ 2$^\wedge$61 // Units up to exibyte are supported 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_l_i_1_1_as_size_value_a2b4907603d2a0539df639bbc468e0ec0}\label{class_c_l_i_1_1_as_size_value_a2b4907603d2a0539df639bbc468e0ec0}} 
+\index{CLI::AsSizeValue@{CLI::AsSizeValue}!AsSizeValue@{AsSizeValue}}
+\index{AsSizeValue@{AsSizeValue}!CLI::AsSizeValue@{CLI::AsSizeValue}}
+\doxysubsubsection{\texorpdfstring{AsSizeValue()}{AsSizeValue()}}
+{\footnotesize\ttfamily C\+L\+I\+::\+As\+Size\+Value\+::\+As\+Size\+Value (\begin{DoxyParamCaption}\item[{bool}]{kb\+\_\+is\+\_\+1000 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+If kb\+\_\+is\+\_\+1000 is true, interpret \textquotesingle{}kb\textquotesingle{}, \textquotesingle{}k\textquotesingle{} as 1000 and \textquotesingle{}kib\textquotesingle{}, \textquotesingle{}ki\textquotesingle{} as 1024 (same applies to higher order units as well). 
+
+Otherwise, interpret all literals as factors of 1024. The first option is formally correct, but the second interpretation is more wide-\/spread (see \href{https://en.wikipedia.org/wiki/Binary_prefix}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Binary\+\_\+prefix}}). 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

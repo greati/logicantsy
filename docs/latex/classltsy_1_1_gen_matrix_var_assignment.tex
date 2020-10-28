@@ -1,0 +1,53 @@
+\hypertarget{classltsy_1_1_gen_matrix_var_assignment}{}\doxysection{ltsy\+::Gen\+Matrix\+Var\+Assignment Class Reference}
+\label{classltsy_1_1_gen_matrix_var_assignment}\index{ltsy::GenMatrixVarAssignment@{ltsy::GenMatrixVarAssignment}}
+
+
+A valuation over an generalized matrix, specified by assignments to each propositional variable.  
+
+
+
+
+{\ttfamily \#include $<$genmatrix.\+h$>$}
+
+Inheritance diagram for ltsy\+::Gen\+Matrix\+Var\+Assignment\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classltsy_1_1_gen_matrix_var_assignment}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_gen_matrix_var_assignment_a64940e60f6a2497afc6a9e8e449aed29}\label{classltsy_1_1_gen_matrix_var_assignment_a64940e60f6a2497afc6a9e8e449aed29}} 
+\mbox{\hyperlink{classltsy_1_1_gen_matrix_var_assignment_a64940e60f6a2497afc6a9e8e449aed29}{Gen\+Matrix\+Var\+Assignment}} (decltype(\+\_\+nmatrix\+\_\+ptr) nmatrix\+\_\+ptr, const std\+::vector$<$ std\+::pair$<$ \mbox{\hyperlink{classltsy_1_1_prop}{Prop}}, int $>$$>$ \&mappings)
+\begin{DoxyCompactList}\small\item\em Initialize a valuation, by indicating the corresponding generalized matrix and the map that assigns to each propositional variable a truth-\/value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_gen_matrix_var_assignment_a9cdff29e24f1a413b5dd9022c824efd7}\label{classltsy_1_1_gen_matrix_var_assignment_a9cdff29e24f1a413b5dd9022c824efd7}} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classltsy_1_1_gen_matrix_var_assignment}{Gen\+Matrix\+Var\+Assignment}} \&other) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_gen_matrix_var_assignment_a7af37059d0ec1e02d27684b806514fd8}\label{classltsy_1_1_gen_matrix_var_assignment_a7af37059d0ec1e02d27684b806514fd8}} 
+std\+::stringstream {\bfseries print} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_gen_matrix_var_assignment_ad7e1a3b9d6ee1ebc2a2848e6ca5ef880}\label{classltsy_1_1_gen_matrix_var_assignment_ad7e1a3b9d6ee1ebc2a2848e6ca5ef880}} 
+decltype(\+\_\+nmatrix\+\_\+ptr) {\bfseries nmatrix\+\_\+ptr} () const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_gen_matrix_var_assignment_a3549adaf74d874601e4d16e3f472faab}\label{classltsy_1_1_gen_matrix_var_assignment_a3549adaf74d874601e4d16e3f472faab}} 
+int {\bfseries operator()} (const \mbox{\hyperlink{classltsy_1_1_prop}{Prop}} \&p)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_gen_matrix_var_assignment_a575fa9006b789094f6cc251757097942}\label{classltsy_1_1_gen_matrix_var_assignment_a575fa9006b789094f6cc251757097942}} 
+std\+::pair$<$ bool, std\+::optional$<$ std\+::set$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$ $>$ $>$ $>$ {\bfseries is\+\_\+model} (const std\+::set$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_formula}{Formula}} $>$$>$ \&fmls, const std\+::set$<$ int $>$ \&dset)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A valuation over an generalized matrix, specified by assignments to each propositional variable. 
+
+Although it is formally expected of such a valuation to provide a single truth-\/value to each formula, we implement this visitor to answer with all possible values, since we are dealing here with non-\/truth-\/funcional semantics (see the theory of N\+Matrices).
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/genmatrix.\+h\end{DoxyCompactItemize}

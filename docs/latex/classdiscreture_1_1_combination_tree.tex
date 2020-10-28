@@ -1,0 +1,70 @@
+\hypertarget{classdiscreture_1_1_combination_tree}{}\doxysection{discreture\+::Combination\+Tree$<$ Int\+Type, Predicate, R\+A\+Container\+Int $>$ Class Template Reference}
+\label{classdiscreture_1_1_combination_tree}\index{discreture::CombinationTree$<$ IntType, Predicate, RAContainerInt $>$@{discreture::CombinationTree$<$ IntType, Predicate, RAContainerInt $>$}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classdiscreture_1_1_combination_tree_1_1iterator}{iterator}}
+\begin{DoxyCompactList}\small\item\em Forward iterator for constructing combinations that satisfy a certain predicate one by one. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a7386f5fa026a6431d1539ab01de9df3c}\label{classdiscreture_1_1_combination_tree_a7386f5fa026a6431d1539ab01de9df3c}} 
+using {\bfseries value\+\_\+type} = R\+A\+Container\+Int
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a5268ff8f85b23e988e5587c5a04d53e8}\label{classdiscreture_1_1_combination_tree_a5268ff8f85b23e988e5587c5a04d53e8}} 
+using {\bfseries combination} = value\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a62b8d510c7348d4f8d738ad7d1c7be51}\label{classdiscreture_1_1_combination_tree_a62b8d510c7348d4f8d738ad7d1c7be51}} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_ab8920845dabfae3162268ae543d81187}\label{classdiscreture_1_1_combination_tree_ab8920845dabfae3162268ae543d81187}} 
+using {\bfseries size\+\_\+type} = difference\+\_\+type
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a87a8908de50a1d4211df3a30ac959303}\label{classdiscreture_1_1_combination_tree_a87a8908de50a1d4211df3a30ac959303}} 
+using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classdiscreture_1_1_combination_tree_1_1iterator}{iterator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdiscreture_1_1_combination_tree_a79bd5c5428e0f2c335d0cf4b47e045f2}{Combination\+Tree}} (Int\+Type n, Int\+Type k, Predicate p)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a7127294515cfb9bbfd031e9c94ea2607}\label{classdiscreture_1_1_combination_tree_a7127294515cfb9bbfd031e9c94ea2607}} 
+Int\+Type {\bfseries get\+\_\+n} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a9e39e4d05b9e49fa72b0121c37b10593}\label{classdiscreture_1_1_combination_tree_a9e39e4d05b9e49fa72b0121c37b10593}} 
+Int\+Type {\bfseries get\+\_\+k} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_aa9551b8a8e1095eaf2885e5756ab9de5}\label{classdiscreture_1_1_combination_tree_aa9551b8a8e1095eaf2885e5756ab9de5}} 
+const \mbox{\hyperlink{classdiscreture_1_1_combination_tree_1_1iterator}{iterator}} \& {\bfseries begin} () const
+\item 
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_ae782b6801fb8484b340ebf24e86955b1}\label{classdiscreture_1_1_combination_tree_ae782b6801fb8484b340ebf24e86955b1}} 
+const \mbox{\hyperlink{classdiscreture_1_1_combination_tree_1_1iterator}{iterator}} \& {\bfseries end} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdiscreture_1_1_combination_tree_a79bd5c5428e0f2c335d0cf4b47e045f2}\label{classdiscreture_1_1_combination_tree_a79bd5c5428e0f2c335d0cf4b47e045f2}} 
+\index{discreture::CombinationTree$<$ IntType, Predicate, RAContainerInt $>$@{discreture::CombinationTree$<$ IntType, Predicate, RAContainerInt $>$}!CombinationTree@{CombinationTree}}
+\index{CombinationTree@{CombinationTree}!discreture::CombinationTree$<$ IntType, Predicate, RAContainerInt $>$@{discreture::CombinationTree$<$ IntType, Predicate, RAContainerInt $>$}}
+\doxysubsubsection{\texorpdfstring{CombinationTree()}{CombinationTree()}}
+{\footnotesize\ttfamily template$<$class Int\+Type , class Predicate , class R\+A\+Container\+Int  = std\+::vector$<$\+Int\+Type$>$$>$ \\
+\mbox{\hyperlink{classdiscreture_1_1_combination_tree}{discreture\+::\+Combination\+Tree}}$<$ Int\+Type, Predicate, R\+A\+Container\+Int $>$\+::\mbox{\hyperlink{classdiscreture_1_1_combination_tree}{Combination\+Tree}} (\begin{DoxyParamCaption}\item[{Int\+Type}]{n,  }\item[{Int\+Type}]{k,  }\item[{Predicate}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & is an integer $>$= 0 \\
+\hline
+{\em k} & is an integer with 0 $<$= k $<$= n \\
+\hline
+{\em p} & is a partial predicate (unary function or functor) that takes as input a partial combination and returns either true or false. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+Discreture/Combination\+Tree.\+hpp\end{DoxyCompactItemize}

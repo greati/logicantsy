@@ -1,0 +1,51 @@
+\hypertarget{classltsy_1_1_signature_truth_interp}{}\doxysection{ltsy\+::Signature\+Truth\+Interp$<$ Cell\+Type $>$ Class Template Reference}
+\label{classltsy_1_1_signature_truth_interp}\index{ltsy::SignatureTruthInterp$<$ CellType $>$@{ltsy::SignatureTruthInterp$<$ CellType $>$}}
+
+
+Holds the truth interpretation of a whole signature.  
+
+
+
+
+{\ttfamily \#include $<$nmatrices.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_truth_interp_ae7cbe3fb9bb61c85606a50ded1aa6bad}\label{classltsy_1_1_signature_truth_interp_ae7cbe3fb9bb61c85606a50ded1aa6bad}} 
+{\bfseries Signature\+Truth\+Interp} (decltype(\+\_\+signature) \+\_\+signature)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_truth_interp_aba64d54979a383f5e5412acb47e30d5f}\label{classltsy_1_1_signature_truth_interp_aba64d54979a383f5e5412acb47e30d5f}} 
+{\bfseries Signature\+Truth\+Interp} (decltype(\+\_\+signature) \+\_\+signature, std\+::initializer\+\_\+list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_truth_interp}{Truth\+Interp}}$<$ Cell\+Type $>$$>$$>$ \+\_\+interps)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_truth_interp_a34cecb7a4f8143113698a4ce8312cf2d}\label{classltsy_1_1_signature_truth_interp_a34cecb7a4f8143113698a4ce8312cf2d}} 
+void {\bfseries try\+\_\+interpret} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_truth_interp}{Truth\+Interp}}$<$ Cell\+Type $>$$>$ truth\+\_\+interp, bool allow\+\_\+overwrite=false)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_truth_interp_a28934074998a63e6996d36ea39a13564}\label{classltsy_1_1_signature_truth_interp_a28934074998a63e6996d36ea39a13564}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_truth_interp}{Truth\+Interp}}$<$ Cell\+Type $>$ $>$ {\bfseries get\+\_\+interpretation} (const Symbol \&symbol) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_truth_interp_a170839dbe6c9d964b83e1abbf2f1ea71}\label{classltsy_1_1_signature_truth_interp_a170839dbe6c9d964b83e1abbf2f1ea71}} 
+decltype(\+\_\+signature) {\bfseries signature} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_truth_interp_a5ccc44787951d3aed7bece05cdde464a}\label{classltsy_1_1_signature_truth_interp_a5ccc44787951d3aed7bece05cdde464a}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classltsy_1_1_signature_truth_interp}{Signature\+Truth\+Interp}}$<$ Cell\+Type $>$ \&ti)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Cell\+Type$>$\newline
+class ltsy\+::\+Signature\+Truth\+Interp$<$ Cell\+Type $>$}
+
+Holds the truth interpretation of a whole signature. 
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/semantics/nmatrices.\+h\end{DoxyCompactItemize}

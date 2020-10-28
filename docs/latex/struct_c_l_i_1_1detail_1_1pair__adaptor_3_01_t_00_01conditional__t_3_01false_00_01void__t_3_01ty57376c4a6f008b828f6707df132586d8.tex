@@ -1,0 +1,51 @@
+\hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8}{}\doxysection{C\+LI\+::detail\+::pair\+\_\+adaptor$<$ T, conditional\+\_\+t$<$ false, void\+\_\+t$<$ typename T\+::value\+\_\+type\+::first\+\_\+type, typename T\+::value\+\_\+type\+::second\+\_\+type $>$, void $>$ $>$ Struct Template Reference}
+\label{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8}\index{CLI::detail::pair\_adaptor$<$ T, conditional\_t$<$ false, void\_t$<$ typename T::value\_type::first\_type, typename T::value\_type::second\_type $>$, void $>$ $>$@{CLI::detail::pair\_adaptor$<$ T, conditional\_t$<$ false, void\_t$<$ typename T::value\_type::first\_type, typename T::value\_type::second\_type $>$, void $>$ $>$}}
+
+
+Adaptor for map-\/like structure (true version, must have key\+\_\+type and mapped\+\_\+type).  
+
+
+
+
+{\ttfamily \#include $<$C\+L\+I11.\+hpp$>$}
+
+Inheritance diagram for C\+LI\+::detail\+::pair\+\_\+adaptor$<$ T, conditional\+\_\+t$<$ false, void\+\_\+t$<$ typename T\+::value\+\_\+type\+::first\+\_\+type, typename T\+::value\+\_\+type\+::second\+\_\+type $>$, void $>$ $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.352657cm]{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a61174c6fee6a788f6bc8385ba39477e0}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a61174c6fee6a788f6bc8385ba39477e0}} 
+using {\bfseries value\+\_\+type} = typename T\+::value\+\_\+type
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a0a49df2a80091b7be7df2213a0d1385b}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a0a49df2a80091b7be7df2213a0d1385b}} 
+using {\bfseries first\+\_\+type} = typename std\+::remove\+\_\+const$<$ typename value\+\_\+type\+::first\+\_\+type $>$\+::type
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_aaed4768da6bb83654140126447f507f9}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_aaed4768da6bb83654140126447f507f9}} 
+using {\bfseries second\+\_\+type} = typename std\+::remove\+\_\+const$<$ typename value\+\_\+type\+::second\+\_\+type $>$\+::type
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a305e9696d1b794a8e46221babab3ef4c}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a305e9696d1b794a8e46221babab3ef4c}} 
+{\footnotesize template$<$typename Q $>$ }\\static auto \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a305e9696d1b794a8e46221babab3ef4c}{first}} (Q \&\&pair\+\_\+value) -\/$>$ decltype(std\+::get$<$ 0 $>$(std\+::forward$<$ Q $>$(pair\+\_\+value)))
+\begin{DoxyCompactList}\small\item\em Get the first value (really just the underlying value) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a5cb5e4d48ab28379b28c310daea1c2fc}\label{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a5cb5e4d48ab28379b28c310daea1c2fc}} 
+{\footnotesize template$<$typename Q $>$ }\\static auto \mbox{\hyperlink{struct_c_l_i_1_1detail_1_1pair__adaptor_3_01_t_00_01conditional__t_3_01false_00_01void__t_3_01ty57376c4a6f008b828f6707df132586d8_a5cb5e4d48ab28379b28c310daea1c2fc}{second}} (Q \&\&pair\+\_\+value) -\/$>$ decltype(std\+::get$<$ 1 $>$(std\+::forward$<$ Q $>$(pair\+\_\+value)))
+\begin{DoxyCompactList}\small\item\em Get the second value (really just the underlying value) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+struct C\+L\+I\+::detail\+::pair\+\_\+adaptor$<$ T, conditional\+\_\+t$<$ false, void\+\_\+t$<$ typename T\+::value\+\_\+type\+::first\+\_\+type, typename T\+::value\+\_\+type\+::second\+\_\+type $>$, void $>$ $>$}
+
+Adaptor for map-\/like structure (true version, must have key\+\_\+type and mapped\+\_\+type). 
+
+This wraps a mapped container in a few utilities access it in a general way. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/external/\+C\+L\+I11/C\+L\+I11.\+hpp\end{DoxyCompactItemize}

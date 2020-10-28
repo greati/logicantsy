@@ -1,0 +1,60 @@
+\hypertarget{classltsy_1_1_signature}{}\doxysection{ltsy\+::Signature Class Reference}
+\label{classltsy_1_1_signature}\index{ltsy::Signature@{ltsy::Signature}}
+
+
+\mbox{\hyperlink{classltsy_1_1_signature}{Signature}} supporting indexing by arity and connective.  
+
+
+
+
+{\ttfamily \#include $<$syntax.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a0f91b07a29e54f52c9def1b892a2f78d}\label{classltsy_1_1_signature_a0f91b07a29e54f52c9def1b892a2f78d}} 
+{\bfseries Signature} (std\+::initializer\+\_\+list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_connective}{Connective}} $>$$>$ connectives)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_ac19e852edec17d2364a543a8f6277ea7}\label{classltsy_1_1_signature_ac19e852edec17d2364a543a8f6277ea7}} 
+{\bfseries Signature} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{classltsy_1_1_connective}{Connective}} $>$ connectives)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_af2d7dfe6e9a7f88eea38ba407e54f020}\label{classltsy_1_1_signature_af2d7dfe6e9a7f88eea38ba407e54f020}} 
+auto {\bfseries begin} ()
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_afcdd1dfa0853f3157423da43a2295931}\label{classltsy_1_1_signature_afcdd1dfa0853f3157423da43a2295931}} 
+auto {\bfseries end} ()
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a4b42f7a8ae702474f1c6deb03d6246c7}\label{classltsy_1_1_signature_a4b42f7a8ae702474f1c6deb03d6246c7}} 
+auto {\bfseries cbegin} ()
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a5a3e43628376c57368b85546cbb868ba}\label{classltsy_1_1_signature_a5a3e43628376c57368b85546cbb868ba}} 
+auto {\bfseries cend} ()
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a0692973533b8e26dcc990aea978b4960}\label{classltsy_1_1_signature_a0692973533b8e26dcc990aea978b4960}} 
+void {\bfseries add} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_connective}{Connective}} $>$ connective)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a3d9f873f8322407599b2be98dc8f2d91}\label{classltsy_1_1_signature_a3d9f873f8322407599b2be98dc8f2d91}} 
+void \mbox{\hyperlink{classltsy_1_1_signature_a3d9f873f8322407599b2be98dc8f2d91}{join}} (const \mbox{\hyperlink{classltsy_1_1_signature}{Signature}} \&signature)
+\begin{DoxyCompactList}\small\item\em Join two signatures, preserving the elements of the left-\/hand side. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a04a452dd3ab7bac2aae5fa318684bb2c}\label{classltsy_1_1_signature_a04a452dd3ab7bac2aae5fa318684bb2c}} 
+\mbox{\hyperlink{classltsy_1_1_signature}{Signature}} {\bfseries operator()} (Arity arity) const
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_af7ffe7db88a4ead4b75f8fc5b4357c71}\label{classltsy_1_1_signature_af7ffe7db88a4ead4b75f8fc5b4357c71}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classltsy_1_1_connective}{Connective}} $>$ {\bfseries operator\mbox{[}$\,$\mbox{]}} (const Symbol \&symbol)
+\item 
+\mbox{\Hypertarget{classltsy_1_1_signature_a7edd0adcc7fa1740e397b5848befec17}\label{classltsy_1_1_signature_a7edd0adcc7fa1740e397b5848befec17}} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classltsy_1_1_signature}{Signature}} \&other) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classltsy_1_1_signature}{Signature}} supporting indexing by arity and connective. 
+
+\begin{DoxyAuthor}{Author}
+Vitor Greati 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sources/include/core/syntax.\+h\end{DoxyCompactItemize}

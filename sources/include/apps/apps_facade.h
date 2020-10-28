@@ -12,6 +12,28 @@ namespace ltsy {
 
         public:
 
+            /* App to check soundness of a rule wrt a given
+             * generalized matrix.
+             * */
+            std::map<std::string, std::optional<std::vector<NdSequentGenMatrixValidator<std::set>::CounterExample>>>
+            sequent_rule_soundness_check_gen_matrix(
+                    std::shared_ptr<GenMatrix> matrix,
+                    const std::vector<int>& sequent_set_correspondence,
+                    const std::vector<NdSequentRule<std::set>>& rules, 
+                    int max_counter_examples=1,
+                    std::optional<progresscpp::ProgressBar> progress_bar = std::nullopt) const {
+                NdSequentGenMatrixValidator<std::set> validator {matrix, sequent_set_correspondence}; 
+                std::map<std::string, std::optional<std::vector<NdSequentGenMatrixValidator<std::set>::CounterExample>>>
+                    result;
+                for (const auto& r : rules) {
+                    Signature sig = r.infer_signature();
+                    result[r.name()] = validator.is_rule_satisfiability_preserving(r, sig, max_counter_examples, progress_bar);  
+                }
+                return result;
+            }
+
+            /* App function to determinize a truth table.
+             * */
             NDTruthTable determinize_truth_table(
                     int number_values, 
                     std::vector<Prop> props,
@@ -24,6 +46,8 @@ namespace ltsy {
                 return determinizer.table(); 
             }
 
+            /* App to axiomatize a truth table.
+             * */
             std::vector<NdSequent<std::set>> axiomatize_truth_table(
                     std::set<int> all_values,
                     Connective connective,
