@@ -140,7 +140,7 @@ namespace ltsy {
             auto processed_args = process_tt_restriction(args_pattern, values, str_to_val);
             int nvalues = values.size();
             for (const auto& arg : processed_args) {
-                dets.insert(Determinant<std::set<int>>(nvalues, arg, det_result)); 
+                dets.insert(Determinant<std::set<int>>(static_cast<int>(nvalues), arg, det_result)); 
             }
             return dets;
         }
@@ -156,7 +156,7 @@ namespace ltsy {
                 if (soft_require(ttnode, TT_DEFAULT_VALUE_NAME)) {
                     std::set<int> default_values = parse_set_str_to_values(ttnode[TT_DEFAULT_VALUE_NAME],
                             str_to_val);
-                    tt = NDTruthTable {nvalues, arity, default_values};
+                    tt = NDTruthTable {static_cast<int>(nvalues), arity, default_values};
                 } else {
                     tt = generate_fully_nd_table(nvalues, arity);
                 }

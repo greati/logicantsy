@@ -40,7 +40,7 @@ namespace ltsy {
             }
 
             Determinant(int nvalues, std::vector<int> args, CellType last) 
-                : _nvalues {nvalues}, _arity {args.size()} {
+                : _nvalues {nvalues}, _arity {static_cast<int>(args.size())} {
                 _data = {utils::position_from_tuple(_nvalues, _arity, args), last};
             }
 

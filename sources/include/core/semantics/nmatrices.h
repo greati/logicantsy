@@ -41,6 +41,12 @@ namespace ltsy {
                     throw std::invalid_argument(INVALID_CONNECTIVE_INTERP_EXCEPTION);
             }
 
+            std::shared_ptr<TruthInterp> copy() const {
+                decltype(_connective) conn = std::make_shared<Connective>(*_connective);
+                decltype(_truth_table) tt = std::make_shared<TruthTable<CellType>>(*_truth_table);
+                return std::make_shared<TruthInterp>(conn, tt);
+            }
+
             /* A pointer to the interpreted connective.
              *
              * @return a pointer to the connective
@@ -129,11 +135,22 @@ namespace ltsy {
             SignatureTruthInterp(decltype(_signature) _signature)
                 : _signature {_signature} {/* empty */}
 
+            SignatureTruthInterp(decltype(_signature) _signature, const decltype(_truth_interps)& truth_interps)
+                : _signature {_signature}, _truth_interps {truth_interps} {/* empty */}
+
             SignatureTruthInterp(decltype(_signature) _signature, 
                     std::initializer_list<std::shared_ptr<TruthInterp<CellType>>> _interps)
                 : _signature {_signature} {
                 for (auto& ti : _interps)
                     this->try_interpret(ti);
+            }
+
+            std::shared_ptr<SignatureTruthInterp> copy() const {
+                decltype(_signature) sig = std::make_shared<Signature>(*_signature);
+                decltype(_truth_interps) truth_interps;
+                for (const auto& [s, t] : _truth_interps)
+                    truth_interps[s] = t->copy();
+                return std::make_shared<SignatureTruthInterp>(sig, truth_interps);
             }
 
             void try_interpret(std::shared_ptr<TruthInterp<CellType>> truth_interp, bool allow_overwrite=false) {

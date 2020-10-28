@@ -263,6 +263,12 @@ namespace ltsy {
 
             GenMatrixValuation() {}
 
+            std::shared_ptr<GenMatrixValuation> copy() const {
+                decltype(_var_assignment) varass = std::make_shared<GenMatrixVarAssignment>(*_var_assignment);
+                decltype(_interpretation) interp = _interpretation->copy();
+                return std::make_shared<GenMatrixValuation>(varass, interp);
+            }
+
             GenMatrixValuation(decltype(_var_assignment) var_assignment,
                     decltype(_interpretation) interpretation) :
             _var_assignment {var_assignment}, _interpretation {interpretation} 
@@ -732,8 +738,9 @@ namespace ltsy {
                             }
                         }
                     }
-                    if (premisses_valid and conclusions_not_valid)
-                        counter_examples.push_back(CounterExample{*val});
+                    if (premisses_valid and conclusions_not_valid) {
+                        counter_examples.push_back(CounterExample{*(val->copy())});
+                    }
                     if (counter_examples.size() >= max_counter_examples)
                         break;
                 }
