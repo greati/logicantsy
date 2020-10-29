@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "core/syntax.h"
+#include "core/parser/fmla/fmla_parser.h"
 #include <memory>
 
 namespace {
@@ -15,6 +16,21 @@ namespace {
         std::invalid_argument);
     }
 
+    TEST(Connective, WeakOrdering) {
+        ltsy::BisonFmlaParser parser;
+        ltsy::FmlaSet fmlas;
+        fmlas.insert(parser.parse("p and (q or p)"));
+        fmlas.insert(parser.parse("p and (r or p)"));
+        fmlas.insert(parser.parse("p and (r or p)"));
+        fmlas.insert(parser.parse("p and q"));
+        fmlas.insert(parser.parse("p"));
+        fmlas.insert(parser.parse("q"));
+        fmlas.insert(parser.parse("p"));
+        fmlas.insert(parser.parse("p or q"));
+        fmlas.insert(parser.parse("p or q"));
+        ASSERT_EQ(6, fmlas.size());
+    }
+
 
     TEST(Formula, Compound) {
         auto p = std::make_shared<ltsy::Prop>("p");
@@ -23,6 +39,33 @@ namespace {
         ltsy::Compound f {land, {p, q}};
         ltsy::FormulaPrinter printer;
         f.accept(printer);
+    }
+
+
+    TEST(Formula, Substitution) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla = parser.parse("p and (q or p)");
+        auto fmla1 = parser.parse("q or r");
+        auto fmla2 = parser.parse("r");
+        ltsy::FormulaVarAssignment ass {
+            {
+                {ltsy::Prop("p"), fmla1}, 
+                {ltsy::Prop("q"), fmla2}
+            }
+        };
+        ltsy::SubstitutionEvaluator subs {ass};
+        auto subsfmla = fmla->accept(subs);
+        std::cout << (*subsfmla) << std::endl;
+    }
+
+    TEST(Formula, SubformulaCollect) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla = parser.parse("p and (q or p)");
+        ltsy::SubFormulaCollector subs;
+        fmla->accept(subs);
+        for (const auto& f : subs.subfmlas()) {
+            std::cout << *f << std::endl;
+        }
     }
 
     TEST(Formula, CollectVariables) {

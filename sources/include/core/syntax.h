@@ -146,14 +146,21 @@ namespace ltsy {
             virtual ReturnT visit_compound(Compound* compound) = 0;
     };
 
+    template<typename ReturnT>
+    class FormulaConstVisitor {
+        public:
+            virtual ReturnT visit_prop(const Prop* prop) const = 0;
+            virtual ReturnT visit_compound(const Compound* compound) const = 0;
+    };
+
     class EqualityFormulaVisitor;
 
     /**
-     * Represents a general formula.
+     * Represents a propositional formula.
      *
      * @author Vitor Greati
      * */
-    class Formula {
+    class Formula : public std::enable_shared_from_this<Formula>{
 
         public:
 
@@ -166,6 +173,7 @@ namespace ltsy {
         protected:
 
             FmlaType _type = FmlaType::UNKNOWN;
+            unsigned int _complexity;
 
         public:
             Formula() {}
@@ -174,8 +182,13 @@ namespace ltsy {
             virtual std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
             virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
-            inline FmlaType type() { return _type; }
+            virtual bool accept(FormulaConstVisitor<bool>& visitor) const = 0;
+            virtual std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) = 0;
+            inline FmlaType type() const { return _type; }
+            bool operator<(const Formula& p1) const;
+            bool operator==(const Formula& p1) const;
             friend std::ostream& operator<<(std::ostream& os, Formula& f);
+            decltype(_complexity) complexity() const { return _complexity; }
     };
 
     /**
@@ -189,11 +202,15 @@ namespace ltsy {
         public:
             Prop() : _symbol {"?"} {
                 _type = FmlaType::PROP;
+                _complexity = 0;
             }
             Prop(const Symbol& _symbol) : _symbol {_symbol} {
                 _type = FmlaType::PROP;
+                _complexity = 0;
             }
-            ~Prop() {}
+            ~Prop() {
+                _complexity = 0;
+            }
 
             inline Symbol symbol() const { return _symbol; };
 
@@ -213,12 +230,23 @@ namespace ltsy {
                 return visitor.visit_prop(this);
             }
 
+            inline bool accept(FormulaConstVisitor<bool>& visitor) const {
+                return visitor.visit_prop(this);
+            }
+
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_prop(this);
             }
 
+            inline std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) {
+                return visitor.visit_prop(this);
+            }
+
             inline std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) {
                 return visitor.visit_prop(this);
+            }
+            std::shared_ptr<Formula> get_formula_copy() const {
+                return std::make_shared<Prop>(*this);
             }
     };
 
@@ -241,6 +269,10 @@ namespace ltsy {
                     this->_components = _components;
                 }
                 _type = FmlaType::COMPOUND;
+                _complexity = 1;
+                for (const auto& c : _components) {
+                    _complexity += c->complexity();
+                }
             }
             ~Compound() {}
 
@@ -258,47 +290,93 @@ namespace ltsy {
             inline bool accept(FormulaVisitor<bool>& visitor) {
                 return visitor.visit_compound(this);
             }
+            inline bool accept(FormulaConstVisitor<bool>& visitor) const {
+                return visitor.visit_compound(this);
+            }
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_compound(this);
             }
+            inline std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) {
+                return visitor.visit_compound(this); 
+            }
             inline std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) {
                 return visitor.visit_compound(this);
+            }
+            bool operator<(const Compound& p1) const {
+                return _connective->arity() < p1._connective->arity();
             }
     };
 
     /**
      * A visitor that tests formula equality.
      */
-    class EqualityFormulaVisitor : public FormulaVisitor<bool> {
+    class EqualityFormulaVisitor : public FormulaConstVisitor<bool> {
         private:
 
-            std::shared_ptr<Formula> _left;
+            const Formula* _left;
 
         public:
-            EqualityFormulaVisitor(decltype(_left) left) : _left {left} {};
+            EqualityFormulaVisitor(const decltype(_left) left) : _left {left} {};
 
-            virtual bool visit_prop(Prop* prop) override {
+            virtual bool visit_prop(const Prop* prop) const override {
                 if (_left->type() != Formula::FmlaType::PROP)
                     return false;
-                auto left_prop = std::dynamic_pointer_cast<Prop>(_left);
+                auto left_prop = dynamic_cast<const Prop*>(_left);
                 return left_prop->symbol() == prop->symbol();
             }
 
-            virtual bool visit_compound(Compound* compound) override {
+            virtual bool visit_compound(const Compound* compound) const override {
                 if (_left->type() != Formula::FmlaType::COMPOUND)
                    return false; 
-                auto left = std::dynamic_pointer_cast<Compound>(_left);
+                auto left = dynamic_cast<const Compound*>(_left);
                 auto left_conn = left->connective();
                 if (*(compound->connective()) != *(left_conn))
                     return false;
                 auto left_comps = left->components();
                 auto right_comps = compound->components();
                 for (int i = 0; i < left_comps.size(); ++i) {
-                    EqualityFormulaVisitor eqvis {left_comps[i]}; 
+                    EqualityFormulaVisitor eqvis {left_comps[i].get()}; 
                     if (not right_comps[i]->accept(eqvis))
                         return false;
                 }
                 return true;
+            }
+    };
+
+    /**
+     * A visitor that tests formula strict weak ordering.
+     */
+    class StrictWeakOrderingFormulaVisitor : public FormulaConstVisitor<bool> {
+        private:
+
+            const Formula* _left;
+
+        public:
+            StrictWeakOrderingFormulaVisitor(const decltype(_left) left) : _left {left} {};
+
+            virtual bool visit_prop(const Prop* prop) const override {
+                if (_left->type() != Formula::FmlaType::PROP)
+                    return true;
+                auto left_prop = dynamic_cast<const Prop*>(_left);
+                return left_prop->symbol() < prop->symbol();
+            }
+
+            virtual bool visit_compound(const Compound* compound) const override {
+                if (_left->type() != Formula::FmlaType::COMPOUND)
+                   return false; 
+                auto left = dynamic_cast<const Compound*>(_left);
+                auto left_conn = left->connective();
+                if (*(compound->connective()) != *(left_conn))
+                    return  left_conn->symbol() < compound->connective()->symbol();
+                auto left_comps = left->components();
+                auto right_comps = compound->components();
+                for (int i = 0; i < left_comps.size(); ++i) {
+                    if ((*right_comps[i])==(*left_comps[i]))
+                        continue;
+                    StrictWeakOrderingFormulaVisitor eqvis {left_comps[i].get()}; 
+                    return right_comps[i]->accept(eqvis);
+                }
+                return false;
             }
     };
 
@@ -349,6 +427,30 @@ namespace ltsy {
     };
 
     /**
+     * A visitor that collects the least signature of a given formula.
+     */
+    class SubFormulaCollector : public FormulaVisitor<void> {
+        private:
+            std::set<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>> _subfmlas;
+
+        public:
+            void visit_prop(Prop* prop) override {
+                this->_subfmlas.insert(std::make_shared<Prop>(*prop));
+            }
+            void visit_compound(Compound* compound) override {
+                this->_subfmlas.insert(std::make_shared<Compound>(*compound));
+                auto components = compound->components();
+                auto connective = compound->connective();
+                for (const auto& c : components) {
+                    c->accept(*this);
+                }
+            }
+            decltype(_subfmlas) subfmlas() {
+                return this->_subfmlas;
+            }
+    };
+
+    /**
      * A visitor to print a formula.
      *
      * @author Vitor Greati
@@ -381,5 +483,67 @@ namespace ltsy {
             }
             std::string get_string() { return buffer.str(); }
     };
+
+    /* Implements an assignment to 
+     * propositional variables.
+     *
+     * @author Vitor Greati
+     * */
+    class FormulaVarAssignment {
+        
+        private:
+            std::map<Prop, std::shared_ptr<Formula>> _assignment;
+
+        public:
+
+            FormulaVarAssignment(const decltype(_assignment)& assignment)
+                : _assignment {assignment} {};
+
+            /* Equality test for assignments.
+             * */
+            bool operator==(const FormulaVarAssignment& other) const {
+                return _assignment == other._assignment;
+            }
+
+            inline std::shared_ptr<Formula> operator()(const Prop& p) {
+                return _assignment[p];
+            }
+    };
+
+
+    /* Given an assignment of formulas to
+     * variables, apply this substitution to
+     * a given formula.
+     *
+     * @author Vitor Greati
+     * */
+    class SubstitutionEvaluator : public FormulaVisitor<std::shared_ptr<Formula>> {
+    
+        private:
+            FormulaVarAssignment _assignment;
+
+        public:
+
+            SubstitutionEvaluator(const decltype(_assignment)& assignment)
+                : _assignment {assignment} {}
+
+            std::shared_ptr<Formula> visit_prop(Prop* prop) override {
+                return _assignment(*prop);
+            }
+
+            std::shared_ptr<Formula> visit_compound(Compound* compound) override {
+                auto components = compound->components();
+                auto connective = compound->connective();
+                std::vector<std::shared_ptr<Formula>> new_components;
+                for (const auto& c : components) {
+                    auto cn = c->accept(*this); 
+                    new_components.push_back(cn);
+                }
+                return std::make_shared<Compound>(connective, new_components);
+            }
+
+    };
+
+    using FmlaSet = std::set<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>;
 }
 #endif

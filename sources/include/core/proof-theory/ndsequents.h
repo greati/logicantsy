@@ -56,7 +56,7 @@ namespace ltsy {
 
             bool is_in(int i, Formula& fmla) const {
                 for (auto fpointer : _sequent_fmlas[i]){
-                    EqualityFormulaVisitor eq {fpointer};
+                    EqualityFormulaVisitor eq {fpointer.get()};
                     if (fmla.accept(eq))
                         return true;
                 }

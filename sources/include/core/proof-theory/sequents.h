@@ -83,7 +83,7 @@ namespace ltsy {
 
             bool in_left(Formula& fmla) {
                 for (auto fpointer : _left_side){
-                    EqualityFormulaVisitor eq {fpointer};
+                    EqualityFormulaVisitor eq {fpointer.get()};
                     if (fmla.accept(eq))
                         return true;
                 }
@@ -91,7 +91,7 @@ namespace ltsy {
             }
             bool in_right(Formula& fmla) {
                 for (auto fpointer : _right_side){
-                    EqualityFormulaVisitor eq {fpointer};
+                    EqualityFormulaVisitor eq {fpointer.get()};
                     if (fmla.accept(eq))
                         return true;
                 }
