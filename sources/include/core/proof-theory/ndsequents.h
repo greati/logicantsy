@@ -112,6 +112,16 @@ namespace ltsy {
                 }
                 return collector.get_collected_signature();
             }
+
+            FmlaSet collect_fmlas() const {
+                FmlaSet fmlaset;
+                for (const auto& seqpos : _sequent_fmlas) {
+                    for (const auto& fm : seqpos) {
+                        fmlaset.insert(fm); 
+                    }
+                }
+                return fmlaset;
+            }
     };
 
     template class NdSequent<std::vector>;

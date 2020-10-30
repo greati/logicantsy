@@ -181,6 +181,7 @@ namespace ltsy {
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
             virtual std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
+            virtual void accept(FormulaConstVisitor<void>& visitor) const = 0;
             virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
             virtual bool accept(FormulaConstVisitor<bool>& visitor) const = 0;
             virtual std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) = 0;
@@ -235,6 +236,10 @@ namespace ltsy {
             }
 
             inline void accept(FormulaVisitor<void>& visitor) {
+                visitor.visit_prop(this);
+            }
+
+            inline void accept(FormulaConstVisitor<void>& visitor) const {
                 visitor.visit_prop(this);
             }
 
@@ -294,6 +299,9 @@ namespace ltsy {
                 return visitor.visit_compound(this);
             }
             inline void accept(FormulaVisitor<void>& visitor) {
+                visitor.visit_compound(this);
+            }
+            inline void accept(FormulaConstVisitor<void>& visitor) const {
                 visitor.visit_compound(this);
             }
             inline std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) {

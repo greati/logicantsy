@@ -59,6 +59,13 @@ namespace ltsy::utils {
     std::set<T> set_difference(const std::set<T>& s1, const std::set<T>& s2);
     extern template std::set<int> set_difference<int>(const std::set<int>& s1, const std::set<int>& s2);
 
+    template<typename T, typename Comp, typename... Args>
+    void insert_set(std::set<T, Comp>& v, Args&&... args)
+    {
+        static_assert((std::is_constructible_v<T, Comp, Args&&> && ...));
+        (v.insert(std::forward<Args>(args)), ...);
+    }
+
 };
 
 #endif
