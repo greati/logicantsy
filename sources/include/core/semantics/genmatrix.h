@@ -692,7 +692,7 @@ namespace ltsy {
              * */
             std::optional<std::set<std::shared_ptr<Formula>>>
             is_fmla_set_valid_under_valuation(const GenMatrixValuation val, 
-                            const std::set<std::shared_ptr<Formula>>& fmls, const std::set<int>& dset) const {
+                            const FmlaSet& fmls, const std::set<int>& dset) const {
                 std::set<std::shared_ptr<Formula>> fail_fmls;
                 for (const auto& f : fmls) {
                    GenMatrixEvaluator collector {std::make_shared<GenMatrixValuation>(val)};

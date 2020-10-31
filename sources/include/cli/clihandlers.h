@@ -163,9 +163,9 @@ namespace ltsy {
                         std::vector<NdSequent<std::set>> conn_parsed_sequents;
                         for (const auto& seq_node : conditions_node) {
                             // each seq_node is a list of lists
-                            std::vector<std::set<std::shared_ptr<Formula>>> seq_places_sets;
+                            std::vector<FmlaSet> seq_places_sets;
                             for (const auto& seq_place_node : seq_node) {
-                                std::set<std::shared_ptr<Formula>> fmlas_in_place;
+                                FmlaSet fmlas_in_place;
                                 auto fmlas_str = seq_place_node.as<std::vector<std::string>>();
                                 for (const auto& fmla_str : fmlas_str) {
                                     auto fmla_parser = parser.make_fmla_parser(seq_place_node);
