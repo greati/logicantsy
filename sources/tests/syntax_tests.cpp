@@ -167,4 +167,18 @@ namespace {
         std::cout << c << std::endl;
     }
 
+    TEST(Formula, FmlaSetIntersect) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla1 = parser.parse("p and (q or p)");
+        auto fmla2 = parser.parse("p or r");
+        auto fmla3 = parser.parse("neg t");
+        ltsy::FmlaSet f1 {fmla1, fmla2};
+        ltsy::FmlaSet f2 {fmla2, fmla3};
+        ltsy::FmlaSet inters;
+        std::set_intersection(f1.begin(), f1.end(),
+                f2.begin(), f2.end(), std::inserter(inters, inters.begin()));
+        for (auto f : inters)
+            std::cout << *f << std::endl;
+    }
+
 };

@@ -19,4 +19,12 @@ namespace ltsy {
         EqualityFormulaVisitor equalityTester (this);
         return p1.accept(equalityTester);
     }
+
+    bool is_subset(const FmlaSet& f1, const FmlaSet& f2) {
+        if (f1.size() > f2.size()) return false;
+        for (auto& e : f1) 
+            if (f2.find(e) == f2.end()) 
+                return false;
+        return true;
+    }
 }

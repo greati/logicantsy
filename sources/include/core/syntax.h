@@ -654,5 +654,7 @@ namespace ltsy {
 
     };
 
+    bool is_subset(const FmlaSet& f1, const FmlaSet& f2);
+
 }
 #endif
