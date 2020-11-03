@@ -1,0 +1,55 @@
+@startuml
+
+package "semantics" #eeeeee {
+    package "genmatrices" #eeeeee {
+        class GenMatrix {}
+    }
+}
+
+package "proof-theory" #eeeeee {
+    package "multconc" #eeeeee {
+        class MultipleConclusionRule {}
+        class MultipleConclusionCalculus {}
+        class MCProofSearchStrategy {}
+        class MCProofSearchHeuristics {}
+    }
+
+    package "ndsequents" #eeeeee {
+        class NdSequent {}
+        class NdSequentRule {}
+    }
+}
+
+package "syntax" #eeeeee {
+    abstract class Formula {
+        +accept(FormulaVisitor&)
+    }
+    class Prop {
+        -string: symbol
+        +string: symbol()
+        +accept(FormulaVisitor&)
+    }
+    class Compound {
+        +accept(FormulaVisitor&)
+    }
+    class Connective {
+        -unsigned int: arity
+        -string: symbol
+        +unsigned int: arity()
+        +string: symbol()
+    }
+    class Signature {}
+    interface FormulaVisitor {
+        +visit_prop(Prop*)
+        +visit_compound(Compound*)
+    }
+
+    Formula <|-- Prop
+    Formula <|-- Compound
+    Connective <--o Compound
+    Formula "n" <--* "n" Compound : components
+    Connective "n" <--o "n" Signature
+    Prop <.. FormulaVisitor
+    Compound <.. FormulaVisitor
+}
+@enduml

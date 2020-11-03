@@ -66,6 +66,14 @@ namespace ltsy {
     
     };
 
+    /* An interface for proof search strategy.
+     * */
+    class ProofSearchStrategy {};
+
+    /* An interface for proof search heuristics.
+     * */
+    class ProofSearchHeuristics {};
+
     /* Represents a multiple conclusion calculus.
      *
      * Holds a set of rules and methods for
