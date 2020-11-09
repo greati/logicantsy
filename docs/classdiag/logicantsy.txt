@@ -10,8 +10,10 @@ package "proof-theory" #eeeeee {
     package "multconc" #eeeeee {
         class MultipleConclusionRule {}
         class MultipleConclusionCalculus {}
-        class MCProofSearchStrategy {}
         class MCProofSearchHeuristics {}
+
+        MultipleConclusionRule "n" <--o "n" MultipleConclusionCalculus
+        MCProofSearchHeuristics "n" <--o "n" MultipleConclusionCalculus
     }
 
     package "ndsequents" #eeeeee {
