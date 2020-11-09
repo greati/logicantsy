@@ -567,6 +567,7 @@ namespace ltsy {
 
         public:
 
+            FormulaVarAssignmentGenerator() {};
             FormulaVarAssignmentGenerator(const PropSet& props,
                     const decltype(_gamma)& gamma)
                 : _gamma {gamma} {

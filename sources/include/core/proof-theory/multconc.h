@@ -66,13 +66,76 @@ namespace ltsy {
     
     };
 
-    /* An interface for proof search strategy.
-     * */
-    class ProofSearchStrategy {};
-
     /* An interface for proof search heuristics.
      * */
-    class ProofSearchHeuristics {};
+    class MCProofSearchHeuristics {
+        protected:
+            std::vector<MultipleConclusionRule> _rules;
+            FmlaSet _generalized_subfmlas;
+        public:
+            MCProofSearchHeuristics(const decltype(_rules)& rules,
+                    const decltype(_generalized_subfmlas)& generalized_subfmlas)
+                : _rules {rules}, _generalized_subfmlas {generalized_subfmlas} {}
+            virtual ~MCProofSearchHeuristics() {};
+            virtual MultipleConclusionRule select_instance() = 0;
+            virtual bool has_next() = 0;
+    };
+
+    /* Sequential heuristics.
+     *
+     * The simplest heuristics: generate the instances
+     * in a fixed order.
+     *
+     * @author Vitor Greati
+     * */
+    class MCProofSearchSequentialHeuristics : public MCProofSearchHeuristics {
+        private:
+            decltype(_rules)::iterator _rules_it;
+            FormulaVarAssignmentGenerator _current_subst_generator;
+        public:
+            MCProofSearchSequentialHeuristics(const decltype(_rules)& rules,
+                    const decltype(_generalized_subfmlas)& generalized_subfmlas)
+                : MCProofSearchHeuristics {rules, generalized_subfmlas} {
+                _rules_it = _rules.begin();
+                auto rule = *(_rules_it);
+                auto rule_props = rule.sequent().collect_props();
+                _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _generalized_subfmlas};
+            }
+            MultipleConclusionRule select_instance() {
+                if (has_next()) {
+                    if (std::next(_rules_it) != _rules.end() and not _current_subst_generator.has_next()) {
+                        auto rule = *(++_rules_it);
+                        auto rule_props = rule.sequent().collect_props();
+                        _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _generalized_subfmlas};
+                    }
+                    auto rule = *(_rules_it);
+                    auto ass = _current_subst_generator.next();
+                    // apply it to the rule
+                    auto rule_instance = rule.apply_substitution(*ass);
+                    return rule_instance;
+                }
+                throw std::logic_error("there is no next rule instance");
+            }
+            bool has_next() {
+                return (std::next(_rules_it) != _rules.end()) or 
+                    (std::next(_rules_it) == _rules.end() and _current_subst_generator.has_next());
+            }
+    };
+
+    /* A modification of the sequential heuristics
+     * to shuffle the vector of rules at the beginning.
+     *
+     * @author Vitor Greati
+     * */
+    class MCProofSearchRandSequentialHeuristics : public MCProofSearchSequentialHeuristics {
+        public:
+            MCProofSearchRandSequentialHeuristics(const decltype(_rules)& rules,
+                    const decltype(_generalized_subfmlas)& generalized_subfmlas)
+                : MCProofSearchSequentialHeuristics {rules, generalized_subfmlas} {
+                // shuffle
+                std::random_shuffle(_rules.begin(), _rules.end());
+            }
+    };
 
     /* Represents a multiple conclusion calculus.
      *
@@ -181,16 +244,17 @@ namespace ltsy {
                     const FmlaSet& generalized_subfmlas,
                     std::shared_ptr<DerivationTreeNode> derivation,
                     int level, const std::optional<int>& max_depth) {
-                // test if satisfied
-                bool satisfied = true;
-                for (auto i {0}; i < conclusions.size() and satisfied; ++i) {
+                // check satisfaction
+                bool satisfied = false;
+                for (auto i {0}; i < conclusions.size() and not satisfied; ++i) {
                     FmlaSet inters;
+                    // conclusions[i] \cap node_fmlas[i]
                     std::set_intersection(node_fmlas[i].begin(), node_fmlas[i].end(),
                             conclusions[i].begin(), conclusions[i].end(), std::inserter(inters, inters.begin()),
                             utils::DeepSharedPointerComp<Formula>());
-                    satisfied &= not inters.empty();
+                    satisfied = satisfied or not inters.empty();
                 }
-                // if satisfied, close this node (stop recursion)
+                // if satisfied, close this node
                 if (satisfied) {
                     derivation->end_branch = true;
                     return true;
@@ -203,74 +267,68 @@ namespace ltsy {
                     satisfied = true;
                     bool some_premiss_satisfied = false;
                     auto rules = _rules;
-                    std::random_shuffle(rules.begin(), rules.end());
-                    for (const auto& rule : rules) {
-                        // collect rule props
-                        auto rule_props = rule.sequent().collect_props();
-                        // instantiate assignment generator
-                        FormulaVarAssignmentGenerator subst_generator {rule_props, generalized_subfmlas};
-                        // for each assignment
-                        while(subst_generator.has_next()) {
-                            auto ass = subst_generator.next();
-                            // apply it to the rule
-                            auto rule_instance = rule.apply_substitution(*ass);
-                            // check if premisses subseteq node_fmlas
-                            const auto& premisses = rule_instance.premisses();
-                            bool premisses_satisfied = true;
-                            for (auto i {0}; i < node_fmlas.size(); ++i) {
-                                premisses_satisfied &= is_subset(premisses[i], node_fmlas[i]);
-                            }
-                            if (premisses_satisfied) {
-                                if (rule_instance.all_conclusions_empty()) {
-                                    auto star_node = 
-                                        std::make_shared<DerivationTreeNode>(
-                                            std::make_optional<MultipleConclusionRule>(rule_instance)
-                                        );
-                                    derivation->add_child(star_node);
-                                    return true;
-                                } else {
-                                    auto rule_conclusions = rule_instance.conclusions();
-                                    // if yes, take a formula A in position i and 
-                                    for (auto i {0}; i < rule_conclusions.size(); ++i) {
-                                        FmlaSet inters;
-                                        std::set_intersection(node_fmlas[i].begin(), node_fmlas[i].end(),
-                                            rule_conclusions[i].begin(), rule_conclusions[i].end(), 
-                                            std::inserter(inters, inters.begin()),
-                                            utils::DeepSharedPointerComp<Formula>());
-                                        if (not inters.empty())
-                                            continue;
-                                        some_premiss_satisfied = true;
-                                        // check if A is in node_fmlas at position i
-                                        for (auto rule_conc_fmla : rule_conclusions[i]) {
-                                            //if (node_fmlas[i].find(rule_conc_fmla) != node_fmlas[i].end())
-                                            //    continue;
-                                            // if no, expand a new node by adding A in position i
-                                            decltype(node_fmlas) new_node_fmlas {node_fmlas.begin(), 
-                                                node_fmlas.end()};
-                                            new_node_fmlas[i].insert(rule_conc_fmla);
-                                            auto new_node = 
-                                                std::make_shared<DerivationTreeNode>(
-                                                    new_node_fmlas, 
-                                                    std::make_optional<MultipleConclusionRule>(rule_instance), 
-                                                    std::vector<std::shared_ptr<DerivationTreeNode>>{}
-                                                );
-                                            // expand
-                                            auto expanded_satisfied = expand_node(new_node_fmlas, 
-                                                    conclusions, generalized_subfmlas, new_node, level+1,
-                                                    max_depth);
-                                            satisfied &= expanded_satisfied;
-                                            if (not expanded_satisfied)
-                                                break;
-                                            derivation->add_child(new_node);
-                                        }
-                                    }
-                                }
-                            }
-                            if (some_premiss_satisfied and satisfied) {
-                                derivation->closed = true;
-                                return true; 
-                            }
-                        }
+                    // create the heuristics
+                    auto heuristics = std::make_shared<MCProofSearchRandSequentialHeuristics>(rules,
+                            generalized_subfmlas);
+                    while (heuristics->has_next()) {
+                       // obtain an instance
+                       auto rule_instance = heuristics->select_instance();
+                       // check if premisses subseteq node_fmlas
+                       const auto& premisses = rule_instance.premisses();
+                       bool premisses_satisfied = true;
+                       for (auto i {0}; i < node_fmlas.size(); ++i)
+                           premisses_satisfied &= is_subset(premisses[i], node_fmlas[i]);
+                       if (premisses_satisfied) {
+                           if (rule_instance.all_conclusions_empty()) {
+                               auto star_node = 
+                                   std::make_shared<DerivationTreeNode>(
+                                       std::make_optional<MultipleConclusionRule>(rule_instance)
+                                   );
+                               derivation->add_child(star_node);
+                               return true;
+                           } else {
+                               auto rule_conclusions = rule_instance.conclusions();
+                               for (auto i {0}; i < rule_conclusions.size(); ++i) {
+                                   FmlaSet inters;
+                                   std::set_intersection(node_fmlas[i].begin(), node_fmlas[i].end(),
+                                       rule_conclusions[i].begin(), rule_conclusions[i].end(), 
+                                       std::inserter(inters, inters.begin()),
+                                       utils::DeepSharedPointerComp<Formula>());
+                                   // check if the node formulas have some of the conclusion formulas
+                                   if (not inters.empty())
+                                       continue;
+                                   // if not, expand
+                                   some_premiss_satisfied = true;
+                                   // check if A is in node_fmlas at position i
+                                   for (auto rule_conc_fmla : rule_conclusions[i]) {
+                                       // expand a new node by adding A in position i
+                                       decltype(node_fmlas) new_node_fmlas {node_fmlas.begin(), 
+                                           node_fmlas.end()};
+                                       new_node_fmlas[i].insert(rule_conc_fmla);
+                                       auto new_node = 
+                                           std::make_shared<DerivationTreeNode>(
+                                               new_node_fmlas, 
+                                               std::make_optional<MultipleConclusionRule>(rule_instance), 
+                                               std::vector<std::shared_ptr<DerivationTreeNode>>{}
+                                           );
+                                       // expand
+                                       auto expanded_satisfied = expand_node(new_node_fmlas, 
+                                               conclusions, generalized_subfmlas, new_node, level+1,
+                                               max_depth);
+                                       satisfied &= expanded_satisfied;
+                                       // if the expanded node do not lead to a closed branch
+                                       if (not expanded_satisfied)
+                                           break;
+                                       // else
+                                       derivation->add_child(new_node);
+                                   }
+                               }
+                           }
+                       }
+                       if (some_premiss_satisfied and satisfied) {
+                           derivation->closed = true;
+                           return true; 
+                       }
                     }
                     return false;
                 }

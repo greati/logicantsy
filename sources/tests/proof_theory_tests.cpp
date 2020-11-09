@@ -69,6 +69,32 @@ namespace {
         std::cout << s << std::endl;
     }
 
+    TEST(ProofTheory, ProofSearchSequentialHeuristics) {
+        ltsy::BisonFmlaParser parser;
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        auto p_and_q = parser.parse("p and q");
+        auto p_and_p = parser.parse("p and p");
+        auto p_or_q = parser.parse("p or q");
+        auto p_or_p = parser.parse("p or p");
+        auto neg_p = parser.parse("neg p");
+        ltsy::MultipleConclusionRule rule1
+            {"exp", ltsy::NdSequent<std::set>({{p, neg_p},{q}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule2
+            {"con_i", ltsy::NdSequent<std::set>({{p, q},{p_and_q, p_or_q}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule3
+            {"disj", ltsy::NdSequent<std::set>({{p},{p_or_q}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule4
+            {"idemp", ltsy::NdSequent<std::set>({{p},{p_and_p, p_or_p}}), {{0,1}}}; 
+        ltsy::MCProofSearchSequentialHeuristics calc {{rule2, rule3}, {neg_p, p_or_q}};
+        int c = 0;
+        while (calc.has_next()) {
+            c++;
+            calc.select_instance();
+        }
+        std::cout << c << std::endl;
+    }
+
     TEST(ProofTheory, MultipleConclusionCalculusDerivableSimple) {
         ltsy::BisonFmlaParser parser;
         auto p = parser.parse("p");
@@ -142,10 +168,6 @@ namespace {
             {"r16", ltsy::NdSequent<std::set>({{neg_q}, {neg_p_and_q}}), {{0,1}}}; 
        ltsy::MultipleConclusionCalculus calc {{rule1, rule2, rule3, rule4, rule5,
            rule6, rule7, rule8, rule9, rule10, rule11, rule12, rule13, rule14, rule15}};
-       //ltsy::MultipleConclusionCalculus calc {{rule14, rule2, rule3, rule15, rule4,
-       //rule1, rule5, rule6, rule7, rule8, rule9, rule10, rule11, rule13, rule14}};
-       //ltsy::MultipleConclusionCalculus calc {{rule14, rule2, rule3, rule15, rule4}};
-       //ltsy::MultipleConclusionCalculus calc {{rule14}};
        auto derivation = calc.derive(rule16, {{p, neg_p}});
        if (not derivation->closed) std::cout << "underivable" << std::endl;
        else std::cout << "derivable" << std::endl;
