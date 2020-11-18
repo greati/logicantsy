@@ -75,9 +75,9 @@ namespace {
         ltsy::Compound f {land, {p, q}};
         ltsy::VariableCollector var_collector;
         f.accept(var_collector);
-        std::set<ltsy::Prop*, ltsy::utils::DeepPointerComp<ltsy::Prop>> expected;
-        expected.insert(p.get()); expected.insert(q.get());
-        ASSERT_EQ(var_collector.get_collected_variables(), expected);
+        std::set<std::shared_ptr<ltsy::Prop>, ltsy::utils::DeepSharedPointerComp<ltsy::Prop>> expected;
+        expected.insert(p); expected.insert(q);
+        ASSERT_EQ(var_collector.get_collected_variables().size(), 2);
     }
 
     TEST(Formula, CollectSignature) {
@@ -106,6 +106,79 @@ namespace {
         ASSERT_EQ(cl_sig(2)["&"]->arity(), 2);
         ASSERT_EQ(cl_sig(2)["|"]->arity(), 2);
         ASSERT_EQ(cl_sig(2)["->"]->arity(), 2);
+    }
+
+    TEST(Formula, FormulaAssignmentGenerator3props) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla1 = parser.parse("p and (q or p)");
+        auto fmla2 = parser.parse("p or r");
+        auto fmla3 = parser.parse("neg t");
+        ltsy::FmlaSet s {fmla1, fmla2, fmla3};
+        std::vector<std::shared_ptr<ltsy::Prop>> props
+            {
+                std::make_shared<ltsy::Prop>("p"),
+                std::make_shared<ltsy::Prop>("q"),
+                std::make_shared<ltsy::Prop>("r"),
+            };
+        ltsy::FormulaVarAssignmentGenerator gen {props, s};
+        int c = 0;
+        while (gen.has_next()) {
+            auto v = gen.next();
+            std::cout << v->print().str() << std::endl;
+            c++;
+        }
+        std::cout << c << std::endl;
+    }
+
+    TEST(Formula, FormulaAssignmentGenerator1prop) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla1 = parser.parse("p and (q or p)");
+        auto fmla2 = parser.parse("p or r");
+        auto fmla3 = parser.parse("neg t");
+        ltsy::FmlaSet s {fmla1, fmla2, fmla3};
+        std::vector<std::shared_ptr<ltsy::Prop>> props
+            {
+                std::make_shared<ltsy::Prop>("p"),
+            };
+        ltsy::FormulaVarAssignmentGenerator gen {props, s};
+        int c = 0;
+        while (gen.has_next()) {
+            auto v = gen.next();
+            std::cout << v->print().str() << std::endl;
+            c++;
+        }
+        std::cout << c << std::endl;
+    }
+
+    TEST(Formula, FormulaAssignmentGenerator0prop) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla1 = parser.parse("p and (q or p)");
+        auto fmla2 = parser.parse("p or r");
+        auto fmla3 = parser.parse("neg t");
+        ltsy::FmlaSet s {fmla1, fmla2, fmla3};
+        std::vector<std::shared_ptr<ltsy::Prop>> props {};
+        ltsy::FormulaVarAssignmentGenerator gen {props, s};
+        int c = 0;
+        while (gen.has_next()) {
+            auto v = gen.next();
+            std::cout << v->print().str() << std::endl;
+            c++;
+        }
+        std::cout << c << std::endl;
+    }
+
+    TEST(Formula, FmlaSetIntersect) {
+        ltsy::BisonFmlaParser parser;
+        auto fmla1 = parser.parse("p and (q or p)");
+        auto fmla2 = parser.parse("p or r");
+        auto fmla3 = parser.parse("neg t");
+        ltsy::FmlaSet f1 {fmla1, fmla2};
+        ltsy::FmlaSet f2 {fmla2, fmla3};
+        ltsy::FmlaSet inters;
+        std::set_intersection(f1.begin(), f1.end(),
+                f2.begin(), f2.end(), std::inserter(inters, inters.begin()));
+        for (auto f : inters)
+            std::cout << *f << std::endl;
     }
 
 };

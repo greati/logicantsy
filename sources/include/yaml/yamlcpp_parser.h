@@ -226,9 +226,9 @@ namespace ltsy {
         }
 
         std::shared_ptr<NdSequent<std::set>> parse_nd_sequent(const YAML::Node& seq_node) {
-            std::vector<std::set<std::shared_ptr<Formula>>> seq_places_sets;
+            std::vector<FmlaSet> seq_places_sets;
             for (const auto& seq_place_node : seq_node) {
-                std::set<std::shared_ptr<Formula>> fmlas_in_place;
+                FmlaSet fmlas_in_place;
                 auto fmlas_str = seq_place_node.as<std::vector<std::string>>();
                 for (const auto& fmla_str : fmlas_str) {
                     auto fmla_parser = make_fmla_parser(seq_place_node);

@@ -15,7 +15,7 @@ namespace ltsy {
     class NdSequent {
 
         private:
-            std::vector<FmlaContainerT<std::shared_ptr<Formula>>> _sequent_fmlas;
+            std::vector<FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>> _sequent_fmlas;
             size_t _dimension;
 
         public:
@@ -25,21 +25,22 @@ namespace ltsy {
                 _dimension = sequent_fmlas.size();
             }
 
-            NdSequent(size_t dimension, const FmlaContainerT<std::shared_ptr<Formula>>& def) : _dimension {dimension} {
+            NdSequent(size_t dimension, const FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& def) 
+                : _dimension {dimension} {
                 _sequent_fmlas = decltype(_sequent_fmlas) {_dimension, def};
             }
 
             inline int dimension() const { return _dimension; }
 
-            FmlaContainerT<std::shared_ptr<Formula>>& operator[](int i) { return _sequent_fmlas[i]; }
+            FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& operator[](int i) { return _sequent_fmlas[i]; }
 
-            FmlaContainerT<std::shared_ptr<Formula>> operator[](int i) const { return _sequent_fmlas[i]; }
+            FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>> operator[](int i) const { return _sequent_fmlas[i]; }
 
             /* Collect the propositional variables that appear in the
              * formulas present in the sequent.
              * */
-            std::set<std::shared_ptr<Prop>> collect_props() const {
-                std::set<Prop*, utils::DeepPointerComp<Prop>> collected_variables;
+            PropSet collect_props() const {
+                PropSet collected_variables;
                 for (const auto& fmla_set : _sequent_fmlas) {
                     for (const auto& fmla : fmla_set) {
                         VariableCollector var_collector;
@@ -48,10 +49,7 @@ namespace ltsy {
                         collected_variables.insert(collected_vars.begin(), collected_vars.end());
                     }
                 } 
-                std::set<std::shared_ptr<Prop>> result;
-                for (auto p : collected_variables)
-                    result.insert(std::make_shared<Prop>(*p));
-                return result;
+                return collected_variables;
             };
 
             bool is_in(int i, Formula& fmla) const {
@@ -112,11 +110,33 @@ namespace ltsy {
                 }
                 return collector.get_collected_signature();
             }
+
+            FmlaSet collect_fmlas() const {
+                FmlaSet fmlaset;
+                for (const auto& seqpos : _sequent_fmlas) {
+                    for (const auto& fm : seqpos) {
+                        fmlaset.insert(fm); 
+                    }
+                }
+                return fmlaset;
+            }
+
+            NdSequent<FmlaContainerT> apply_substitution(const FormulaVarAssignment& ass) const {
+                std::vector<FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>> res_sequent_fmlas;
+                for (auto i {0}; i < _sequent_fmlas.size(); ++i) {
+                    FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>> container;
+                    for (const auto& fm : _sequent_fmlas[i]) {
+                        SubstitutionEvaluator seval {ass};
+                        auto sres = fm->accept(seval);
+                        container.insert(container.end(), sres); 
+                    }
+                    res_sequent_fmlas.push_back(container);
+                }
+                return NdSequent<FmlaContainerT>{res_sequent_fmlas};
+            }
     };
 
-    template class NdSequent<std::vector>;
     template class NdSequent<std::set>;
-    template class NdSequent<std::unordered_set>;
 
     /* NdSequent-to-NdSequent bidimensional rule representation.
      * It contains a set of NdSequent-premisses,
@@ -176,9 +196,7 @@ namespace ltsy {
 
     };
 
-    template class NdSequentRule<std::vector>;
     template class NdSequentRule<std::set>;
-    template class NdSequentRule<std::unordered_set>;
 
 };
 #endif

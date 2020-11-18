@@ -181,6 +181,7 @@ namespace ltsy {
             virtual int accept(FormulaVisitor<int>& visitor) = 0;
             virtual std::set<int> accept(FormulaVisitor<std::set<int>>& visitor) = 0;
             virtual void accept(FormulaVisitor<void>& visitor) = 0;
+            virtual void accept(FormulaConstVisitor<void>& visitor) const = 0;
             virtual bool accept(FormulaVisitor<bool>& visitor) = 0;
             virtual bool accept(FormulaConstVisitor<bool>& visitor) const = 0;
             virtual std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) = 0;
@@ -235,6 +236,10 @@ namespace ltsy {
             }
 
             inline void accept(FormulaVisitor<void>& visitor) {
+                visitor.visit_prop(this);
+            }
+
+            inline void accept(FormulaConstVisitor<void>& visitor) const {
                 visitor.visit_prop(this);
             }
 
@@ -296,6 +301,9 @@ namespace ltsy {
             inline void accept(FormulaVisitor<void>& visitor) {
                 visitor.visit_compound(this);
             }
+            inline void accept(FormulaConstVisitor<void>& visitor) const {
+                visitor.visit_compound(this);
+            }
             inline std::shared_ptr<Formula> accept(FormulaVisitor<std::shared_ptr<Formula>>& visitor) {
                 return visitor.visit_compound(this); 
             }
@@ -306,6 +314,9 @@ namespace ltsy {
                 return _connective->arity() < p1._connective->arity();
             }
     };
+
+    using FmlaSet = std::set<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>;
+    using PropSet = std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>>;
 
     /**
      * A visitor that tests formula equality.
@@ -386,11 +397,11 @@ namespace ltsy {
      */
     class VariableCollector : public FormulaVisitor<void> {
         private:
-            std::set<Prop*, utils::DeepPointerComp<Prop>> collected_variables;
+            std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>> collected_variables;
 
         public:
             virtual void visit_prop(Prop* prop) override {
-                this->collected_variables.insert(prop);
+                this->collected_variables.insert(std::make_shared<Prop>(*prop));
             }
             virtual void visit_compound(Compound* compound) override {
                 auto components = compound->components();
@@ -496,6 +507,8 @@ namespace ltsy {
 
         public:
 
+            FormulaVarAssignment() {}
+
             FormulaVarAssignment(const decltype(_assignment)& assignment)
                 : _assignment {assignment} {};
 
@@ -505,9 +518,107 @@ namespace ltsy {
                 return _assignment == other._assignment;
             }
 
+            void set(const Prop& prop, std::shared_ptr<Formula> fmla) {
+                _assignment[prop] = fmla;
+            }
+
+            std::shared_ptr<Formula>& operator[](const Prop& prop) {
+                return _assignment[prop];
+            }
+
             inline std::shared_ptr<Formula> operator()(const Prop& p) {
                 return _assignment[p];
             }
+
+            std::stringstream print() const {
+                std::stringstream ss;
+                for (const auto& [k, v] : _assignment) {
+                    ss << k.symbol() << " -> " << (*v) << std::endl;
+                }
+                return ss;
+            }
+    };
+
+    /* Given a set of propositional variables P
+     * and a set of formulas \Gamma, generate all
+     * possible substitution assignments
+     * of the variables in P for the formulas 
+     * in \Gamma.
+     * */
+    class FormulaVarAssignmentGenerator {
+    
+        private:
+
+            std::vector<std::shared_ptr<Prop>> _props;
+            FmlaSet _gamma;
+            std::vector<FmlaSet::iterator> _current_iterators;
+            std::shared_ptr<FormulaVarAssignment> _current;
+            bool finished = false;
+            bool first = true;
+            int qtd_in_max = 0;
+
+            void initialize_iterators() {
+                _current_iterators.clear();
+                for (int i = 0; i < _props.size(); ++i) {
+                    _current_iterators.push_back(_gamma.begin());
+                    _current->set(*_props[i], *_current_iterators[i]);
+                }
+            }
+
+        public:
+
+            FormulaVarAssignmentGenerator() {};
+            FormulaVarAssignmentGenerator(const PropSet& props,
+                    const decltype(_gamma)& gamma)
+                : _gamma {gamma} {
+                _props = decltype(_props){props.begin(), props.end()};
+                _current = std::make_shared<FormulaVarAssignment>();
+                reset();    
+            }
+
+            FormulaVarAssignmentGenerator(const decltype(_props)& props,
+                    const decltype(_gamma)& gamma)
+                : _props {props}, _gamma {gamma} {
+                _current = std::make_shared<FormulaVarAssignment>();
+                reset();    
+            }
+
+            decltype(_current) next() {
+                if (not has_next())
+                    throw std::logic_error("no substitutions to generate");
+                if (not first) {
+                    int i = 0;
+                    for (i = _props.size() - 1; i >= 0; --i) {
+                        if (std::next(_current_iterators[i]) == _gamma.end()) {
+                            _current_iterators[i] = _gamma.begin(); 
+                            _current->set(*_props[i], *_current_iterators[i]);
+                            qtd_in_max--;
+                        } else {
+                            ++_current_iterators[i];
+                            _current->set(*_props[i], *_current_iterators[i]);
+                            if (std::next(_current_iterators[i]) == _gamma.end())
+                                qtd_in_max++;
+                            break;
+                        } 
+                    }
+                    if (qtd_in_max == _props.size())
+                        finished = true;
+                } else {
+                    first = false;
+                }
+                return _current; 
+            }
+
+            bool has_next() const {
+                return not finished;
+            }
+
+            void reset() {
+                initialize_iterators();
+                first = true;
+                finished = _props.empty() or _gamma.empty();
+            }
+    
     };
 
 
@@ -544,6 +655,7 @@ namespace ltsy {
 
     };
 
-    using FmlaSet = std::set<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>;
+    bool is_subset(const FmlaSet& f1, const FmlaSet& f2);
+
 }
 #endif
