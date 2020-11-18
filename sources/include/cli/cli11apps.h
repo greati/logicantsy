@@ -4,6 +4,7 @@
 #include "external/CLI11/CLI11.hpp"
 #include "cli/clidefs.h"
 #include "cli/clihandlers.h"
+#include "core/printers/factory.h"
 
 namespace ltsy {
 
@@ -22,17 +23,26 @@ namespace ltsy {
      * Truth-table determinizer app.
      * */
     class TTDeterminizerCLI11App : public CLI11App {
+        public:
+
         private:
             std::string _file_path;
+            Printer::PrinterType _output_type = Printer::PrinterType::PLAIN;
+
+            std::map<std::string, Printer::PrinterType> output_type_mapping
+                {{"plain", Printer::PrinterType::PLAIN}, {"latex", Printer::PrinterType::LATEX}};
 
         public:
+
             TTDeterminizerCLI11App() : CLI11App (CLIDefs::TT_DET_APP_NAME, CLIDefs::TT_DET_APP_DESC) {
                 this->add_option("-f,--file", _file_path, "YAML input file")
                    ->required()
                    ->check(CLI::ExistingFile);
+                this->add_option("-o, --output", _output_type, "Output type")
+                    ->check(CLI::CheckedTransformer(output_type_mapping, CLI::ignore_case));
                 this->callback([&]() {
                     TTDeterminizerCLIHandler handler;
-                    handler.handle(_file_path);
+                    handler.handle(_file_path, _output_type);
                 });
             }
     };

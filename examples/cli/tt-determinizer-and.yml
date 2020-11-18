@@ -20,3 +20,12 @@ truth-tables:
   p or q:
     conditions:
       - [[],[],[],[]] 
+tex:
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  p: "\\varphi"
+  q: "\\psi"
+  and: "\\land"
+  or: "\\lor"

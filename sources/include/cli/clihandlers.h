@@ -10,8 +10,14 @@
 #include "core/semantics/attitude_semantics.h"
 #include "core/common.h"
 #include "core/semantics/genmatrix.h"
+#include "core/printers/factory.h"
 
 namespace ltsy {
+
+    class CLIHandler {
+        protected:
+            std::map<std::string, std::string> _tex_translation;
+    };
 
     class TTAxiomatizerCLIHandler {
         private:
@@ -24,6 +30,12 @@ namespace ltsy {
             std::map<std::string, std::shared_ptr<Connective>> _connectives;
             std::map<std::string, std::vector<std::shared_ptr<Prop>>> _props;
         public:
+
+            enum class OutputType {
+                PLAIN,
+                LATEX,
+            };
+
             void handle(const std::string& yaml_path) {
                 YAMLCppParser parser;
                 try {
@@ -113,7 +125,8 @@ namespace ltsy {
             std::map<std::string, std::vector<NdSequent<std::set>>> _sequents_per_connective;
 
         public:
-            void handle(const std::string& yaml_path) {
+
+            void handle(const std::string& yaml_path, Printer::PrinterType output_type) {
                 YAMLCppParser parser;
                 try {
                     auto root = parser.load_from_file(yaml_path);
@@ -184,7 +197,12 @@ namespace ltsy {
                         auto table = apps_facade.determinize_truth_table(nvalues, _props[conn_name], 
                                 *_connectives[conn_name],
                                 _judgements, _sequents_per_connective[conn_name], base_tt);
-                        auto table_print = table.print(_val_to_str).str();
+                        table.set_values_names(_val_to_str);
+                        
+                        PrinterFactory printer_factory;
+                        auto printer = printer_factory.make_printer(output_type);
+
+                        auto table_print = printer->print(table);//table.print(_val_to_str).str();
                         spdlog::info("The table for " + conn_name + " is" + "\n" + table_print);
                         
                     }
