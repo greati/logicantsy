@@ -136,24 +136,23 @@ namespace ltsy {
                 std::string temp;
                 switch(output_type) {
                     case Printer::PrinterType::PLAIN:
-                        temp += "Check the result below:";
+                        temp += "Check the result below:\n";
                         for (const auto& k : keys) {
-                            temp += "(|{ " + k + " }|)";
-                            temp += "\n\n";
+                            temp += "(|{ " + k + " }|)\n";
                         }
                         break;
                     case Printer::PrinterType::LATEX:
-                        temp += "\\documentclass{article}";
-                        temp += "\\usepackage[utf8]{inputenc}";
-                        temp += "\\usepackage[english]{babel}";
-                        temp += "\\usepackage{booktabs}";
-                        temp += "\\begin{document}";
-                        temp += "    \\begin{center}";
+                        temp += "\\documentclass{article}\n";
+                        temp += "\\usepackage[utf8]{inputenc}\n";
+                        temp += "\\usepackage[english]{babel}\n";
+                        temp += "\\usepackage{booktabs}\n";
+                        temp += "\\begin{document}\n";
+                        temp += "    \\begin{center}\n";
                         for (const auto& k : keys) {
-                            temp += "        (|{ " + k + " }|)";
-                            temp += "        \\vspace{1em}";
+                            temp += "        (|{ " + k + " }|)\n";
+                            temp += "        \\vspace{1em}\n";
                         }
-                        temp += "    \\end{center}";
+                        temp += "    \\end{center}\n";
                         temp += "\\end{document}";
                         break;
                 }
