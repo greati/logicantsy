@@ -28,6 +28,7 @@ namespace ltsy {
             NdSequent(size_t dimension, const FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& def) 
                 : _dimension {dimension} {
                 _sequent_fmlas = decltype(_sequent_fmlas) {_dimension, def};
+                _dimension = _sequent_fmlas.size();
             }
 
             inline int dimension() const { return _dimension; }
@@ -35,6 +36,8 @@ namespace ltsy {
             FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& operator[](int i) { return _sequent_fmlas[i]; }
 
             FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>> operator[](int i) const { return _sequent_fmlas[i]; }
+
+            const FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& at(int i) const { return _sequent_fmlas[i]; }
 
             /* Collect the propositional variables that appear in the
              * formulas present in the sequent.

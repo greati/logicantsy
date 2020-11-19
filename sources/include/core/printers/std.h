@@ -2,6 +2,7 @@
 #define __STD_PRINTER__
 
 #include "core/printers/base.h"
+#include "core/syntax.h"
 
 namespace ltsy {
     
@@ -15,8 +16,26 @@ namespace ltsy {
             StdPrinter(const decltype(_translation)& translation) :
                 Printer {translation} {}
 
-            std::string print(const Formula& fmla) const override {}
-            std::string print(const NdSequent<std::set>& sequent) const override {}
+            std::string print(std::shared_ptr<Formula> fmla) const override {
+                FormulaPrinter printer {_translation};
+                fmla->accept(printer);
+                return printer.get_string();
+            }
+
+            std::vector<std::string> print(const NdSequent<std::set>& seq) const override {
+                std::vector<std::string> result;
+                for (auto i = 0; i < seq.dimension(); ++i) {
+                    std::stringstream os;
+                    const auto seq_fmlas = seq[i];
+                    for (auto it = seq_fmlas.begin(); it != seq_fmlas.end(); ++it) {
+                        os << print(*it);
+                        if (std::next(it) != seq_fmlas.end())
+                            os << ", ";
+                    }
+                    result.push_back(os.str());
+                }
+                return result;
+            }
 
             std::string print(const Determinant<std::set<int>>& det) const override {
                 std::stringstream ss;

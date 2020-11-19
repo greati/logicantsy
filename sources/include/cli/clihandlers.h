@@ -23,25 +23,83 @@ namespace ltsy {
     class TTAxiomatizerCLIHandler {
         private:
             const std::string SEMANTICS_TITLE = "semantics";
+            const std::string LATEX_TITLE = "latex";
             const std::string SEMANTICS_VALUES_TITLE = "values";
             const std::string SEMANTICS_JUDGMENTS_TITLE = "judgements";
             const std::string TRUTH_TABLE_TITLE = "truth-tables";
             std::map<int, std::string> _val_to_str;
             std::map<std::string, int> _str_to_val;
+            const std::string TRUTH_TABLES_NAME_TITLE = "name";
+            const std::string TEMPLATE_TITLE = "template";
             std::map<std::string, std::shared_ptr<Connective>> _connectives;
             std::map<std::string, std::vector<std::shared_ptr<Prop>>> _props;
+            std::map<std::string, std::string> _tex_translation;
         public:
 
-            enum class OutputType {
-                PLAIN,
-                LATEX,
-            };
+            std::string get_default_template(Printer::PrinterType output_type, unsigned int dimension=4) {
+                std::string temp;
+                switch(output_type) {
+                    case Printer::PrinterType::PLAIN:
+                        temp += "Check the result below:\n";
+                        temp += "{\% for connective, axioms in axiomatizations \%}";
+                        temp += "Axiomatizations for (|{ connective }|):\n";
+                        temp += "    {\% for axiom in axioms \%}\n";
+                        temp += "- (|{ axiom }|)";
+                        temp += "    {\% endfor \%}\n";
+                        temp += "{\% endfor \%}";
+                        break;
+                    case Printer::PrinterType::LATEX:
+                        temp += "\\documentclass{article}\n";
+                        temp += "\\usepackage[utf8]{inputenc}\n";
+                        temp += "\\usepackage[english]{babel}\n";
+                        temp += "\\usepackage{booktabs}\n";
+                        temp += "\\usepackage{amsmath}\n";
+                        temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+                        unsigned int index=1;
+                        dimension = dimension % 2 ? dimension : dimension + 1;
+                        for (auto i = 1; i < dimension; i+=2) {
+                            temp += "\\frac{#" + 
+                                std::to_string(i) + "}{#" + std::to_string(i+1) + "}";
+                            if (i < dimension/2)
+                                temp += "{|}";
+                        }
+                        temp += "}";
+                        temp += "\\begin{document}\n";
+                        temp += "    \\begin{center}\n";
+                        temp += "{\% for connective, axioms in axiomatizations \%}";
+                        temp += "Axiomatizations for $(|{ connective }|)$:\n";
+                        temp += "    {\% for axiom in axioms \%}\n";
+                        temp += "\\[\n";
+                        temp += "\\bCon";
+                        temp += "        {\% for fmlas in axiom \%}\n";
+                        temp += "{\\text{ (|{ fmlas }|) }}";
+                        temp += "        {\% endfor \%}\n";
+                        temp += "\\]";
+                        temp += "    {\% endfor \%}\n";
+                        temp += "{\% endfor \%}\n";
+                        temp += "    \\end{center}\n";
+                        temp += "\\end{document}";
+                        break;
+                }
+                return temp;
+            }
 
-            void handle(const std::string& yaml_path) {
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
                 YAMLCppParser parser;
+                nlohmann::json result_data;
+                result_data["axiomatizations"] = {};
                 try {
                     auto root = parser.load_from_file(yaml_path);
                     auto semantics_node = parser.hard_require(root, SEMANTICS_TITLE);
+                    // get latex
+                    if (auto latex_node = root[LATEX_TITLE]) {
+                        for (auto it = latex_node.begin(); it != latex_node.end(); ++it)
+                           _tex_translation[it->first.as<std::string>()] = it->second.as<std::string>(); 
+                    }
                     // parse values
                     auto values_node = parser.hard_require(semantics_node, SEMANTICS_VALUES_TITLE);
                     auto values = values_node.as<std::vector<std::string>>();
@@ -80,9 +138,10 @@ namespace ltsy {
                         _props[conn_name] = vars;
                         // parse tt
                         NDTruthTable tt = parser.parse_nd_truth_table(tt_node.second, real_values,
-                                compound->connective()->arity(), _str_to_val);
+                                compound->connective()->arity(), _str_to_val, conn_name);
                         auto table_print = tt.print(_val_to_str).str();
-                        spdlog::info("Input table for connective " + conn_name + " is\n" + table_print);
+                        if (verbose)
+                            spdlog::info("Input table for connective " + conn_name + " is\n" + table_print);
                         AppsFacade apps_facade;
                         auto sequents = apps_facade.axiomatize_truth_table(real_values,
                                 *compound->connective(),
@@ -91,13 +150,44 @@ namespace ltsy {
                                 judgements_in_semantics,
                                 jvc,
                                 tt);
+
+                        tt.set_values_names(_val_to_str);
+
+                        PrinterFactory printer_factory;
+                        auto printer = printer_factory.make_printer(output_type, _tex_translation);
+
+                        auto tt_name_trans = tt.name();
+                        if (output_type == Printer::PrinterType::LATEX) {
+                            auto itt = _tex_translation.find(tt_name_trans);
+                            if (itt != _tex_translation.end())
+                                tt_name_trans = itt->second;
+                        }
+
                         std::string out = "";
-                        for (const auto& seq : sequents)
+                        result_data["axiomatizations"][tt_name_trans] = std::vector<std::vector<std::string>>{};
+                        for (const auto& seq : sequents) {
                             out += "- " + seq.to_string() + "\n"; 
-                        spdlog::info("Here is an axiomatization for " + conn_name + ", with " 
-                                    + std::to_string(sequents.size()) + " sequent(s):\n" + out);
+                            result_data["axiomatizations"][tt_name_trans].push_back(printer->print(seq));
+                        }
+                        if (verbose)
+                            spdlog::info("Here is an axiomatization for " + tt_name_trans + ", with " 
+                                        + std::to_string(sequents.size()) + " sequent(s):\n" + out);
                     }
-                    spdlog::info("Done.");
+                    // get template if exists
+                    std::string template_source;
+                    if (template_path) {
+                        template_source = *template_path;
+                    } else if (auto temp = root[TEMPLATE_TITLE]) {
+                        template_source = temp.as<std::string>(); 
+                    } else {
+                        template_source = get_default_template(output_type);
+                    }
+                    // generate report
+                    AppReport report;
+                    auto r = report.produce(template_source, result_data, template_path.has_value(), dest_path);
+                    std::cout << r << std::endl;
+                    if (verbose)
+                        spdlog::info("Done.");
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());
                 } catch (YAML::ParserException& ye) {
@@ -132,7 +222,8 @@ namespace ltsy {
 
         public:
 
-            std::string get_default_template(const std::vector<std::string>& keys, Printer::PrinterType output_type) {
+            std::string get_default_template(const std::vector<std::string>& keys, 
+                    Printer::PrinterType output_type) {
                 std::string temp;
                 switch(output_type) {
                     case Printer::PrinterType::PLAIN:
@@ -165,7 +256,7 @@ namespace ltsy {
                     std::optional<std::string> template_path=std::nullopt,
                     std::optional<std::string> dest_path=std::nullopt) {
                 YAMLCppParser parser;
-                std::map<std::string, std::string> result_data;
+                nlohmann::json result_data;
                 try {
                     auto root = parser.load_from_file(yaml_path);
                     // get latex

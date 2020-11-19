@@ -25,3 +25,10 @@ truth-tables:
     default: [t, f, bot, top]
     restrictions:
       - [t, t, t]: []
+latex:
+  "->": "\\to"
+  p: "\\varphi"
+  q: "\\psi"
+  r: "\\phi"
+  and: "\\land"
+  or: "\\lor"

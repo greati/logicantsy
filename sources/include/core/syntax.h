@@ -469,15 +469,28 @@ namespace ltsy {
     class FormulaPrinter : public FormulaVisitor<void> {
         private:
             std::stringstream buffer;
+            std::map<std::string, std::string> translation_map;
         public:
+
+            FormulaPrinter() {}
+
+            FormulaPrinter(const decltype(translation_map)& tmap) : translation_map {tmap} {}
+
+            std::string get_translation(const std::string& i) const {
+                auto it = translation_map.find(i);
+                if (it != translation_map.end())
+                    return it->second;
+                return i;
+            }
+
             virtual void visit_prop(Prop* prop) override {
-                buffer << prop->symbol();
+                buffer << get_translation(prop->symbol());
             }
             virtual void visit_compound(Compound* compound) override {
                 auto arity = compound->connective()->arity();
                 auto symbol = compound->connective()->symbol();
                 if (arity != 2) {
-                    buffer << symbol << "(";
+                    buffer << get_translation(symbol) << "(";
                     auto components = compound->components();
                     for (auto it = components.cbegin(); it != components.cend(); ++it) {
                         (*it)->accept(*this);
@@ -488,7 +501,7 @@ namespace ltsy {
                 } else {
                     auto components = compound->components();
                     components[0]->accept(*this);
-                    buffer << " " << symbol << " ";
+                    buffer << " " << get_translation(symbol) << " ";
                     components[1]->accept(*this);
                 }
             }

@@ -2,6 +2,7 @@
 #define __LATEX_PRINTER__
 
 #include "core/printers/base.h"
+#include "core/syntax.h"
 
 namespace ltsy {
     
@@ -21,9 +22,26 @@ namespace ltsy {
         LaTeXPrinter(const decltype(_translation)& translation) :
             Printer {translation} {}
 
-        std::string print(const Formula& fmla) const override {}
+        std::string print(std::shared_ptr<Formula> fmla) const override {
+            FormulaPrinter printer {_translation};
+            fmla->accept(printer);
+            return inline_math(printer.get_string());
+        }
 
-        std::string print(const NdSequent<std::set>& sequent) const override {}
+        std::vector<std::string> print(const NdSequent<std::set>& seq) const override {
+            std::vector<std::string> result;
+            for (auto i = 0; i < seq.dimension(); ++i) {
+                std::stringstream os;
+                const auto seq_fmlas = seq[i];
+                for (auto it = seq_fmlas.begin(); it != seq_fmlas.end(); ++it) {
+                    os << print(*it);
+                    if (std::next(it) != seq_fmlas.end())
+                        os << ", ";
+                }
+                result.push_back(os.str());
+            }
+            return result;
+        }
 
         std::string print(const NDTruthTable& tt) const override {
             std::stringstream ss;
@@ -36,17 +54,17 @@ namespace ltsy {
                header += "&";
             }
             ss << "c}" << std::endl;
-            ss << "\\toprule" << std::endl;
+            ss << "    \\toprule" << std::endl;
             ss << header << inline_math(get_translation(tt.name(), tt.name())) << "\\\\" << std::endl;
-            ss << "\\midrule" << std::endl;
+            ss << "    \\midrule" << std::endl;
             auto dets = tt.get_determinants();
             for (auto it = dets.begin(); it != dets.end(); ++it) {
-                ss << print(*it) << "\\\\";
+                ss << "    " << print(*it) << "\\\\";
                 if (std::next(it) != dets.end())
                     ss << std::endl;    
             }
             ss << std::endl;
-            ss << "\\bottomrule" << std::endl;
+            ss << "    \\bottomrule" << std::endl;
             ss << "\\end{tabular}";
             ss << "\\end{table}";
             return ss.str();

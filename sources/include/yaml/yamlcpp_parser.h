@@ -155,7 +155,8 @@ namespace ltsy {
 
         NDTruthTable parse_nd_truth_table(const YAML::Node& ttnode, 
                 const std::set<int>& values, int arity,
-                const std::map<std::string, int>& str_to_val) 
+                const std::map<std::string, int>& str_to_val,
+                std::string def_name="unknown") 
             const {
             try {
                 auto nvalues = values.size();
@@ -182,6 +183,10 @@ namespace ltsy {
                 for (const auto& [s, v] : str_to_val)
                     _val_to_str[v] = s;
                 tt.set_values_names(_val_to_str);
+                if (auto name_node = ttnode["name"])
+                    tt.set_name(name_node.as<std::string>()); 
+                else
+                    tt.set_name(def_name);
                 return tt;
             } catch (YAML::ParserException &ye) {
                 throw;

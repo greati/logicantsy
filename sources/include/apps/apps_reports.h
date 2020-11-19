@@ -15,15 +15,13 @@ namespace ltsy {
 
             AppReport() {
                 env.set_expression("(|{","}|)");
+                env.set_comment("(|#","#|)");
             }
 
             std::string produce(const std::string& template_source,
-                    const std::map<std::string, std::string>& data,
+                    const nlohmann::json& json_data,
                     bool from_file=true,
                     std::optional<std::string> dest_path=std::nullopt) {
-                nlohmann::json json_data;
-                for (const auto& [k, v] : data)
-                    json_data[k] = v;
                 std::string result;
                 inja::Template temp;
                 if (from_file)
