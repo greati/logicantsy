@@ -22,13 +22,23 @@ namespace ltsy {
             Printer {translation} {}
 
         std::string print(const Formula& fmla) const override {}
+
         std::string print(const NdSequent<std::set>& sequent) const override {}
+
         std::string print(const NDTruthTable& tt) const override {
             std::stringstream ss;
+            ss << "\\begin{table}";
+            ss << "\\centering";
             ss << "\\begin{tabular}{";
-            for (auto i = 0; i < tt.arity(); ++i)
+            std::string header = "";
+            for (auto i = 0; i < tt.arity(); ++i) {
                ss << "c|"; 
+               header += "&";
+            }
             ss << "c}" << std::endl;
+            ss << "\\toprule" << std::endl;
+            ss << header << inline_math(get_translation(tt.name(), tt.name())) << "\\\\" << std::endl;
+            ss << "\\midrule" << std::endl;
             auto dets = tt.get_determinants();
             for (auto it = dets.begin(); it != dets.end(); ++it) {
                 ss << print(*it) << "\\\\";
@@ -38,8 +48,10 @@ namespace ltsy {
             ss << std::endl;
             ss << "\\bottomrule" << std::endl;
             ss << "\\end{tabular}";
+            ss << "\\end{table}";
             return ss.str();
         }
+
         std::string print(const Determinant<std::set<int>>& det) const override {
             std::stringstream ss;
             auto args = det.get_args();

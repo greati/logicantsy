@@ -12,14 +12,14 @@ namespace ltsy {
 
         public:
 
-            std::shared_ptr<Printer> make_printer(Printer::PrinterType printer_type) {
+            std::shared_ptr<Printer> make_printer(Printer::PrinterType printer_type, const std::map<std::string, std::string>& translation) {
                 std::shared_ptr<Printer> printer;
                 switch(printer_type) {
                     case Printer::PrinterType::PLAIN:
-                        printer = std::make_shared<StdPrinter>();
+                        printer = std::make_shared<StdPrinter>(translation);
                         break;
                     case Printer::PrinterType::LATEX:
-                        printer = std::make_shared<LaTeXPrinter>();
+                        printer = std::make_shared<LaTeXPrinter>(translation);
                         break;
                 }
                 return printer;

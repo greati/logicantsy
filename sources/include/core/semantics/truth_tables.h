@@ -109,7 +109,8 @@ namespace ltsy {
     class TruthTable {
         
         private:
-
+            
+            std::string _name {"#"};  //<! a name to identify the truth-table
             int _nvalues;
             int _number_of_rows;
             int _arity = -1;
@@ -150,6 +151,9 @@ namespace ltsy {
              * Build a truth table from its rows.
              * */
             TruthTable(int nvalues, const std::initializer_list<TruthTableRow>& rows);
+
+            inline void set_name(const decltype(_name)& name) { _name = name; }
+            inline decltype(_name) name() const { return _name; }
 
             /* Gives the image at the given position.
              * */

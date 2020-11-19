@@ -27,6 +27,7 @@ namespace ltsy {
 
         private:
             std::string _file_path;
+            bool _verbose {false};
             Printer::PrinterType _output_type = Printer::PrinterType::PLAIN;
 
             std::map<std::string, Printer::PrinterType> output_type_mapping
@@ -40,9 +41,10 @@ namespace ltsy {
                    ->check(CLI::ExistingFile);
                 this->add_option("-o, --output", _output_type, "Output type")
                     ->check(CLI::CheckedTransformer(output_type_mapping, CLI::ignore_case));
+                this->add_flag("-v, --verbose", _verbose, "Print results as they come");
                 this->callback([&]() {
                     TTDeterminizerCLIHandler handler;
-                    handler.handle(_file_path, _output_type);
+                    handler.handle(_file_path, _output_type, _verbose);
                 });
             }
     };

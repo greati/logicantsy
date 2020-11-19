@@ -7,6 +7,7 @@ semantics:
     R:  [top, f]
 truth-tables:
   p and q:
+    name: myand
     base:
       restrictions:
         - [f, f]: [f]
@@ -18,14 +19,15 @@ truth-tables:
       - [[p and q], [], [], [p]]
       - [[p and q], [], [], [q]]
   p or q:
+    name: myor
     conditions:
       - [[],[],[],[]] 
-tex:
+latex:
   f: "\\mathbf{f}"
   t: "\\mathbf{t}"
   bot: "\\bot"
   top: "\\top"
   p: "\\varphi"
   q: "\\psi"
-  and: "\\land"
-  or: "\\lor"
+  myand: "\\land"
+  myor: "\\lor"

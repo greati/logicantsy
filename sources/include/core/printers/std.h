@@ -36,6 +36,7 @@ namespace ltsy {
             std::string print(const NDTruthTable& tt) const override {
                 std::stringstream ss;
                 auto dets = tt.get_determinants();
+                ss << tt.name() << std::endl;
                 for (auto it = dets.begin(); it != dets.end(); ++it) {
                     ss << print(*it);
                     if (std::next(it) != dets.end())
