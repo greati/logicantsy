@@ -54,21 +54,26 @@ namespace ltsy {
                         temp += "\\usepackage[english]{babel}\n";
                         temp += "\\usepackage{booktabs}\n";
                         temp += "\\usepackage{amsmath}\n";
+                        temp += "\\usepackage{float}\n";
                         temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
                         unsigned int index=1;
                         dimension = dimension % 2 ? dimension : dimension + 1;
                         for (auto i = 1; i < dimension; i+=2) {
                             temp += "\\frac{#" + 
-                                std::to_string(i) + "}{#" + std::to_string(i+1) + "}";
+                                std::to_string(i+1) + "}{#" + std::to_string(i) + "}";
                             if (i < dimension/2)
                                 temp += "{|}";
                         }
                         temp += "}";
                         temp += "\\begin{document}\n";
+                        temp += "\\tableofcontents\n";
                         temp += "    \\begin{center}\n";
-                        temp += "{\% for connective, axioms in axiomatizations \%}";
-                        temp += "Axiomatizations for $(|{ connective }|)$:\n";
-                        temp += "    {\% for axiom in axioms \%}\n";
+                        temp += "{\% for connective, content in axiomatizations \%}";
+                        temp += "\\section{Axiomatization of $(|{ connective }|)$ }\n";
+                        temp += "\\subsection{Table}\n";
+                        temp += "(|{ content.table }|)\n";
+                        temp += "\\subsection{Axioms}\n";
+                        temp += "    {\% for axiom in content.axioms \%}\n";
                         temp += "\\[\n";
                         temp += "\\bCon";
                         temp += "        {\% for fmlas in axiom \%}\n";
@@ -92,6 +97,7 @@ namespace ltsy {
                 YAMLCppParser parser;
                 nlohmann::json result_data;
                 result_data["axiomatizations"] = {};
+                result_data["tables"] = {};
                 try {
                     auto root = parser.load_from_file(yaml_path);
                     auto semantics_node = parser.hard_require(root, SEMANTICS_TITLE);
@@ -164,10 +170,13 @@ namespace ltsy {
                         }
 
                         std::string out = "";
-                        result_data["axiomatizations"][tt_name_trans] = std::vector<std::vector<std::string>>{};
+                        result_data["axiomatizations"][tt_name_trans] = 
+                        {{"axioms", std::vector<std::vector<std::string>>{}},
+                         {"table", printer->print(tt)}
+                        };
                         for (const auto& seq : sequents) {
                             out += "- " + seq.to_string() + "\n"; 
-                            result_data["axiomatizations"][tt_name_trans].push_back(printer->print(seq));
+                            result_data["axiomatizations"][tt_name_trans]["axioms"].push_back(printer->print(seq));
                         }
                         if (verbose)
                             spdlog::info("Here is an axiomatization for " + tt_name_trans + ", with " 

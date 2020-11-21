@@ -36,4 +36,30 @@ the produced family of strings.
 cd build
 ./ltsy --help
 ```
+### tt-axiomatizer
 
+#### Output
+
+```json
+"tables": {
+    "connective1": table1,
+    "connective2": table2,
+    ...
+    "connectiveM": tableM
+},
+"axiomatizations": {
+    "connective1": [
+        [A11, B11, C11, D11],
+        ...
+        [A1N1, B1N1, C1N1, D1N1]   
+    ],
+    "connective2": [...],
+    ...
+    "connectiveM": [...]
+}
+```
+- Each Aij, Bij, Cij, Dij is a string of formulas, separated by a comma.
+- Each `tablei` is a string representing a truth table
+
+### tt-determinizer
+### rule-soundness-checker

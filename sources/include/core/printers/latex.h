@@ -45,7 +45,7 @@ namespace ltsy {
 
         std::string print(const NDTruthTable& tt) const override {
             std::stringstream ss;
-            ss << "\\begin{table}";
+            ss << "\\begin{table}[H]";
             ss << "\\centering";
             ss << "\\begin{tabular}{";
             std::string header = "";

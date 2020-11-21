@@ -1,7 +1,7 @@
 semantics:
   type: four-billatice
   values: [f, bot, top, t]
-  judgements: [NR, NA, A, R]
+  judgements: [A, NR, R, NA]
 truth-tables:
   p and q:
     default: [t]
@@ -21,10 +21,16 @@ truth-tables:
     restrictions:
       - [_, _]: []
       - [t, f]: [f]
-  foo(p, q, r):
-    default: [t, f, bot, top]
+  not(p):
     restrictions:
-      - [t, t, t]: []
+      - [t]: [f]
+      - [f]: [t]
+  bot():
+    restrictions:
+      - []: [f]
+  top():
+    restrictions:
+      - []: [t, top]
 latex:
   "->": "\\to"
   p: "\\varphi"
@@ -32,3 +38,9 @@ latex:
   r: "\\phi"
   and: "\\land"
   or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  foo: "\\circ"
+  not: "\\neg"
