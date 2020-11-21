@@ -1,13 +1,66 @@
 @startuml
 
-package "semantics" #eeeeee {
-    package "genmatrices" #eeeeee {
+package "apps" #ffffff {
+
+    package "controller" #ffffff {
+        interface AppController {
+            +on_request(json:json) : json
+        }
+        class TTDeterminizerController implements AppController {}
+        class TTAxiomatizerController implements AppController {}
+        class SoundnessCheckerController implements AppController {}
+        AppController <-- CLIHandler
+    }
+
+    package "cli" #ffffff {
+        package "cli11" #eeeeee {
+            abstract class CLIApp {}
+            class CLIAppTTDeterminizer {}
+            class CLIAppTTAxiomatizer {}
+            class CLIAppSoundnessChecker {}
+
+            CLIApp <|-- CLIAppTTDeterminizer
+            CLIApp <|-- CLIAppTTAxiomatizer
+            CLIApp <|-- CLIAppSoundnessChecker
+        }
+        package "handlers" #ffffff {
+            abstract class CLIHandler {
+                +handle(args : heterogeneous_map)
+            }
+            class TTDeterminizerCLIHandler {}
+            class TTAxiomatizerCLIHandler {}
+            class SoundnessCheckerCLIHandler {}
+
+            CLIHandler <|-- TTDeterminizerCLIHandler
+            CLIHandler <|-- TTAxiomatizerCLIHandler
+            CLIHandler <|-- SoundnessCheckerCLIHandler
+        }
+        CLIHandler <-- CLIApp
+    }
+
+    package "webapi" #ffffff {
+        package "pistacheio" #eeeeee {
+            abstract class Pistache::Http::Handler {}
+            abstract class LtsyPistacheHandler extends Pistache::Http::Handler {}
+            class TTDeterminizerPistacheHandler extends LtsyPistacheHandler {}
+            class TTAxiomatizerPistacheHandler extends LtsyPistacheHandler {}
+            class SoundnessCheckerPistageHandler extends LtsyPistacheHandler {}
+           
+            AppController <-- LtsyPistacheHandler 
+        }
+    }
+
+
+}
+
+package "semantics" #ffffff {
+    package "genmatrices" #ffffff {
         class GenMatrix {}
     }
 }
 
-package "proof-theory" #eeeeee {
-    package "multconc" #eeeeee {
+package "proof-theory" #ffffff {
+    package "multconc" #ffffff {
         class MultipleConclusionRule {}
         class MultipleConclusionCalculus {}
         class MCProofSearchHeuristics {}
@@ -16,13 +69,13 @@ package "proof-theory" #eeeeee {
         MCProofSearchHeuristics "n" <--o "n" MultipleConclusionCalculus
     }
 
-    package "ndsequents" #eeeeee {
+    package "ndsequents" #ffffff {
         class NdSequent {}
         class NdSequentRule {}
     }
 }
 
-package "syntax" #eeeeee {
+package "syntax" #ffffff {
     abstract class Formula {
         +accept(FormulaVisitor&)
     }
