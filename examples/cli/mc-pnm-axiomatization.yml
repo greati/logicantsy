@@ -1,0 +1,68 @@
+semantics:
+  values: [f, bot, top, t]
+  dsets:
+    - [t, top]
+    - [f, top]
+truth-tables:
+  p and q:
+    default: [t]
+    restrictions:
+      - [f, _]: [f]
+      - [_, f]: [f]
+      - [top, t]: [top]
+      - [t, top]: [top]
+      - [bot, t]: [bot]
+      - [t, bot]: [bot]
+      - [top, bot]: [f]
+      - [bot, top]: [f]
+      - [bot, bot]: [bot]
+      - [top, top]: [top]
+      - [t, t]: [t]
+  p -> q:
+    restrictions:
+      - [_, _]: []
+      - [t, f]: [f]
+  p `to` q:
+    restrictions:
+      - [f, _]: [t]
+      - [_, t]: [t]
+      - [t, f]: [f]
+      - [t, top]: [top]
+      - [t, bot]: [bot]
+      - [top, f]: [bot]
+      - [top, top]: [t]
+      - [top, bot]: [bot]
+      - [bot, f]: [top]
+      - [bot, top]: [top]
+      - [bot, bot]: [t]
+  not(p):
+    restrictions:
+      - [t]: [f]
+      - [f]: [t]
+  bot():
+    restrictions:
+      - []: [f]
+  top():
+    restrictions:
+      - []: [t, top]
+separators:
+  - [f, bot]: p
+  - [f, top]: p
+  - [f, t]: p
+  - [t, bot]: p
+  - [t, top]: p
+  - [bot, top]: p
+latex:
+  "->": "\\to"
+  p: "\\varphi"
+  q: "\\psi"
+  r: "\\phi"
+  and: "\\land"
+  or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  foo: "\\circ"
+  not: "\\neg"
+  "`to`": "\\Tilde{\\supset}"
