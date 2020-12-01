@@ -15,6 +15,8 @@
 
 namespace ltsy {
 
+    template<typename CellType> class TruthTable;
+
     /**
      * Represents a determinant. 
      *
@@ -30,19 +32,26 @@ namespace ltsy {
             int _nvalues;   /*< arg values take values from 0..(_nvalues-1)*/
             int _arity;     /*< arg size is _arity (so the determinant is _arity + 1) */
             std::pair<int, CellType> _data;
+            std::map<int, std::string> _values_names;
 
         public:
 
-            Determinant(int nvalues, int arity, int tuple_pos, CellType last) : 
-                _nvalues {nvalues}, _arity {arity}
+            Determinant(int nvalues, int arity, int tuple_pos, CellType last, const decltype(_values_names)& values_names) : 
+                _nvalues {nvalues}, _arity {arity}, _values_names {values_names}
             {
                 _data = {tuple_pos, last};
             }
 
-            Determinant(int nvalues, std::vector<int> args, CellType last) 
-                : _nvalues {nvalues}, _arity {static_cast<int>(args.size())} {
+            Determinant(int nvalues, int arity, int tuple_pos, CellType last) : 
+               Determinant{nvalues, arity, tuple_pos, last, {}} {} 
+
+            Determinant(int nvalues, std::vector<int> args, CellType last, const decltype(_values_names)& values_names) 
+                : _nvalues {nvalues}, _arity {static_cast<int>(args.size())}, _values_names {values_names} {
                 _data = {utils::position_from_tuple(_nvalues, _arity, args), last};
             }
+
+            Determinant(int nvalues, std::vector<int> args, CellType last) 
+                : Determinant{nvalues, args, last, {}} {}
 
             inline CellType get_last() const { return _data.second; }
 
@@ -65,11 +74,21 @@ namespace ltsy {
             friend std::ostream& operator<<(std::ostream& os, const Determinant<CellType>& det) {
                 auto args = det.get_args();
                 os << std::string("< ");
-                for (auto it = args.begin(); it != args.end(); ++it)
+                for (auto it = args.begin(); it != args.end(); ++it) {
                     os << (*it) << std::string(" ");
+                }
                 os << det.get_last();
                 os << std::string(" >");
                 return os;  
+            }
+
+            inline void set_values_names(const decltype(_values_names)& values_names) { _values_names = values_names; }
+
+            inline std::string get_value_name(int value) const { 
+                auto f = _values_names.find(value);
+                if (f == _values_names.end())
+                    return std::to_string(value);
+                return f->second;
             }
     };
 
@@ -90,11 +109,14 @@ namespace ltsy {
     class TruthTable {
         
         private:
-
+            
+            std::string _name {"#"};  //<! a name to identify the truth-table
             int _nvalues;
             int _number_of_rows;
             int _arity = -1;
             std::vector<CellType> _images;
+
+            std::map<int, std::string> _values_names;
 
             using TruthTableRow = std::pair<std::vector<int>, CellType>;
 
@@ -130,6 +152,9 @@ namespace ltsy {
              * */
             TruthTable(int nvalues, const std::initializer_list<TruthTableRow>& rows);
 
+            inline void set_name(const decltype(_name)& name) { _name = name; }
+            inline decltype(_name) name() const { return _name; }
+
             /* Gives the image at the given position.
              * */
             inline CellType at(int i) const { return _images[i]; }
@@ -160,7 +185,7 @@ namespace ltsy {
             std::set<Determinant<CellType>> get_determinants() const {
                 std::set<Determinant<CellType>> result;
                 for (auto i {0}; i < _images.size(); ++i){
-                    Determinant<CellType> d (_nvalues, _arity, i, at(i));
+                    Determinant<CellType> d (_nvalues, _arity, i, at(i), _values_names);
                     result.insert(d);
                 }
                 return result;
@@ -179,6 +204,14 @@ namespace ltsy {
                     os << std::endl;
                 }
                 return os;  
+            }
+
+            inline void set_values_names(const decltype(_values_names)& values_names) { _values_names = values_names; }
+            inline std::string get_value_name(int value) const { 
+                auto f = _values_names.find(value);
+                if (f == _values_names.end())
+                    return std::to_string(value);
+                return f->second;
             }
 
             std::stringstream print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const;

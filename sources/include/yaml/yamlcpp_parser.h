@@ -72,6 +72,14 @@ namespace ltsy {
             return s;
         }
 
+        std::map<std::string, std::string> parse_tex_translation(const YAML::Node& node) {
+            std::map<std::string, std::string> m;
+            for (auto it = node.begin(); it != node.end(); ++it) {
+                m[it->first.as<std::string>()] = it->second.as<std::string>();
+            }
+            return m;
+        }
+
         std::vector<int> parse_vector_str_to_values(const YAML::Node& node,
                 const std::map<std::string, int>& str_to_val) const {
             auto list_of_str = node.as<std::vector<std::string>>();
@@ -147,7 +155,8 @@ namespace ltsy {
 
         NDTruthTable parse_nd_truth_table(const YAML::Node& ttnode, 
                 const std::set<int>& values, int arity,
-                const std::map<std::string, int>& str_to_val) 
+                const std::map<std::string, int>& str_to_val,
+                std::string def_name="unknown") 
             const {
             try {
                 auto nvalues = values.size();
@@ -170,6 +179,14 @@ namespace ltsy {
                         tt.update(dets);
                     }
                 }
+                std::map<int, std::string> _val_to_str;
+                for (const auto& [s, v] : str_to_val)
+                    _val_to_str[v] = s;
+                tt.set_values_names(_val_to_str);
+                if (auto name_node = ttnode["name"])
+                    tt.set_name(name_node.as<std::string>()); 
+                else
+                    tt.set_name(def_name);
                 return tt;
             } catch (YAML::ParserException &ye) {
                 throw;

@@ -13,13 +13,22 @@ namespace ltsy {
         protected:
 
             std::map<std::string, CognitiveAttitude> _judgements;
+            unsigned int _n_values;
 
         public:
-            JudgementValueCorrespondence(const decltype(_judgements)& judgements) 
-                : _judgements {judgements} { /* empty */ }
+            JudgementValueCorrespondence(const decltype(_judgements)& judgements, const decltype(_n_values) n_values) 
+                : _judgements {judgements}, _n_values {n_values} { /* empty */ }
 
             virtual std::set<CognitiveAttitude> judgements_from_value(int) = 0;
             virtual int value_from_judgements(const std::set<CognitiveAttitude>&) = 0;
+            virtual std::set<CognitiveAttitude> get_complementary_attitudes() const {
+                std::set<CognitiveAttitude> r;
+                for (auto [k, j] : _judgements)
+                    r.insert(j);
+                return r;
+            }
+
+            decltype(_n_values) n_values() const { return _n_values; }
 
             /**
              * Produces a set of lists of judgements. Each list
@@ -77,7 +86,8 @@ namespace ltsy {
 
             BillaticeJudgementValueCorrespondence(
                     const decltype(_judgements)& judgements, 
-                    const decltype(_adjs)& adjs) : JudgementValueCorrespondence {judgements}, _adjs {adjs} {}
+                    const decltype(_adjs)& adjs,
+                    const decltype(_n_values)& n_values) : JudgementValueCorrespondence {judgements, n_values}, _adjs {adjs} {}
 
             std::set<CognitiveAttitude> judgements_from_value(int v) override;
 
