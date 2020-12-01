@@ -32,6 +32,12 @@ std::vector<std::set<CognitiveAttitude>> BillaticeJudgementValueCorrespondence::
     // no values
     if (vals_size == 0)
         return atts;
+    if (vals_size == this->n_values()) {
+        auto s = this->get_complementary_attitudes();
+        for (auto att : s)
+            atts.push_back({att});
+        return atts;
+    }
     // induced subgraph
     std::set<CognitiveAttitude> inducedSubgraph = this->_compute_judgs_from_induced_subgraph(vals);;
     if (inducedSubgraph.size() == 0) {
@@ -52,4 +58,5 @@ std::shared_ptr<JudgementValueCorrespondence> JudgementValueCorrespondenceFactor
         case JudgementValueCorrespondenceType::FOUR_BILLATICE:
             return nullptr; 
     }
+    return nullptr;
 }

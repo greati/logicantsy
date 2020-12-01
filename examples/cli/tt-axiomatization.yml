@@ -21,6 +21,19 @@ truth-tables:
     restrictions:
       - [_, _]: []
       - [t, f]: [f]
+  p `to` q:
+    restrictions:
+      - [f, _]: [t]
+      - [_, t]: [t]
+      - [t, f]: [f]
+      - [t, top]: [top]
+      - [t, bot]: [bot]
+      - [top, f]: [bot]
+      - [top, top]: [t]
+      - [top, bot]: [bot]
+      - [bot, f]: [top]
+      - [bot, top]: [top]
+      - [bot, bot]: [t]
   not(p):
     restrictions:
       - [t]: [f]
@@ -44,3 +57,4 @@ latex:
   top: "\\top"
   foo: "\\circ"
   not: "\\neg"
+  "`to`": "\\Tilde{\\supset}"

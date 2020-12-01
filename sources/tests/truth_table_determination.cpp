@@ -99,7 +99,7 @@ namespace {
             {1, {{0, r}, {3, na}}},
             {2, {{0, a}, {3, nr}}},
             {3, {{1, na}, {2, nr}}}
-           }
+           }, 4
         );
         std::cout << billatice.judgements_from_value(0) << std::endl;
         std::cout << billatice.judgements_from_value(1) << std::endl;
@@ -145,7 +145,7 @@ namespace {
             {1, {{0, r}, {3, na}}},
             {2, {{0, a}, {3, nr}}},
             {3, {{1, na}, {2, nr}}}
-           }
+           }, 4
         );
 
         auto p = std::make_shared<ltsy::Prop>("p");

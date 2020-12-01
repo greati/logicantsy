@@ -66,11 +66,11 @@ namespace ltsy {
                 if (avoid_set_size == 0)
                     return;
                 // partiality
-                if (avoid_set_size == all_values_size) {
-                    NdSequent<std::set> seq {_sequent_dim, {}};
-                    place_variables(seq, det);
-                    sequents.push_back(seq);
-                }
+               //if (avoid_set_size == all_values_size) {
+               //    NdSequent<std::set> seq {_sequent_dim, {}};
+               //    place_variables(seq, det);
+               //    sequents.push_back(seq);
+               //}
                 // other cases
                 else {
                     auto judgs_from_set = _judg_value_correspondence->judgements_from_set_values(avoid_set); 

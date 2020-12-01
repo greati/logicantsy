@@ -32,8 +32,13 @@ namespace ltsy {
                                     {0, {{2, {"R", {0,2}}}, {1, {"NA",{0,1}}}}},
                                     {3, {{2, {"A", {2,3}}}, {1, {"NR",{1,3}}}}},
                                     {1, {{0, {"NA",{0,1}}}, {3, {"NR",{1,3}}}}}
-                                }
+                                }, 4
                              } { /* empty */ }
+
+            std::set<CognitiveAttitude> get_complementary_attitudes() const override { 
+                return std::set<CognitiveAttitude> {{"A", {2, 3}},
+                                                   {"NA", {0,1}}};
+            }
     }; 
 
 
