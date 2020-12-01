@@ -489,7 +489,18 @@ namespace ltsy {
             virtual void visit_compound(Compound* compound) override {
                 auto arity = compound->connective()->arity();
                 auto symbol = compound->connective()->symbol();
-                if (arity != 2) {
+
+                if (arity == 0) {
+                    buffer << get_translation(symbol);
+                } else if (arity == 1 and compound->components()[0]->type() == Formula::FmlaType::PROP) {
+                    buffer << get_translation(symbol);
+                    compound->components()[0]->accept(*this);
+                } else if (arity == 2) {
+                    auto components = compound->components();
+                    components[0]->accept(*this);
+                    buffer << " " << get_translation(symbol) << " ";
+                    components[1]->accept(*this);
+                } else {
                     buffer << get_translation(symbol) << "(";
                     auto components = compound->components();
                     for (auto it = components.cbegin(); it != components.cend(); ++it) {
@@ -498,11 +509,6 @@ namespace ltsy {
                             buffer << ",";
                     }
                     buffer <<")";
-                } else {
-                    auto components = compound->components();
-                    components[0]->accept(*this);
-                    buffer << " " << get_translation(symbol) << " ";
-                    components[1]->accept(*this);
                 }
             }
             std::string get_string() { return buffer.str(); }
