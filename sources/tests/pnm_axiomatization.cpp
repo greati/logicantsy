@@ -66,8 +66,7 @@ namespace {
       ltsy::PNMMultipleConclusionAxiomatizer::Discriminator discriminator
       {{
            {0, {{circ_p},{p}}},
-           {1, {{},{}}},
-           //{1, {{neg_p},{p, circ_p}}},
+           {1, {{neg_p},{p, circ_p}}},
            {2, {{},{p, circ_p, neg_p}}},
            {3, {{p, neg_p},{circ_p}}},
            {4, {{p},{circ_p, neg_p}}},
@@ -75,7 +74,17 @@ namespace {
       }};
 
       ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix};
-      axiomatizer.make_exists_rules();
+      auto exists_rules = axiomatizer.make_exists_rules();
+      std::cout << exists_rules.size() << std::endl;
+      for (auto r : exists_rules) {
+            std::cout << r.name() << std::endl;
+            std::cout << r.sequent() << std::endl;
+      }
+      auto d_rules = axiomatizer.make_d_rules();
+      for (auto r : d_rules) {
+            std::cout << r.name() << std::endl;
+            std::cout << r.sequent() << std::endl;
+      }
     }
 }
 

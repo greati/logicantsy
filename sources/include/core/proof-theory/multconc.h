@@ -46,6 +46,28 @@ namespace ltsy {
                     const decltype(_prem_conc_pos_corresp)& prem_conc_pos_corresp)
             : MultipleConclusionRule {name, sequent, prem_conc_pos_corresp, nullptr} {}
 
+            bool operator<(const MultipleConclusionRule& other) const {
+                for (int i = 0; i < _sequent.dimension(); ++i) {
+                    if (_sequent.sequent_fmlas()[i] == other._sequent.sequent_fmlas()[i]){
+                        continue;
+                    }
+                    auto fmlas = _sequent.sequent_fmlas()[i];
+                    for (auto it = fmlas.begin(); it != fmlas.end(); ++it)
+                        if (not other._sequent.is_in(i, *(*it)))
+                           return false; 
+                    return true;
+                    //return _sequent.sequent_fmlas()[i] < other._sequent.sequent_fmlas()[i];
+                }
+                return false;
+            }
+            bool operator==(const MultipleConclusionRule& other) const {
+                for (int i = 0; i < _sequent.dimension(); ++i) {
+                    if (_sequent.sequent_fmlas()[i] != other._sequent.sequent_fmlas()[i])    
+                        return false;
+                }
+                return true;
+            }
+
             decltype(_sequent) sequent() const { return _sequent; }
 
             decltype(_name) name() const { return _name; }
