@@ -47,18 +47,16 @@ namespace ltsy {
             : MultipleConclusionRule {name, sequent, prem_conc_pos_corresp, nullptr} {}
 
             bool operator<(const MultipleConclusionRule& other) const {
-                for (int i = 0; i < _sequent.dimension(); ++i) {
-                    if (_sequent.sequent_fmlas()[i] == other._sequent.sequent_fmlas()[i]){
-                        continue;
-                    }
-                    auto fmlas = _sequent.sequent_fmlas()[i];
-                    for (auto it = fmlas.begin(); it != fmlas.end(); ++it)
-                        if (not other._sequent.is_in(i, *(*it)))
-                           return false; 
-                    return true;
-                    //return _sequent.sequent_fmlas()[i] < other._sequent.sequent_fmlas()[i];
-                }
-                return false;
+                auto comp = [&](const FmlaSet& f1, const FmlaSet& f2) {
+                    return std::lexicographical_compare(
+                            f1.begin(), f1.end(), f2.begin(), f2.end(),
+                            utils::DeepSharedPointerComp<Formula>());
+                };
+                auto seqfmlasleft = _sequent.sequent_fmlas();
+                auto seqfmlasright = other._sequent.sequent_fmlas();
+                return std::lexicographical_compare(seqfmlasleft.begin(), seqfmlasleft.end(),
+                        seqfmlasright.begin(), seqfmlasright.end(),
+                        comp);
             }
             bool operator==(const MultipleConclusionRule& other) const {
                 for (int i = 0; i < _sequent.dimension(); ++i) {
@@ -358,11 +356,14 @@ namespace ltsy {
 
         public:
 
+            MultipleConclusionCalculus() {}
 
             /* Basic constructor.
              * */
             MultipleConclusionCalculus(const decltype(_rules)& rules)
                 : _rules {rules} {}
+
+            decltype(_rules) rules() const { return _rules; }
 
             /* Try to produce a derivation tree based
              * on the system's rules.

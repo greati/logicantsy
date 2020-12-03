@@ -74,16 +74,13 @@ namespace {
       }};
 
       ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix};
-      auto exists_rules = axiomatizer.make_exists_rules();
-      std::cout << exists_rules.size() << std::endl;
-      for (auto r : exists_rules) {
-            std::cout << r.name() << std::endl;
-            std::cout << r.sequent() << std::endl;
-      }
-      auto d_rules = axiomatizer.make_d_rules();
-      for (auto r : d_rules) {
-            std::cout << r.name() << std::endl;
-            std::cout << r.sequent() << std::endl;
+      auto calculuses = axiomatizer.make_calculus();
+      for (auto [k, calculus] : calculuses) {
+          std::cout << k << std::endl;
+          for (auto r : calculus.rules()) {
+                std::cout << r.name() << std::endl;
+                std::cout << r.sequent() << std::endl;
+          }
       }
     }
 }

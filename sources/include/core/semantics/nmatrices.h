@@ -145,6 +145,11 @@ namespace ltsy {
                     this->try_interpret(ti);
             }
 
+            auto begin() { return _truth_interps.begin(); }
+            auto end() { return _truth_interps.end(); }
+            auto cbegin() { return _truth_interps.cbegin(); }
+            auto cend() { return _truth_interps.cend(); }
+
             std::shared_ptr<SignatureTruthInterp> copy() const {
                 decltype(_signature) sig = std::make_shared<Signature>(*_signature);
                 decltype(_truth_interps) truth_interps;

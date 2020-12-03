@@ -25,6 +25,23 @@ namespace ltsy {
                 public:
                     std::map<int, std::vector<FmlaSet>> separators;
                     Discriminator(const decltype(separators) _separators) : separators {_separators} {}
+                    std::vector<FmlaSet> apply_subs(int v, std::shared_ptr<Formula>& sfmla) {
+                        std::vector<FmlaSet> result {separators[v].size()};
+                        for (int i = 0; i < separators[v].size(); ++i) {
+                            auto set = separators[v][i];
+                            for (auto fmla : set) {
+                                VariableCollector vcollector; fmla->accept(vcollector);
+                                auto props = vcollector.get_collected_variables(); // this should have a single var
+                                if (props.size() != 1) throw std::logic_error("discriminator is not monadic");
+                                auto prop = *props.begin();
+                                FormulaVarAssignment subst { {{*prop, sfmla}} };
+                                SubstitutionEvaluator substeval {subst};
+                                auto resfmla = fmla->accept(substeval);
+                                result[i].insert(resfmla); 
+                            }
+                        }
+                        return result;
+                    }
             };
 
         private:
@@ -115,6 +132,51 @@ namespace ltsy {
                 }
             }
 
+            std::map<std::string, MultipleConclusionCalculus> make_calculus() {
+                auto exists = make_exists_rules(); 
+                exists = remove_overlaps(exists);
+                auto d = make_d_rules(); 
+                d = remove_overlaps(d);
+                auto sigma = make_sigma_rules(); 
+                sigma = remove_overlaps(sigma);
+
+                auto allrules = exists;
+                allrules.insert(d.begin(), d.end());
+                allrules.insert(sigma.begin(), sigma.end());
+
+                auto make_calc_item = [&](const decltype(exists)& rulesset) {
+                    std::vector<MultipleConclusionRule> rules;
+                    for (auto r : rulesset)
+                        rules.push_back(r);
+                    return MultipleConclusionCalculus {rules};
+                };
+                std::map<std::string, MultipleConclusionCalculus> result;
+                result["all"] = make_calc_item(allrules);
+                result["exists"] = make_calc_item(exists);
+                result["sigma"] = make_calc_item(sigma);
+                result["d"] = make_calc_item(d);
+                return result;
+            }
+
+            std::set<MultipleConclusionRule> remove_overlaps(const std::set<MultipleConclusionRule>& rules) {
+                std::set<MultipleConclusionRule> result;
+                for (auto r : rules) {
+                    for (auto [d1,d2] : _opposition_dsets) {
+                        auto s1 = r.sequent().sequent_fmlas()[d1];
+                        auto s2 = r.sequent().sequent_fmlas()[d2];
+                        decltype(s1) inters;
+                        std::set_intersection(s1.begin(), s1.end(),
+                                s2.begin(), s2.end(), 
+                                std::inserter(inters, inters.begin()),
+                                utils::DeepSharedPointerComp<Formula>());
+                        if (not inters.empty())
+                            continue;
+                        result.insert(r);
+                    }
+                }
+                return result;    
+            }
+
             std::set<MultipleConclusionRule> make_exists_rules() {
                 auto values = _gen_matrix->values();
                 std::set<MultipleConclusionRule> result;
@@ -179,7 +241,60 @@ namespace ltsy {
                 }
                 return result;
             }
+            std::vector<std::shared_ptr<Formula>> make_props(int k) const {
+                std::vector<std::shared_ptr<Formula>> result;
+                for(int i = 1; i <= k; ++i) {
+                    std::string s = "p" + std::to_string(i);
+                    result.push_back(std::make_shared<Prop>(s));
+                }
+                return result;
+            }
+            std::shared_ptr<Formula> make_compound(std::shared_ptr<Connective> conn,
+                    const std::vector<std::shared_ptr<Formula>>& props) {
+                return std::make_shared<Compound>(conn, props); 
+            }
             std::set<MultipleConclusionRule> make_sigma_rules() {
+                auto values = _gen_matrix->values();
+                auto dsets = _gen_matrix->distinguished_sets();
+                std::set<MultipleConclusionRule> result;
+                auto interpretation = _gen_matrix->interpretation();
+                // loop over interpretations
+                for (auto [symb, interp] : *interpretation) {
+                    auto connective = interp->connective();
+                    auto truth_table = interp->truth_table();
+                    auto arity = connective->arity();
+                    auto props = make_props(arity);
+                    auto compound = make_compound(connective, props);
+                    // loop over the determinants
+                    for (auto determinant : truth_table->get_determinants()) {
+                        auto args = determinant.get_args(); 
+                        auto response = determinant.get_last();
+                        auto response_complement = utils::set_difference(values, response);
+                        for (auto y : response_complement) {
+                             std::vector<FmlaSet> sequent {dsets.size()};
+                             for (auto [dset, dpos] : _dsets_rule_positions) {
+                                 auto seps = _discriminator.apply_subs(y, compound);
+                                 sequent[dpos].insert(seps[dset].begin(), seps[dset].end());
+                             }
+                             for (int i = 0; i < args.size(); ++i) {
+                                 auto xi = args[i];
+                                 for (auto [dset, dpos] : _dsets_rule_positions) {
+                                     auto seps = _discriminator.apply_subs(xi, props[i]);
+                                     sequent[dpos].insert(seps[dset].begin(), seps[dset].end());
+                                 }
+                             }
+                             NdSequent<std::set> sequent_rule {sequent};
+                             // make rule name
+                             std::string rule_name = connective->symbol() + "-";
+                             for (auto a : args)
+                                 rule_name += std::to_string(a) + ",";
+                             rule_name += std::to_string(y);
+                             MultipleConclusionRule mcrule {rule_name, sequent_rule, _prem_conc_pos_corresp};
+                             result.insert(mcrule);
+                        }
+                    } 
+                }
+                return result;
             }
             std::set<MultipleConclusionRule> make_nontotal_rules() {
             }
