@@ -433,6 +433,7 @@ namespace ltsy {
                         temp += "    \\begin{center}\n";
                         temp += "{\% for group, schemas in axiomatization \%}";
                         temp += "\\section{Schemas of $(|{ group }|)$ }\n";
+                        temp += "Size: (|{ length(schemas) }|)\n";
                         temp += "    {\% for schema in schemas \%}\n";
                         temp += "(|{ schema.name }|)\n";
                         temp += "\\[\n";
