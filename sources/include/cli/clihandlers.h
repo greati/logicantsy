@@ -391,6 +391,8 @@ namespace ltsy {
             const std::string DISCR_TITLE = "discriminator";
             const std::string INFER_COMPLEMENTS_TITLE = "infer_complements";
             const std::string TEMPLATE_TITLE = "template";
+            const std::string SIMPLIFY_OVERLAP = "simplify_overlap";
+            const std::string SIMPLIFY_DILUTION = "simplify_dilution";
             const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
             const std::string LATEX_TITLE = "latex";
             std::map<std::string, std::string> _tex_translation;
@@ -466,10 +468,14 @@ namespace ltsy {
 
                     auto pnmatrix = parser.parse_gen_matrix(root);
                     auto disc_node = parser.hard_require(root, DISCR_TITLE);
+                    auto simplify_overlap = parser.hard_require(root, SIMPLIFY_OVERLAP);
+                    auto simplify_dilution = parser.hard_require(root, SIMPLIFY_DILUTION);
                     auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
+                    auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
+                        .as<std::vector<int>>();
                     AppsFacade apps_facade;
                     auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
-                            monadic_discriminator);
+                            monadic_discriminator, seq_dset_corr, simplify_overlap, simplify_dilution);
                     if (verbose)
                         spdlog::info("Input tables: \n" + pnmatrix->print());
                     

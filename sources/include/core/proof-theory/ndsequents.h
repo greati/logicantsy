@@ -125,6 +125,29 @@ namespace ltsy {
                 return fmlaset;
             }
 
+
+            bool operator==(const NdSequent<FmlaContainerT>& other) const {
+                for (int i = 0; i < _sequent_fmlas.size(); ++i) {
+                    auto other_fmlas = other.sequent_fmlas()[i];        
+                    auto current_fmlas = _sequent_fmlas[i];        
+                    if (other_fmlas != current_fmlas)
+                        return false;
+                }
+                return true;
+            }
+
+            bool is_dilution_of(const NdSequent<FmlaContainerT>& other) const {
+                for (int i = 0; i < _sequent_fmlas.size(); ++i) {
+                    auto other_fmlas = other.sequent_fmlas()[i];        
+                    auto current_fmlas = _sequent_fmlas[i];        
+                    for (const auto& f : other_fmlas) {
+                        if (current_fmlas.find(f) == current_fmlas.end())
+                            return false;
+                    }
+                }
+                return true;
+            }
+
             NdSequent<FmlaContainerT> apply_substitution(const FormulaVarAssignment& ass) const {
                 std::vector<FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>> res_sequent_fmlas;
                 for (auto i {0}; i < _sequent_fmlas.size(); ++i) {

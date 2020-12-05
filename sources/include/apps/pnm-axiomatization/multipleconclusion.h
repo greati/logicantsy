@@ -89,7 +89,7 @@ namespace ltsy {
 
         public:
             PNMMultipleConclusionAxiomatizer(const decltype(_discriminator)& discriminator,
-                    decltype(_gen_matrix) gen_matrix)
+                    decltype(_gen_matrix) gen_matrix, const std::vector<int>& dsets_rule_positions)
             : _discriminator {discriminator}, _gen_matrix {gen_matrix} {
             
                 for (int i = 0, j=0; i < _gen_matrix->distinguished_sets().size(); i += 2) {
@@ -98,14 +98,14 @@ namespace ltsy {
                     _dsets_positions[i+1] = j++; 
                 }
                 for (int i = 0; i < _gen_matrix->distinguished_sets().size(); i += 1) {
-                    _dsets_rule_positions[i]=i; 
+                    _dsets_rule_positions[i]=dsets_rule_positions[i]; 
                 }
                 for (auto [a,b] : _opposition_dsets) {
                     _prem_conc_pos_corresp.push_back({a,b});
                 }
             }
 
-            std::map<std::string, MultipleConclusionCalculus> make_calculus() {
+            std::map<std::string, MultipleConclusionCalculus> make_calculus(bool simplify_overlap=true, bool simplify_dilution=true) {
                 auto make_calc_item = [&](const std::set<MultipleConclusionRule>& rulesset) {
                     std::vector<MultipleConclusionRule> rules;
                     for (auto r : rulesset)
@@ -115,36 +115,67 @@ namespace ltsy {
                 std::map<std::string, MultipleConclusionCalculus> result;
                 // exists
                 auto exists = make_exists_rules(); 
-                exists = remove_overlaps(exists);
+                if (simplify_overlap)
+                    exists = remove_overlaps(exists);
+                if (simplify_dilution)
+                    remove_dilutions(exists);
                 result["exists"] = make_calc_item(exists);
                 // d
                 auto d = make_d_rules(); 
-                d = remove_overlaps(d);
+                if (simplify_overlap)
+                    d = remove_overlaps(d);
+                if (simplify_dilution)
+                    remove_dilutions(d);
                 result["d"] = make_calc_item(d);
                 // sigma
                 auto sigma_groups = make_sigma_rules();
                 for (auto [symb, sigma_conn] : sigma_groups) {
-                    sigma_conn = remove_overlaps(sigma_conn);
+                    if (simplify_overlap)
+                        sigma_conn = remove_overlaps(sigma_conn);
+                    if (simplify_dilution)
+                        remove_dilutions(sigma_conn);
                     result["sigma-"+symb] = make_calc_item(sigma_conn);
                 }
                 return result;
             }
 
+            void remove_dilutions(std::set<MultipleConclusionRule>& rules) {
+                auto it = rules.begin();
+                while (it != rules.end()) {
+                    bool is_dilution = false;
+                    auto rule = *it;
+                    for (const auto& another_rule : rules) {
+                        if (rule.sequent() == another_rule.sequent())
+                            continue;
+                        if (rule.sequent().is_dilution_of(another_rule.sequent())) {
+                            it = rules.erase(it);
+                            is_dilution = true;
+                            break;
+                        }
+                    } 
+                    if (not is_dilution) {
+                        it++;
+                    }
+                }
+            }
+
             std::set<MultipleConclusionRule> remove_overlaps(const std::set<MultipleConclusionRule>& rules) {
                 std::set<MultipleConclusionRule> result;
                 for (auto r : rules) {
+                    bool overlap = false;
                     for (auto [d1,d2] : _opposition_dsets) {
-                        auto s1 = r.sequent().sequent_fmlas()[d1];
-                        auto s2 = r.sequent().sequent_fmlas()[d2];
+                        auto s1 = r.sequent().sequent_fmlas()[_dsets_rule_positions[d1]];
+                        auto s2 = r.sequent().sequent_fmlas()[_dsets_rule_positions[d2]];
                         decltype(s1) inters;
                         std::set_intersection(s1.begin(), s1.end(),
                                 s2.begin(), s2.end(), 
                                 std::inserter(inters, inters.begin()),
                                 utils::DeepSharedPointerComp<Formula>());
                         if (not inters.empty())
-                            continue;
-                        result.insert(r);
+                            overlap = true;
                     }
+                    if (not overlap)
+                        result.insert(r);
                 }
                 return result;    
             }

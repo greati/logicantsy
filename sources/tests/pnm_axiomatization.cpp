@@ -73,7 +73,7 @@ namespace {
            {5, {{p, circ_p},{}}},
       }};
 
-      ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix};
+      ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, {0,1}};
       auto calculuses = axiomatizer.make_calculus();
       for (auto [k, calculus] : calculuses) {
           std::cout << k << std::endl;

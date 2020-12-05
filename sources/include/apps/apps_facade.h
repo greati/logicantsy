@@ -19,9 +19,13 @@ namespace ltsy {
             std::map<std::string, MultipleConclusionCalculus>
             monadic_gen_matrix_mult_conc_axiomatizer(
                     std::shared_ptr<GenMatrix> matrix,
-                    Discriminator discriminator) {
-               PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix}; 
-               return axiomatizer.make_calculus();
+                    Discriminator discriminator,
+                    const std::vector<int>& sequent_set_correspondence,
+                    bool simplify_overlap=true,
+                    bool simplify_dilution=true
+                    ) {
+               PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence}; 
+               return axiomatizer.make_calculus(simplify_overlap, simplify_dilution);
             }
 
             /* App to check soundness of a rule wrt a given
