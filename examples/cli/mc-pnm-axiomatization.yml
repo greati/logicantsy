@@ -1,62 +1,78 @@
-semantics:
-  values: [f, bot, top, t]
-  dsets:
-    - [t, top]
-    - [f, top]
-truth-tables:
-  p and q:
-    default: [t]
-    restrictions:
-      - [f, _]: [f]
-      - [_, f]: [f]
-      - [top, t]: [top]
-      - [t, top]: [top]
-      - [bot, t]: [bot]
-      - [t, bot]: [bot]
-      - [top, bot]: [f]
-      - [bot, top]: [f]
-      - [bot, bot]: [bot]
-      - [top, top]: [top]
-      - [t, t]: [t]
-  p -> q:
-    restrictions:
-      - [_, _]: []
-      - [t, f]: [f]
-  p `to` q:
-    restrictions:
-      - [f, _]: [t]
-      - [_, t]: [t]
-      - [t, f]: [f]
-      - [t, top]: [top]
-      - [t, bot]: [bot]
-      - [top, f]: [bot]
-      - [top, top]: [t]
-      - [top, bot]: [bot]
-      - [bot, f]: [top]
-      - [bot, top]: [top]
-      - [bot, bot]: [t]
-  not(p):
-    restrictions:
-      - [t]: [f]
-      - [f]: [t]
-  bot():
-    restrictions:
-      - []: [f]
-  top():
-    restrictions:
-      - []: [t, top]
-separators:
-  - [f, bot]: p
-  - [f, top]: p
-  - [f, t]: p
-  - [t, bot]: p
-  - [t, top]: p
-  - [bot, top]: p
+pnmatrix:
+  values: [^0, 0, a, b, 1, ^1]
+  distinguished_sets:
+    - [b, 1, ^1]
+  infer_complements: true
+  interpretation:
+    p and q:
+      restrictions:
+        - [^0, ^0]: [^0]
+        - [0, _]  : [0]
+        - [_, 0]  : [0]
+        - [a, _]  : [a]
+        - [_, a]  : [a]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [b, a]  : [1]
+        - [a, b]  : [1]
+        - [1, _]  : [1]
+        - [_, 1]  : [1]
+        - [^1, _] : [^1]
+        - [_, ^1] : [^1]
+    p or q:
+      restrictions:
+        - [^1, ^1]: [^1]
+        - [1, _]  : [1]
+        - [_, 1]  : [1]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [a, _]  : [a]
+        - [_, a]  : [a]
+        - [a, b]  : [0]
+        - [b, a]  : [0]
+        - [0, _]  : [0]
+        - [_, 0]  : [0]
+        - [^0, _] : [^0]
+        - [_, ^0] : [^0]
+    neg p:
+      restrictions:
+        - [^0]: [^1]
+        - [0] : [1]
+        - [a] : [a]
+        - [b] : [b]
+        - [1] : [0]
+        - [^1]: [^0]
+    o(p):
+      restrictions:
+        - [^0]: [^1]
+        - [0] : [^0]
+        - [a] : [^0]
+        - [b] : [^0]
+        - [1] : [^0]
+        - [^1]: [^1]
+    bot():
+      restrictions:
+        - []: [^0]
+    top():
+      restrictions:
+        - []: [^1]
+discriminator:
+  ^0: [[o(p)], [p]]
+  0:  [[neg p], [o(p), p]]
+  a:  [[], [p, o(p), neg p]]
+  b:  [[p, neg p], [o(p)]]
+  1:  [[p], [o(p), neg p]]
+  ^1: [[p, o(p)], []]
 latex:
   "->": "\\to"
   p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
   q: "\\psi"
   r: "\\phi"
+  circ: "\\circ"
+  o: "\\circ"
   and: "\\land"
   or: "\\lor"
   f: "\\mathbf{f}"
@@ -65,4 +81,5 @@ latex:
   top: "\\top"
   foo: "\\circ"
   not: "\\neg"
+  neg: "\\neg"
   "`to`": "\\Tilde{\\supset}"

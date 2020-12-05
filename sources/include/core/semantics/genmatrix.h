@@ -47,12 +47,19 @@ namespace ltsy {
                     }
             }
 
+            std::string print() {
+                return _interpretation->print(_val_to_str).str();  
+            }
+
             GenMatrix(const decltype(_values)& values, const decltype(_distinguished_sets)& distinguished_sets)
                     : GenMatrix {values, distinguished_sets, nullptr, nullptr} {}
 
             inline void set_val_to_str(decltype(_val_to_str) val_to_str) { _val_to_str = val_to_str; }
+            inline void set_str_to_val(decltype(_str_to_val) str_to_val) { _str_to_val = str_to_val; }
 
             inline decltype(_val_to_str) val_to_str() const { return _val_to_str; }
+
+            inline decltype(_str_to_val) str_to_val() const { return _str_to_val; }
 
             inline decltype(_values) values() const { return _values; }
 
@@ -63,6 +70,33 @@ namespace ltsy {
             }
              
             inline decltype(_signature) signature() const { return _signature; }
+    };
+
+
+    /* Represents a discriminator
+     * as a map of lists of sets of formulas.
+     * */
+    struct Discriminator {
+        public:
+            std::map<int, std::vector<FmlaSet>> separators;
+            Discriminator(const decltype(separators) _separators) : separators {_separators} {}
+            std::vector<FmlaSet> apply_subs(int v, std::shared_ptr<Formula>& sfmla) {
+                std::vector<FmlaSet> result {separators[v].size()};
+                for (int i = 0; i < separators[v].size(); ++i) {
+                    auto set = separators[v][i];
+                    for (auto fmla : set) {
+                        VariableCollector vcollector; fmla->accept(vcollector);
+                        auto props = vcollector.get_collected_variables(); // this should have a single var
+                        if (props.size() != 1) throw std::logic_error("discriminator is not monadic");
+                        auto prop = *props.begin();
+                        FormulaVarAssignment subst { {{*prop, sfmla}} };
+                        SubstitutionEvaluator substeval {subst};
+                        auto resfmla = fmla->accept(substeval);
+                        result[i].insert(resfmla); 
+                    }
+                }
+                return result;
+            }
     };
 
     /**

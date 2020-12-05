@@ -239,7 +239,38 @@ namespace ltsy {
             auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, 
                     signature, sig_truth_interp, infer_complements);
             gen_matrix->set_val_to_str(_val_to_str);
+            gen_matrix->set_str_to_val(_str_to_val);
             return gen_matrix;
+        }
+
+        Discriminator parse_monadic_discriminator(const YAML::Node& det_node, std::shared_ptr<GenMatrix> genmatrix) {
+            auto values = genmatrix->values();
+            auto n_dsets = genmatrix->distinguished_sets().size();
+            auto str_to_val = genmatrix->str_to_val();
+            std::map<int, std::vector<FmlaSet>> separators;
+            for (auto v : values)
+                separators[v] = std::vector<FmlaSet>{n_dsets};
+            for (auto it = det_node.begin(); it != det_node.end(); ++it) {
+                const auto valstr = it->first.as<std::string>();
+                int value;
+                auto valit = str_to_val.find(valstr);
+                if (valit != str_to_val.end()) 
+                    value = valit->second;
+                else
+                    throw std::logic_error("unknown value " + valstr);
+                auto discriminator_fmlas = it->second;
+                auto dset = 0;
+                for (auto itd = discriminator_fmlas.begin(); itd != discriminator_fmlas.end(); ++itd) {
+                    auto fmlas = *itd;
+                    for (auto f : fmlas) {
+                        auto fmla_parser = make_fmla_parser(f);
+                        auto parsed_fmla = fmla_parser->parse(f.as<std::string>());
+                        separators[value][dset].insert(parsed_fmla);
+                    }
+                    dset++;
+                }
+            }
+            return Discriminator {separators}; 
         }
 
         std::shared_ptr<NdSequent<std::set>> parse_nd_sequent(const YAML::Node& seq_node) {

@@ -63,7 +63,7 @@ namespace {
        auto neg_p = parser.parse("neg p");
        auto circ_p = parser.parse("o(p)");
 
-      ltsy::PNMMultipleConclusionAxiomatizer::Discriminator discriminator
+      ltsy::Discriminator discriminator
       {{
            {0, {{circ_p},{p}}},
            {1, {{neg_p},{p, circ_p}}},

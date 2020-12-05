@@ -87,6 +87,9 @@ namespace ltsy {
             ss << "\\}";
             return ss.str();
         }
+
+        std::string print(const MultipleConclusionRule& mcrule) const {}
+        std::string print(const MultipleConclusionCalculus& mcrule) const {}
     };
 
 };

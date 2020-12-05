@@ -15,6 +15,9 @@ namespace ltsy {
             inline static const std::string TT_AXI_APP_DESC = "Produce axiomatic sequents given a (partial) non-deterministic k-ary n-valued truth-table.";
             inline static const std::string RSOUND_APP_NAME = "rule-soundness-checker";
             inline static const std::string RSOUND_APP_DESC = "Check soundness for sequent-to-sequent rules.";
+
+            inline static const std::string MON_MATRIX_AXIMTZR_APP_NAME = "axiomatize-monadic-matrix";
+            inline static const std::string MON_MATRIX_AXIMTZR_APP_DESC = "Produce a generalized Hilbert calculus for a monadic partial matrix";
     };
 
 };

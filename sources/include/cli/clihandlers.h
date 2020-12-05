@@ -381,7 +381,137 @@ namespace ltsy {
             };
     };
 
+    
+    /* Handler for the sequent rule soundness app.
+     * */
+    class MonadicMatrixAxiomatizerCLIHandler {
 
+        private:
+            const std::string RULES_TITLE = "rules";
+            const std::string DISCR_TITLE = "discriminator";
+            const std::string INFER_COMPLEMENTS_TITLE = "infer_complements";
+            const std::string TEMPLATE_TITLE = "template";
+            const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
+            const std::string LATEX_TITLE = "latex";
+            std::map<std::string, std::string> _tex_translation;
+
+        public:
+            std::string get_default_template(Printer::PrinterType output_type, unsigned int dimension=4) {
+                std::string temp;
+                switch(output_type) {
+                    case Printer::PrinterType::PLAIN:
+                        temp += "Check the result below:\n";
+                        temp += "{\% for groups, schemas in axiomatization \%}";
+                        temp += "Group of schemas (|{ groups }|):\n";
+                        temp += "    {\% for schema in schemas \%}\n";
+                        temp += "- (|{ schema.name }|)";
+                        temp += "- (|{ schema.schema }|)";
+                        temp += "    {\% endfor \%}\n";
+                        temp += "{\% endfor \%}";
+                        break;
+                    case Printer::PrinterType::LATEX:
+                        temp += "\\documentclass{article}\n";
+                        temp += "\\usepackage[utf8]{inputenc}\n";
+                        temp += "\\usepackage[english]{babel}\n";
+                        temp += "\\usepackage{booktabs}\n";
+                        temp += "\\usepackage{amsmath}\n";
+                        temp += "\\usepackage{float}\n";
+                        temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+                        unsigned int index=1;
+                        dimension = dimension % 2 ? dimension : dimension + 1;
+                        for (auto i = 1; i < dimension; i+=2) {
+                            temp += "\\frac{#" + 
+                                std::to_string(i+1) + "}{#" + std::to_string(i) + "}";
+                            if (i < dimension/2)
+                                temp += "{|}";
+                        }
+                        temp += "}";
+                        temp += "\\begin{document}\n";
+                        temp += "\\tableofcontents\n";
+                        temp += "    \\begin{center}\n";
+                        temp += "{\% for group, schemas in axiomatization \%}";
+                        temp += "\\section{Schemas of $(|{ group }|)$ }\n";
+                        temp += "    {\% for schema in schemas \%}\n";
+                        temp += "(|{ schema.name }|)\n";
+                        temp += "\\[\n";
+                        temp += "\\bCon";
+                        temp += "        {\% for fmlas in schema.schema \%}\n";
+                        temp += "{\\text{ (|{ fmlas }|) }}";
+                        temp += "        {\% endfor \%}\n";
+                        temp += "\\]";
+                        temp += "    {\% endfor \%}\n";
+                        temp += "{\% endfor \%}\n";
+                        temp += "    \\end{center}\n";
+                        temp += "\\end{document}";
+                        break;
+                }
+                return temp;
+            }
+
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
+                YAMLCppParser parser;
+                nlohmann::json result_data;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+
+                    // get latex
+                    if (auto latex_node = root[LATEX_TITLE]) {
+                        for (auto it = latex_node.begin(); it != latex_node.end(); ++it)
+                           _tex_translation[it->first.as<std::string>()] = it->second.as<std::string>(); 
+                    }
+
+                    auto pnmatrix = parser.parse_gen_matrix(root);
+                    auto disc_node = parser.hard_require(root, DISCR_TITLE);
+                    auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
+                    AppsFacade apps_facade;
+                    auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
+                            monadic_discriminator);
+                    if (verbose)
+                        spdlog::info("Input tables: \n" + pnmatrix->print());
+                    
+                    PrinterFactory printer_factory;
+                    auto printer = printer_factory.make_printer(output_type, _tex_translation);
+
+                    result_data["axiomatization"] = {}; 
+                    for (auto [k, calculus] : axiomatization) {
+                        result_data["axiomatization"][k] = nlohmann::json::array();
+                        for (auto r : calculus.rules()) {
+                              nlohmann::json rule_json ({
+                                {"name", r.name()},        
+                                {"schema", printer->print(r.sequent())},        
+                              });
+                              result_data["axiomatization"][k].push_back(rule_json);
+                        }
+                    }
+
+                    /////// templating / reporting
+                    // get template if exists
+                    std::string template_source;
+                    if (template_path) {
+                        template_source = *template_path;
+                    } else if (auto temp = root[TEMPLATE_TITLE]) {
+                        template_source = temp.as<std::string>(); 
+                    } else {
+                        template_source = get_default_template(output_type, pnmatrix->distinguished_sets().size());
+                    }
+                    // generate report
+                    AppReport report;
+                    auto r = report.produce(template_source, result_data, template_path.has_value(), dest_path);
+                    std::cout << r << std::endl;                   
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
+    };
+    
+    /* Handler for the sequent rule soundness app.
+     * */
     class SequentRuleSoundnessCLIHandler {
 
         private:

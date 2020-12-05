@@ -47,6 +47,8 @@ namespace ltsy {
             virtual std::vector<std::string> print(const NdSequent<std::set>& sequent) const = 0;
             virtual std::string print(const NDTruthTable& tt) const = 0;
             virtual std::string print(const Determinant<std::set<int>>& nddeterminant) const = 0;
+            virtual std::string print(const MultipleConclusionRule& mcrule) const = 0;
+            virtual std::string print(const MultipleConclusionCalculus& mcrule) const = 0;
     };
 }
 

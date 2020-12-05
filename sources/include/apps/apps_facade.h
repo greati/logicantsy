@@ -5,12 +5,24 @@
 #include "tt_determination/ndsequents.h"
 #include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
+#include "apps/pnm-axiomatization/multipleconclusion.h"
 
 namespace ltsy {
 
     class AppsFacade {
 
         public:
+
+            /* App to axiomatize a monadic generalized matrix
+             * given a ser of separators.
+             * */
+            std::map<std::string, MultipleConclusionCalculus>
+            monadic_gen_matrix_mult_conc_axiomatizer(
+                    std::shared_ptr<GenMatrix> matrix,
+                    Discriminator discriminator) {
+               PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix}; 
+               return axiomatizer.make_calculus();
+            }
 
             /* App to check soundness of a rule wrt a given
              * generalized matrix.
