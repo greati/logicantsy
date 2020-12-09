@@ -68,6 +68,10 @@ namespace ltsy {
 
             decltype(_sequent) sequent() const { return _sequent; }
 
+            void set(int i, FmlaSet fmlas) {
+                _sequent[i] = fmlas;
+            }
+
             decltype(_name) name() const { return _name; }
 
             decltype(_all_conclusions_empty) all_conclusions_empty() const { return _all_conclusions_empty; }

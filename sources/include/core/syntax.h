@@ -318,6 +318,9 @@ namespace ltsy {
     using FmlaSet = std::set<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>;
     using PropSet = std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>>;
 
+    FmlaSet intersection(const FmlaSet& s1, const FmlaSet& s2);
+    FmlaSet difference(const FmlaSet& s1, const FmlaSet& s2);
+
     /**
      * A visitor that tests formula equality.
      */

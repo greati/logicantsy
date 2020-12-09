@@ -134,6 +134,9 @@ namespace ltsy {
                         sigma_conn = remove_overlaps(sigma_conn);
                     if (simplify_dilution)
                         remove_dilutions(sigma_conn);
+                    sigma_conn = simplify_by_cut(sigma_conn);
+                    remove_dilutions(sigma_conn);
+                    //simplify_by_cut(sigma_conn);
                     result["sigma-"+symb] = make_calc_item(sigma_conn);
                 }
                 return result;
@@ -157,6 +160,65 @@ namespace ltsy {
                         it++;
                     }
                 }
+            }
+
+            std::optional<MultipleConclusionRule> 
+            simple_cut(const MultipleConclusionRule& r1, const MultipleConclusionRule& r2,
+                    bool subrule_check=true) {
+                for (auto [d1,d2] : _opposition_dsets) {
+                    auto s1 = r1.sequent().sequent_fmlas()[_dsets_rule_positions[d1]];
+                    auto s2 = r2.sequent().sequent_fmlas()[_dsets_rule_positions[d2]];
+                    auto inters = intersection(s1, s2);
+                    if (not inters.empty()) {
+                        inters = {*inters.begin()};
+                        // perform the cut
+                        auto dif1 = difference(s1, inters); 
+                        auto dif2 = difference(s2, inters); 
+                        auto others1 = r1.sequent().sequent_fmlas()[_dsets_rule_positions[d2]];
+                        auto others2 = r2.sequent().sequent_fmlas()[_dsets_rule_positions[d1]];
+                        dif2.insert(others1.begin(), others1.end());
+                        dif1.insert(others2.begin(), others2.end());
+                        MultipleConclusionRule new_rule = r1;
+                        new_rule.set(_dsets_rule_positions[d1], dif1);
+                        new_rule.set(_dsets_rule_positions[d2], dif2);
+                        // check if result is subrule
+                        if (subrule_check) {
+                            if (not r1.sequent().is_dilution_of(new_rule.sequent())
+                                    or not r2.sequent().is_dilution_of(new_rule.sequent()))
+                                return std::nullopt;
+                        }
+                        return std::optional<MultipleConclusionRule>(new_rule);
+                    }
+                }
+                return std::nullopt;
+            }
+
+            std::set<MultipleConclusionRule> simplify_by_cut(std::set<MultipleConclusionRule>& rules) {
+                std::set<MultipleConclusionRule> current = rules;
+                std::set<MultipleConclusionRule> previous = {};
+                while (current != previous) {
+                    previous = current;
+                    for (auto it1 = previous.begin(); it1 != previous.end(); ++it1) {
+                        bool had_cut = false;
+                        auto r1 = *it1;
+                        for (auto it2 = std::next(it1); it2 != previous.end(); ++it2) {
+                            auto r2 = *it2;
+                            // try cut in one direction
+                            auto cut_result1 = simple_cut(r1, r2);
+                            if (cut_result1) {
+                                had_cut = true; current.insert(*cut_result1);        
+                                continue;
+                            }
+                            // try cut in another direction
+                            auto cut_result2 = simple_cut(r2, r1);
+                            if (cut_result2) {
+                                had_cut = true; current.insert(*cut_result2);        
+                                continue;
+                            }
+                        }
+                    }
+                }
+                return current;
             }
 
             std::set<MultipleConclusionRule> remove_overlaps(const std::set<MultipleConclusionRule>& rules) {
