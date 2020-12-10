@@ -193,6 +193,30 @@ namespace ltsy {
                 return std::nullopt;
             }
 
+            /* Given sets of rules R1 and R2, consider
+             * each pair <r1,r2> in R1xR2 and try to cut.
+             * The result is the set of all new rules generated from cuts.
+             * */
+            std::set<MultipleConclusionRule> cuts_between_sets(const std::set<MultipleConclusionRule>& rules1,
+                    const std::set<MultipleConclusionRule>& rules2, bool subrule_check=true) {
+                std::set<MultipleConclusionRule> result;
+                for (auto it1 = rules1.begin(); it1 != rules1.end(); ++it1) {
+                    auto r1 = *it1;
+                    for (auto it2 = rules2.begin(); it2 != rules2.end(); ++it2) {
+                        auto r2 = *it2;
+                        // try cut in one direction
+                        auto cut_result1 = simple_cut(r1, r2);
+                        if (cut_result1)
+                            result.insert(*cut_result1);        
+                        // try cut in another direction
+                        auto cut_result2 = simple_cut(r2, r1);
+                        if (cut_result2)
+                            result.insert(*cut_result2);        
+                    }
+                } 
+                return result;
+            }
+
             std::set<MultipleConclusionRule> simplify_by_cut(std::set<MultipleConclusionRule>& rules) {
                 std::set<MultipleConclusionRule> current = rules;
                 std::set<MultipleConclusionRule> previous = {};
