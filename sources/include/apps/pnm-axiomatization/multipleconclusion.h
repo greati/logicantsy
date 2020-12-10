@@ -134,7 +134,7 @@ namespace ltsy {
                         sigma_conn = remove_overlaps(sigma_conn);
                     if (simplify_dilution)
                         remove_dilutions(sigma_conn);
-                    sigma_conn = simplify_by_cut(sigma_conn);
+                    sigma_conn = simplify_by_cut2(sigma_conn);
                     remove_dilutions(sigma_conn);
                     //simplify_by_cut(sigma_conn);
                     result["sigma-"+symb] = make_calc_item(sigma_conn);
@@ -215,6 +215,20 @@ namespace ltsy {
                     }
                 } 
                 return result;
+            }
+
+            std::set<MultipleConclusionRule> simplify_by_cut2(const std::set<MultipleConclusionRule>& rules) {
+                std::set<MultipleConclusionRule> previous = {};
+                std::set<MultipleConclusionRule> current = rules;
+                std::set<MultipleConclusionRule> prev_newrules = {};
+                std::set<MultipleConclusionRule> newrules = cuts_between_sets(rules, rules);
+                while (current != previous) {
+                    previous = current;
+                    prev_newrules = newrules;
+                    current.insert(newrules.begin(), newrules.end());
+                    newrules = cuts_between_sets(current, prev_newrules); 
+                }
+                return current;
             }
 
             std::set<MultipleConclusionRule> simplify_by_cut(std::set<MultipleConclusionRule>& rules) {
