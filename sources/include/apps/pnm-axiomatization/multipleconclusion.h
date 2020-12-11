@@ -51,11 +51,11 @@ namespace ltsy {
              * */
             std::set<std::vector<FmlaSet>> 
                 make_separator_choice(const std::set<int> X, const std::vector<int>& distsets) {
-                if (X.empty()) {
+                // base case: X is empty
+                if (X.empty())
                     return { std::vector<FmlaSet>(distsets.size(), FmlaSet{}) };
-                } 
+                // check if possible
                 auto x = *(X.begin());
-
                 int possible = false;
                 for (auto dset : distsets) {
                     if (_discriminator.separators[x][dset].size() > 0) {
@@ -63,26 +63,20 @@ namespace ltsy {
                         break;
                     }
                 }
-
                 if (not possible) return {};
-
+                // recursive step
                 auto Xm = X;
                 Xm.erase(Xm.begin());
-
                 auto rec_result = make_separator_choice(Xm, distsets);
-                std::set<std::vector<FmlaSet>> result = rec_result;
+                std::set<std::vector<FmlaSet>> result = {};
                 for (auto distset : distsets) {
-                    if (_discriminator.separators[x][distset].empty())
-                         continue;
-                    std::set<std::vector<FmlaSet>> new_result;
-                    for (auto res : result) {
+                    for (auto res : rec_result) {
                         for (auto fmla : _discriminator.separators[x][distset]) {
                             auto new_res = res;
                             new_res[_dsets_positions[distset]].insert(fmla);
-                            new_result.insert(new_res); 
+                            result.insert(new_res); 
                         } 
                     }
-                    result = new_result;
                 } 
                 return result;
             }
@@ -200,10 +194,6 @@ namespace ltsy {
                                     or not r2.sequent().is_dilution_of(new_rule.sequent()))
                                 return std::nullopt;
                         }
-                       //std::cout << "CUT" << std::endl;
-                       //std::cout << r1.sequent().to_string() << std::endl;
-                       //std::cout << r2.sequent().to_string() << std::endl;
-                       // std::cout << new_rule.sequent().to_string() << std::endl;
                         return std::optional<MultipleConclusionRule>(new_rule);
                     }
                 }
@@ -244,34 +234,6 @@ namespace ltsy {
                     prev_newrules = newrules;
                     current.insert(newrules.begin(), newrules.end());
                     newrules = cuts_between_sets(current, prev_newrules); 
-                }
-                return current;
-            }
-
-            std::set<MultipleConclusionRule> simplify_by_cut(std::set<MultipleConclusionRule>& rules) {
-                std::set<MultipleConclusionRule> current = rules;
-                std::set<MultipleConclusionRule> previous = {};
-                while (current != previous) {
-                    previous = current;
-                    for (auto it1 = previous.begin(); it1 != previous.end(); ++it1) {
-                        bool had_cut = false;
-                        auto r1 = *it1;
-                        for (auto it2 = std::next(it1); it2 != previous.end(); ++it2) {
-                            auto r2 = *it2;
-                            // try cut in one direction
-                            auto cut_result1 = simple_cut(r1, r2);
-                            if (cut_result1) {
-                                had_cut = true; current.insert(*cut_result1);        
-                                continue;
-                            }
-                            // try cut in another direction
-                            auto cut_result2 = simple_cut(r2, r1);
-                            if (cut_result2) {
-                                had_cut = true; current.insert(*cut_result2);        
-                                continue;
-                            }
-                        }
-                    }
                 }
                 return current;
             }
