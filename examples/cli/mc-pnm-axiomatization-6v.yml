@@ -4,7 +4,7 @@ pnmatrix:
     - [b, 1, ^1]
   infer_complements: true
   interpretation:
-    p and q:
+    p or q:
       restrictions:
         - [^0, ^0]: [^0]
         - [0, _]  : [0]
@@ -19,7 +19,7 @@ pnmatrix:
         - [_, 1]  : [1]
         - [^1, _] : [^1]
         - [_, ^1] : [^1]
-    p or q:
+    p and q:
       restrictions:
         - [^1, ^1]: [^1]
         - [1, _]  : [1]

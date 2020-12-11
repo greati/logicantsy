@@ -5,32 +5,32 @@ pnmatrix:
     - [top, f]
   infer_complements: true
   interpretation:
-    p and q:
-      restrictions:
-        - [f, _]: [f]
-        - [_, f]: [f]
-        - [top, t]: [top]
-        - [bot, t]: [bot]
-        - [t, top]: [top]
-        - [t, bot]: [bot]
-        - [top, bot]: [f]
-        - [bot, top]: [f]
-        - [top,top]: [top]
-        - [bot,bot]: [bot]
-        - [t, t]: [t]
-    p or q:
-      restrictions:
-        - [t, _]: [t]
-        - [_, t]: [t]
-        - [top, f]: [top]
-        - [bot, f]: [bot]
-        - [f, top]: [top]
-        - [f, bot]: [bot]
-        - [top, bot]: [t]
-        - [bot, top]: [t]
-        - [top,top]: [top]
-        - [bot,bot]: [bot]
-        - [f, f]: [f]
+    #   p and q:
+    #     restrictions:
+    #       - [f, _]: [f]
+    #       - [_, f]: [f]
+    #       - [top, t]: [top]
+    #       - [bot, t]: [bot]
+    #       - [t, top]: [top]
+    #       - [t, bot]: [bot]
+    #       - [top, bot]: [f]
+    #       - [bot, top]: [f]
+    #       - [top,top]: [top]
+    #       - [bot,bot]: [bot]
+    #       - [t, t]: [t]
+    #   p or q:
+    #     restrictions:
+    #       - [t, _]: [t]
+    #       - [_, t]: [t]
+    #       - [top, f]: [top]
+    #       - [bot, f]: [bot]
+    #       - [f, top]: [top]
+    #       - [f, bot]: [bot]
+    #       - [top, bot]: [t]
+    #       - [bot, top]: [t]
+    #       - [top,top]: [top]
+    #       - [bot,bot]: [bot]
+    #       - [f, f]: [f]
     p -> q:
       restrictions:
         - [f, _]: [t]

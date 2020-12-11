@@ -181,12 +181,29 @@ namespace ltsy {
                         MultipleConclusionRule new_rule = r1;
                         new_rule.set(_dsets_rule_positions[d1], dif1);
                         new_rule.set(_dsets_rule_positions[d2], dif2);
+                        // perform unions in other dimensions
+                        for (const auto& [d1o,d2o] : _opposition_dsets) {
+                            if (d1 != d1o and d2 != d2o) {
+                                auto s11o = r1.sequent().sequent_fmlas()[_dsets_rule_positions[d1o]]; 
+                                auto s21o = r2.sequent().sequent_fmlas()[_dsets_rule_positions[d1o]]; 
+                                auto s12o = r1.sequent().sequent_fmlas()[_dsets_rule_positions[d2o]]; 
+                                auto s22o = r2.sequent().sequent_fmlas()[_dsets_rule_positions[d2o]]; 
+                                s11o.insert(s21o.begin(), s21o.end());
+                                s12o.insert(s22o.begin(), s22o.end());
+                                new_rule.set(_dsets_rule_positions[d1o], s11o);
+                                new_rule.set(_dsets_rule_positions[d2o], s12o);
+                            }
+                        }
                         // check if result is subrule
                         if (subrule_check) {
                             if (not r1.sequent().is_dilution_of(new_rule.sequent())
                                     or not r2.sequent().is_dilution_of(new_rule.sequent()))
                                 return std::nullopt;
                         }
+                       //std::cout << "CUT" << std::endl;
+                       //std::cout << r1.sequent().to_string() << std::endl;
+                       //std::cout << r2.sequent().to_string() << std::endl;
+                       // std::cout << new_rule.sequent().to_string() << std::endl;
                         return std::optional<MultipleConclusionRule>(new_rule);
                     }
                 }
