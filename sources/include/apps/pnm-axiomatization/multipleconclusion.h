@@ -133,6 +133,11 @@ namespace ltsy {
                     //simplify_by_cut(sigma_conn);
                     result["sigma-"+symb] = make_calc_item(sigma_conn);
                 }
+                //non-total rules
+                auto non_total_rules = make_nontotal_rules();
+                non_total_rules = simplify_by_cut2(non_total_rules);
+                remove_dilutions(non_total_rules);
+                result["nontotal"] = make_calc_item(non_total_rules);
                 return result;
             }
 
@@ -392,6 +397,32 @@ namespace ltsy {
             }
 
             std::set<MultipleConclusionRule> make_nontotal_rules() {
+                auto non_total_subsets = _gen_matrix->get_non_total_subsets();
+                //std::cout << "non total" << std::endl;
+                //for (auto sts : non_total_subsets) {
+                //    for (auto nt : sts) {
+                //        std::cout << nt << ",";
+                //    }
+                //    std::cout << std::endl;
+                //}
+                auto dist_sets_qtd = _gen_matrix->distinguished_sets().size();
+                std::set<MultipleConclusionRule> result;
+                auto props = make_props(_gen_matrix->values().size()); 
+                for (const auto& X : non_total_subsets) {
+                    std::vector<FmlaSet> sequent_fmlas {dist_sets_qtd};
+                    for (const auto& x : X) {
+                        if (X.empty()) continue;
+                        auto prop = props[x];
+                        for (int i = 0; i < dist_sets_qtd; ++i) {
+                            auto seps = _discriminator.apply_subs(x, prop);
+                            sequent_fmlas[_dsets_rule_positions[i]].insert(seps[i].begin(), seps[i].end());
+                        }
+                    }
+                    NdSequent<std::set> sequent {sequent_fmlas};
+                    MultipleConclusionRule mcrule {"", sequent, _prem_conc_pos_corresp};
+                    result.insert(mcrule);
+                }
+                return result;
             }
 
     };

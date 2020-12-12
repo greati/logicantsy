@@ -93,7 +93,7 @@ namespace ltsy::utils {
 
     template<typename T>
     bool is_subset(const std::set<T>& s1, const std::set<T>& s2){
-        return std::includes(s1.begin(), s1.end(), s2.begin(), s2.end());
+        return std::includes(s2.begin(), s2.end(), s1.begin(), s1.end());
     }
 
     template bool is_subset<int>(const std::set<int>& s1, const std::set<int>& s2);

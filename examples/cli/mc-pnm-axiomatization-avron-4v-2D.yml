@@ -39,9 +39,11 @@ pnmatrix:
         - [t, top]: [top]
         - [t, bot]: [bot]
         - [top, f]: [bot]
-        - [top, top]: [t]
+          #- [top, top]: [t]
+        - [top, top]: []
         - [top, bot]: [bot]
-        - [bot, f]: [top]
+          #- [bot, f]: [top]
+        - [bot, f]: []
         - [bot, top]: [top]
         - [bot, bot]: [t]
     neg p:
@@ -70,6 +72,7 @@ latex:
   p1: "\\varphi"
   p2: "\\psi"
   p3: "\\phi"
+  p4: "\\sigma"
   q: "\\psi"
   r: "\\phi"
   circ: "\\circ"

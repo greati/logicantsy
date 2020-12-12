@@ -9,7 +9,7 @@
 namespace ltsy {
 
     template<typename CellType>
-    TruthTable<CellType>::TruthTable(int _nvalues, const std::initializer_list<TruthTableRow>& rows) {
+    TruthTableBase<CellType>::TruthTableBase(int _nvalues, const std::initializer_list<TruthTableRow>& rows) {
         this->_nvalues = _nvalues;
         for (auto& row : rows) {
             auto [input_tuple, value] = row;
@@ -28,7 +28,7 @@ namespace ltsy {
     }
 
     template<typename CellType>
-    CellType TruthTable<CellType>::at(const std::vector<int>& input) const {
+    CellType TruthTableBase<CellType>::at(const std::vector<int>& input) const {
         if (input.size() != this->_arity)
             throw std::invalid_argument(ltsy::WRONG_ARITY_INPUT_EXCEPTION);
         auto position = utils::position_from_tuple(_nvalues, _arity, input);
@@ -36,7 +36,7 @@ namespace ltsy {
     }
 
     template<>
-    std::stringstream TruthTable<std::set<int>>::print(const std::map<int, std::string>& values_map) const {
+    std::stringstream TruthTableBase<std::set<int>>::print(const std::map<int, std::string>& values_map) const {
         auto get_or_default = [&](const int& v){ 
             return values_map.find(v) != values_map.end() ? values_map.find(v)->second : std::to_string(v); 
         };
@@ -58,7 +58,7 @@ namespace ltsy {
     }
 
     template<typename CellType>
-    std::stringstream TruthTable<CellType>::print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const {
+    std::stringstream TruthTableBase<CellType>::print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const {
         std::stringstream ss;
         for (auto i = 0; i < _images.size(); ++i) {
             auto row = utils::tuple_from_position(_nvalues, _arity, i);
@@ -95,7 +95,7 @@ namespace ltsy {
 
     NDTruthTable generate_fully_nd_table(int nvalues, int arity) {
         auto nrows = utils::compute_number_of_rows(nvalues, arity);
-        NDTruthTable tt {nvalues, arity};
+        NDTruthTable tt (nvalues, arity);
         std::set<int> s;
         for (int i = 0; i < nvalues; ++i)
             s.insert(i);

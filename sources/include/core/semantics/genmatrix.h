@@ -70,6 +70,47 @@ namespace ltsy {
             }
              
             inline decltype(_signature) signature() const { return _signature; }
+
+            inline std::set<std::set<int>> get_total_subsets() const {
+                std::set<std::set<int>> non_total_inputs;
+                for (const auto& [s, ti] : *_interpretation) {
+                    auto tt = ti->truth_table();
+                    auto tt_non_total_inputs = tt->partial_inputs();
+                    non_total_inputs.insert(tt_non_total_inputs.begin(), tt_non_total_inputs.end()); 
+                } 
+                //std::cout << non_total_inputs.size() << std::endl;
+                DiscretureCombinationGenerator combination_gen {_values.size()};
+                std::set<std::set<int>> result;
+                while (combination_gen.has_next()) {
+                    auto comb = *(combination_gen.next());
+                    auto X = std::set<int>{comb.begin(), comb.end()};
+                    if (X.empty()) continue;
+                    bool non_total_supset = false;
+                    for (const auto& nti : non_total_inputs) {
+                        if (utils::is_subset(nti, X)) {
+                            non_total_supset = true;
+                            break;
+                        }
+                    }
+                    if (not non_total_supset)
+                        result.insert(X);
+                }
+                return result;
+            };
+            inline std::set<std::set<int>> get_non_total_subsets() const {
+                auto total_subsets = get_total_subsets(); 
+                //std::cout << total_subsets.size() << std::endl;
+                std::set<std::set<int>> result;
+                DiscretureCombinationGenerator combination_gen {_values.size()};
+                while (combination_gen.has_next()) {
+                    auto comb = *(combination_gen.next());
+                    auto X = std::set<int>{comb.begin(), comb.end()};
+                    if (X.empty()) continue;
+                    if (total_subsets.find(X) == total_subsets.end())
+                        result.insert(X);
+                }
+                return result;
+            }
     };
 
 

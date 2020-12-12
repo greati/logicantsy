@@ -82,6 +82,7 @@ namespace ltsy {
                 return os;  
             }
 
+
             inline void set_values_names(const decltype(_values_names)& values_names) { _values_names = values_names; }
 
             inline std::string get_value_name(int value) const { 
@@ -106,9 +107,9 @@ namespace ltsy {
      * @author Vitor Greati
      * */
     template<typename CellType = int>
-    class TruthTable {
+    class TruthTableBase {
         
-        private:
+        protected:
             
             std::string _name {"#"};  //<! a name to identify the truth-table
             int _nvalues;
@@ -124,9 +125,9 @@ namespace ltsy {
 
         public:
 
-            TruthTable() {/*empty*/}
+            TruthTableBase() {/*empty*/}
 
-            TruthTable(int _nvalues, int _arity) : 
+            TruthTableBase(int _nvalues, int _arity) : 
                 _nvalues {_nvalues},
                 _arity {_arity},
                 _number_of_rows { this->compute_number_of_rows(_nvalues, _arity) },
@@ -136,21 +137,21 @@ namespace ltsy {
             /**
              * Build truth table giving its images array.
              * */
-            TruthTable(int _nvalues, int _arity, const CellType& default_value) : 
-                TruthTable {_nvalues, _arity}
+            TruthTableBase(int _nvalues, int _arity, const CellType& default_value) : 
+                TruthTableBase {_nvalues, _arity}
                 { this->_images = std::vector<CellType>(_number_of_rows, default_value); } 
 
             /**
              * Build truth table giving its images array.
              * */
-            TruthTable(int _nvalues, int _arity, const decltype(_images)& _images) : 
-                TruthTable {_nvalues, _arity}
+            TruthTableBase(int _nvalues, int _arity, const decltype(_images)& _images) : 
+                TruthTableBase {_nvalues, _arity}
                 { this->_images = _images; } 
 
             /**
              * Build a truth table from its rows.
              * */
-            TruthTable(int nvalues, const std::initializer_list<TruthTableRow>& rows);
+            TruthTableBase(int nvalues, const std::initializer_list<TruthTableRow>& rows);
 
             inline void set_name(const decltype(_name)& name) { _name = name; }
             inline decltype(_name) name() const { return _name; }
@@ -191,7 +192,7 @@ namespace ltsy {
                 return result;
             }
 
-            friend std::ostream& operator<<(std::ostream& os, const TruthTable<CellType>& tt) {
+            friend std::ostream& operator<<(std::ostream& os, const TruthTableBase<CellType>& tt) {
                 for (auto i = 0; i < tt._images.size(); ++i) {
                     auto row = utils::tuple_from_position(tt._nvalues, tt._arity, i);
                     for (auto it = row.cbegin(); it != row.cend(); it++) {
@@ -218,8 +219,38 @@ namespace ltsy {
             std::stringstream print(const std::map<int, std::string>& values_map) const;
     };
 
+    template class TruthTableBase<std::set<int>>;
+    template class TruthTableBase<int>;
+
+    template<typename CellType = int>
+    class TruthTable : public TruthTableBase<CellType> {
+    
+        using TruthTableRow = std::pair<std::vector<int>, CellType>;
+        public:
+            using TruthTableBase<CellType>::TruthTableBase;
+    
+    
+    };
+
     template class TruthTable<int>;
-    template class TruthTable<std::set<int>>;
+
+    template<>
+    class TruthTable<std::set<int>> : public TruthTableBase<std::set<int>> {
+        public:
+            using TruthTableBase<std::set<int>>::TruthTableBase;
+            /* Return a set of all sets X = {x1,...,xn} s.t. *(x1,...,xn) = empty.
+             * */
+            std::set<std::set<int>> partial_inputs() const {
+                std::set<std::set<int>> result;
+                for (const auto& det : get_determinants()) {
+                    if (det.get_last().empty()) {
+                        auto args = det.get_args();
+                        result.insert(std::set<int>{args.begin(), args.end()}); 
+                    }
+                } 
+                return result;
+            }   
+    };
 
     using NDTruthTable = TruthTable<std::set<int>>;
 
