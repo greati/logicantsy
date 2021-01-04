@@ -63,6 +63,15 @@ namespace ltsy {
                 return utils::tuple_from_position(_nvalues, _arity, _data.first); 
             }
 
+            inline bool has_only_args(const std::set<int>& vs) const {
+                const auto args = get_args();
+                for (const auto& arg : args) {
+                    if (vs.find(arg) == vs.end())
+                        return false;
+                }
+                return true;
+            }
+
             inline int get_args_pos() const { return _data.first; }
 
             bool operator==(const Determinant<CellType>& other) const {
@@ -250,6 +259,33 @@ namespace ltsy {
                 } 
                 return result;
             }   
+
+            /* Return a set of determinants corresponding to the
+             * given subvalues.
+             *
+             * @return the set of determinants after filtering and the set
+             * of determinants after filtering having empty outputs
+             * */
+            std::pair<std::set<Determinant<std::set<int>>>, std::set<Determinant<std::set<int>>>>
+            get_sub_table_determinants(const std::set<int>& subvalues) const {
+                std::set<Determinant<std::set<int>>> result;
+                std::set<Determinant<std::set<int>>> empty_dets;
+                auto dets = this->get_determinants();
+                for (const auto det : dets) {
+                    if (not det.has_only_args(subvalues))
+                        continue;
+                    auto adjusted_det = det;
+                    std::set<int> inters;
+                    auto det_last = det.get_last();
+                    std::set_intersection(det_last.begin(), det_last.end(),
+                            inters.begin(), inters.end(), std::inserter(inters, inters.begin()));
+                    adjusted_det.set_last(inters);
+                    result.insert(adjusted_det);
+                    if (inters.empty())
+                        empty_dets.insert(adjusted_det);
+                }
+                return {result, empty_dets};
+            }
     };
 
     using NDTruthTable = TruthTable<std::set<int>>;
