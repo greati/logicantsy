@@ -1,8 +1,7 @@
 pnmatrix:
   values: [0, a, 1]
   distinguished_sets:
-    - [1]
-    - [0]
+    - [1, a]
   infer_complements: true
   interpretation:
     p and q:
@@ -37,13 +36,13 @@ pnmatrix:
         - [1]: [1]
         - [a]: [0]
         - [0]: [1]
-sequent_dset_correspondence: [0, 3, 2, 1]
+sequent_dset_correspondence: [1, 0]
 simplify_overlap: true
 simplify_dilution: true
 discriminator:
-  1: [[p],[],[],[]]
-  a: [[],[p],[],[p]]
-  0: [[],[p],[p],[]]
+  1: [[p],[neg p]]
+  a: [[p, neg p], []]
+  0: [[],[p]]
 latex:
   "->": "\\to"
   p: "\\varphi"

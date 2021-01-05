@@ -305,6 +305,38 @@ namespace {
        std::cout << res << std::endl;
     }
 
+    TEST(GenMatrices, TotalSubsets) {
+        ltsy::Signature cl_sig {
+            {"&", 2},
+            {"|", 2},
+        };
+        auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
+
+        auto tt_or =  ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0}, {1}, {}, {0,1}});
+        auto tt_and = ltsy::TruthTable<std::set<int>>(2, 2, std::vector<std::set<int>>{{0}, {1}, {1}, {1}});
+
+        auto or_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["|"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or));
+        auto and_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["&"], 
+                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_and));
+
+       auto truth_interp = ltsy::SignatureTruthInterp<std::set<int>>(sig_ptr, 
+               {
+                   or_int,
+                   and_int,
+               });
+
+        auto cl_matrix = 
+           std::make_shared<ltsy::GenMatrix>(std::set<int>{0,1}, 
+                   std::vector<std::set<int>>{std::set<int> {1}}, sig_ptr, 
+                   std::make_shared<ltsy::SignatureTruthInterp<std::set<int>>>(truth_interp));   
+
+        std::set<std::set<int>> total_subsets;
+        cl_matrix->get_maximal_total_subsets(std::set<int>{0,1}, total_subsets);
+        std::cout << total_subsets << std::endl;
+        auto non_total_subsets = cl_matrix->get_non_total_subsets();
+        std::cout << non_total_subsets << std::endl;
+    }
 
     TEST(GenMatrices, GenMatrixValuationGenerator) {
          ltsy::Signature cl_sig {

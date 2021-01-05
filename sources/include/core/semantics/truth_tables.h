@@ -260,6 +260,27 @@ namespace ltsy {
                 return result;
             }   
 
+            /* Check if a sub table is total.
+             *
+             * @return true if the sub table is total
+             * */
+            bool
+            is_sub_table_total(const std::set<int>& subvalues) const {
+                auto dets = this->get_determinants();
+                for (const auto det : dets) {
+                    if (not det.has_only_args(subvalues))
+                        continue;
+                    auto adjusted_det = det;
+                    std::set<int> inters;
+                    auto det_last = det.get_last();
+                    std::set_intersection(det_last.begin(), det_last.end(),
+                            subvalues.begin(), subvalues.end(), std::inserter(inters, inters.begin()));
+                    if (inters.empty())
+                        return false;
+                }
+                return true;
+            }
+
             /* Return a set of determinants corresponding to the
              * given subvalues.
              *

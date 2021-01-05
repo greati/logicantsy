@@ -78,7 +78,6 @@ namespace ltsy {
                     auto tt_non_total_inputs = tt->partial_inputs();
                     non_total_inputs.insert(tt_non_total_inputs.begin(), tt_non_total_inputs.end()); 
                 } 
-                //std::cout << non_total_inputs.size() << std::endl;
                 DiscretureCombinationGenerator combination_gen {_values.size()};
                 std::set<std::set<int>> result;
                 while (combination_gen.has_next()) {
@@ -97,19 +96,73 @@ namespace ltsy {
                 }
                 return result;
             };
+
             inline std::set<std::set<int>> get_non_total_subsets() const {
-                auto total_subsets = get_total_subsets(); 
-                //std::cout << total_subsets.size() << std::endl;
+                std::set<std::set<int>> max_total_subsets;
+                get_maximal_total_subsets(_values, max_total_subsets); 
                 std::set<std::set<int>> result;
                 DiscretureCombinationGenerator combination_gen {_values.size()};
                 while (combination_gen.has_next()) {
                     auto comb = *(combination_gen.next());
                     auto X = std::set<int>{comb.begin(), comb.end()};
                     if (X.empty()) continue;
-                    if (total_subsets.find(X) == total_subsets.end())
+                    bool is_subset_of_max_total = false;
+                    for (const auto& mts : max_total_subsets) {
+                        if (utils::is_subset(X, mts)) {
+                            is_subset_of_max_total = true;
+                            break;
+                        }
+                    }
+                    if (not is_subset_of_max_total)
                         result.insert(X);
                 }
                 return result;
+            }
+
+
+            bool
+            is_sub_matrix_total(const std::set<int>& subvalues) const {
+                if (subvalues.empty())
+                    return true;
+                for (const auto& [s, ti] : *_interpretation) {
+                    auto tt = ti->truth_table();
+                    if (not tt->is_sub_table_total(subvalues)) {
+                        return false;
+                    }
+                } 
+                return true;
+            }
+
+            inline void get_maximal_total_subsets(const std::set<int> values, 
+                    std::set<std::set<int>>& maximal_total_subsets) const {
+                if (values.empty()) 
+                    return;
+                bool is_sub_total = is_sub_matrix_total(values);
+                if (is_sub_total) {
+                    maximal_total_subsets.insert(values);
+                    return;
+                }
+                std::vector<int> values_vec {values.begin(), values.end()};
+                DiscretureCombinationGenerator combination_gen {values.size(), values.size() - 1}; 
+                while (combination_gen.has_next()) {
+                   auto combidxs = *(combination_gen.next());
+                   if (combidxs.empty()) continue;
+                   // compose the combination
+                   std::set<int> comb;
+                   for (auto i : combidxs) 
+                       comb.insert(values_vec[i]);
+                   // check if subset of maximal
+                   bool subset_of_maximal = false;
+                   for (const auto mts : maximal_total_subsets) {
+                       if (utils::is_subset(comb, mts)) {
+                           subset_of_maximal = true;
+                           break;
+                       }
+                   }
+                   // recursive call if not subset of maximal
+                   if (not subset_of_maximal)
+                       get_maximal_total_subsets(comb, maximal_total_subsets);
+                }
             }
     };
 

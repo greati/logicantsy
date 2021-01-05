@@ -11,6 +11,7 @@ namespace ltsy {
             int _n;
             int _k = 0;
             std::shared_ptr<std::vector<int>> _current;
+            bool _strict_k = false;
 
         public:
 
@@ -36,8 +37,8 @@ namespace ltsy {
             DiscretureCombinationGenerator(int n) : CombinationGenerator{n} {/* empty */
                 reset(); 
             }
-
             DiscretureCombinationGenerator(int n, int k) : CombinationGenerator{n, k} {/* empty */
+                _strict_k = true;
                 reset();
             }
             
@@ -67,7 +68,10 @@ namespace ltsy {
             }
 
             bool has_next() override {
-                return this->_current_k <= _n;
+                if (not _strict_k)
+                    return this->_current_k <= _n;
+                else
+                    return this->_current_k == _k;
             }
 
     };

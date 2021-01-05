@@ -398,13 +398,6 @@ namespace ltsy {
 
             std::set<MultipleConclusionRule> make_nontotal_rules() {
                 auto non_total_subsets = _gen_matrix->get_non_total_subsets();
-                //std::cout << "non total" << std::endl;
-                //for (auto sts : non_total_subsets) {
-                //    for (auto nt : sts) {
-                //        std::cout << nt << ",";
-                //    }
-                //    std::cout << std::endl;
-                //}
                 auto dist_sets_qtd = _gen_matrix->distinguished_sets().size();
                 std::set<MultipleConclusionRule> result;
                 auto props = make_props(_gen_matrix->values().size()); 
