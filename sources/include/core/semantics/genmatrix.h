@@ -835,7 +835,7 @@ namespace ltsy {
             bool
             is_valid_under_valuation(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
-                     auto is_model_result = is_fmla_set_valid_under_valuation(val, seq[i], _d_sets[i]);
+                     auto is_model_result = is_fmla_set_valid_under_valuation(val, seq[i], _d_sets[_sequent_set_correspondence[i]]);
                      if (is_model_result) return true;
                  }
                  return false;

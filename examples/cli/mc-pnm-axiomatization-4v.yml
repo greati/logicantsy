@@ -46,6 +46,7 @@ pnmatrix:
 sequent_dset_correspondence: [0, 3, 2, 1]
 simplify_overlap: true
 simplify_dilution: true
+simplify_subrules: true
 discriminator:
   top:  [[p],[],[p],[]]
   t:    [[p],[],[],[p]]

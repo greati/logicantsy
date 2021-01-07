@@ -22,10 +22,11 @@ namespace ltsy {
                     Discriminator discriminator,
                     const std::vector<int>& sequent_set_correspondence,
                     bool simplify_overlap=true,
-                    bool simplify_dilution=true
+                    bool simplify_dilution=true,
+                    bool simplify_subrules=true
                     ) {
                PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence}; 
-               return axiomatizer.make_calculus(simplify_overlap, simplify_dilution);
+               return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
             }
 
             /* App to check soundness of a rule wrt a given

@@ -20,6 +20,11 @@ namespace ltsy {
 
         public:
 
+            NdSequent(size_t dimension) : _dimension {dimension} {
+                for (auto i = 0; i < dimension; ++i)
+                    _sequent_fmlas.push_back({});
+            }
+
             NdSequent(const decltype(_sequent_fmlas)& sequent_fmlas) : _sequent_fmlas {sequent_fmlas}
             {
                 _dimension = sequent_fmlas.size();
@@ -33,6 +38,7 @@ namespace ltsy {
 
             inline int dimension() const { return _dimension; }
             inline decltype(_sequent_fmlas) sequent_fmlas() const { return _sequent_fmlas; }
+
 
             FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& operator[](int i) { return _sequent_fmlas[i]; }
 
@@ -146,6 +152,10 @@ namespace ltsy {
                     }
                 }
                 return true;
+            }
+
+            void set(int i, FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>> container) {
+                _sequent_fmlas[i] = container;
             }
 
             NdSequent<FmlaContainerT> apply_substitution(const FormulaVarAssignment& ass) const {

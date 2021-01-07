@@ -4,6 +4,7 @@
 #include "ndsequents.h"
 #include <numeric>
 #include <memory>
+#include "core/combinatorics/combinations.h"
 
 namespace ltsy {
 
@@ -86,6 +87,81 @@ namespace ltsy {
                 auto assptr = std::make_shared<FormulaVarAssignment>(ass);
                 MultipleConclusionRule r {_name, new_seq, _prem_conc_pos_corresp, assptr}; 
                 return r;
+            }
+    };
+
+
+    /* Generate all subrules of a given rule.
+     * */
+    class MultipleConclusionSubrulesGenerator {
+
+        private:
+
+            MultipleConclusionRule _base_rule;
+            std::vector<std::vector<std::shared_ptr<Formula>>> _fmlas;
+            std::vector<DiscretureCombinationGenerator> _comb_gens;
+            NdSequent<std::set> _current;
+            int _dim;
+            bool finished = false;
+            bool first = true;
+    
+        public:
+
+            MultipleConclusionSubrulesGenerator(const MultipleConclusionRule& base_rule) : _base_rule {base_rule},
+               _current {NdSequent<std::set> {base_rule.sequent().dimension()}} {
+                   for (int i = 0; i < _base_rule.sequent().dimension(); ++i) {
+                        auto fmlas_pos = _base_rule.sequent().sequent_fmlas()[i];
+                        _fmlas.push_back(std::vector<std::shared_ptr<Formula>>(fmlas_pos.begin(), fmlas_pos.end()));
+                   }
+                   reset();
+            }
+
+            void reset() {
+                finished = false;
+                first = true;
+                _dim = _base_rule.sequent().dimension();
+                _current = NdSequent<std::set> {_dim};
+                // initialize combination generators
+                for (auto i {0}; i < _dim; ++i) {
+                    _comb_gens.push_back(DiscretureCombinationGenerator {_fmlas[i].size()});
+                    _comb_gens[i].next();
+                }
+            }
+
+            NdSequent<std::set> next_sequent() {
+                if (not has_next())
+                    throw std::logic_error("no next subformula to produce");
+                if (first) {first=false; return _current;}
+                int i = _dim - 1;
+                while (i >= 0 and not _comb_gens[i].has_next()) {
+                    _comb_gens[i].reset();
+                    auto comb_idxs = *(_comb_gens[i].next());
+                    _current.set(i, {});
+                    i--;
+                }
+                if (i >= 0) {
+                    auto comb_idxs = *(_comb_gens[i].next());
+                    FmlaSet subfmlas;
+                    for (auto j : comb_idxs) {
+                        subfmlas.insert(_fmlas[i][j]);
+                    }
+                    _current.set(i, subfmlas);
+                }
+                i = _dim - 1;
+                while (i >= 0 and not _comb_gens[i].has_next()) i--;
+                if (i < 0) finished=true;
+                return _current;
+            }
+
+            MultipleConclusionRule next() {
+                if (not has_next())
+                    throw std::logic_error("no next subformula to produce");
+                auto sequent = next_sequent();
+                return MultipleConclusionRule {_base_rule.name()+" (sub)", sequent, _base_rule.prem_conc_pos_corresp()};
+            }
+
+            bool has_next() {
+                return not finished;
             }
     
     };

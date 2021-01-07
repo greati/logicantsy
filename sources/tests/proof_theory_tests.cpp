@@ -45,6 +45,23 @@ namespace {
         ltsy::MultipleConclusionRule rule ("a", ltsy::NdSequent<std::set>({{p,q},{p_to_q}}), {{0,1}}); 
     }
 
+    TEST(ProofTheory, SubrulesGenerator) {
+        ltsy::BisonFmlaParser parser;
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        auto p_and_q = parser.parse("p and q");
+        auto p_or_q = parser.parse("p or q");
+        auto neg_p = parser.parse("neg p");
+        ltsy::MultipleConclusionRule rule1
+            {"exp", ltsy::NdSequent<std::set>({{p, neg_p},{q}}), {{0,1}}};
+        ltsy::MultipleConclusionSubrulesGenerator gen {rule1};
+        while(gen.has_next()) {
+            auto r = gen.next();
+            std::cout << r.sequent() << std::endl;
+        }
+
+    }
+
     TEST(ProofTheory, MultipleConclusionCalculus) {
         ltsy::BisonFmlaParser parser;
         auto p = parser.parse("p");
