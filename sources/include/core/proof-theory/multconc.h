@@ -463,6 +463,10 @@ namespace ltsy {
                     auto s = collector.subfmlas(); 
                     statement_subfmlas.insert(s.begin(), s.end());
                 }
+                std::cout << "Subfmlas" << std::endl;
+                for (const auto& sb : statement_subfmlas) {
+                    std::cout << *sb << std::endl;
+                }
                 // collect all propositional variables from the formulas in \phi
                 PropSet props_phi;
                 for (auto f : statement_subfmlas) {

@@ -162,7 +162,7 @@ namespace {
        ltsy::NdSequent<std::set> seq22 ({{p},{q}});
        ltsy::NdSequentRule<std::set> seqrule1 ({seq21},{seq22});
        ltsy::NdSequentRule<std::set> seqrule2 ({seq31},{seq22});
-        ltsy::NdSequentGenMatrixValidator<std::set> sequent_validator {cl_matrix, {0}};
+        ltsy::NdSequentGenMatrixValidator<std::set> sequent_validator {cl_matrix, {0,1}};
         auto con_ce = sequent_validator.is_rule_satisfiability_preserving(seqrule1);
         auto disj_ce = sequent_validator.is_rule_satisfiability_preserving(seqrule2);
         if (disj_ce.has_value()) {

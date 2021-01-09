@@ -38,16 +38,12 @@ pnmatrix:
         - [a]: [0]
         - [0]: [1]
 sequent_dset_correspondence: [0, 3, 2, 1]
-simplify_overlap: true
-simplify_dilution: true
-simplify_subrules: true
-discriminator:
-  1: [[p],[],[],[]]
-  a: [[],[p],[],[p]]
-  0: [[],[p],[p],[]]
-derive:
-  negelim: [[],[neg neg p],[p],[]]
-  and: [[p, q],[],[],[p and q]]
+max_counter_models: 2
+rules:
+  negelim:
+    premisses:
+    conclusions:
+      - [[p],[],[],[neg p]]
 latex:
   "->": "\\to"
   p: "\\varphi"

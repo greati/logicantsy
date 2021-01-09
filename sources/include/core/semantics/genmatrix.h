@@ -174,6 +174,17 @@ namespace ltsy {
         public:
             std::map<int, std::vector<FmlaSet>> separators;
             Discriminator(const decltype(separators) _separators) : separators {_separators} {}
+            
+            FmlaSet get_formulas() const {
+                FmlaSet result;
+                for (const auto& [v, fmlas_vecs] : separators) {
+                    for (const auto& fmla_sets : fmlas_vecs) {
+                        result.insert(fmla_sets.begin(), fmla_sets.end());
+                    }
+                }
+                return result;
+            }
+
             std::vector<FmlaSet> apply_subs(int v, std::shared_ptr<Formula>& sfmla) {
                 std::vector<FmlaSet> result {separators[v].size()};
                 for (int i = 0; i < separators[v].size(); ++i) {

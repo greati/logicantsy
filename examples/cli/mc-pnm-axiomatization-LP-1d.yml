@@ -37,12 +37,16 @@ pnmatrix:
         - [a]: [0]
         - [0]: [1]
 sequent_dset_correspondence: [1, 0]
+premisses_conclusions_correspondence: [[0, 1]]
 simplify_overlap: true
 simplify_dilution: true
+simplify_subrules: true
 discriminator:
   1: [[p],[neg p]]
   a: [[p, neg p], []]
   0: [[],[p]]
+derive:
+  negelim: [[neg(neg p)], [p]]
 latex:
   "->": "\\to"
   p: "\\varphi"

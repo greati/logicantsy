@@ -421,9 +421,9 @@ namespace ltsy {
 
             std::set<MultipleConclusionRule> simplify_by_subrule_soundness(
                     const std::set<MultipleConclusionRule>& rules) {
-                std::vector<int> dset_positions {_dsets_rule_positions.size(), -1};
+                std::vector<int> dset_positions;
                 for (const auto& [a, b] : _dsets_rule_positions)
-                    dset_positions[a] = b;
+                    dset_positions.push_back(b);
                 std::set<MultipleConclusionRule> result;
                 for (const auto& rule : rules) {
                     std::set<MultipleConclusionRule> sound_subrules;

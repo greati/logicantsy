@@ -276,7 +276,8 @@ namespace ltsy {
                 _type = FmlaType::COMPOUND;
                 _complexity = 1;
                 for (const auto& c : _components) {
-                    _complexity += c->complexity();
+                    if (c != nullptr)
+                        _complexity += c->complexity();
                 }
             }
             ~Compound() {}
