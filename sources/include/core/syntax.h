@@ -11,6 +11,8 @@
 #include <unordered_set>
 #include <algorithm>
 #include <sstream>
+#include "assert.h"
+#include <iostream>
 
 namespace ltsy {
     
@@ -553,6 +555,12 @@ namespace ltsy {
                 return _assignment[p];
             }
 
+            int size() const {
+                int s = 0;
+                for (const auto& [p,f] : _assignment) s++;
+                return s;
+            }
+
             std::stringstream print() const {
                 std::stringstream ss;
                 for (const auto& [k, v] : _assignment) {
@@ -603,6 +611,7 @@ namespace ltsy {
                     const decltype(_gamma)& gamma)
                 : _props {props}, _gamma {gamma} {
                 _current = std::make_shared<FormulaVarAssignment>();
+                _props = decltype(_props){props.begin(), props.end()};
                 reset();    
             }
 
@@ -629,6 +638,7 @@ namespace ltsy {
                 } else {
                     first = false;
                 }
+                assert(_current->size() == _props.size());
                 return _current; 
             }
 

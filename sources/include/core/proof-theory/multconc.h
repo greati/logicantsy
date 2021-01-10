@@ -88,6 +88,11 @@ namespace ltsy {
                 MultipleConclusionRule r {_name, new_seq, _prem_conc_pos_corresp, assptr}; 
                 return r;
             }
+
+            bool has_only(const FmlaSet& fmlas) const {
+                auto rule_fmlas = _sequent.collect_fmlas();
+                return is_subset(rule_fmlas, fmlas); 
+            }
     };
 
 
@@ -196,11 +201,16 @@ namespace ltsy {
             MCProofSearchSequentialHeuristics(const decltype(_rules)& rules,
                     const decltype(_generalized_subfmlas)& generalized_subfmlas)
                 : MCProofSearchHeuristics {rules, generalized_subfmlas} {
+                    init();
+            }
+
+            void init() {
                 _rules_it = _rules.begin();
                 auto rule = *(_rules_it);
                 auto rule_props = rule.sequent().collect_props();
                 _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _generalized_subfmlas};
             }
+
             MultipleConclusionRule select_instance() {
                 if (has_next()) {
                     if (std::next(_rules_it) != _rules.end() and not _current_subst_generator.has_next()) {
@@ -234,6 +244,7 @@ namespace ltsy {
                 : MCProofSearchSequentialHeuristics {rules, generalized_subfmlas} {
                 // shuffle
                 std::random_shuffle(_rules.begin(), _rules.end());
+                init();
             }
     };
 
@@ -373,6 +384,9 @@ namespace ltsy {
                     while (heuristics->has_next()) {
                        // obtain an instance
                        auto rule_instance = heuristics->select_instance();
+                       // validate for analiticity
+                       if (not rule_instance.has_only(generalized_subfmlas))
+                           continue;
                        // check if premisses subseteq node_fmlas
                        const auto& premisses = rule_instance.premisses();
                        bool premisses_satisfied = true;
@@ -390,8 +404,10 @@ namespace ltsy {
                                auto rule_conclusions = rule_instance.conclusions();
                                for (auto i {0}; i < rule_conclusions.size(); ++i) {
                                    FmlaSet inters;
-                                   std::set_intersection(node_fmlas[i].begin(), node_fmlas[i].end(),
-                                       rule_conclusions[i].begin(), rule_conclusions[i].end(), 
+                                   auto A = node_fmlas[i];
+                                   auto B = rule_conclusions[i];
+                                   std::set_intersection(A.begin(), A.end(),
+                                       B.begin(), B.end(), 
                                        std::inserter(inters, inters.begin()),
                                        utils::DeepSharedPointerComp<Formula>());
                                    // check if the node formulas have some of the conclusion formulas
@@ -462,10 +478,6 @@ namespace ltsy {
                     f->accept(collector);
                     auto s = collector.subfmlas(); 
                     statement_subfmlas.insert(s.begin(), s.end());
-                }
-                std::cout << "Subfmlas" << std::endl;
-                for (const auto& sb : statement_subfmlas) {
-                    std::cout << *sb << std::endl;
                 }
                 // collect all propositional variables from the formulas in \phi
                 PropSet props_phi;

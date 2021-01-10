@@ -506,30 +506,27 @@ namespace ltsy {
                     // if derive
                     if (auto derive_node = root[DERIVE]) {
                         auto discriminator_fmlas = monadic_discriminator.get_formulas();
-                        
-                        for (const auto& fm : discriminator_fmlas) {
-                            std::cout << *fm << std::endl;
-                        }
-
                         std::set<MultipleConclusionRule> full_calculus_rules; 
                         for (auto [k, calculus] : axiomatization) {
                             auto calculus_rules = calculus.rules();
                             full_calculus_rules.insert(calculus_rules.begin(), calculus_rules.end());
                         }
                         MultipleConclusionCalculus full_calculus {
-                            std::vector<MultipleConclusionRule>{full_calculus_rules.begin(), full_calculus_rules.end()}};
+                            std::vector<MultipleConclusionRule>{full_calculus_rules.begin(), 
+                                full_calculus_rules.end()}
+                        };
 
                         for (auto it = derive_node.begin(); it != derive_node.end(); ++it) {
                             auto name =  it->first.as<std::string>();
                             auto sequent =  parser.parse_nd_sequent(it->second);
-                            MultipleConclusionRule rule {name, *sequent, {{0,1}}};
+                            MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
                             auto derivation = full_calculus.derive(rule, discriminator_fmlas);
-                            //if (not derivation->closed)
-                            //    std::cout << name + " is derivable." << std::endl;
-                            //else
-                            //    std::cout << name + " is underivable." << std::endl;
-                            //auto derivtree = derivation->print().str();
-                            //std::cout << derivtree << std::endl;
+                            if (derivation->closed)
+                                std::cout << name + " is derivable." << std::endl;
+                            else
+                                std::cout << name + " is underivable." << std::endl;
+                            auto derivtree = derivation->print().str();
+                            std::cout << derivtree << std::endl;
                         }
                     }
 
