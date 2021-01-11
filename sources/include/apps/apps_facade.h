@@ -21,11 +21,12 @@ namespace ltsy {
                     std::shared_ptr<GenMatrix> matrix,
                     Discriminator discriminator,
                     const std::vector<int>& sequent_set_correspondence,
+                    const std::vector<std::pair<int,int>>& prem_conc_corresp,
                     bool simplify_overlap=true,
                     bool simplify_dilution=true,
                     bool simplify_subrules=true
                     ) {
-               PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence}; 
+               PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
                return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
             }
 

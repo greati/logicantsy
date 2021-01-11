@@ -82,9 +82,11 @@ namespace ltsy {
             }
 
         public:
+
             PNMMultipleConclusionAxiomatizer(const decltype(_discriminator)& discriminator,
-                    decltype(_gen_matrix) gen_matrix, const std::vector<int>& dsets_rule_positions)
-            : _discriminator {discriminator}, _gen_matrix {gen_matrix} {
+                    decltype(_gen_matrix) gen_matrix, const std::vector<int>& dsets_rule_positions,
+                    decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp)
+            : _discriminator {discriminator}, _gen_matrix {gen_matrix}, _prem_conc_pos_corresp {prem_conc_pos_corresp} {
             
                 for (int i = 0, j=0; i < _gen_matrix->distinguished_sets().size(); i += 2) {
                     _opposition_dsets[i] = i+1;
@@ -93,9 +95,6 @@ namespace ltsy {
                 }
                 for (int i = 0; i < _gen_matrix->distinguished_sets().size(); i += 1) {
                     _dsets_rule_positions[i]=dsets_rule_positions[i]; 
-                }
-                for (auto [a,b] : _opposition_dsets) {
-                    _prem_conc_pos_corresp.push_back({a,b});
                 }
             }
 

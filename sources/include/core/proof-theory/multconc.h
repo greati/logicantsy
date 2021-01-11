@@ -358,11 +358,7 @@ namespace ltsy {
                 // check satisfaction
                 bool satisfied = false;
                 for (auto i {0}; i < conclusions.size() and not satisfied; ++i) {
-                    FmlaSet inters;
-                    // conclusions[i] \cap node_fmlas[i]
-                    std::set_intersection(node_fmlas[i].begin(), node_fmlas[i].end(),
-                            conclusions[i].begin(), conclusions[i].end(), std::inserter(inters, inters.begin()),
-                            utils::DeepSharedPointerComp<Formula>());
+                    FmlaSet inters = intersection(node_fmlas[i], conclusions[i]);
                     satisfied = satisfied or not inters.empty();
                 }
                 // if satisfied, close this node
@@ -403,19 +399,12 @@ namespace ltsy {
                            } else {
                                auto rule_conclusions = rule_instance.conclusions();
                                for (auto i {0}; i < rule_conclusions.size(); ++i) {
-                                   FmlaSet inters;
-                                   auto A = node_fmlas[i];
-                                   auto B = rule_conclusions[i];
-                                   std::set_intersection(A.begin(), A.end(),
-                                       B.begin(), B.end(), 
-                                       std::inserter(inters, inters.begin()),
-                                       utils::DeepSharedPointerComp<Formula>());
+                                   FmlaSet inters = intersection(node_fmlas[i], rule_conclusions[i]);
                                    // check if the node formulas have some of the conclusion formulas
                                    if (not inters.empty())
                                        continue;
                                    // if not, expand
                                    some_premiss_satisfied = true;
-                                   // check if A is in node_fmlas at position i
                                    for (auto rule_conc_fmla : rule_conclusions[i]) {
                                        // expand a new node by adding A in position i
                                        decltype(node_fmlas) new_node_fmlas {node_fmlas.begin(), 

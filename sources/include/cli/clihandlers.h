@@ -478,15 +478,19 @@ namespace ltsy {
                     auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
                     auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
                         .as<std::vector<int>>();
-                    auto prem_conc_corr = parser.hard_require(root, PREM_CONC_CORRESPOND_TITLE)
-                        .as<std::vector<std::pair<int, int>>>();
+                    auto prem_conc_corr_node = parser.hard_require(root, PREM_CONC_CORRESPOND_TITLE);
+                    std::vector<std::pair<int,int>> prem_conc_corr;
+                    for (auto it = prem_conc_corr_node.begin(); it != prem_conc_corr_node.end(); it++) {
+                        auto prem_conc = it->as<std::vector<int>>();
+                        prem_conc_corr.push_back({prem_conc[0], prem_conc[1]});
+                    }
 
                     if (verbose)
                         spdlog::info("Input tables: \n" + pnmatrix->print());
 
                     AppsFacade apps_facade;
                     auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
-                            monadic_discriminator, seq_dset_corr, simplify_overlap, simplify_dilution, simplify_subrules);
+                            monadic_discriminator, seq_dset_corr, prem_conc_corr, simplify_overlap, simplify_dilution, simplify_subrules);
                     
                     PrinterFactory printer_factory;
                     auto printer = printer_factory.make_printer(output_type, _tex_translation);
