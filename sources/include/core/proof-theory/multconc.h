@@ -176,11 +176,11 @@ namespace ltsy {
     class MCProofSearchHeuristics {
         protected:
             std::vector<MultipleConclusionRule> _rules;
-            FmlaSet _generalized_subfmlas;
+            FmlaSet _fmlas_to_make_instances;
         public:
             MCProofSearchHeuristics(const decltype(_rules)& rules,
-                    const decltype(_generalized_subfmlas)& generalized_subfmlas)
-                : _rules {rules}, _generalized_subfmlas {generalized_subfmlas} {}
+                    const decltype(_fmlas_to_make_instances)& fmlas_to_make_instances)
+                : _rules {rules}, _fmlas_to_make_instances {fmlas_to_make_instances} {}
             virtual ~MCProofSearchHeuristics() {};
             virtual MultipleConclusionRule select_instance() = 0;
             virtual bool has_next() = 0;
@@ -199,8 +199,8 @@ namespace ltsy {
             FormulaVarAssignmentGenerator _current_subst_generator;
         public:
             MCProofSearchSequentialHeuristics(const decltype(_rules)& rules,
-                    const decltype(_generalized_subfmlas)& generalized_subfmlas)
-                : MCProofSearchHeuristics {rules, generalized_subfmlas} {
+                    const decltype(_fmlas_to_make_instances)& fmlas_to_make_instances)
+                : MCProofSearchHeuristics {rules, fmlas_to_make_instances} {
                     init();
             }
 
@@ -208,7 +208,7 @@ namespace ltsy {
                 _rules_it = _rules.begin();
                 auto rule = *(_rules_it);
                 auto rule_props = rule.sequent().collect_props();
-                _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _generalized_subfmlas};
+                _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _fmlas_to_make_instances};
             }
 
             MultipleConclusionRule select_instance() {
@@ -216,7 +216,7 @@ namespace ltsy {
                     if (std::next(_rules_it) != _rules.end() and not _current_subst_generator.has_next()) {
                         auto rule = *(++_rules_it);
                         auto rule_props = rule.sequent().collect_props();
-                        _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _generalized_subfmlas};
+                        _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _fmlas_to_make_instances};
                     }
                     auto rule = *(_rules_it);
                     auto ass = _current_subst_generator.next();
@@ -240,8 +240,8 @@ namespace ltsy {
     class MCProofSearchRandSequentialHeuristics : public MCProofSearchSequentialHeuristics {
         public:
             MCProofSearchRandSequentialHeuristics(const decltype(_rules)& rules,
-                    const decltype(_generalized_subfmlas)& generalized_subfmlas)
-                : MCProofSearchSequentialHeuristics {rules, generalized_subfmlas} {
+                    const decltype(_fmlas_to_make_instances)& fmlas_to_make_instances)
+                : MCProofSearchSequentialHeuristics {rules, fmlas_to_make_instances} {
                 // shuffle
                 std::random_shuffle(_rules.begin(), _rules.end());
                 init();
@@ -344,6 +344,7 @@ namespace ltsy {
         private:
 
             std::vector<MultipleConclusionRule> _rules;
+            unsigned int _analiticity_level = 1;
 
             void print_set(const FmlaSet& f) {
                 for (auto ff : f)
@@ -352,7 +353,8 @@ namespace ltsy {
 
             bool expand_node(std::vector<FmlaSet> node_fmlas, 
                     const std::vector<FmlaSet>& conclusions,
-                    const FmlaSet& generalized_subfmlas,
+                    const FmlaSet& fmlas_to_make_instances,
+                    const FmlaSet& fmlas_allowed_in_derivations,
                     std::shared_ptr<DerivationTreeNode> derivation,
                     int level, const std::optional<int>& max_depth) {
                 // check satisfaction
@@ -377,12 +379,12 @@ namespace ltsy {
                     auto rules = _rules;
                     // create the heuristics
                     auto heuristics = std::make_shared<MCProofSearchRandSequentialHeuristics>(rules,
-                            generalized_subfmlas);
+                            fmlas_to_make_instances);
                     while (heuristics->has_next()) {
                        // obtain an instance
                        auto rule_instance = heuristics->select_instance();
                        // validate for analiticity
-                       if (not rule_instance.has_only(generalized_subfmlas))
+                       if (not rule_instance.has_only(fmlas_allowed_in_derivations))
                            continue;
                        // check if premisses subseteq node_fmlas
                        const auto& premisses = rule_instance.premisses();
@@ -419,7 +421,8 @@ namespace ltsy {
                                            );
                                        // expand
                                        auto expanded_satisfied = expand_node(new_node_fmlas, 
-                                               conclusions, generalized_subfmlas, new_node, level+1,
+                                               conclusions, fmlas_to_make_instances, 
+                                               fmlas_allowed_in_derivations, new_node, level+1,
                                                max_depth);
                                        satisfied &= expanded_satisfied;
                                        // if the expanded node do not lead to a closed branch
@@ -438,6 +441,38 @@ namespace ltsy {
                     }
                     return false;
                 }
+            }
+
+            std::pair<FmlaSet, FmlaSet> 
+            gen_subformulas(const MultipleConclusionRule& statement, const FmlaSet& phi, 
+                    const PropSet& props_phi, const unsigned int& k) {
+                if (k == 0) {
+                    // collect all formulas in the input statement
+                    auto statement_fmlas = statement.sequent().collect_fmlas();
+                    // collect all subformulas of the statement formulas, in Sb
+                    FmlaSet statement_subfmlas;
+                    for (auto f : statement_fmlas) {
+                        SubFormulaCollector collector;
+                        f->accept(collector);
+                        auto s = collector.subfmlas(); 
+                        statement_subfmlas.insert(s.begin(), s.end());
+                    }
+                    return {{}, statement_subfmlas};
+                } 
+                auto [S1, S2] = gen_subformulas(statement, phi, props_phi, k-1);
+                FmlaSet gen_sb_phi = S2; // S_{k-1} cup...
+                // compute \Sb_\phi by all substitutions over \phi using formulas in \Sb
+                FormulaVarAssignmentGenerator gen_sb_phi_subs {props_phi, S2}; // props_phi -> S2
+                for (auto fm : phi) {
+                    while(gen_sb_phi_subs.has_next()) {
+                        auto s = gen_sb_phi_subs.next();
+                        SubstitutionEvaluator eval {*s};
+                        auto fmsubs = fm->accept(eval);
+                        gen_sb_phi.insert(fmsubs);
+                    }
+                    gen_sb_phi_subs.reset();
+                }
+                return {S2, gen_sb_phi};
             }
 
         public:
@@ -459,47 +494,27 @@ namespace ltsy {
              * */
             std::shared_ptr<DerivationTreeNode> derive(const MultipleConclusionRule& statement,
                     const FmlaSet& phi, std::optional<int> max_depth = std::nullopt) {
-                // collect all formulas in the input statement
-                auto statement_fmlas = statement.sequent().collect_fmlas();
-                // collect all subformulas of the statement formulas, in Sb
-                FmlaSet statement_subfmlas;
-                for (auto f : statement_fmlas) {
-                    SubFormulaCollector collector;
-                    f->accept(collector);
-                    auto s = collector.subfmlas(); 
-                    statement_subfmlas.insert(s.begin(), s.end());
-                }
-                // collect all propositional variables from the formulas in \phi
+                // get the props in phi
                 PropSet props_phi;
-                for (auto f : statement_subfmlas) {
+                for (auto f : phi) {
                     VariableCollector collector;
                     f->accept(collector);
                     auto p = collector.get_collected_variables();
                     props_phi.insert(p.begin(), p.end());
                 }
-                // compute \Sb_\phi by all substitutions over \phi using formulas in \Sb
-                FmlaSet sb_phi {statement_subfmlas.begin(), statement_subfmlas.end()};
-                FormulaVarAssignmentGenerator gen_sb_phi_subs {props_phi, statement_subfmlas};
-                for (auto fm : phi) {
-                    while(gen_sb_phi_subs.has_next()) {
-                        auto s = gen_sb_phi_subs.next();
-                        SubstitutionEvaluator eval {*s};
-                        auto fmsubs = fm->accept(eval);
-                        sb_phi.insert(fmsubs);
-                    }
-                    gen_sb_phi_subs.reset();
-                }
-                // split premisses and conclusions
+                // compute the generalized subformulas
+                const auto& [thetak_1, thetak] = gen_subformulas(statement, phi, props_phi, _analiticity_level);
+                // identify premisses and conclusion
                 std::vector<FmlaSet> premisses;
                 std::vector<FmlaSet> conclusions;
                 for (const auto& [p,c] : statement.prem_conc_pos_corresp()) {
                     premisses.push_back(statement.sequent()[p]);   
                     conclusions.push_back(statement.sequent()[c]);   
                 }
-
+                // search for the derivation
                 auto derivation = std::make_shared<DerivationTreeNode>(premisses, 
                         std::vector<std::shared_ptr<DerivationTreeNode>>{});
-                bool derivation_result = expand_node(premisses, conclusions, sb_phi, derivation, 0,
+                bool derivation_result = expand_node(premisses, conclusions, thetak_1, thetak, derivation, 0,
                         max_depth);
                 return derivation;
             };
