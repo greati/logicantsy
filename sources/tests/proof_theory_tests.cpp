@@ -3,38 +3,48 @@
 #include "core/proof-theory/multconc.h"
 #include "core/proof-theory/ndsequents.h"
 #include "core/parser/fmla/fmla_parser.h"
+#include "core/utils.h"
 
 
 namespace {
 
-    TEST(ProofTheory, Sequents) {
+    TEST(ProofTheory, CreateASequent) {
         auto p = std::make_shared<ltsy::Prop>("p");
         auto q = std::make_shared<ltsy::Prop>("q");
         auto to = std::make_shared<ltsy::Connective>("->", 2);
         auto p_to_q = std::make_shared<ltsy::Compound>(to, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
-        ltsy::SetSetSequent seq {{p, p_to_q}, {q}};    
-    }
-
-
-    TEST(ProofTheory, NdSequentCreation) {
-        auto p = std::make_shared<ltsy::Prop>("p");
-        auto q = std::make_shared<ltsy::Prop>("q");
-        auto to = std::make_shared<ltsy::Connective>("->", 2);
-        auto p_to_q = std::make_shared<ltsy::Compound>(to, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
-        ltsy::NdSequent<std::set> seq ({{p, q}, {}, {p_to_q}, {}});
-        std::cout << seq << std::endl;
+        ltsy::NdSequent<std::set> seq {{{p, p_to_q}, {q}}};    
+        ASSERT_EQ(seq.dimension(), 2);
+        ltsy::NdSequent<std::set> seq4 {{{},{p},{},{p_to_q}}};
+        ASSERT_EQ(seq4.dimension(), 4);
     }
 
     TEST(ProofTheory, NdSequentVariables) {
         auto p = std::make_shared<ltsy::Prop>("p");
         auto q = std::make_shared<ltsy::Prop>("q");
+        ltsy::PropSet psets {p, q};
         auto to = std::make_shared<ltsy::Connective>("->", 2);
+        auto bot = std::make_shared<ltsy::Connective>("bot", 0);
         auto p_to_q = std::make_shared<ltsy::Compound>(to, std::vector<std::shared_ptr<ltsy::Formula>>{p, q});
-        ltsy::NdSequent<std::set> seq ({{p, q}, {}, {p_to_q}, {}});
-        auto vars = seq.collect_props();
-        std::cout << seq << std::endl;
-        for (const auto v : vars)
-            std::cout << v->symbol() << std::endl;
+        auto botf = std::make_shared<ltsy::Compound>(bot, std::vector<std::shared_ptr<ltsy::Formula>>{});
+        auto bot_to_bot = std::make_shared<ltsy::Compound>(to, 
+                std::vector<std::shared_ptr<ltsy::Formula>>{botf, botf});
+        {
+            ltsy::NdSequent<std::set> seq ({{p, q}, {}, {p_to_q}, {}});
+            auto vars = seq.collect_props();
+            auto eq_test = (psets == vars);
+            ASSERT_TRUE(eq_test);
+        }
+        {
+            ltsy::NdSequent<std::set> seq ({{botf}, {}, {bot_to_bot}, {}});
+            auto vars = seq.collect_props();
+            ASSERT_EQ(vars.size(), 0);
+        }
+        {
+            ltsy::NdSequent<std::set> seq ({{}, {}, {}, {}});
+            auto vars = seq.collect_props();
+            ASSERT_EQ(vars.size(), 0);
+        }
     }
 
     TEST(ProofTheory, MultipleConclusionRules) {
@@ -138,6 +148,69 @@ namespace {
         }
         std::string s = derivation->print().str();
         std::cout << s << std::endl;
+    }
+
+    TEST(ProofTheory, NegationFragmentDerivability) {
+        ltsy::BisonFmlaParser parser;
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        auto neg_p = parser.parse("neg p");
+        auto neg_q = parser.parse("neg q");
+        auto neg_r = parser.parse("neg r");
+        auto neg_neg_p = parser.parse("neg neg p");
+        ltsy::MultipleConclusionRule rule1
+            {"DNI", ltsy::NdSequent<std::set>({{p}, {neg_neg_p}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule2
+            {"DNE", ltsy::NdSequent<std::set>({{neg_neg_p}, {p}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule3
+            {"EXP", ltsy::NdSequent<std::set>({{p, neg_p}, {q}}), {{0,1}}}; 
+       ltsy::MultipleConclusionCalculus calc {{rule1, rule2, rule3}};
+
+       {
+           auto derivation = calc.derive(rule1, {{p}});
+           ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+           auto derivation = calc.derive(rule2, {{p}});
+           ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+           auto derivation = calc.derive(rule3, {{p}});
+           ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+          ltsy::MultipleConclusionRule rule
+           {"SI", ltsy::NdSequent<std::set>({{p, neg_p}, {neg_r}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule, {{p}});
+           std::cout << derivation->print().str() << std::endl;
+           ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+          ltsy::MultipleConclusionRule rule
+           {"O", ltsy::NdSequent<std::set>({{p, neg_p}, {neg_p}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule, {{p}});
+           std::cout << derivation->print().str() << std::endl;
+           ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+          ltsy::MultipleConclusionRule rule
+           {"D", ltsy::NdSequent<std::set>({{p, neg_p}, {q, neg_q}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule, {{p}});
+           std::cout << derivation->print().str() << std::endl;
+           ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+          ltsy::MultipleConclusionRule rule
+           {"EXP", ltsy::NdSequent<std::set>({{p}, {neg_p}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule, {{p}});
+           ASSERT_FALSE(derivation->closed);
+       }
     }
 
     TEST(ProofTheory, MultipleConclusionCalculusDerivable) {

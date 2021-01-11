@@ -217,14 +217,6 @@ namespace ltsy {
 
             inline Symbol symbol() const { return _symbol; };
 
-            bool operator<(const Prop& p1) const {
-                return _symbol < p1._symbol;
-            }
-
-            bool operator==(const Prop& p2) const {
-                return _symbol == p2._symbol;
-            }
-
             inline int accept(FormulaVisitor<int>& visitor) {
                 return visitor.visit_prop(this);
             }

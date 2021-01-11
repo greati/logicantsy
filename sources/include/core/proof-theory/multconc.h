@@ -364,6 +364,7 @@ namespace ltsy {
                 // if satisfied, close this node
                 if (satisfied) {
                     derivation->end_branch = true;
+                    derivation->closed = true;
                     return true;
                 }
                 // if not satisfied, search by applying the system's rules

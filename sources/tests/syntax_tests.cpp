@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "core/syntax.h"
+#include "core/utils.h"
 #include "core/parser/fmla/fmla_parser.h"
 #include <memory>
 
@@ -56,6 +57,17 @@ namespace {
         ltsy::SubstitutionEvaluator subs {ass};
         auto subsfmla = fmla->accept(subs);
         std::cout << (*subsfmla) << std::endl;
+    }
+
+    TEST(Formula, PropSetComparison) {
+        auto p1 = std::make_shared<ltsy::Prop>("p");
+        auto q1 = std::make_shared<ltsy::Prop>("q");
+        auto p2 = std::make_shared<ltsy::Prop>("p");
+        auto q2 = std::make_shared<ltsy::Prop>("q");
+        ltsy::PropSet S1 {p1,q1}; 
+        ltsy::PropSet S2 {p2,q2}; 
+        auto eq = (S1 == S2);
+        ASSERT_TRUE(eq);
     }
 
     TEST(Formula, SubformulaCollect) {

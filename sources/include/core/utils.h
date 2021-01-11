@@ -23,6 +23,28 @@ namespace ltsy::utils {
         }
     };
 
+
+    /* Compare two sets of pointers for equality.
+     * */
+    template<typename T>
+    bool is_subset(const std::set<std::shared_ptr<T>, DeepSharedPointerComp<T>>& s1,
+                const std::set<std::shared_ptr<T>, DeepSharedPointerComp<T>>& s2) {
+        if (s1.size() > s2.size()) return false;
+        for (const auto& s : s1)
+            if (s2.find(s) == s2.end())
+                return false;
+        return true;
+    }
+
+    /* Compare two sets of pointers for equality.
+     * */
+    template<typename T>
+    bool equals(const std::set<std::shared_ptr<T>, DeepSharedPointerComp<T>>& s1,
+                const std::set<std::shared_ptr<T>, DeepSharedPointerComp<T>>& s2) {
+        if (s1.size() != s2.size()) return false;
+        return is_subset(s1, s2) and is_subset(s2,s1);
+    }
+
     std::vector<int> tuple_from_position(int nvalues, int arity, int position);
 
     int position_from_tuple(int nvalues, int arity, const std::vector<int>& tuple);
@@ -67,5 +89,11 @@ namespace ltsy::utils {
     }
 
 };
+
+template<typename T>
+bool operator==(const std::set<std::shared_ptr<T>, ltsy::utils::DeepSharedPointerComp<T>>& s1,
+            const std::set<std::shared_ptr<T>, ltsy::utils::DeepSharedPointerComp<T>>& s2) {
+    return ltsy::utils::equals(s1,s2); 
+}
 
 #endif
