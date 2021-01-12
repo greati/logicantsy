@@ -197,6 +197,7 @@ namespace ltsy {
         private:
             decltype(_rules)::iterator _rules_it;
             FormulaVarAssignmentGenerator _current_subst_generator;
+            bool finished = false;
         public:
             MCProofSearchSequentialHeuristics(const decltype(_rules)& rules,
                     const decltype(_fmlas_to_make_instances)& fmlas_to_make_instances)
@@ -205,6 +206,7 @@ namespace ltsy {
             }
 
             void init() {
+                finished = false;
                 _rules_it = _rules.begin();
                 auto rule = *(_rules_it);
                 auto rule_props = rule.sequent().collect_props();
@@ -219,16 +221,25 @@ namespace ltsy {
                         _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _fmlas_to_make_instances};
                     }
                     auto rule = *(_rules_it);
-                    auto ass = _current_subst_generator.next();
-                    // apply it to the rule
-                    auto rule_instance = rule.apply_substitution(*ass);
-                    return rule_instance;
+                    if (_current_subst_generator.has_next()) {
+                        auto ass = _current_subst_generator.next();
+                        // apply it to the rule
+                        auto rule_instance = rule.apply_substitution(*ass);
+                        if (_rules_it == _rules.end() and not _current_subst_generator.has_next())
+                            finished = true;
+                        return rule_instance;
+                    } else {
+                        if (_rules_it == _rules.end() and not _current_subst_generator.has_next())
+                            finished = true;
+                        return rule;
+                    }
                 }
                 throw std::logic_error("there is no next rule instance");
             }
             bool has_next() {
-                return (std::next(_rules_it) != _rules.end()) or 
-                    (std::next(_rules_it) == _rules.end() and _current_subst_generator.has_next());
+                return not finished;
+                //return (std::next(_rules_it) != _rules.end()) or 
+                //    (std::next(_rules_it) == _rules.end() and _current_subst_generator.has_next());
             }
     };
 
@@ -383,6 +394,7 @@ namespace ltsy {
                     while (heuristics->has_next()) {
                        // obtain an instance
                        auto rule_instance = heuristics->select_instance();
+                       std::cout << rule_instance.sequent().to_string() << std::endl;
                        // validate for analiticity
                        if (not rule_instance.has_only(fmlas_allowed_in_derivations))
                            continue;
@@ -485,6 +497,8 @@ namespace ltsy {
                 : _rules {rules} {}
 
             decltype(_rules) rules() const { return _rules; }
+
+            inline unsigned int size() const { return _rules.size(); }
 
             /* Try to produce a derivation tree based
              * on the system's rules.

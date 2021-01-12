@@ -608,8 +608,9 @@ namespace ltsy {
             }
 
             decltype(_current) next() {
-                if (not has_next())
+                if (not has_next()) {
                     throw std::logic_error("no substitutions to generate");
+                }
                 if (not first) {
                     int i = 0;
                     for (i = _props.size() - 1; i >= 0; --i) {
@@ -640,8 +641,8 @@ namespace ltsy {
 
             void reset() {
                 initialize_iterators();
-                first = true;
-                finished = _props.empty() or _gamma.empty();
+                finished = false or _props.empty() or _gamma.empty();
+                first = not finished;
             }
     
     };

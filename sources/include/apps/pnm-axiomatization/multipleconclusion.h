@@ -98,6 +98,27 @@ namespace ltsy {
                 }
             }
 
+            MultipleConclusionCalculus make_single_calculus(
+                    bool simplify_overlap=true, 
+                    bool simplify_dilution=true, 
+                    bool simplify_subrule_sound=true, 
+                    bool simplify_with_derivation=true) {
+                auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, simplify_subrule_sound); 
+                std::set<MultipleConclusionRule> full_calculus_rules; 
+                for (auto [k, calculus] : axiomatization) {
+                    auto calculus_rules = calculus.rules();
+                    full_calculus_rules.insert(calculus_rules.begin(), calculus_rules.end());
+                }
+                MultipleConclusionCalculus full_calculus {
+                            std::vector<MultipleConclusionRule>{full_calculus_rules.begin(), 
+                                                                full_calculus_rules.end()}
+                };
+                if (simplify_with_derivation) {
+                    const auto& [simplified_calc, depth] = simplify_by_derivation(full_calculus, 0);
+                }
+                return full_calculus;
+            }
+
             std::map<std::string, MultipleConclusionCalculus> make_calculus(bool simplify_overlap=true, bool simplify_dilution=true, bool simplify_subrule_sound=true) {
                 auto make_calc_item = [&](const std::set<MultipleConclusionRule>& rulesset) {
                     std::vector<MultipleConclusionRule> rules;
@@ -448,7 +469,28 @@ namespace ltsy {
                 return result;
             }
 
-
+            std::pair<MultipleConclusionCalculus, unsigned int>
+                simplify_by_derivation(const MultipleConclusionCalculus& calculus, unsigned int depth) const {
+                if (calculus.size() == 0)
+                    return {calculus, 0};
+                MultipleConclusionCalculus simplified_calc;
+                auto rules = calculus.rules();
+                int  max_depth = 0;
+                for (auto i {0}; i < rules.size(); ++i) {
+                    auto rules_simp = rules;
+                    rules_simp.erase(rules_simp.begin() + i);
+                    MultipleConclusionCalculus simp_calc {rules_simp};
+                    auto derivation = simp_calc.derive(rules[i], _discriminator.get_formulas());
+                    if (derivation->closed) {
+                        const auto [rec_calculus, rec_depth] = simplify_by_derivation(simp_calc, depth + 1);
+                        if (rec_depth > max_depth) {
+                            max_depth = rec_depth;
+                            simplified_calc = rec_calculus; 
+                        }
+                    }
+                }
+                return {simplified_calc, max_depth};
+            }
     };
 
 
