@@ -5,6 +5,7 @@
 #include "core/utils.h"
 #include "core/semantics/genmatrix.h"
 #include "core/proof-theory/multconc.h"
+#include "spdlog/spdlog.h"
 
 namespace ltsy {
 
@@ -102,7 +103,7 @@ namespace ltsy {
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
                     bool simplify_subrule_sound=true, 
-                    bool simplify_with_derivation=true) {
+                    std::optional<unsigned int> simplify_with_derivation=std::nullopt) {
                 auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, simplify_subrule_sound); 
                 std::set<MultipleConclusionRule> full_calculus_rules; 
                 for (auto [k, calculus] : axiomatization) {
@@ -114,12 +115,20 @@ namespace ltsy {
                                                                 full_calculus_rules.end()}
                 };
                 if (simplify_with_derivation) {
-                    const auto& [simplified_calc, depth] = simplify_by_derivation(full_calculus, 0);
+                    spdlog::info("Simplifying using derivations...");
+                    const auto& [simplified_calc, removed_rules, depth] = 
+                        simplify_by_derivation(full_calculus, 0, simplify_with_derivation);
+                    for (const auto& rr : removed_rules)
+                        spdlog::info(rr.name() + " " + rr.sequent().to_string());
+                    return simplified_calc;
                 }
                 return full_calculus;
             }
 
-            std::map<std::string, MultipleConclusionCalculus> make_calculus(bool simplify_overlap=true, bool simplify_dilution=true, bool simplify_subrule_sound=true) {
+            std::map<std::string, MultipleConclusionCalculus> make_calculus(
+                    bool simplify_overlap=true, 
+                    bool simplify_dilution=true, 
+                    bool simplify_subrule_sound=true) {
                 auto make_calc_item = [&](const std::set<MultipleConclusionRule>& rulesset) {
                     std::vector<MultipleConclusionRule> rules;
                     for (auto r : rulesset)
@@ -128,22 +137,27 @@ namespace ltsy {
                 };
                 std::map<std::string, MultipleConclusionCalculus> result;
                 // exists
+                spdlog::info("Producing exists rules...");
                 auto exists = make_exists_rules(); 
                 if (simplify_overlap)
                     exists = remove_overlaps(exists);
                 if (simplify_dilution)
                     remove_dilutions(exists);
-                result["exists"] = make_calc_item(exists);
+                result["\\exists"] = make_calc_item(exists);
+                spdlog::info("Done.");
                 // d
+                spdlog::info("Producing D rules...");
                 auto d = make_d_rules(); 
                 if (simplify_overlap)
                     d = remove_overlaps(d);
                 if (simplify_dilution)
                     remove_dilutions(d);
-                result["d"] = make_calc_item(d);
+                result["\\mathcal{D}"] = make_calc_item(d);
+                spdlog::info("Done.");
                 // sigma
                 auto sigma_groups = make_sigma_rules();
                 for (auto [symb, sigma_conn] : sigma_groups) {
+                    spdlog::info("Producing sigma(" + symb + ") rules...");
                     if (simplify_overlap)
                         sigma_conn = remove_overlaps(sigma_conn);
                     if (simplify_dilution)
@@ -152,13 +166,16 @@ namespace ltsy {
                     remove_dilutions(sigma_conn);
                     if (simplify_subrule_sound)
                         sigma_conn = simplify_by_subrule_soundness(sigma_conn);
-                    result["sigma-"+symb] = make_calc_item(sigma_conn);
+                    result["\\Sigma_{" + symb + "}"] = make_calc_item(sigma_conn);
+                    spdlog::info("Done.");
                 }
                 //non-total rules
+                spdlog::info("Producing T rules...");
                 auto non_total_rules = make_nontotal_rules();
                 non_total_rules = simplify_by_cut2(non_total_rules);
                 remove_dilutions(non_total_rules);
-                result["nontotal"] = make_calc_item(non_total_rules);
+                result["\\mathcal{T}"] = make_calc_item(non_total_rules);
+                spdlog::info("Done.");
                 return result;
             }
 
@@ -201,6 +218,7 @@ namespace ltsy {
                         MultipleConclusionRule new_rule = r1;
                         new_rule.set(_dsets_rule_positions[d1], dif1);
                         new_rule.set(_dsets_rule_positions[d2], dif2);
+                        new_rule.set_name("(cut:" + r1.name() + "," + r2.name() + ")");
                         // perform unions in other dimensions
                         for (const auto& [d1o,d2o] : _opposition_dsets) {
                             if (d1 != d1o and d2 != d2o) {
@@ -312,6 +330,7 @@ namespace ltsy {
                             NdSequent<std::set> sequent {sequent_fmlas};
                             auto rule_name = make_exists_rule_name(X, rule_idx++);
                             MultipleConclusionRule mcrule {rule_name, sequent, _prem_conc_pos_corresp};
+                            mcrule.set_group("\\exists");
                             result.insert(mcrule);
                         }
                     }
@@ -345,6 +364,7 @@ namespace ltsy {
                         NdSequent<std::set> sequent {seq_fmlas};
                         auto rule_name = make_d_rule_name(v, rule_idx++);
                         MultipleConclusionRule mcrule {rule_name, sequent, _prem_conc_pos_corresp};
+                        mcrule.set_group("\\mathcal{D}");
                         result.insert(mcrule);
                     }
                 }
@@ -400,6 +420,7 @@ namespace ltsy {
                              rule_name += std::to_string(a) + ",";
                          rule_name += std::to_string(y);
                          MultipleConclusionRule mcrule {rule_name, sequent_rule, _prem_conc_pos_corresp};
+                         mcrule.set_group("\\Sigma_{" + connective->symbol() + "}");
                          result.insert(mcrule);
                     }
                 } 
@@ -434,6 +455,7 @@ namespace ltsy {
                     }
                     NdSequent<std::set> sequent {sequent_fmlas};
                     MultipleConclusionRule mcrule {"", sequent, _prem_conc_pos_corresp};
+                    mcrule.set_group("\\mathcal{T}");
                     result.insert(mcrule);
                 }
                 return result;
@@ -452,7 +474,7 @@ namespace ltsy {
                         auto subr = gen.next();
                         // if it was the last, ignore
                         if (not gen.has_next()) break;
-                        NdSequentRule<std::set> ndrule {subr.name()+"(sub)", {}, {subr.sequent()}};
+                        NdSequentRule<std::set> ndrule {subr.name(), {}, {subr.sequent()}};
                         NdSequentGenMatrixValidator<std::set> validator {_gen_matrix, dset_positions}; 
                         auto has_counterexample = validator.is_rule_satisfiability_preserving(ndrule, 1);  
                         if (not has_counterexample) {
@@ -469,27 +491,40 @@ namespace ltsy {
                 return result;
             }
 
-            std::pair<MultipleConclusionCalculus, unsigned int>
-                simplify_by_derivation(const MultipleConclusionCalculus& calculus, unsigned int depth) const {
+            std::tuple<MultipleConclusionCalculus, std::set<MultipleConclusionRule>, unsigned int>
+                simplify_by_derivation(const MultipleConclusionCalculus& calculus, 
+                        unsigned int depth, std::optional<unsigned int> max_depth = std::nullopt) const {
                 if (calculus.size() == 0)
-                    return {calculus, 0};
-                MultipleConclusionCalculus simplified_calc;
+                    return {calculus, {}, depth};
+                if (max_depth and depth > *max_depth)
+                    return std::tuple<MultipleConclusionCalculus, 
+                           std::set<MultipleConclusionRule>, unsigned int>(calculus, {}, *max_depth);
+                MultipleConclusionCalculus simplified_calc = calculus;
+                std::set<MultipleConclusionRule> rules_removed = {};
                 auto rules = calculus.rules();
-                int  max_depth = 0;
+                int  max_depth_so_far = 0;
                 for (auto i {0}; i < rules.size(); ++i) {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
                     MultipleConclusionCalculus simp_calc {rules_simp};
                     auto derivation = simp_calc.derive(rules[i], _discriminator.get_formulas());
                     if (derivation->closed) {
-                        const auto [rec_calculus, rec_depth] = simplify_by_derivation(simp_calc, depth + 1);
-                        if (rec_depth > max_depth) {
-                            max_depth = rec_depth;
+                        spdlog::debug("Derived " + rules[i].sequent().to_string() + 
+                                " in depth " + std::to_string(depth) + " using " + 
+                                std::to_string(simp_calc.size()) + " rules ");
+                        const auto [rec_calculus, rec_rules_rem, rec_depth] = 
+                            simplify_by_derivation(simp_calc, depth + 1, max_depth);
+                        if (rec_depth > max_depth_so_far) {
+                            max_depth_so_far = rec_depth;
                             simplified_calc = rec_calculus; 
+                            rules_removed = rec_rules_rem;
+                            rules_removed.insert(rules[i]);
+                            if (max_depth and rec_depth >= *max_depth)
+                                break;
                         }
                     }
                 }
-                return {simplified_calc, max_depth};
+                return std::make_tuple(simplified_calc, rules_removed, max_depth_so_far);
             }
     };
 

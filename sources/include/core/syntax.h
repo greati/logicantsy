@@ -584,6 +584,8 @@ namespace ltsy {
                 _current_iterators.clear();
                 for (int i = 0; i < _props.size(); ++i) {
                     _current_iterators.push_back(_gamma.begin());
+                    if (std::next(_current_iterators[i]) == _gamma.end())
+                        qtd_in_max++;
                     _current->set(*_props[i], *_current_iterators[i]);
                 }
             }
@@ -630,6 +632,8 @@ namespace ltsy {
                         finished = true;
                 } else {
                     first = false;
+                    if (qtd_in_max == _props.size())
+                        finished = true;
                 }
                 assert(_current->size() == _props.size());
                 return _current; 

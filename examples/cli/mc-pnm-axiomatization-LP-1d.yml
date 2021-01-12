@@ -41,6 +41,7 @@ premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
+simplify_derivation: 3
 discriminator:
   1: [[p],[neg p]]
   a: [[p, neg p], []]

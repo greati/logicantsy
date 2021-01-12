@@ -5,6 +5,7 @@
 #include "cli/clidefs.h"
 #include "cli/clihandlers.h"
 #include "core/printers/factory.h"
+#include "spdlog/spdlog.h"
 
 namespace ltsy {
 
@@ -14,9 +15,13 @@ namespace ltsy {
     class CLI11App : public CLI::App {
         public:
             CLI11App (const std::string& name,
-                    const std::string& desc) : CLI::App {desc, name} {}
+                    const std::string& desc) : CLI::App {desc, name} {
+               spdlog::set_level(spdlog::level::debug);
+            }
 
-            CLI11App (const std::string& name) : CLI::App {name} {}
+            CLI11App (const std::string& name) : CLI::App {name} {
+               spdlog::set_level(spdlog::level::debug); 
+            }
     };
 
     /**

@@ -18,6 +18,7 @@ namespace ltsy {
     
         private:
             std::string _name;
+            std::string _group = "unnamed";
             NdSequent<std::set> _sequent;
             std::shared_ptr<FormulaVarAssignment> _substitution;
             std::vector<std::pair<int,int>> _prem_conc_pos_corresp;
@@ -67,13 +68,17 @@ namespace ltsy {
                 return true;
             }
 
+            inline void set_group(const decltype(_group)& group) { _group = group; }
+            inline decltype(_group) group() const { return _group; }
+
             decltype(_sequent) sequent() const { return _sequent; }
 
             void set(int i, FmlaSet fmlas) {
                 _sequent[i] = fmlas;
             }
 
-            decltype(_name) name() const { return _name; }
+            inline decltype(_name) name() const { return _name; }
+            inline void set_name(const decltype(_name)& name) { _name = name; }
 
             decltype(_all_conclusions_empty) all_conclusions_empty() const { return _all_conclusions_empty; }
 
@@ -162,7 +167,9 @@ namespace ltsy {
                 if (not has_next())
                     throw std::logic_error("no next subformula to produce");
                 auto sequent = next_sequent();
-                return MultipleConclusionRule {_base_rule.name()+" (sub)", sequent, _base_rule.prem_conc_pos_corresp()};
+                auto res = MultipleConclusionRule {_base_rule.name()+" (sub)", sequent, _base_rule.prem_conc_pos_corresp()};
+                res.set_group(_base_rule.group());
+                return res;
             }
 
             bool has_next() {
@@ -206,11 +213,16 @@ namespace ltsy {
             }
 
             void init() {
-                finished = false;
-                _rules_it = _rules.begin();
-                auto rule = *(_rules_it);
-                auto rule_props = rule.sequent().collect_props();
-                _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _fmlas_to_make_instances};
+                if (_rules.empty())
+                    finished = true;
+                else {
+                    finished = false;
+                    _rules_it = _rules.begin();
+                    auto rule = *(_rules_it);
+                    auto rule_props = rule.sequent().collect_props();
+                    _current_subst_generator = FormulaVarAssignmentGenerator 
+                            {rule_props, _fmlas_to_make_instances};
+                }
             }
 
             MultipleConclusionRule select_instance() {
@@ -218,18 +230,19 @@ namespace ltsy {
                     if (std::next(_rules_it) != _rules.end() and not _current_subst_generator.has_next()) {
                         auto rule = *(++_rules_it);
                         auto rule_props = rule.sequent().collect_props();
-                        _current_subst_generator = FormulaVarAssignmentGenerator {rule_props, _fmlas_to_make_instances};
+                        _current_subst_generator = FormulaVarAssignmentGenerator 
+                                                        {rule_props, _fmlas_to_make_instances};
                     }
                     auto rule = *(_rules_it);
                     if (_current_subst_generator.has_next()) {
                         auto ass = _current_subst_generator.next();
                         // apply it to the rule
                         auto rule_instance = rule.apply_substitution(*ass);
-                        if (_rules_it == _rules.end() and not _current_subst_generator.has_next())
+                        if (std::next(_rules_it) == _rules.end() and not _current_subst_generator.has_next())
                             finished = true;
                         return rule_instance;
                     } else {
-                        if (_rules_it == _rules.end() and not _current_subst_generator.has_next())
+                        if (std::next(_rules_it) == _rules.end() and not _current_subst_generator.has_next())
                             finished = true;
                         return rule;
                     }
@@ -394,7 +407,6 @@ namespace ltsy {
                     while (heuristics->has_next()) {
                        // obtain an instance
                        auto rule_instance = heuristics->select_instance();
-                       std::cout << rule_instance.sequent().to_string() << std::endl;
                        // validate for analiticity
                        if (not rule_instance.has_only(fmlas_allowed_in_derivations))
                            continue;
@@ -497,8 +509,21 @@ namespace ltsy {
                 : _rules {rules} {}
 
             decltype(_rules) rules() const { return _rules; }
+            void add_rule(const MultipleConclusionRule& rule) { _rules.push_back(rule); }
 
             inline unsigned int size() const { return _rules.size(); }
+
+            std::map<std::string, MultipleConclusionCalculus> group() const {
+                std::map<std::string, MultipleConclusionCalculus> groups;
+                for (const auto& rule : _rules) {
+                    auto group_name = rule.group();
+                    if (groups.find(group_name) == groups.end())
+                        groups[group_name] = MultipleConclusionCalculus {{rule}};
+                    else
+                        groups[group_name].add_rule(rule);
+                }
+                return groups;
+            }
 
             /* Try to produce a derivation tree based
              * on the system's rules.

@@ -84,7 +84,7 @@ namespace {
            {"->", 2},
            {"~", 1},
            {"1", 0},
-           //{"0", 0},
+           {"0", 0},
        };
        auto sig_ptr = std::make_shared<ltsy::Signature>(cl_sig);
 
@@ -97,8 +97,8 @@ namespace {
 
       auto top_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["1"], 
                std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_top));
-      // auto bot_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["0"], 
-      //         std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_bot));
+      auto bot_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["0"], 
+               std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_bot));
       auto or_int =  std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["|"], 
               std::make_shared<ltsy::TruthTable<std::set<int>>>(tt_or));
       auto and_int = std::make_shared<ltsy::TruthInterp<std::set<int>>>((*sig_ptr)["&"], 
@@ -111,7 +111,7 @@ namespace {
       auto truth_interp = ltsy::SignatureTruthInterp<std::set<int>>(sig_ptr, 
               {
                   top_int, 
-                  //bot_int,
+                  bot_int,
                   or_int,
                   and_int,
                   imp_int,
@@ -131,11 +131,6 @@ namespace {
       }};
     
        ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, cl_matrix, {0,1}, {{0,1}}};
-       //try {
-       //auto calc = axiomatizer.make_calculus(true, true, true);
-       //}catch(std::exception& e) {
-       // std::cout << "exception" << std::endl;
-       //}
        auto calc = axiomatizer.make_single_calculus(true, true, true, true);
        for (const auto& r : calc.rules()) {
             std::cout << r.sequent().to_string() << std::endl;

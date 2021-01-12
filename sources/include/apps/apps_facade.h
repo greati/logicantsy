@@ -24,10 +24,15 @@ namespace ltsy {
                     const std::vector<std::pair<int,int>>& prem_conc_corresp,
                     bool simplify_overlap=true,
                     bool simplify_dilution=true,
-                    bool simplify_subrules=true
+                    bool simplify_subrules=true,
+                    std::optional<unsigned int> simplify_by_derivation=std::nullopt
                     ) {
                PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
-               return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
+               if (simplify_by_derivation)
+                   return 
+                   axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, simplify_subrules, simplify_by_derivation).group();
+               else
+                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
             }
 
             /* App to check soundness of a rule wrt a given
