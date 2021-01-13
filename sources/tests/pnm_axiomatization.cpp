@@ -73,7 +73,7 @@ namespace {
            {5, {{p, circ_p},{}, {}, {}}},
       }};
 
-      ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, {0,1,2,3}, {{0,3},{2,1}}};
+      ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, {0,3,1,2}, {{0,3},{2,1}}};
       axiomatizer.make_exists_rules();
     };
 

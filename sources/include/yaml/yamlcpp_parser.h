@@ -45,6 +45,13 @@ namespace ltsy {
             return curr_node[node_name];
         }
 
+        template<typename T>
+        std::optional<T> optional_require(const YAML::Node & curr_node, const std::string& node_name) const {
+            if (curr_node[node_name])
+                return curr_node[node_name].as<T>();
+            else return std::nullopt;
+        }
+
         const std::string TT_DEFAULT_VALUE_NAME = "default";
         const std::string TT_RESTRICTIONS_NAME = "restrictions";
         const std::string PNMATRIX_NAME = "pnmatrix";

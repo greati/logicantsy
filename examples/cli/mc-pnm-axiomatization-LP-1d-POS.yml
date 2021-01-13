@@ -1,8 +1,7 @@
 pnmatrix:
   values: [0, a, 1]
   distinguished_sets:
-    - [1]
-    - [0]
+    - [1, a]
   infer_complements: true
   interpretation:
     p and q:
@@ -27,28 +26,23 @@ pnmatrix:
         - [_, 1]: [1]
         - [a, a]: [a]
         - [1, a]: [a]
-    neg p:
-      restrictions:
-        - [1]: [0]
-        - [a]: [a]
-        - [0]: [1]
     o(p):
       restrictions:
         - [1]: [1]
         - [a]: [0]
         - [0]: [1]
-sequent_dset_correspondence: [0, 3, 2, 1]
-premisses_conclusions_correspondence: [[0, 3], [2, 1]]
+sequent_dset_correspondence: [1, 0]
+premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
-simplify_derivation: 9
+simplify_derivation: 1
 discriminator:
-  1: [[p],[],[],[]]
-  a: [[],[p],[],[p]]
-  0: [[],[p],[p],[]]
+  1: [[p, o(p)],[]]
+  a: [[p], [o(p)]]
+  0: [[],[p]]
 derive:
-  negelim: [[],[neg(neg p)],[p],[]]
+  imp: [[p,o(q)], [p -> q]]
 latex:
   "->": "\\to"
   p: "\\varphi"

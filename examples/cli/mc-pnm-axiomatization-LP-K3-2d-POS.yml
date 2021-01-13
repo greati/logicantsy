@@ -27,11 +27,6 @@ pnmatrix:
         - [_, 1]: [1]
         - [a, a]: [a]
         - [1, a]: [a]
-    neg p:
-      restrictions:
-        - [1]: [0]
-        - [a]: [a]
-        - [0]: [1]
     o(p):
       restrictions:
         - [1]: [1]
@@ -42,13 +37,14 @@ premisses_conclusions_correspondence: [[0, 3], [2, 1]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
-simplify_derivation: 9
+simplify_derivation: 8
 discriminator:
   1: [[p],[],[],[]]
   a: [[],[p],[],[p]]
   0: [[],[p],[p],[]]
 derive:
-  negelim: [[],[neg(neg p)],[p],[]]
+  imp: [[],[p -> q],[p, o(q)],[]]
+  or: [[],[],[p],[o(p)]]
 latex:
   "->": "\\to"
   p: "\\varphi"

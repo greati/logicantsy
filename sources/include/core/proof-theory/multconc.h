@@ -80,7 +80,11 @@ namespace ltsy {
             inline decltype(_name) name() const { return _name; }
             inline void set_name(const decltype(_name)& name) { _name = name; }
 
-            decltype(_all_conclusions_empty) all_conclusions_empty() const { return _all_conclusions_empty; }
+            decltype(_all_conclusions_empty) all_conclusions_empty() const { 
+                for (const auto& concset : _conclusions)
+                    if (not concset.empty()) return false;
+                return true;
+            }
 
             decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp() const { return _prem_conc_pos_corresp; }
 
@@ -398,17 +402,30 @@ namespace ltsy {
                     // check max_depth
                     if (max_depth and level > *max_depth)
                         return false;
-                    satisfied = true;
-                    bool some_premiss_satisfied = false;
                     auto rules = _rules;
                     // create the heuristics
                     auto heuristics = std::make_shared<MCProofSearchRandSequentialHeuristics>(rules,
                             fmlas_to_make_instances);
+                    bool some_premiss_satisfied = false;
                     while (heuristics->has_next()) {
+                       some_premiss_satisfied = false;
+                       satisfied = false;
                        // obtain an instance
                        auto rule_instance = heuristics->select_instance();
                        // validate for analiticity
                        if (not rule_instance.has_only(fmlas_allowed_in_derivations))
+                           continue;
+                       auto rule_conclusions = rule_instance.conclusions();
+                       // check node fmlas conclusion intersection
+                       bool conclusion_intersect_node_fmlas = false;
+                       for (auto i {0}; i < rule_conclusions.size(); ++i) {
+                            FmlaSet inters = intersection(node_fmlas[i], rule_conclusions[i]);
+                            if (not inters.empty()) { 
+                                conclusion_intersect_node_fmlas = true;
+                                break;
+                            }
+                       }
+                       if (conclusion_intersect_node_fmlas)
                            continue;
                        // check if premisses subseteq node_fmlas
                        const auto& premisses = rule_instance.premisses();
@@ -424,12 +441,11 @@ namespace ltsy {
                                derivation->add_child(star_node);
                                return true;
                            } else {
-                               auto rule_conclusions = rule_instance.conclusions();
                                for (auto i {0}; i < rule_conclusions.size(); ++i) {
-                                   FmlaSet inters = intersection(node_fmlas[i], rule_conclusions[i]);
-                                   // check if the node formulas have some of the conclusion formulas
-                                   if (not inters.empty())
-                                       continue;
+                                  //FmlaSet inters = intersection(node_fmlas[i], rule_conclusions[i]);
+                                  //// check if the node formulas have some of the conclusion formulas
+                                  //if (not inters.empty())
+                                  //    continue;
                                    // if not, expand
                                    some_premiss_satisfied = true;
                                    for (auto rule_conc_fmla : rule_conclusions[i]) {
@@ -448,16 +464,17 @@ namespace ltsy {
                                                conclusions, fmlas_to_make_instances, 
                                                fmlas_allowed_in_derivations, new_node, level+1,
                                                max_depth);
-                                       satisfied &= expanded_satisfied;
+                                       satisfied = expanded_satisfied;
                                        // if the expanded node do not lead to a closed branch
                                        if (not expanded_satisfied)
                                            break;
                                        // else
                                        derivation->add_child(new_node);
                                    }
+                                   if (not satisfied) break; // stop checking this instance!
                                }
                            }
-                       }
+                       } else continue;
                        if (some_premiss_satisfied and satisfied) {
                            derivation->closed = true;
                            return true; 

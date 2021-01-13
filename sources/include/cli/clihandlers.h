@@ -476,7 +476,7 @@ namespace ltsy {
                     auto simplify_overlap = parser.hard_require(root, SIMPLIFY_OVERLAP).as<bool>();
                     auto simplify_dilution = parser.hard_require(root, SIMPLIFY_DILUTION).as<bool>();
                     auto simplify_subrules = parser.hard_require(root, SIMPLIFY_SUBRULES).as<bool>();
-                    auto simplify_derivation = parser.hard_require(root, SIMPLIFY_DERIVATION).as<unsigned int>();
+                    auto simplify_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_DERIVATION);
                     auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
                     auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
                         .as<std::vector<int>>();
