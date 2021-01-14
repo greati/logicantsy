@@ -1,48 +1,44 @@
 pnmatrix:
-  values: [0, a, 1]
+  values: [0, 1, 2]
   distinguished_sets:
-    - [1, a]
+    - [1, 2]
   infer_complements: true
   interpretation:
     p and q:
       restrictions:
-        - [1, 1] : [1]
-        - [a, _] : [a]
-        - [_, a] : [a]
-        - [0, _] : [0]
-        - [_, 0] : [0]
+        - [2, 2]: [2]
+        - [1, 1]: [1]
+        - [2, 1]: [2]
+        - [1, 2]: []
+        - [0, _]: [0]
+        - [_, 0]: [0]
     p or q:
+      default: [1,2]
       restrictions:
         - [0, 0]: [0]
-        - [a, _]: [a]
-        - [_, a]: [a]
-        - [1, _]: [1]
-        - [_, 1]: [1]
     p -> q:
+      default: [1,2]
       restrictions:
         - [1, 0]: [0]
-        - [a, 0]: [a]
-        - [0, _]: [1]
-        - [_, 1]: [1]
-        - [a, a]: [a]
-        - [1, a]: [a]
-    o(p):
+        - [2, 0]: [0]
+    neg p:
+      default: [1,2]
       restrictions:
-        - [1]: [1]
-        - [a]: [0]
-        - [0]: [1]
+        - [1]: [0]
+    o(p):
+      default: [1,2]
+      restrictions:
+        - [2]: [0]
 sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
-#simplify_derivation: 1
+simplify_derivation: 4
 discriminator:
-  1: [[p, o(p)],[]]
-  a: [[p], [o(p)]]
   0: [[],[p]]
-derive:
-  imp: [[p,o(q)], [p -> q]]
+  1: [[p],[neg p]]
+  2: [[p, neg p],[]]
 latex:
   "->": "\\to"
   p: "\\varphi"

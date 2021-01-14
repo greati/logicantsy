@@ -502,7 +502,7 @@ namespace ltsy {
                 MultipleConclusionCalculus simplified_calc = calculus;
                 std::set<MultipleConclusionRule> rules_removed = {};
                 auto rules = calculus.rules();
-                int  max_depth_so_far = 0;
+                int  max_depth_so_far = depth;
                 for (auto i {0}; i < rules.size(); ++i) {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
