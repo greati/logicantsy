@@ -63,9 +63,11 @@ pnmatrix:
         - [bot]: [top]
         - [top]: [bot]
 sequent_dset_correspondence: [0, 3, 2, 1]
+premisses_conclusions_correspondence: [[0, 3], [2, 1]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
+simplify_derivation: 8
 discriminator:
   top:  [[p],[],[p],[]]
   t:    [[p],[],[],[p]]

@@ -27,11 +27,11 @@ pnmatrix:
         - [_, 1]: [1]
         - [a, a]: [a]
         - [1, a]: [a]
-          #   neg p:
-          #     restrictions:
-          #       - [1]: [0]
-          #       - [a]: [a]
-          #       - [0]: [1]
+    neg p:
+      restrictions:
+        - [1]: [0]
+        - [a]: [a]
+        - [0]: [1]
     o(p):
       restrictions:
         - [1]: [1]
@@ -40,10 +40,10 @@ pnmatrix:
 sequent_dset_correspondence: [0, 3, 2, 1]
 max_counter_models: 2
 rules:
-  # negelim:
-  #   premisses:
-  #   conclusions:
-  #     - [[p],[],[],[neg p]]
+  negelim:
+    premisses:
+    conclusions:
+      - [[],[neg neg p],[p],[]]
   imp:
     premisses:
     conclusions:

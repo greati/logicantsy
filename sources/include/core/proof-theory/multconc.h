@@ -62,7 +62,7 @@ namespace ltsy {
             }
             bool operator==(const MultipleConclusionRule& other) const {
                 for (int i = 0; i < _sequent.dimension(); ++i) {
-                    if (_sequent.sequent_fmlas()[i] != other._sequent.sequent_fmlas()[i])    
+                    if (not ltsy::utils::equals(_sequent.sequent_fmlas()[i], other._sequent.sequent_fmlas()[i]))    
                         return false;
                 }
                 return true;
@@ -385,9 +385,15 @@ namespace ltsy {
                     const FmlaSet& fmlas_allowed_in_derivations,
                     std::shared_ptr<DerivationTreeNode> derivation,
                     int level, const std::optional<int>& max_depth) {
+                //std::cout << "Fmlas allowed in derivs" << std::endl;
+                //print_set(fmlas_allowed_in_derivations);
+                //std::cout << "fmlas to make instances" << std::endl;
+                //print_set(fmlas_to_make_instances);
                 // check satisfaction
                 bool satisfied = false;
                 for (auto i {0}; i < conclusions.size() and not satisfied; ++i) {
+                    //std::cout << "Check for closure on pos " + std::to_string(i) << std::endl;
+                    //print_set(node_fmlas[i]);
                     FmlaSet inters = intersection(node_fmlas[i], conclusions[i]);
                     satisfied = satisfied or not inters.empty();
                 }
@@ -408,6 +414,7 @@ namespace ltsy {
                             fmlas_to_make_instances);
                     bool some_premiss_satisfied = false;
                     while (heuristics->has_next()) {
+                       bool useful_instance = true;
                        some_premiss_satisfied = false;
                        satisfied = false;
                        // obtain an instance
@@ -427,12 +434,16 @@ namespace ltsy {
                        }
                        if (conclusion_intersect_node_fmlas)
                            continue;
+                       //std::cout << "Rule instance before checking for premisses: " << std::endl;
+                       //std::cout << rule_instance.sequent().to_string() << std::endl;
                        // check if premisses subseteq node_fmlas
                        const auto& premisses = rule_instance.premisses();
                        bool premisses_satisfied = true;
                        for (auto i {0}; i < node_fmlas.size(); ++i)
                            premisses_satisfied &= is_subset(premisses[i], node_fmlas[i]);
                        if (premisses_satisfied) {
+                           //std::cout << ">> Rule with premiss satisfied" << std::endl;
+                           //std::cout << rule_instance.sequent().to_string() << std::endl;
                            if (rule_instance.all_conclusions_empty()) {
                                auto star_node = 
                                    std::make_shared<DerivationTreeNode>(
@@ -442,11 +453,6 @@ namespace ltsy {
                                return true;
                            } else {
                                for (auto i {0}; i < rule_conclusions.size(); ++i) {
-                                  //FmlaSet inters = intersection(node_fmlas[i], rule_conclusions[i]);
-                                  //// check if the node formulas have some of the conclusion formulas
-                                  //if (not inters.empty())
-                                  //    continue;
-                                   // if not, expand
                                    some_premiss_satisfied = true;
                                    for (auto rule_conc_fmla : rule_conclusions[i]) {
                                        // expand a new node by adding A in position i
@@ -465,16 +471,18 @@ namespace ltsy {
                                                fmlas_allowed_in_derivations, new_node, level+1,
                                                max_depth);
                                        satisfied = expanded_satisfied;
-                                       // if the expanded node do not lead to a closed branch
-                                       if (not expanded_satisfied)
-                                           break;
+                                       // if the expanded node do not lead to a closed derivation
+                                       if (not expanded_satisfied) {
+                                           useful_instance = false;
+                                           break; // stop checking the expansion by this formula
+                                       }
                                        // else
-                                       derivation->add_child(new_node);
+                                       derivation->add_child(new_node); // subtree accepted, add it to the current tree
                                    }
-                                   if (not satisfied) break; // stop checking this instance!
+                                   if (not useful_instance) break; // stop checking this instance!
                                }
                            }
-                       } else continue;
+                       } else continue; // go to next rule instance if premisses are not satisfied
                        if (some_premiss_satisfied and satisfied) {
                            derivation->closed = true;
                            return true; 

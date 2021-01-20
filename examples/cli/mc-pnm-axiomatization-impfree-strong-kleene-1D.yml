@@ -40,9 +40,7 @@ premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
-simplify_derivation: 13
-simplify_overlap: true
-simplify_dilution: true
+simplify_derivation: 14
 discriminator:
   0:  [[neg p],[p]]
   a:  [[],[p, neg p]]

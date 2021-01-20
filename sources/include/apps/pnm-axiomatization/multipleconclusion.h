@@ -119,7 +119,7 @@ namespace ltsy {
                     const auto& [simplified_calc, removed_rules, depth] = 
                         simplify_by_derivation(full_calculus, 0, simplify_with_derivation);
                     for (const auto& rr : removed_rules)
-                        spdlog::info(rr.name() + " " + rr.sequent().to_string());
+                        spdlog::info("Removed rule " + rr.sequent().to_string());
                     return simplified_calc;
                 }
                 return full_calculus;

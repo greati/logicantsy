@@ -133,6 +133,9 @@ namespace ltsy {
                 return true;
             }
 
+            /* Compute the maximal total components of
+             * a partial generalized matrix.
+             * */
             inline void get_maximal_total_subsets(const std::set<int> values, 
                     std::set<std::set<int>>& maximal_total_subsets) const {
                 if (values.empty()) 

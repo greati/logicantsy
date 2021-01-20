@@ -96,4 +96,5 @@ bool operator==(const std::set<std::shared_ptr<T>, ltsy::utils::DeepSharedPointe
     return ltsy::utils::equals(s1,s2); 
 }
 
+
 #endif
