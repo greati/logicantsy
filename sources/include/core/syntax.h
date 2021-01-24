@@ -131,6 +131,8 @@ namespace ltsy {
                 return other._signature == this->_signature;
             }
 
+            bool empty() const { return _signature.empty();};
+
     };
 
     class Compound;

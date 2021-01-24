@@ -180,12 +180,16 @@ namespace ltsy {
             }
 
             void remove_dilutions(std::set<MultipleConclusionRule>& rules) {
+                spdlog::debug("Removing dilutions (size " + std::to_string(rules.size()) + ")...");
                 auto it = rules.begin();
+                int round = 1;
                 while (it != rules.end()) {
+                    spdlog::debug("Round " + std::to_string(round++) + " of dilution");
                     bool is_dilution = false;
                     auto rule = *it;
-                    for (const auto& another_rule : rules) {
-                        if (rule.sequent() == another_rule.sequent())
+                    auto rules_cpy = rules;
+                    for (const auto& another_rule : rules_cpy) {
+                        if (rule == another_rule)
                             continue;
                         if (rule.sequent().is_dilution_of(another_rule.sequent())) {
                             it = rules.erase(it);
@@ -250,6 +254,8 @@ namespace ltsy {
              * */
             std::set<MultipleConclusionRule> cuts_between_sets(const std::set<MultipleConclusionRule>& rules1,
                     const std::set<MultipleConclusionRule>& rules2, bool subrule_check=true) {
+                spdlog::debug("Cutting sets of rules: " + std::to_string(rules1.size()) + " x " 
+                        + std::to_string(rules2.size()));
                 std::set<MultipleConclusionRule> result;
                 for (auto it1 = rules1.begin(); it1 != rules1.end(); ++it1) {
                     auto r1 = *it1;
@@ -269,11 +275,16 @@ namespace ltsy {
             }
 
             std::set<MultipleConclusionRule> simplify_by_cut2(const std::set<MultipleConclusionRule>& rules) {
+                spdlog::debug("Simplifying by cuts...");
                 std::set<MultipleConclusionRule> previous = {};
                 std::set<MultipleConclusionRule> current = rules;
                 std::set<MultipleConclusionRule> prev_newrules = {};
                 std::set<MultipleConclusionRule> newrules = cuts_between_sets(rules, rules);
+                int round = 0;
                 while (current != previous) {
+                    // update progress
+                    round += 1;
+                    spdlog::debug("Round " + std::to_string(round) + " of cuts");
                     previous = current;
                     prev_newrules = newrules;
                     current.insert(newrules.begin(), newrules.end());
@@ -283,6 +294,7 @@ namespace ltsy {
             }
 
             std::set<MultipleConclusionRule> remove_overlaps(const std::set<MultipleConclusionRule>& rules) {
+                spdlog::debug("Removing overlaps...");
                 std::set<MultipleConclusionRule> result;
                 for (auto r : rules) {
                     bool overlap = false;
@@ -463,20 +475,24 @@ namespace ltsy {
 
             std::set<MultipleConclusionRule> simplify_by_subrule_soundness(
                     const std::set<MultipleConclusionRule>& rules) {
+                spdlog::debug("Simplifying by subrule soundness (size "+ std::to_string(rules.size()) +")...");
                 std::vector<int> dset_positions;
                 for (const auto& [a, b] : _dsets_rule_positions)
                     dset_positions.push_back(b);
                 std::set<MultipleConclusionRule> result;
                 for (const auto& rule : rules) {
+                    spdlog::debug("Processing rule " + rule.sequent().to_string());
                     std::set<MultipleConclusionRule> sound_subrules;
                     ltsy::MultipleConclusionSubrulesGenerator gen {rule}; 
                     while(gen.has_next()) {
                         auto subr = gen.next();
                         // if it was the last, ignore
                         if (not gen.has_next()) break;
+                        spdlog::debug("Subrule " + subr.sequent().to_string());
                         NdSequentRule<std::set> ndrule {subr.name(), {}, {subr.sequent()}};
+                        auto sig = ndrule.infer_signature();
                         NdSequentGenMatrixValidator<std::set> validator {_gen_matrix, dset_positions}; 
-                        auto has_counterexample = validator.is_rule_satisfiability_preserving(ndrule, 1);  
+                        auto has_counterexample = validator.is_rule_satisfiability_preserving(ndrule, sig, 1);  
                         if (not has_counterexample) {
                             sound_subrules.insert(subr);
                             break; //! TODO keep all sound subrules and them select one amonst them? 

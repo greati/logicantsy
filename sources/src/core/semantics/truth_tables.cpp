@@ -35,6 +35,7 @@ namespace ltsy {
         return _images[position];
     }
 
+
     template<>
     std::stringstream TruthTableBase<std::set<int>>::print(const std::map<int, std::string>& values_map) const {
         auto get_or_default = [&](const int& v){ 
@@ -55,6 +56,11 @@ namespace ltsy {
                 ss << std::endl;
         }
         return ss;   
+    }
+
+    template<>
+    std::stringstream TruthTableBase<std::set<int>>::print() const {
+        return this->print(std::map<int, std::string>{});
     }
 
     template<typename CellType>

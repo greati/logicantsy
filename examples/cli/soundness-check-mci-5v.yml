@@ -46,17 +46,20 @@ pnmatrix:
       restrictions:
         - [I]: [F]
 sequent_dset_correspondence: [0, 3, 2, 1]
-premisses_conclusions_correspondence: [[0, 3], [2, 1]]
-simplify_overlap: true
-simplify_dilution: true
-simplify_subrules: true
-#simplify_derivation: 8
-discriminator:
-  I: [  [p, neg p], [],     [p],  []  ]
-  T: [  [p],        [neg p],[p],  []  ]
-  F: [  [],         [p],    [],   [p] ]
-  t: [  [p],        [],     [],   [p] ]
-  f: [  [],         [p],    [p],  []  ]
+max_counter_models: 2
+rules:
+  empty:
+    premisses:
+    conclusions:
+      - [[],[],[],[]]
+  andnot:
+    premisses:
+    conclusions:
+      - [[],[],[p1 and p2],[neg(p1 and p2)]]
+  ornot:
+    premisses:
+    conclusions:
+      - [[],[],[p1 or p2],[neg(p1 or p2)]]
 latex:
   "->": "\\to"
   p: "\\varphi"

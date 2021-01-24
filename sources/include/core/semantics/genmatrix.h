@@ -9,6 +9,7 @@
 #include "core/proof-theory/ndsequents.h"
 #include <set>
 #include "external/ProgressBar/ProgressBar.hpp"
+#include "spdlog/spdlog.h"
 
 namespace ltsy {
     
@@ -453,6 +454,7 @@ namespace ltsy {
             std::stringstream print() const {
                 std::stringstream ss;
                 ss << _var_assignment->print().str() << std::endl;
+                ss << _interpretation->print().str() << std::endl;
                 return ss;
             }
     
@@ -638,7 +640,8 @@ namespace ltsy {
                             true);
                     _total *= gen.total();
                 }
-                (*(_generators.begin())).second.reset();
+                if (not _generators.empty())
+                    (*(_generators.begin())).second.reset();
                 return sti;
             }
 
@@ -745,7 +748,10 @@ namespace ltsy {
                 _var_assign_generator.reset();
                 _truth_interp_generator.reset();
                 _total = _var_assign_generator.total() * _truth_interp_generator.total();
-                _current->set_interpretation(_truth_interp_generator.next());
+                if (_truth_interp_generator.has_next())
+                    _current->set_interpretation(_truth_interp_generator.next());
+                else
+                    _current->set_interpretation(std::make_shared<SignatureTruthInterp<std::set<int>>>(_signature));
                 finish = false;
             }
 
@@ -761,12 +767,19 @@ namespace ltsy {
 
                 if (not _var_assign_generator.has_next()) {
                     _var_assign_generator.reset();
-                    _current->set_interpretation(_truth_interp_generator.next());
+                    if (_truth_interp_generator.has_next()) {
+                        auto interp = _truth_interp_generator.next();
+                        _current->set_interpretation(interp);
+                    }
                 } 
 
                 auto assign = _var_assign_generator.next();
                 _current->set_var_assignment(assign);
 
+                //spdlog::debug("Var assign and truth interp has next " 
+                //        + std::to_string(_var_assign_generator.has_next()) + " "
+                //        + std::to_string(_truth_interp_generator.has_next())
+                //        );
                 if (not _var_assign_generator.has_next() and not _truth_interp_generator.has_next()) {
                     finish = true; 
                 }
@@ -879,6 +892,7 @@ namespace ltsy {
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props, std::make_shared<Signature>(sig)};
+                //spdlog::debug("Valuations to test: " + std::to_string(generator.total()));
                 if (progress_bar)
                     (*progress_bar).set_total_ticks(generator.total());
                 while (generator.has_next()) {
