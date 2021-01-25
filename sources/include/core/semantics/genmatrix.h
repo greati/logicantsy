@@ -892,6 +892,11 @@ namespace ltsy {
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props, std::make_shared<Signature>(sig)};
+                spdlog::debug(generator.total());
+                if (generator.total() >= (1 << 22)) {
+                    spdlog::warn("Rule avoided, too many valuations to test");
+                    throw std::logic_error("Too many valuations to test");
+                }
                 //spdlog::debug("Valuations to test: " + std::to_string(generator.total()));
                 if (progress_bar)
                     (*progress_bar).set_total_ticks(generator.total());

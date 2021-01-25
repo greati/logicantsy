@@ -21,19 +21,19 @@ pnmatrix:
         - [f, _]: [f]
         - [_, F]: [f]
         - [_, f]: [f]
-          #  p -> q:
-          #    restrictions:
-          #      - [F, _]: [t, I]
-          #      - [f, _]: [t, I]
-          #      - [_, I]: [t, I]
-          #      - [_, T]: [t, I]
-          #      - [_, t]: [t, I]
-          #      - [I, F]: [f]
-          #      - [I, f]: [f]
-          #      - [T, F]: [f]
-          #      - [T, f]: [f]
-          #      - [t, F]: [f]
-          #      - [t, f]: [f]
+    p -> q:
+      restrictions:
+        - [F, _]: [t, I]
+        - [f, _]: [t, I]
+        - [_, I]: [t, I]
+        - [_, T]: [t, I]
+        - [_, t]: [t, I]
+        - [I, F]: [f]
+        - [I, f]: [f]
+        - [T, F]: [f]
+        - [T, f]: [f]
+        - [t, F]: [f]
+        - [t, f]: [f]
     neg p:
       restrictions:
         - [T]: [F]
@@ -60,6 +60,10 @@ rules:
     premisses:
     conclusions:
       - [[],[],[p1 or p2],[neg(p1 or p2)]]
+  impnot:
+    premisses:
+    conclusions:
+      - [[],[],[p1 -> p2],[neg(p1 -> p2)]]
 latex:
   "->": "\\to"
   p: "\\varphi"

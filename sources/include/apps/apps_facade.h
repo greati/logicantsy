@@ -25,12 +25,14 @@ namespace ltsy {
                     bool simplify_overlap=true,
                     bool simplify_dilution=true,
                     bool simplify_subrules=true,
+                    std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
                     std::optional<unsigned int> simplify_by_derivation=std::nullopt
                     ) {
                PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
-               if (simplify_by_derivation)
+               if (simplify_by_derivation or simplify_subrules_deriv)
                    return 
-                   axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, simplify_subrules, simplify_by_derivation).group();
+                   axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, simplify_subrules, 
+                           simplify_subrules_deriv, simplify_by_derivation).group();
                else
                    return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
             }

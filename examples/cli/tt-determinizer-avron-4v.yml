@@ -1,0 +1,42 @@
+semantics:
+  values: [f, bot, top, t]
+  judgements:
+    NR: [bot, t]
+    NA: [bot, f]
+    A:  [top, t]
+    R:  [top, f]
+truth-tables:
+  p `ot` q:
+    name: otimes
+    conditions:
+      - [[],[p `ot` q],[p, q],[]]
+      - [[p `ot` q],[],[],[p, q]]
+      - [[],[p `ot` q],[p],[]]
+      - [[p `ot` q],[],[],[p]]
+      - [[],[p `ot` q],[q],[]]
+      - [[p `ot` q],[],[],[q]]
+  p and q:
+    name: myand
+    base:
+      restrictions:
+        - [f, f]: [f]
+    conditions:
+      - [[], [p and q], [p, q], []]
+      - [[], [p], [p and q], []]
+      - [[], [q], [p and q], []]
+      - [[p, q], [], [], [p and q]]
+      - [[p and q], [], [], [p]]
+      - [[p and q], [], [], [q]]
+  p or q:
+    name: myor
+    conditions:
+      - [[],[],[],[]] 
+latex:
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  p: "\\varphi"
+  q: "\\psi"
+  myand: "\\land"
+  myor: "\\lor"

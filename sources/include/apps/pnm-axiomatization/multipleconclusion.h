@@ -103,6 +103,7 @@ namespace ltsy {
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
                     bool simplify_subrule_sound=true, 
+                    std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
                     std::optional<unsigned int> simplify_with_derivation=std::nullopt) {
                 auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, simplify_subrule_sound); 
                 std::set<MultipleConclusionRule> full_calculus_rules; 
@@ -114,6 +115,15 @@ namespace ltsy {
                             std::vector<MultipleConclusionRule>{full_calculus_rules.begin(), 
                                                                 full_calculus_rules.end()}
                 };
+
+                if (simplify_subrules_deriv) {
+                    spdlog::debug("Simplify by deriving subrules");
+                    auto simp_rules = simplify_by_subrule_deriv(full_calculus, *simplify_subrules_deriv);
+                    full_calculus = MultipleConclusionCalculus {std::vector<MultipleConclusionRule>{
+                                                                        simp_rules.begin(), 
+                                                                        simp_rules.end()}};
+                }
+
                 if (simplify_with_derivation) {
                     spdlog::info("Simplifying using derivations...");
                     const auto& [simplified_calc, removed_rules, depth] = 
@@ -128,7 +138,8 @@ namespace ltsy {
             std::map<std::string, MultipleConclusionCalculus> make_calculus(
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
-                    bool simplify_subrule_sound=true) {
+                    bool simplify_subrule_sound=true,
+                    bool simplify_subrule_deriv=true) {
                 auto make_calc_item = [&](const std::set<MultipleConclusionRule>& rulesset) {
                     std::vector<MultipleConclusionRule> rules;
                     for (auto r : rulesset)
@@ -184,7 +195,6 @@ namespace ltsy {
                 auto it = rules.begin();
                 int round = 1;
                 while (it != rules.end()) {
-                    spdlog::debug("Round " + std::to_string(round++) + " of dilution");
                     bool is_dilution = false;
                     auto rule = *it;
                     auto rules_cpy = rules;
@@ -492,10 +502,14 @@ namespace ltsy {
                         NdSequentRule<std::set> ndrule {subr.name(), {}, {subr.sequent()}};
                         auto sig = ndrule.infer_signature();
                         NdSequentGenMatrixValidator<std::set> validator {_gen_matrix, dset_positions}; 
-                        auto has_counterexample = validator.is_rule_satisfiability_preserving(ndrule, sig, 1);  
-                        if (not has_counterexample) {
-                            sound_subrules.insert(subr);
-                            break; //! TODO keep all sound subrules and them select one amonst them? 
+                        try {
+                            auto has_counterexample = validator.is_rule_satisfiability_preserving(ndrule, sig, 1);  
+                            if (not has_counterexample) {
+                                sound_subrules.insert(subr);
+                                break; //! TODO keep all sound subrules and them select one amonst them? 
+                            }
+                        } catch (std::exception e) {
+                            continue;
                         }
                     }
                     if (sound_subrules.empty())
@@ -504,6 +518,41 @@ namespace ltsy {
                         result.insert(sound_subrules.begin(), sound_subrules.end());
                 }
                 
+                return result;
+            }
+
+            std::set<MultipleConclusionRule> simplify_by_subrule_deriv(
+                    MultipleConclusionCalculus calculus, 
+                    std::optional<unsigned int> max_depth = std::nullopt) const {
+                auto rules = calculus.rules();
+                spdlog::debug("Simplifying by subrule derivations (size "+ std::to_string(rules.size()) +")...");
+                std::vector<int> dset_positions;
+                for (const auto& [a, b] : _dsets_rule_positions)
+                    dset_positions.push_back(b);
+                std::set<MultipleConclusionRule> result;
+                for (const auto& rule : rules) {
+                    spdlog::debug("Processing rule " + rule.sequent().to_string());
+                    std::set<MultipleConclusionRule> sound_subrules;
+                    ltsy::MultipleConclusionSubrulesGenerator gen {rule}; 
+                    gen.next(); // skip empty
+                    while(gen.has_next()) {
+                        auto subr = gen.next();
+                        // if it was the last, ignore
+                        if (not gen.has_next()) break;
+                        spdlog::debug("Subrule " + subr.sequent().to_string());
+                        // DERIVE HERE
+                        auto derivation = calculus.derive(subr, _discriminator.get_formulas());
+                        if (derivation->closed) {
+                            sound_subrules.insert(subr);
+                            spdlog::debug("Derived subrule " + subr.sequent().to_string());
+                            break; //! TODO keep all sound subrules and then select one amonst them? 
+                        }
+                    }
+                    if (sound_subrules.empty())
+                        result.insert(rule);
+                    else
+                        result.insert(sound_subrules.begin(), sound_subrules.end());
+                }
                 return result;
             }
 
