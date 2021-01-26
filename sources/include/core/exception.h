@@ -8,6 +8,7 @@ namespace ltsy{
     const std::string NEGATIVE_ARITY_EXCEPTION = "provide an arity > 0";
     const std::string CONECTIVE_NOT_IN_SIGNATURE_EXCEPTION = "connective is not in signature";
     const std::string WRONG_NUMBER_ARGUMENTS_FMLA_EXCEPTION = "connective is not in signature";
+    const std::string NULL_POINTER_TO_COMPOUND = "a null pointer was passed as a formula component";
     const std::string WRONG_TUPLE_POSITION_EXCEPTION = "invalid tuple position";
     const std::string WRONG_ARITY_INPUT_EXCEPTION = "invalid input tuple arity";
     const std::string INVALID_CONNECTIVE_INTERP_EXCEPTION = "invalid connective interpretation";
