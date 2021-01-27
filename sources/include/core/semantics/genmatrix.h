@@ -19,22 +19,32 @@ namespace ltsy {
      * - we may define more than one distinguished set (thus allowing
      *   the creation of q-matrices, p-matrices, B-matrices...)
      * - we may interpret the connectives using (partial) non-deterministic
-     *   truth-tables.
+     *   truth-tables
      *
      * @author Vitor Greati
      * */
     class GenMatrix {
     
         private:
-            std::set<int> _values;
-            std::vector<std::set<int>> _distinguished_sets;
-            std::shared_ptr<Signature> _signature;
-            std::shared_ptr<SignatureTruthInterp<std::set<int>>> _interpretation;
-            std::map<int, std::string> _val_to_str;
-            std::map<std::string, int> _str_to_val;
+            std::set<int> _values; //> Set of values
+            std::vector<std::set<int>> _distinguished_sets; //> Distinguished sets, used to define the entailment
+            std::shared_ptr<Signature> _signature; //> Matrix signature
+            std::shared_ptr<SignatureTruthInterp<std::set<int>>> _interpretation; //> Signature interpretation
+            std::map<int, std::string> _val_to_str; //> Maps a value to a string
+            std::map<std::string, int> _str_to_val; //> Maps the string representation of a value to the value
 
         public:
 
+            /* Construct a generalized matrix.
+             *
+             * @param values the set of values, must be {0,...,k} TODO check this
+             * @param distinguished_sets distinguished sets
+             * @param signature the matrix signature
+             * @param interpretation the interpretation of each connective
+             * @param infer_complements if true, _distinguished_sets[i+1] get the complement of
+             * distinguished_sets[i]. For example, if one designated set, {1}, then
+             * _distinguished_sets will be [{1},{0}]. This is to ease manipulation.
+             * */
             GenMatrix(const decltype(_values)& values, const decltype(_distinguished_sets)& distinguished_sets, 
                     decltype(_signature) signature,
                     decltype(_interpretation) interpretation,
@@ -48,56 +58,30 @@ namespace ltsy {
                     }
             }
 
-            std::string print() {
-                return _interpretation->print(_val_to_str).str();  
-            }
-
+            /* Construct a generalized matrix, with the interpretation to be later specified.
+             */
             GenMatrix(const decltype(_values)& values, const decltype(_distinguished_sets)& distinguished_sets)
                     : GenMatrix {values, distinguished_sets, nullptr, nullptr} {}
 
+            /* Print the generalized matrix.
+             */
+            inline std::string print() const {
+                return _interpretation->print(_val_to_str).str();  
+            }
+
             inline void set_val_to_str(decltype(_val_to_str) val_to_str) { _val_to_str = val_to_str; }
             inline void set_str_to_val(decltype(_str_to_val) str_to_val) { _str_to_val = str_to_val; }
-
             inline decltype(_val_to_str) val_to_str() const { return _val_to_str; }
-
             inline decltype(_str_to_val) str_to_val() const { return _str_to_val; }
 
             inline decltype(_values) values() const { return _values; }
-
             inline decltype(_distinguished_sets) distinguished_sets() const { return _distinguished_sets; }
-
-            inline decltype(_interpretation) interpretation() const {
-                return _interpretation;
-            }
-             
+            inline decltype(_interpretation) interpretation() const { return _interpretation; }
             inline decltype(_signature) signature() const { return _signature; }
 
-            inline std::set<std::set<int>> get_total_subsets() const {
-                std::set<std::set<int>> non_total_inputs;
-                for (const auto& [s, ti] : *_interpretation) {
-                    auto tt = ti->truth_table();
-                    auto tt_non_total_inputs = tt->partial_inputs();
-                    non_total_inputs.insert(tt_non_total_inputs.begin(), tt_non_total_inputs.end()); 
-                } 
-                DiscretureCombinationGenerator combination_gen {_values.size()};
-                std::set<std::set<int>> result;
-                while (combination_gen.has_next()) {
-                    auto comb = *(combination_gen.next());
-                    auto X = std::set<int>{comb.begin(), comb.end()};
-                    if (X.empty()) continue;
-                    bool non_total_supset = false;
-                    for (const auto& nti : non_total_inputs) {
-                        if (utils::is_subset(nti, X)) {
-                            non_total_supset = true;
-                            break;
-                        }
-                    }
-                    if (not non_total_supset)
-                        result.insert(X);
-                }
-                return result;
-            };
-
+            /* Return those subsets of values that
+             * are subsets of maximal total subsets.
+             */
             inline std::set<std::set<int>> get_non_total_subsets() const {
                 std::set<std::set<int>> max_total_subsets;
                 get_maximal_total_subsets(_values, max_total_subsets); 
@@ -120,22 +104,29 @@ namespace ltsy {
                 return result;
             }
 
-
-            bool
-            is_sub_matrix_total(const std::set<int>& subvalues) const {
+            /* Indicates if a matrix refinement is total.
+             *
+             * @param subvalues a subset of the truth-values
+             */
+            bool is_sub_matrix_total(const std::set<int>& subvalues) const {
                 if (subvalues.empty())
                     return true;
                 for (const auto& [s, ti] : *_interpretation) {
                     auto tt = ti->truth_table();
-                    if (not tt->is_sub_table_total(subvalues)) {
+                    if (not tt->is_sub_table_total(subvalues))
                         return false;
-                    }
                 } 
                 return true;
             }
 
             /* Compute the maximal total components of
              * a partial generalized matrix.
+             *
+             * @param values set of values to be checked
+             * @param maximal_total_subsets maximal total subsets to be tested
+             *
+             * TODO: avoid checking the sets that are known to lead to no
+             * total submatrix
              * */
             inline void get_maximal_total_subsets(const std::set<int> values, 
                     std::set<std::set<int>>& maximal_total_subsets) const {
@@ -147,6 +138,7 @@ namespace ltsy {
                     return;
                 }
                 std::vector<int> values_vec {values.begin(), values.end()};
+                // get all subsets of size (N-1)
                 DiscretureCombinationGenerator combination_gen {values.size(), values.size() - 1}; 
                 while (combination_gen.has_next()) {
                    auto combidxs = *(combination_gen.next());
@@ -157,7 +149,7 @@ namespace ltsy {
                        comb.insert(values_vec[i]);
                    // check if subset of maximal
                    bool subset_of_maximal = false;
-                   for (const auto mts : maximal_total_subsets) {
+                   for (const auto& mts : maximal_total_subsets) {
                        if (utils::is_subset(comb, mts)) {
                            subset_of_maximal = true;
                            break;
@@ -170,15 +162,21 @@ namespace ltsy {
             }
     };
 
-
     /* Represents a discriminator
-     * as a map of lists of sets of formulas.
+     * as a map of values to lists of sets of formulas.
+     *
+     * @author Vitor Greati
      * */
     struct Discriminator {
         public:
-            std::map<int, std::vector<FmlaSet>> separators;
+            std::map<int, std::vector<FmlaSet>> separators; //> x -> [[A],[B],...]
+
+            /* Constructor.
+             */
             Discriminator(const decltype(separators) _separators) : separators {_separators} {}
             
+            /* Collect all discriminator formulas in a single set.
+             */
             FmlaSet get_formulas() const {
                 FmlaSet result;
                 for (const auto& [v, fmlas_vecs] : separators) {
@@ -189,6 +187,13 @@ namespace ltsy {
                 return result;
             }
 
+            /* Replace the variable occurring in the separators for a value
+             * by a formula.
+             *
+             * @param v the value
+             * @param sfmla the formula
+             * @return the vector of separators resulting from the substitution
+             */
             std::vector<FmlaSet> apply_subs(int v, std::shared_ptr<Formula>& sfmla) {
                 std::vector<FmlaSet> result {separators[v].size()};
                 for (int i = 0; i < separators[v].size(); ++i) {
@@ -209,13 +214,13 @@ namespace ltsy {
     };
 
     /**
-     * A valuation over an generalized matrix, specified
+     * A valuation over a generalized matrix, specified
      * by assignments to each propositional variable.
      * Although it is formally expected of such
      * a valuation to provide a single truth-value
      * to each formula, we implement this visitor
      * to answer with all possible values, since we
-     * are dealing here with non-truth-funcional semantics
+     * are dealing here with non-truth-functional semantics
      * (see the theory of NMatrices).
      *
      * @author Vitor Greati
@@ -239,8 +244,6 @@ namespace ltsy {
                     const std::vector<std::pair<Prop, int>>& mappings)
                 : _nmatrix_ptr {nmatrix_ptr}
                 {
-                //std::atomic_store(&(this->_nmatrix_ptr), std::move(nmatrix_ptr));
-
                 auto values = _nmatrix_ptr->values();
                
                 for (auto& mapping : mappings) {
@@ -713,6 +716,7 @@ namespace ltsy {
 
     /* Given a pointer to a PNmatrix
      * and a set of propositional variables,
+     * generate all possible valuations.
      *
      * @author Vitor Greati
      * */

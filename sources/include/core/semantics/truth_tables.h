@@ -102,8 +102,6 @@ namespace ltsy {
             }
     };
 
-
-
     /**
      * Represents an `NValues`-valued `Arity`-ary truth table. 
      * Values are taken to be 0,...,`NValues`-1.
