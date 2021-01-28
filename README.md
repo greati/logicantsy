@@ -39,13 +39,13 @@ cd build
 
 ### determinize-tt
 Examples of YAML inputs:
-- https://github.com/greati/logicantsy/blob/master/examples/cli/tt-determinizer-avron-4v.yml
+- https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/tt-determinizer-avron-4v.yml
 
 ### rule-soundness-checker
 Examples of YAML inputs:
-- https://github.com/greati/logicantsy/blob/master/examples/cli/sequent-rule-soundness.yml
+- https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/sequent-rule-soundness.yml
 
 ### axiomatize-monadic-matrix
 Examples of YAML inputs:
-- Implication-free strong Kleene (one-dimensional): https://github.com/greati/logicantsy/blob/master/examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-1D.yml
-- A two-dimensional logic over the billatice FOUR: https://github.com/greati/logicantsy/blob/master/examples/cli/mc-pnm-axiomatization-avron-4v-2D.yml
+- Implication-free strong Kleene (one-dimensional): https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-1D.yml
+- A two-dimensional logic over the billatice FOUR: https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/mc-pnm-axiomatization-avron-4v-2D.yml
