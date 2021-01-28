@@ -1,6 +1,6 @@
 # logicantsy
 
-Library and CLI assistant for research in Logic. Written in Modern C++.
+Library and CLI assistant for research in Logic.
 
 ## Build
 
