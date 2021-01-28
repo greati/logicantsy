@@ -26,7 +26,7 @@ make test
     - `common.h`, `utils.h`: pieces of code of interest to other pieces of code
     - `exception.h`: any exception code goes here
     - `/combinatorics`: code related to combinatorics tasks, like generating all subsets of another set
-    - `/exception`: folder holding codes for exception (yes, this *must* be unified with `exception.h`)
+    - `/exception`: folder holding codes for exception (yes, this *must* be unified with `exception.h` in some moment)
     - `parser`: stores code for parsing formulas and other entities (only formulas for now)
     - `printers`: code that attempts to separate the printing of entities from their logic
     - `proof-theory`: code related to proof-theory concepts
