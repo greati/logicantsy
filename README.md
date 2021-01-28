@@ -36,30 +36,16 @@ the produced family of strings.
 cd build
 ./ltsy --help
 ```
-### tt-axiomatizer
 
-#### Output
+### determinize-tt
+Examples of YAML inputs:
+- https://github.com/greati/logicantsy/blob/master/examples/cli/tt-determinizer-avron-4v.yml
 
-```json
-"tables": {
-    "connective1": table1,
-    "connective2": table2,
-    ...
-    "connectiveM": tableM
-},
-"axiomatizations": {
-    "connective1": [
-        [A11, B11, C11, D11],
-        ...
-        [A1N1, B1N1, C1N1, D1N1]   
-    ],
-    "connective2": [...],
-    ...
-    "connectiveM": [...]
-}
-```
-- Each Aij, Bij, Cij, Dij is a string of formulas, separated by a comma.
-- Each `tablei` is a string representing a truth table
-
-### tt-determinizer
 ### rule-soundness-checker
+Examples of YAML inputs:
+- https://github.com/greati/logicantsy/blob/master/examples/cli/sequent-rule-soundness.yml
+
+### axiomatize-monadic-matrix
+Examples of YAML inputs:
+- Implication-free strong Kleene (one-dimensional): https://github.com/greati/logicantsy/blob/master/examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-1D.yml
+- A two-dimensional logic over the billatice FOUR: https://github.com/greati/logicantsy/blob/master/examples/cli/mc-pnm-axiomatization-avron-4v-2D.yml
