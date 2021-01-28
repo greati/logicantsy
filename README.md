@@ -1,6 +1,6 @@
 # logicantsy
 
-Library and CLI assistant for research in Logic.
+Library and CLI assistant for research in logic.
 
 ## Build
 
