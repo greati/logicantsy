@@ -1,0 +1,100 @@
+pnmatrix:
+  values: [bot, t, f, top]
+  distinguished_sets:
+    - [top, t]
+  infer_complements: true
+  interpretation:
+    p and q:
+      restrictions:
+        - [f, _]: [f]
+        - [_, f]: [f]
+        - [top, t]: [top]
+        - [bot, t]: [bot]
+        - [t, top]: [top]
+        - [t, bot]: [bot]
+        - [top, bot]: [f]
+        - [bot, top]: [f]
+        - [top,top]: [top]
+        - [bot,bot]: [bot]
+        - [t, t]: [t]
+    p or q:
+      restrictions:
+        - [t, _]: [t]
+        - [_, t]: [t]
+        - [top, f]: [top]
+        - [bot, f]: [bot]
+        - [f, top]: [top]
+        - [f, bot]: [bot]
+        - [top, bot]: [t]
+        - [bot, top]: [t]
+        - [top,top]: [top]
+        - [bot,bot]: [bot]
+        - [f, f]: [f]
+    p -> q:
+      restrictions:
+        - [f, _]: [t]
+        - [_, t]: [t]
+        - [t, f]: [f]
+        - [t, top]: [top]
+        - [t, bot]: [bot]
+        - [top, f]: [bot]
+        - [top, top]: [t]
+        - [top, bot]: [bot]
+        - [bot, f]: [top]
+        - [bot, top]: [top]
+        - [bot, bot]: [t]
+    neg p:
+      restrictions:
+        - [t]: [f]
+        - [f]: [t]
+        - [bot]: [bot]
+        - [top]: [top]
+    bot():
+      restrictions:
+        - []: [f]
+    top():
+      restrictions:
+        - []: [t]
+    conf(p):
+      restrictions:
+        - [t]: [t]
+        - [f]: [f]
+        - [bot]: [top]
+        - [top]: [bot]
+    tilde(p):
+      restrictions:
+        - [t]: [f]
+        - [f]: [t]
+        - [bot]: [top]
+        - [top]: [bot]
+sequent_dset_correspondence: [1, 0]
+simplify_overlap: true
+simplify_dilution: true
+discriminator:
+  top:  [[p, neg p],[]]
+  t:    [[p],[neg p]]
+  f:    [[neg p],[p]]
+  bot:  [[],[p, neg p]]
+latex:
+  "->": "\\to"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  q: "\\psi"
+  r: "\\phi"
+  circ: "\\circ"
+  o: "\\circ"
+  and: "\\land"
+  or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  foo: "\\circ"
+  not: "\\neg"
+  conf: "-"
+  tilde: "\\sim"
+  "`to`": "\\Tilde{\\supset}"
+  neg: "\\neg"
+  "`to`": "\\Tilde{\\supset}"

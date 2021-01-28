@@ -1,0 +1,97 @@
+pnmatrix:
+  values: [I, T, F, t, f]
+  distinguished_sets:
+    - [I, T, t]
+    - [I, T, f]
+  infer_complements: true
+  interpretation:
+    p or q:
+      default: [f]
+      restrictions:
+        - [I, _]: [t, I]
+        - [T, _]: [t, I]
+        - [t, _]: [t, I]
+        - [_, I]: [t, I]
+        - [_, T]: [t, I]
+        - [_, t]: [t, I]
+    p and q:
+      default: [t, I]
+      restrictions:
+        - [F, _]: [f]
+        - [f, _]: [f]
+        - [_, F]: [f]
+        - [_, f]: [f]
+    p -> q:
+      restrictions:
+        - [F, _]: [t, I]
+        - [f, _]: [t, I]
+        - [_, I]: [t, I]
+        - [_, T]: [t, I]
+        - [_, t]: [t, I]
+        - [I, F]: [f]
+        - [I, f]: [f]
+        - [T, F]: [f]
+        - [T, f]: [f]
+        - [t, F]: [f]
+        - [t, f]: [f]
+    neg p:
+      restrictions:
+        - [T]: [F]
+        - [F]: [T]
+        - [t]: [f]
+        - [f]: [t, I]
+        - [I]: [t, I]
+    o(p):
+      default: [T]
+      restrictions:
+        - [I]: [F]
+sequent_dset_correspondence: [0, 3, 2, 1]
+max_counter_models: 2
+rules:
+  empty:
+    premisses:
+    conclusions:
+      - [[],[],[],[]]
+  andnot:
+    premisses:
+    conclusions:
+      - [[],[],[p1 and p2],[neg(p1 and p2)]]
+  ornot:
+    premisses:
+    conclusions:
+      - [[],[],[p1 or p2],[neg(p1 or p2)]]
+  impnot:
+    premisses:
+    conclusions:
+      - [[],[],[p1 -> p2],[neg(p1 -> p2)]]
+latex:
+  "->": "\\to"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\sigma"
+  q: "\\psi"
+  r: "\\phi"
+  "->": "\\to"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\sigma"
+  q: "\\psi"
+  r: "\\phi"
+  circ: "\\circ"
+  o: "\\circ"
+  and: "\\land"
+  or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  foo: "\\circ"
+  not: "\\neg"
+  neg: "\\neg"
+  conf: "-"
+  tilde: "\\sim"
+  "`to`": "\\Tilde{\\supset}"

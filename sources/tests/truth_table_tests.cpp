@@ -16,7 +16,7 @@ namespace {
     }
 
     TEST(Determinants, ExtractDetsOr) {
-        auto tt_or = ltsy::TruthTable(2, 
+        auto tt_or = ltsy::TruthTable<int>(2, 
             {
                 {{0,0},0},
                 {{0,1},1},
@@ -54,7 +54,7 @@ namespace {
     }
 
     TEST(TruthTable, ConstructAndAt) {
-       auto tt_or = ltsy::TruthTable(2, 
+       auto tt_or = ltsy::TruthTable<int>(2, 
                {
                    {{0,0},0},
                    {{0,1},1},

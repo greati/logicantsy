@@ -103,6 +103,7 @@ set(test_sources ${test_sources}
     tests/truth_table_determination.cpp
     tests/combinatorics_tests.cpp
     tests/fmla_parser_tests.cpp
+    tests/pnm_axiomatization.cpp
 )
 
 

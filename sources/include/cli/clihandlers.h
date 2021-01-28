@@ -381,7 +381,190 @@ namespace ltsy {
             };
     };
 
+    
+    /* Handler for the sequent rule soundness app.
+     * */
+    class MonadicMatrixAxiomatizerCLIHandler {
 
+        private:
+            const std::string RULES_TITLE = "rules";
+            const std::string DISCR_TITLE = "discriminator";
+            const std::string INFER_COMPLEMENTS_TITLE = "infer_complements";
+            const std::string TEMPLATE_TITLE = "template";
+            const std::string SIMPLIFY_OVERLAP = "simplify_overlap";
+            const std::string SIMPLIFY_DILUTION = "simplify_dilution";
+            const std::string SIMPLIFY_SUBRULES = "simplify_subrules";
+            const std::string SIMPLIFY_SUBRULES_DERIV = "simplify_subrules_deriv";
+            const std::string SIMPLIFY_DERIVATION = "simplify_derivation";
+            const std::string DERIVE = "derive";
+            const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
+            const std::string PREM_CONC_CORRESPOND_TITLE = "premisses_conclusions_correspondence";
+            const std::string LATEX_TITLE = "latex";
+            std::map<std::string, std::string> _tex_translation;
+
+        public:
+            std::string get_default_template(Printer::PrinterType output_type, unsigned int dimension=4) {
+                std::string temp;
+                switch(output_type) {
+                    case Printer::PrinterType::PLAIN:
+                        temp += "Check the result below:\n";
+                        temp += "{\% for groups, schemas in axiomatization \%}";
+                        temp += "Group of schemas (|{ groups }|):\n";
+                        temp += "    {\% for schema in schemas \%}\n";
+                        temp += "- (|{ schema.name }|)";
+                        temp += "- (|{ schema.schema }|)";
+                        temp += "    {\% endfor \%}\n";
+                        temp += "{\% endfor \%}";
+                        break;
+                    case Printer::PrinterType::LATEX:
+                        temp += "\\documentclass{article}\n";
+                        temp += "\\usepackage[utf8]{inputenc}\n";
+                        temp += "\\usepackage[english]{babel}\n";
+                        temp += "\\usepackage{booktabs}\n";
+                        temp += "\\usepackage{amsmath}\n";
+                        temp += "\\usepackage{float}\n";
+                        temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+                        unsigned int index=1;
+                        dimension = dimension % 2 ? dimension : dimension + 1;
+                        for (auto i = 1; i < dimension; i+=2) {
+                            temp += "\\frac{#" + 
+                                std::to_string(i+1) + "}{#" + std::to_string(i) + "}";
+                            if (i < dimension/2)
+                                temp += "{|}";
+                        }
+                        temp += "}";
+                        temp += "\\begin{document}\n";
+                        temp += "\\tableofcontents\n";
+                        temp += "    \\begin{center}\n";
+                        temp += "{\% for group, schemas in axiomatization \%}";
+                        temp += "\\section{Schemas of $(|{ group }|)$ }\n";
+                        temp += "Size: (|{ length(schemas) }|)\n";
+                        temp += "    {\% for schema in schemas \%}\n";
+                        temp += "(|{ schema.name }|)\n";
+                        temp += "\\[\n";
+                        temp += "\\bCon";
+                        temp += "        {\% for fmlas in schema.schema \%}\n";
+                        temp += "{\\text{ (|{ fmlas }|) }}";
+                        temp += "        {\% endfor \%}\n";
+                        temp += "\\]";
+                        temp += "    {\% endfor \%}\n";
+                        temp += "{\% endfor \%}\n";
+                        temp += "    \\end{center}\n";
+                        temp += "\\end{document}";
+                        break;
+                }
+                return temp;
+            }
+
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
+                YAMLCppParser parser;
+                nlohmann::json result_data;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+
+                    // get latex
+                    if (auto latex_node = root[LATEX_TITLE]) {
+                        for (auto it = latex_node.begin(); it != latex_node.end(); ++it)
+                           _tex_translation[it->first.as<std::string>()] = it->second.as<std::string>(); 
+                    }
+
+                    auto pnmatrix = parser.parse_gen_matrix(root);
+                    auto disc_node = parser.hard_require(root, DISCR_TITLE);
+                    auto simplify_overlap = parser.hard_require(root, SIMPLIFY_OVERLAP).as<bool>();
+                    auto simplify_dilution = parser.hard_require(root, SIMPLIFY_DILUTION).as<bool>();
+                    auto simplify_subrules = parser.hard_require(root, SIMPLIFY_SUBRULES).as<bool>();
+                    auto simplify_subrules_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_SUBRULES_DERIV);
+                    auto simplify_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_DERIVATION);
+                    auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
+                    auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
+                        .as<std::vector<int>>();
+                    auto prem_conc_corr_node = parser.hard_require(root, PREM_CONC_CORRESPOND_TITLE);
+                    std::vector<std::pair<int,int>> prem_conc_corr;
+                    for (auto it = prem_conc_corr_node.begin(); it != prem_conc_corr_node.end(); it++) {
+                        auto prem_conc = it->as<std::vector<int>>();
+                        prem_conc_corr.push_back({prem_conc[0], prem_conc[1]});
+                    }
+
+                    if (verbose)
+                        spdlog::info("Input tables: \n" + pnmatrix->print());
+
+                    AppsFacade apps_facade;
+                    auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
+                            monadic_discriminator, seq_dset_corr, prem_conc_corr, 
+                            simplify_overlap, simplify_dilution, simplify_subrules, simplify_subrules_derivation, 
+                            simplify_derivation);
+                    
+                    PrinterFactory printer_factory;
+                    auto printer = printer_factory.make_printer(output_type, _tex_translation);
+
+                    result_data["axiomatization"] = {}; 
+                    for (auto [k, calculus] : axiomatization) {
+                        result_data["axiomatization"][k] = nlohmann::json::array();
+                        for (auto r : calculus.rules()) {
+                              nlohmann::json rule_json ({
+                                {"name", r.name()},        
+                                {"schema", printer->print(r.sequent())},        
+                              });
+                              result_data["axiomatization"][k].push_back(rule_json);
+                        }
+                    }
+
+                    // if derive
+                    if (auto derive_node = root[DERIVE]) {
+                        auto discriminator_fmlas = monadic_discriminator.get_formulas();
+                        std::set<MultipleConclusionRule> full_calculus_rules; 
+                        for (auto [k, calculus] : axiomatization) {
+                            auto calculus_rules = calculus.rules();
+                            full_calculus_rules.insert(calculus_rules.begin(), calculus_rules.end());
+                        }
+                        MultipleConclusionCalculus full_calculus {
+                            std::vector<MultipleConclusionRule>{full_calculus_rules.begin(), 
+                                full_calculus_rules.end()}
+                        };
+
+                        for (auto it = derive_node.begin(); it != derive_node.end(); ++it) {
+                            auto name =  it->first.as<std::string>();
+                            auto sequent =  parser.parse_nd_sequent(it->second);
+                            MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
+                            auto derivation = full_calculus.derive(rule, discriminator_fmlas);
+                            if (derivation->closed)
+                                std::cout << name + " is derivable." << std::endl;
+                            else
+                                std::cout << name + " is underivable." << std::endl;
+                            auto derivtree = derivation->print().str();
+                            std::cout << derivtree << std::endl;
+                        }
+                    }
+
+
+                    /////// templating / reporting
+                    // get template if exists
+                    std::string template_source;
+                    if (template_path) {
+                        template_source = *template_path;
+                    } else if (auto temp = root[TEMPLATE_TITLE]) {
+                        template_source = temp.as<std::string>(); 
+                    } else {
+                        template_source = get_default_template(output_type, pnmatrix->distinguished_sets().size());
+                    }
+                    // generate report
+                    AppReport report;
+                    auto r = report.produce(template_source, result_data, template_path.has_value(), dest_path);
+                    std::cout << r << std::endl;                   
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
+    };
+    
+    /* Handler for the sequent rule soundness app.
+     * */
     class SequentRuleSoundnessCLIHandler {
 
         private:
@@ -409,19 +592,21 @@ namespace ltsy {
                     AppsFacade apps_facade;
                     for (const auto& rule : rules) {
                         spdlog::info("Checking for rule " + rule.name() + "...");
-                        auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
-                                    pnmatrix, seq_dset_corr, {rule}, max_counter_models,
-                                    std::make_optional<progresscpp::ProgressBar>(70)
-                                );
-                        auto result = soundness_results[rule.name()];
-                        if (not result) {
-                            spdlog::info("Sound.");
-                        } else {
-                            spdlog::info("Not sound. Consider the following configuration(s):");
-                            for (const auto& ce : *result) {
-                                spdlog::info("\n" + ce.val.print(pnmatrix->val_to_str()).str());
+                        try {
+                            auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
+                                        pnmatrix, seq_dset_corr, {rule}, max_counter_models,
+                                        std::make_optional<progresscpp::ProgressBar>(70)
+                                    );
+                            auto result = soundness_results[rule.name()];
+                            if (not result) {
+                                spdlog::info("Sound.");
+                            } else {
+                                spdlog::info("Not sound. Consider the following configuration(s):");
+                                for (const auto& ce : *result) {
+                                    spdlog::info("\n" + ce.val.print(pnmatrix->val_to_str()).str());
+                                }
                             }
-                        }
+                        } catch(std::exception e) {}
                     }
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());

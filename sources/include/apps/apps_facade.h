@@ -5,12 +5,37 @@
 #include "tt_determination/ndsequents.h"
 #include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
+#include "apps/pnm-axiomatization/multipleconclusion.h"
 
 namespace ltsy {
 
     class AppsFacade {
 
         public:
+
+            /* App to axiomatize a monadic generalized matrix
+             * given a ser of separators.
+             * */
+            std::map<std::string, MultipleConclusionCalculus>
+            monadic_gen_matrix_mult_conc_axiomatizer(
+                    std::shared_ptr<GenMatrix> matrix,
+                    Discriminator discriminator,
+                    const std::vector<int>& sequent_set_correspondence,
+                    const std::vector<std::pair<int,int>>& prem_conc_corresp,
+                    bool simplify_overlap=true,
+                    bool simplify_dilution=true,
+                    bool simplify_subrules=true,
+                    std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
+                    std::optional<unsigned int> simplify_by_derivation=std::nullopt
+                    ) {
+               PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
+               if (simplify_by_derivation or simplify_subrules_deriv)
+                   return 
+                   axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, simplify_subrules, 
+                           simplify_subrules_deriv, simplify_by_derivation).group();
+               else
+                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
+            }
 
             /* App to check soundness of a rule wrt a given
              * generalized matrix.

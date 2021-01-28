@@ -27,4 +27,22 @@ namespace ltsy {
                 return false;
         return true;
     }
+
+    FmlaSet intersection(const FmlaSet& s1, const FmlaSet& s2) {
+        FmlaSet inters;
+        std::set_intersection(s1.begin(), s1.end(),
+                s2.begin(), s2.end(), 
+                std::inserter(inters, inters.begin()),
+                utils::DeepSharedPointerComp<Formula>());
+        return inters;
+    }
+
+    FmlaSet difference(const FmlaSet& s1, const FmlaSet& s2) {
+        FmlaSet inters;
+        std::set_difference(s1.begin(), s1.end(),
+                s2.begin(), s2.end(), 
+                std::inserter(inters, inters.begin()),
+                utils::DeepSharedPointerComp<Formula>());
+        return inters;
+    }
 }

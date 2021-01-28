@@ -75,6 +75,14 @@ namespace ltsy {
                 return os;  
             }
 
+            std::stringstream print() const {
+                std::stringstream ss;
+                ss << _connective->symbol();
+                ss << std::string(":") << std::endl;
+                ss << _truth_table->print().str();
+                return ss;
+            }
+
             std::stringstream print(const std::map<int, std::string>& values_map) const {
                 std::stringstream ss;
                 ss << _connective->symbol();
@@ -132,21 +140,30 @@ namespace ltsy {
             std::shared_ptr<Signature> _signature;
             std::map<Symbol, std::shared_ptr<TruthInterp<CellType>>> _truth_interps;
         public:
-            SignatureTruthInterp(decltype(_signature) _signature)
-                : _signature {_signature} {/* empty */}
+            SignatureTruthInterp(decltype(_signature) signature)
+                : _signature {signature} {/* empty */}
 
-            SignatureTruthInterp(decltype(_signature) _signature, const decltype(_truth_interps)& truth_interps)
-                : _signature {_signature}, _truth_interps {truth_interps} {/* empty */}
+            SignatureTruthInterp(decltype(_signature) signature, const decltype(_truth_interps)& truth_interps)
+                : _signature {signature}, _truth_interps {truth_interps} {/* empty */}
 
-            SignatureTruthInterp(decltype(_signature) _signature, 
+            SignatureTruthInterp(decltype(_signature) signature, 
                     std::initializer_list<std::shared_ptr<TruthInterp<CellType>>> _interps)
-                : _signature {_signature} {
+                : _signature {signature} {
                 for (auto& ti : _interps)
                     this->try_interpret(ti);
             }
 
+            auto begin() { return _truth_interps.begin(); }
+            auto end() { return _truth_interps.end(); }
+            auto cbegin() { return _truth_interps.cbegin(); }
+            auto cend() { return _truth_interps.cend(); }
+
             std::shared_ptr<SignatureTruthInterp> copy() const {
-                decltype(_signature) sig = std::make_shared<Signature>(*_signature);
+                decltype(_signature) sig = nullptr;
+                if (_signature)
+                    sig = std::make_shared<Signature>(*_signature);
+                else
+                    sig = std::make_shared<Signature>();
                 decltype(_truth_interps) truth_interps;
                 for (const auto& [s, t] : _truth_interps)
                     truth_interps[s] = t->copy();
@@ -182,6 +199,13 @@ namespace ltsy {
                     os << (*t) << std::endl;
                 }
                 return os;  
+            }
+            std::stringstream print() const {
+                std::stringstream ss;
+                for(auto& [s, t] : _truth_interps) {
+                    ss << t->print().str() << std::endl;
+                }
+                return ss;
             }
             std::stringstream print(const std::map<int, std::string>& values_map) const {
                 std::stringstream ss;

@@ -63,6 +63,15 @@ namespace ltsy {
                 return utils::tuple_from_position(_nvalues, _arity, _data.first); 
             }
 
+            inline bool has_only_args(const std::set<int>& vs) const {
+                const auto args = get_args();
+                for (const auto& arg : args) {
+                    if (vs.find(arg) == vs.end())
+                        return false;
+                }
+                return true;
+            }
+
             inline int get_args_pos() const { return _data.first; }
 
             bool operator==(const Determinant<CellType>& other) const {
@@ -82,6 +91,7 @@ namespace ltsy {
                 return os;  
             }
 
+
             inline void set_values_names(const decltype(_values_names)& values_names) { _values_names = values_names; }
 
             inline std::string get_value_name(int value) const { 
@@ -91,8 +101,6 @@ namespace ltsy {
                 return f->second;
             }
     };
-
-
 
     /**
      * Represents an `NValues`-valued `Arity`-ary truth table. 
@@ -106,9 +114,9 @@ namespace ltsy {
      * @author Vitor Greati
      * */
     template<typename CellType = int>
-    class TruthTable {
+    class TruthTableBase {
         
-        private:
+        protected:
             
             std::string _name {"#"};  //<! a name to identify the truth-table
             int _nvalues;
@@ -124,9 +132,9 @@ namespace ltsy {
 
         public:
 
-            TruthTable() {/*empty*/}
+            TruthTableBase() {/*empty*/}
 
-            TruthTable(int _nvalues, int _arity) : 
+            TruthTableBase(int _nvalues, int _arity) : 
                 _nvalues {_nvalues},
                 _arity {_arity},
                 _number_of_rows { this->compute_number_of_rows(_nvalues, _arity) },
@@ -136,21 +144,21 @@ namespace ltsy {
             /**
              * Build truth table giving its images array.
              * */
-            TruthTable(int _nvalues, int _arity, const CellType& default_value) : 
-                TruthTable {_nvalues, _arity}
+            TruthTableBase(int _nvalues, int _arity, const CellType& default_value) : 
+                TruthTableBase {_nvalues, _arity}
                 { this->_images = std::vector<CellType>(_number_of_rows, default_value); } 
 
             /**
              * Build truth table giving its images array.
              * */
-            TruthTable(int _nvalues, int _arity, const decltype(_images)& _images) : 
-                TruthTable {_nvalues, _arity}
+            TruthTableBase(int _nvalues, int _arity, const decltype(_images)& _images) : 
+                TruthTableBase {_nvalues, _arity}
                 { this->_images = _images; } 
 
             /**
              * Build a truth table from its rows.
              * */
-            TruthTable(int nvalues, const std::initializer_list<TruthTableRow>& rows);
+            TruthTableBase(int nvalues, const std::initializer_list<TruthTableRow>& rows);
 
             inline void set_name(const decltype(_name)& name) { _name = name; }
             inline decltype(_name) name() const { return _name; }
@@ -191,7 +199,7 @@ namespace ltsy {
                 return result;
             }
 
-            friend std::ostream& operator<<(std::ostream& os, const TruthTable<CellType>& tt) {
+            friend std::ostream& operator<<(std::ostream& os, const TruthTableBase<CellType>& tt) {
                 for (auto i = 0; i < tt._images.size(); ++i) {
                     auto row = utils::tuple_from_position(tt._nvalues, tt._arity, i);
                     for (auto it = row.cbegin(); it != row.cend(); it++) {
@@ -216,10 +224,89 @@ namespace ltsy {
 
             std::stringstream print(std::function<void(std::stringstream&, const CellType&)> cell_printer) const;
             std::stringstream print(const std::map<int, std::string>& values_map) const;
+            std::stringstream print() const;
+    };
+
+    template class TruthTableBase<std::set<int>>;
+    template class TruthTableBase<int>;
+
+    template<typename CellType = int>
+    class TruthTable : public TruthTableBase<CellType> {
+    
+        using TruthTableRow = std::pair<std::vector<int>, CellType>;
+        public:
+            using TruthTableBase<CellType>::TruthTableBase;
+    
+    
     };
 
     template class TruthTable<int>;
-    template class TruthTable<std::set<int>>;
+
+    template<>
+    class TruthTable<std::set<int>> : public TruthTableBase<std::set<int>> {
+        public:
+            using TruthTableBase<std::set<int>>::TruthTableBase;
+            /* Return a set of all sets X = {x1,...,xn} s.t. *(x1,...,xn) = empty.
+             * */
+            std::set<std::set<int>> partial_inputs() const {
+                std::set<std::set<int>> result;
+                for (const auto& det : get_determinants()) {
+                    if (det.get_last().empty()) {
+                        auto args = det.get_args();
+                        result.insert(std::set<int>{args.begin(), args.end()}); 
+                    }
+                } 
+                return result;
+            }   
+
+            /* Check if a sub table is total.
+             *
+             * @return true if the sub table is total
+             * */
+            bool
+            is_sub_table_total(const std::set<int>& subvalues) const {
+                auto dets = this->get_determinants();
+                for (const auto det : dets) {
+                    if (not det.has_only_args(subvalues))
+                        continue;
+                    auto adjusted_det = det;
+                    std::set<int> inters;
+                    auto det_last = det.get_last();
+                    std::set_intersection(det_last.begin(), det_last.end(),
+                            subvalues.begin(), subvalues.end(), std::inserter(inters, inters.begin()));
+                    if (inters.empty())
+                        return false;
+                }
+                return true;
+            }
+
+            /* Return a set of determinants corresponding to the
+             * given subvalues.
+             *
+             * @return the set of determinants after filtering and the set
+             * of determinants after filtering having empty outputs
+             * */
+            std::pair<std::set<Determinant<std::set<int>>>, std::set<Determinant<std::set<int>>>>
+            get_sub_table_determinants(const std::set<int>& subvalues) const {
+                std::set<Determinant<std::set<int>>> result;
+                std::set<Determinant<std::set<int>>> empty_dets;
+                auto dets = this->get_determinants();
+                for (const auto det : dets) {
+                    if (not det.has_only_args(subvalues))
+                        continue;
+                    auto adjusted_det = det;
+                    std::set<int> inters;
+                    auto det_last = det.get_last();
+                    std::set_intersection(det_last.begin(), det_last.end(),
+                            inters.begin(), inters.end(), std::inserter(inters, inters.begin()));
+                    adjusted_det.set_last(inters);
+                    result.insert(adjusted_det);
+                    if (inters.empty())
+                        empty_dets.insert(adjusted_det);
+                }
+                return {result, empty_dets};
+            }
+    };
 
     using NDTruthTable = TruthTable<std::set<int>>;
 
