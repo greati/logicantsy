@@ -59,7 +59,7 @@ Examples of YAML inputs:
 Example of a command:
 `./ltsy determinize-tt -f ../examples/cli/tt-determinizer-avron-4v.yml`
 
-### rule-soundness-checker
+### rule-soundness-checker (needs fixes)
 Examples of YAML inputs:
 - https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/sequent-rule-soundness.yml
 
