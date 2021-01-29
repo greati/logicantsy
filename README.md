@@ -17,7 +17,7 @@ cmake --build .
 make test
 ```
 
-# Project main structure ()
+# Project main structure
 - `/docs`: documentation
 - `/sources/include`
     - `/cli`: stores all code related to the CLI application
