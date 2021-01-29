@@ -18,6 +18,7 @@ make test
 ```
 
 # Project main structure ()
+- `/docs`: documentation
 - `/sources/include`
     - `/cli`: stores all code related to the CLI application
     - `/apps`: stores the code for the applications, like the axiomatization algorithm
