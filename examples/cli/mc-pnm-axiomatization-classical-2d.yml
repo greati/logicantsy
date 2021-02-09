@@ -1,0 +1,45 @@
+pnmatrix:
+  values: [T, F]
+  distinguished_sets:
+    - [T]
+    - [F]
+  infer_complements: true
+  interpretation:
+    p -> q:
+      restrictions:
+        - [_,_]: [T]
+        - [T,F]: [F]
+    p `-<` q:
+      restrictions:
+        - [_,_]: [F]
+        - [F,T]: [T]
+sequent_dset_correspondence: [0, 3, 2, 1]
+premisses_conclusions_correspondence: [[0, 3], [2, 1]]
+simplify_overlap: true
+simplify_dilution: true
+simplify_subrules: false
+simplify_derivation: 20
+discriminator:
+  T: [[p],[],[],[]]
+  F: [[],[p],[],[]]
+latex:
+  "->": "\\to"
+  "`-<`": "\\gets"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  q: "\\psi"
+  r: "\\phi"
+  circ: "\\circ"
+  o: "\\circ"
+  and: "\\land"
+  or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  foo: "\\circ"
+  not: "\\neg"
+  neg: "\\neg"
+  "`to`": "\\Tilde{\\supset}"

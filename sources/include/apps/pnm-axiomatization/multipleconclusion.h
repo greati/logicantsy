@@ -130,15 +130,16 @@ namespace ltsy {
                         simplify_by_derivation(full_calculus, 0, simplify_with_derivation);
                     for (const auto& rr : removed_rules)
                         spdlog::info("Removed rule " + rr.sequent().to_string());
-                    spdlog::info("Simplify with subrule soundness");
-                    auto rules_simp = simplified_calc.rules();
-                    auto rules_simp_set = simplify_by_subrule_soundness(
-                                std::set<MultipleConclusionRule>{rules_simp.begin(), 
-                                rules_simp.end()}
-                            );
-                    full_calculus = MultipleConclusionCalculus {
-                        std::vector<MultipleConclusionRule>{rules_simp_set.begin(), rules_simp_set.end()}
-                    };
+                    full_calculus = simplified_calc;
+                   //spdlog::info("Simplify with subrule soundness");
+                   //auto rules_simp = simplified_calc.rules();
+                   //auto rules_simp_set = simplify_by_subrule_soundness(
+                   //            std::set<MultipleConclusionRule>{rules_simp.begin(), 
+                   //            rules_simp.end()}
+                   //        );
+                   //full_calculus = MultipleConclusionCalculus {
+                   //    std::vector<MultipleConclusionRule>{rules_simp_set.begin(), rules_simp_set.end()}
+                   //};
                 }
                 spdlog::info("Ended with " + std::to_string(full_calculus.rules().size()) + " rules.");
                 return full_calculus;
