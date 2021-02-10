@@ -2,6 +2,7 @@
 #include "core/utils.h"
 #include "core/exception.h"
 #include "core/common.h"
+#include "core/parser/fmla/fmla_parser.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -9,7 +10,9 @@
 namespace ltsy {
 
     template<typename CellType>
-    TruthTableBase<CellType>::TruthTableBase(int _nvalues, const std::initializer_list<TruthTableRow>& rows) {
+    TruthTableBase<CellType>::TruthTableBase(int _nvalues, const std::initializer_list<TruthTableRow>& rows, 
+            std::shared_ptr<Formula> fmla) {
+        this->_fmla = fmla;
         this->_nvalues = _nvalues;
         for (auto& row : rows) {
             auto [input_tuple, value] = row;

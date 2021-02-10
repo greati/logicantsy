@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include "core/utils.h"
 #include "core/common.h"
+#include "core/syntax.h"
 #include <functional>
 #include <stdexcept>
 #include <set>
@@ -123,6 +124,7 @@ namespace ltsy {
             int _number_of_rows;
             int _arity = -1;
             std::vector<CellType> _images;
+            std::shared_ptr<Formula> _fmla; //<! a formula whose induced interpretation is the present table
 
             std::map<int, std::string> _values_names;
 
@@ -134,34 +136,49 @@ namespace ltsy {
 
             TruthTableBase() {/*empty*/}
 
-            TruthTableBase(int _nvalues, int _arity) : 
+            TruthTableBase(int _nvalues, int _arity, std::shared_ptr<Formula> fmla = nullptr) : 
                 _nvalues {_nvalues},
                 _arity {_arity},
                 _number_of_rows { this->compute_number_of_rows(_nvalues, _arity) },
-                _images {std::vector<CellType>(_number_of_rows)}
+                _images {std::vector<CellType>(_number_of_rows)},
+                _fmla {fmla}
                 {/* empty */}
 
             /**
              * Build truth table giving its images array.
              * */
-            TruthTableBase(int _nvalues, int _arity, const CellType& default_value) : 
-                TruthTableBase {_nvalues, _arity}
+            TruthTableBase(int _nvalues, int _arity, const CellType& default_value, 
+                    std::shared_ptr<Formula> fmla = nullptr) : 
+                TruthTableBase {_nvalues, _arity, fmla}
                 { this->_images = std::vector<CellType>(_number_of_rows, default_value); } 
 
             /**
              * Build truth table giving its images array.
              * */
-            TruthTableBase(int _nvalues, int _arity, const decltype(_images)& _images) : 
-                TruthTableBase {_nvalues, _arity}
+            TruthTableBase(int _nvalues, int _arity, const decltype(_images)& _images,
+                    std::shared_ptr<Formula> fmla = nullptr) : 
+                TruthTableBase {_nvalues, _arity, fmla}
                 { this->_images = _images; } 
 
             /**
              * Build a truth table from its rows.
              * */
-            TruthTableBase(int nvalues, const std::initializer_list<TruthTableRow>& rows);
+            TruthTableBase(int nvalues, const std::initializer_list<TruthTableRow>& rows, 
+                    std::shared_ptr<Formula> fmla = nullptr);
 
             inline void set_name(const decltype(_name)& name) { _name = name; }
             inline decltype(_name) name() const { return _name; }
+
+            inline int number_of_rows() const {return _images.size(); }
+            decltype(_fmla) fmla() const { return _fmla; };
+
+            bool operator<(const TruthTableBase<CellType>& other) const {
+                return this->_images < other._images;
+            }
+
+            bool operator==(const TruthTableBase<CellType>& other) const {
+                return this->_images == other._images;
+            }
 
             /* Gives the image at the given position.
              * */
@@ -214,7 +231,11 @@ namespace ltsy {
                 return os;  
             }
 
-            inline void set_values_names(const decltype(_values_names)& values_names) { _values_names = values_names; }
+
+            inline void set_values_names(const decltype(_values_names)& values_names) { 
+                _values_names = values_names; 
+            }
+
             inline std::string get_value_name(int value) const { 
                 auto f = _values_names.find(value);
                 if (f == _values_names.end())
@@ -306,6 +327,54 @@ namespace ltsy {
                 }
                 return {result, empty_dets};
             }
+
+            TruthTable<std::set<int>> compose(const std::vector<TruthTable<std::set<int>>>& gs) const {
+                if (gs.size() != this->_arity)
+                    throw std::invalid_argument("wrong parameters number on composition of truth-table");
+                auto arity = gs[0].arity();
+                auto number_of_rows = gs[0].number_of_rows();
+
+                auto validate_input = [&](const std::vector<int>& input, int l) -> bool {
+                    for (int i = 0; i < input.size(); ++i) {
+                        for (int j = i+1; j < input.size(); ++j) {
+                            if (gs[i].at(l) == gs[j].at(l)
+                                   and input[i] != input[j]) return false; 
+                        }
+                    }
+                    return true;
+                };
+
+                // composing fmlas
+                std::shared_ptr<Formula> result_fmla = nullptr;
+                if (this->_fmla != nullptr) {
+                    std::vector<std::shared_ptr<Formula>> component_fmlas;
+                    for (const auto& g : gs) {
+                        if (g.fmla() != nullptr) 
+                            component_fmlas.push_back(g.fmla());
+                    }
+                    if (component_fmlas.size() == gs.size()) {
+                        result_fmla = std::make_shared<Compound>(this->_fmla->connective(), component_fmlas);
+                    }
+                }
+
+                TruthTable<std::set<int>> result {_nvalues, arity, result_fmla};
+                for (int i = 0; i < number_of_rows; ++i) {
+                    // collect images of g's
+                    std::vector<std::set<int>> gsimages;
+                    for (const auto& g : gs)
+                        gsimages.push_back(g.at(i));
+                    const auto& cartproduct = utils::cartesian_product(gsimages);
+                    std::set<int> comp_output;
+                    for (const auto& input : cartproduct) {
+                        if (not validate_input(input, i)) continue;
+                        const auto& foutput = this->at(input);
+                        comp_output.insert(foutput.begin(), foutput.end()); 
+                    }
+                    result.set(i, comp_output);
+                }
+                return result;
+            } 
+
     };
 
     using NDTruthTable = TruthTable<std::set<int>>;
