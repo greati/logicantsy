@@ -51,7 +51,7 @@ simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: false
 #simplify_subrules_deriv: 5
-simplify_derivation: 5
+#simplify_derivation: 5
 discriminator:
   I: [  [p, neg p], [],     [p],  []  ]
   T: [  [p],        [neg p],[p],  []  ]

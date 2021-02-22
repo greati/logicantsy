@@ -474,7 +474,10 @@ namespace ltsy {
                                        // if the expanded node do not lead to a closed derivation
                                        if (not expanded_satisfied) {
                                            useful_instance = false;
-                                           break; // stop checking the expansion by this formula
+                                           derivation->add_child(new_node); 
+                                           derivation->closed = false;
+                                           return false;
+                                           //break; // stop checking the expansion by this formula
                                        }
                                        // else
                                        derivation->add_child(new_node); // subtree accepted, add it to the current tree
