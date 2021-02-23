@@ -74,7 +74,7 @@ namespace {
       }};
 
       ltsy::PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, {0,3,1,2}, {{0,3},{2,1}}};
-      axiomatizer.make_exists_rules();
+      //axiomatizer.make_exists_rules();
     };
 
     TEST(PNMAxiomatization, AxiomatizeCL) {

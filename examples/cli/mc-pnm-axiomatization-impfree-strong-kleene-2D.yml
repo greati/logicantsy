@@ -36,14 +36,21 @@ pnmatrix:
         - [1]: [0]
         - [a]: [a]
         - [b]: [b]
-sequent_dset_correspondence: [0, 3, 2, 1]
+sequent_dset_correspondence: [1, 0, 3, 2]
+premisses_conclusions_correspondence: [[1, 0], [3, 2]]
 simplify_overlap: true
 simplify_dilution: true
+simplify_subrules: false
+simplify_derivation: 14
 discriminator:
   a:  [[],[p],[],[p]]
   b:  [[p],[],[p],[]]
   0:  [[],[p],[p],[]]
   1:  [[p],[],[],[p]]
+derive:
+  DM: [[(neg p) or (neg q)], [neg(p and q)],[],[]]
+  DC: [[p and q],[p or q],[],[]]
+  EX: [[s],[p and q],[s],[p or q]]
 latex:
   "->": "\\to"
   p: "\\varphi"

@@ -42,14 +42,10 @@ pnmatrix:
         - [b] : [b]
         - [1] : [0]
         - [^1]: [^0]
-    o(p):
+    nab(p):
       restrictions:
-        - [^0]: [^1]
-        - [0] : [^0]
-        - [a] : [^0]
-        - [b] : [^0]
-        - [1] : [^0]
-        - [^1]: [^1]
+        - [_]  : [^1]
+        - [^0] : [^0]
     bot():
       restrictions:
         - []: [^0]
@@ -61,14 +57,14 @@ premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
-simplify_derivation: 13
+simplify_derivation: 50
 discriminator:
-  ^0: [[o(p)], [p]]
-  0:  [[neg p], [o(p), p]]
-  a:  [[], [p, o(p), neg p]]
-  b:  [[p, neg p], [o(p)]]
-  1:  [[p], [o(p), neg p]]
-  ^1: [[p, o(p)], []]
+  ^0: [[], [nab(p), p]]
+  0:  [[nab(p), neg p], [p]]
+  a:  [[nab(p)], [neg p, p]]
+  b:  [[nab(p), p, neg p], []]
+  1:  [[p, nab(neg(p))], [neg p]]
+  ^1: [[p], [neg p, nab(neg(p))]]
 latex:
   nab: "\\nabla"
   "->": "\\to"

@@ -423,15 +423,24 @@ namespace ltsy {
                         temp += "\\usepackage{booktabs}\n";
                         temp += "\\usepackage{amsmath}\n";
                         temp += "\\usepackage{float}\n";
+                        temp += "\\usepackage{graphicx}\n";
                         temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
                         unsigned int index=1;
-                        dimension = dimension % 2 ? dimension : dimension + 1;
-                        for (auto i = 1; i < dimension; i+=2) {
-                            temp += "\\frac{#" + 
-                                std::to_string(i+1) + "}{#" + std::to_string(i) + "}";
-                            if (i < dimension/2)
-                                temp += "{|}";
+                        //dimension = dimension % 2 ? dimension : dimension + 1;
+                        temp += "\\scalebox{1.5}{$\n";
+                        temp += "\\begin{smallmatrix}\n";
+                        for (auto i = 2; i <= dimension; i+=2) {
+                            temp += "#"+std::to_string(i);
+                            if (i != dimension) temp += "&;&";
                         }
+                        temp += "\\\\\n";
+                        temp += "\\midrule\n";
+                        for (auto i = 1; i < dimension; i+=2) {
+                            temp += "#"+std::to_string(i);
+                            if (i != dimension-1) temp += "&;&";
+                        }
+                        temp += "\\end{smallmatrix}\n";
+                        temp += "$}";
                         temp += "}";
                         temp += "\\begin{document}\n";
                         temp += "\\tableofcontents\n";

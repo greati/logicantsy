@@ -368,6 +368,12 @@ namespace ltsy {
                     return ss;
                 }
             };
+
+            void rename_rules() {
+                int rule_index = 1;
+                for (auto& r : _rules)
+                    r.set_name("r"+std::to_string(rule_index++));
+            }
     
         private:
 
@@ -474,7 +480,10 @@ namespace ltsy {
                                        // if the expanded node do not lead to a closed derivation
                                        if (not expanded_satisfied) {
                                            useful_instance = false;
-                                           break; // stop checking the expansion by this formula
+                                           derivation->add_child(new_node); 
+                                           derivation->closed = false;
+                                           return false;
+                                           //break; // stop checking the expansion by this formula
                                        }
                                        // else
                                        derivation->add_child(new_node); // subtree accepted, add it to the current tree
