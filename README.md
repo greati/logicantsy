@@ -17,23 +17,6 @@ cmake --build .
 make test
 ```
 
-# Project main structure
-- `/docs`: documentation
-- `/sources/include`
-    - `/cli`: stores all code related to the CLI application
-    - `/apps`: stores the code for the applications, like the axiomatization algorithm
-    - `/core`: all core code
-        - `syntax.h`: code related to connectives, signatures and formulas
-        - `common.h`, `utils.h`: pieces of code of interest to other pieces of code
-        - `exception.h`: any exception code goes here
-        - `/combinatorics`: code related to combinatorics tasks, like generating all subsets of another set
-        - `/exception`: folder holding codes for exception (yes, this *must* be unified with `exception.h` in some moment)
-        - `parser`: stores code for parsing formulas and other entities (only formulas for now)
-        - `printers`: code that attempts to separate the printing of entities from their logic
-        - `proof-theory`: code related to proof-theory concepts
-        - `semantics`: code related to semantics, like truth-tables and generalized matrices
-- `/sources/tests`: here you may find how to use the classes
-
 # CLI
 
 We provide a set of utilities, our apps, accessible via a
@@ -64,4 +47,21 @@ Examples of YAML inputs:
 
 Example of a command:
 `./ltsy axiomatize-monadic-matrix -f ../examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-2D.yml -o latex -s sk2d.tex`
+
+# Project main structure
+- `/docs`: documentation
+- `/sources/include`
+    - `/cli`: stores all code related to the CLI application
+    - `/apps`: stores the code for the applications, like the axiomatization algorithm
+    - `/core`: all core code
+        - `syntax.h`: code related to connectives, signatures and formulas
+        - `common.h`, `utils.h`: pieces of code of interest to other pieces of code
+        - `exception.h`: any exception code goes here
+        - `/combinatorics`: code related to combinatorics tasks, like generating all subsets of another set
+        - `/exception`: folder holding codes for exception (yes, this *must* be unified with `exception.h` in some moment)
+        - `parser`: stores code for parsing formulas and other entities (only formulas for now)
+        - `printers`: code that attempts to separate the printing of entities from their logic
+        - `proof-theory`: code related to proof-theory concepts
+        - `semantics`: code related to semantics, like truth-tables and generalized matrices
+- `/sources/tests`: here you may find how to use the classes
 
