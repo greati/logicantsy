@@ -31,39 +31,14 @@ pnmatrix:
         - [top,top]: [top]
         - [bot,bot]: [t, bot]
         - [f, f]: [f, top]
-          #   p -> q:
-          #     restrictions:
-          #       - [f, _]: [t]
-          #       - [_, t]: [t]
-          #       - [t, f]: [f]
-          #       - [t, top]: [top]
-          #       - [t, bot]: [bot]
-          #       - [top, f]: [bot]
-          #       - [top, top]: [t]
-          #       - [top, bot]: [bot]
-          #       - [bot, f]: [top]
-          #       - [bot, top]: [top]
-          #       - [bot, bot]: [t]
     neg p:
       restrictions:
         - [t]: [f]
         - [f]: [t]
         - [bot]: [bot]
         - [top]: [top]
-          #conf(p):
-          #  restrictions:
-          #    - [t]: [t]
-          #    - [f]: [f]
-          #    - [bot]: [top]
-          #    - [top]: [bot]
-          #tilde(p):
-          #  restrictions:
-          #    - [t]: [f]
-          #    - [f]: [t]
-          #    - [bot]: [top]
-          #    - [top]: [bot]
-sequent_dset_correspondence: [0, 3, 2, 1]
-premisses_conclusions_correspondence: [[0, 3], [2, 1]]
+sequent_dset_correspondence: [1, 0, 3, 2]
+premisses_conclusions_correspondence: [[1, 0], [3, 2]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: false

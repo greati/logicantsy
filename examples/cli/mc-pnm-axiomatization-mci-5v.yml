@@ -45,12 +45,11 @@ pnmatrix:
       default: [T]
       restrictions:
         - [I]: [F]
-sequent_dset_correspondence: [0, 3, 2, 1]
-premisses_conclusions_correspondence: [[0, 3], [2, 1]]
+sequent_dset_correspondence: [1, 0, 3, 2]
+premisses_conclusions_correspondence: [[1, 0], [3, 2]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: false
-#simplify_subrules_deriv: 5
 simplify_derivation: 5
 discriminator:
   I: [  [p, neg p], [],     [p],  []  ]
