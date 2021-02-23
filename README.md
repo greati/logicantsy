@@ -38,6 +38,9 @@ cd build
 ```
 ### axiomatize-monadic-matrix
 
+Use this app to generate an axiomatization for a monadic two-dimensional (partial) non-deterministic matrix
+and search for proof over this axiomatization. The GIF below illustrates this app. Check the example input file [here](https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-2D.yml).
+
 ![grab-landing-page](https://github.com/greati/logicantsy/blob/master/examples/cli/kleene-2d.gif)
 
 Examples of YAML inputs:
