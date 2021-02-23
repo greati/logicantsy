@@ -368,6 +368,12 @@ namespace ltsy {
                     return ss;
                 }
             };
+
+            void rename_rules() {
+                int rule_index = 1;
+                for (auto& r : _rules)
+                    r.set_name("r"+std::to_string(rule_index++));
+            }
     
         private:
 

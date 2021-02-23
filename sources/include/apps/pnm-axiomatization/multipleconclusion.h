@@ -142,6 +142,7 @@ namespace ltsy {
                    //};
                 }
                 spdlog::info("Ended with " + std::to_string(full_calculus.rules().size()) + " rules.");
+                full_calculus.rename_rules();
                 return full_calculus;
             }
 
