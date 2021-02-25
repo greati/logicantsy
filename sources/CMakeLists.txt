@@ -71,6 +71,8 @@ add_library(logicantsy
     src/core/semantics/judgment_values_corr.cpp
     src/core/semantics/truth_tables.cpp
     src/core/semantics/genmatrix.cpp
+    ${BISON_bison_fmla_parser_OUTPUTS} 
+    ${FLEX_flex_fmla_lexer_OUTPUTS}
     )
 target_include_directories(logicantsy PUBLIC include ${spdlog_SOURCE_DIR}/include)
 
