@@ -61,14 +61,23 @@ premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
-simplify_derivation: 16
+simplify_derivation: 14
+# discriminator using less complex formulas as possible
 discriminator:
-  ^0: [[o(p), neg p], []]
+  ^0: [[o(p)], [p]]
   0:  [[neg p], [o(p), p]]
   a:  [[], [p, o(p), neg p]]
   b:  [[p, neg p], [o(p)]]
   1:  [[p], [o(p), neg p]]
-  ^1: [[o(p)], [neg p]]
+  ^1: [[p, o(p)], []]
+# a discriminator with less p's
+#discriminator:
+#  ^0: [[o(p), neg p], []]
+#  0:  [[neg p], [o(p), p]]
+#  a:  [[], [p, o(p), neg p]]
+#  b:  [[p, neg p], [o(p)]]
+#  1:  [[p], [o(p), neg p]]
+#  ^1: [[o(p)], [neg p]]
 latex:
   nab: "\\nabla"
   "->": "\\to"
