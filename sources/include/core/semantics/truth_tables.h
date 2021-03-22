@@ -114,19 +114,19 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
-    template<typename CellType = int>
+    template<typename T = std::string>
     class TruthTableBase {
         
-        protected:
-            
+        protected: 
             std::string _name {"#"};  //<! a name to identify the truth-table
+            std::vector<T> _domain;
             int _nvalues;
             int _number_of_rows;
             int _arity = -1;
-            std::vector<CellType> _images;
+            std::vector<std::set<int>> _images;
             std::shared_ptr<Formula> _fmla; //<! a formula whose induced interpretation is the present table
 
-            std::map<int, std::string> _values_names;
+            std::map<T, int> _values_to_int;
 
             using TruthTableRow = std::pair<std::vector<int>, CellType>;
 
@@ -193,6 +193,10 @@ namespace ltsy {
             inline int arity() const { return _arity; }
 
             inline int nvalues() const { return _nvalues; }
+
+            inline std::vector<T> domain() const { return _domain; }
+
+            inline std::map<T, int> translation() const { return _values_to_int; }
 
             void update(const std::set<Determinant<CellType>>& dets) {
                 for (auto e : dets)

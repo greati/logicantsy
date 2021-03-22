@@ -107,6 +107,7 @@ set(test_sources ${test_sources}
     tests/fmla_parser_tests.cpp
     tests/pnm_axiomatization.cpp
     tests/clone_generation_tests.cpp
+    tests/new_genmatrix_test.cpp
 )
 
 

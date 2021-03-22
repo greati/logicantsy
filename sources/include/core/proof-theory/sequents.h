@@ -1,6 +1,7 @@
 #ifndef __SEQUENTS__
 #define __SEQUENTS__
 
+#include <functional>
 #include <set>
 #include "core/syntax.h"
 

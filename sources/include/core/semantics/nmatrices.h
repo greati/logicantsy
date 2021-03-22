@@ -21,12 +21,12 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
-    template<typename CellType = int>
+    template<typename T = std::string>
     class TruthInterp {
 
         private:
             std::shared_ptr<Connective> _connective; //< a pointer to the connective
-            std::shared_ptr<TruthTable<CellType>> _truth_table; //< a pointer to the truth table
+            std::shared_ptr<TruthTable<T>> _truth_table; //< a pointer to the truth table
 
         public:
 
@@ -130,15 +130,19 @@ namespace ltsy {
     };
 
     /**
+     * TODO: Change its name to MultiAlgebra
      * Holds the truth interpretation of a whole signature.
      *
      * @author Vitor Greati
      * */
-    template<typename CellType>
+    template<typename T = std::string>
     class SignatureTruthInterp {
         private:
+            std::vector<T> _domain;
             std::shared_ptr<Signature> _signature;
-            std::map<Symbol, std::shared_ptr<TruthInterp<CellType>>> _truth_interps;
+            std::map<Symbol, std::shared_ptr<TruthInterp<T>>> _truth_interps;
+
+            std::map<T, int> _value_to_int;
         public:
             SignatureTruthInterp(decltype(_signature) signature)
                 : _signature {signature} {/* empty */}
@@ -152,6 +156,49 @@ namespace ltsy {
                 for (auto& ti : _interps)
                     this->try_interpret(ti);
             }
+
+            /*
+             * Constructs a new SignatureTruthInterp object, given a signature and a set of
+             * TruthInterp. The domain and the element translations are infered from the
+             * truth tables.
+             * Notice that the set of truth interpretations must provide one and
+             * only one interpretation for each connective object in the signature. Furthermore
+             * these interpretations must all have the same domain and the same translation of
+             * values to int. If some of these requirements are not satisfied, the construction
+             * is aborted and a corresponding exception is thrown.
+            **/
+            SignatureTruthInterp(std::shared_ptr<Signature> signature, 
+                std::set<std::shared_ptr<TruthInterp<T>>> truth_interpretations) :
+                _domain {truth_interpretations[0]->truth_table()->domain()},
+                _signature {signature},
+                _value_to_int {truth_interpretations[0]->truth_table()->translation()} {
+                    // The following code ensures that we every connective in the signature
+                    // has one and only one interpretation and that the domaind of the interpretations
+                    // is the same.
+                    std::map<Connective*, int> symbol_count;
+                    for (std::pair<Symbol, std::shared_ptr<Connective>> sig_elem : *signature) {
+                        symbol_count[sig_elem.second.get()] = 0;
+                    }
+                    for (std::shared_ptr<TruthInterp<T>> interp_elem : truth_interpretations) {
+                        if (interp_elem->truth_table()->domain() != _domain) {
+                            throw std::invalid_argument("The interpretations do not have the same domain or the same translation ot int");
+                        }
+                        symbol_count[interp_elem->connective().get()]++;
+                    }
+                    for (std::pair<Connective*, int> count : symbol_count) {
+                        if (count.second == 0) {
+                            throw std::invalid_argument("Connective missing interpretation");
+                        }
+                        else if (count.second > 1) {
+                            throw std::invalid_argument("Connective with multiple interpretations");
+                        }
+                    }
+
+                    //If everything is okay with the arguments, then the object is populated
+                    for (std::shared_ptr<TruthInterp<T>> interp_elem : truth_interpretations) {
+                        _truth_interps[interp_elem->connective()->symbol()] = interp_elem;
+                    }
+                }
 
             auto begin() { return _truth_interps.begin(); }
             auto end() { return _truth_interps.end(); }
