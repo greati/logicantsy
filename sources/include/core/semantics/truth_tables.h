@@ -16,7 +16,7 @@
 
 namespace ltsy {
 
-    template<typename CellType> class TruthTable;
+    template<typename T> class TruthTable;
 
     /**
      * Represents a determinant. 
@@ -27,43 +27,53 @@ namespace ltsy {
      *
      * @author Vitor Greati
      * */
-    template<typename CellType = int>
+    template<typename T = std::string>
     class Determinant {
         private:
             int _nvalues;   /*< arg values take values from 0..(_nvalues-1)*/
             int _arity;     /*< arg size is _arity (so the determinant is _arity + 1) */
-            std::pair<int, CellType> _data;
-            std::map<int, std::string> _values_names;
+            std::pair<int, std::set<int>> _data;
+            std::map<int, T> _values_names;
 
         public:
 
-            Determinant(int nvalues, int arity, int tuple_pos, CellType last, const decltype(_values_names)& values_names) : 
+            // Constructs a determinant given all of its atributes as arguments
+            Determinant(int nvalues, int arity, int tuple_pos, std::set<int> last, const decltype(_values_names)& values_names) : 
                 _nvalues {nvalues}, _arity {arity}, _values_names {values_names}
             {
                 _data = {tuple_pos, last};
             }
 
-            Determinant(int nvalues, int arity, int tuple_pos, CellType last) : 
+            // Constructs a determinant without the translation of the internal representation of values
+            Determinant(int nvalues, int arity, int tuple_pos, std::set<int> last) : 
                Determinant{nvalues, arity, tuple_pos, last, {}} {} 
 
-            Determinant(int nvalues, std::vector<int> args, CellType last, const decltype(_values_names)& values_names) 
+            // Constructs a determinant like before, but instead of receiving the raw absolute position
+            // of the row, it receives the tuple of arguments and calculates its absolute position
+            Determinant(int nvalues, std::vector<int> args, std::set<int> last, const decltype(_values_names)& values_names) 
                 : _nvalues {nvalues}, _arity {static_cast<int>(args.size())}, _values_names {values_names} {
                 _data = {utils::position_from_tuple(_nvalues, _arity, args), last};
             }
 
-            Determinant(int nvalues, std::vector<int> args, CellType last) 
+            //Constructs a determinant given the tuple of arguments, without the translation of values
+            Determinant(int nvalues, std::vector<int> args, std::set<int> last) 
                 : Determinant{nvalues, args, last, {}} {}
 
-            inline CellType get_last() const { return _data.second; }
+            // Return the image set of the determinant
+            inline std::set<int> get_last() const { return _data.second; }
 
-            inline CellType& get_last() { return _data.second; }
+            // Returns a reference to the image set of the determinant
+            inline std::set<int>& get_last() { return _data.second; }
 
-            inline void set_last(CellType& value) { _data.second = value; }
+            // Changes the image set
+            inline void set_last(std::set<int>& value) { _data.second = value; }
 
+            // Returns the tuple of arguments of the determinant
             inline std::vector<int> get_args() const { 
                 return utils::tuple_from_position(_nvalues, _arity, _data.first); 
             }
 
+            // Returns true iff the arguments of the determinant are contained in @vs
             inline bool has_only_args(const std::set<int>& vs) const {
                 const auto args = get_args();
                 for (const auto& arg : args) {
@@ -73,15 +83,21 @@ namespace ltsy {
                 return true;
             }
 
+            // Returns the absolute position of the determinant
             inline int get_args_pos() const { return _data.first; }
 
-            bool operator==(const Determinant<CellType>& other) const {
+            // Two determinants are considered equal if they have the same @_data
+            bool operator==(const Determinant<T>& other) const {
                 return _data == other._data;
             }
 
-            bool operator<(const Determinant<CellType>& other) const;
+            /* We say that a determinant D1 is "less than"(<) D2 if either the absolute position
+             * of D1 is smaller than the absolute position of D2 or if they have the same absolute
+             * position and the image set of D1 is contained in that of D2
+            **/
+            bool operator<(const Determinant<T>& other) const;
 
-            friend std::ostream& operator<<(std::ostream& os, const Determinant<CellType>& det) {
+            friend std::ostream& operator<<(std::ostream& os, const Determinant<T>& det) {
                 auto args = det.get_args();
                 os << std::string("< ");
                 for (auto it = args.begin(); it != args.end(); ++it) {
@@ -92,13 +108,14 @@ namespace ltsy {
                 return os;  
             }
 
-
+            // Sets the translation of values names
             inline void set_values_names(const decltype(_values_names)& values_names) { _values_names = values_names; }
 
-            inline std::string get_value_name(int value) const { 
+            // Returns the value with internal representation @value
+            inline T get_value_name(int value) const { 
                 auto f = _values_names.find(value);
                 if (f == _values_names.end())
-                    return std::to_string(value);
+                    throw std::domain_error("There is no element with the given representation");
                 return f->second;
             }
     };
@@ -128,7 +145,7 @@ namespace ltsy {
 
             std::map<T, int> _values_to_int;
 
-            using TruthTableRow = std::pair<std::vector<int>, CellType>;
+            using TruthTableRow = std::pair<std::vector<int>, std::set<int>>;
 
             static constexpr auto compute_number_of_rows = [](int nvalues, int arity) { return int(std::pow(nvalues, arity)); };
 

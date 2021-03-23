@@ -95,18 +95,18 @@ endif()
 include(GoogleTest)
 
 set(test_sources ${test_sources}
-    tests/main.cpp
-    tests/syntax_tests.cpp
+    # tests/main.cpp
+    # tests/syntax_tests.cpp
     tests/truth_table_tests.cpp
-    tests/core_utils_tests.cpp
-    tests/nmatrices_tests.cpp
-    tests/genmatrices_tests.cpp
-    tests/proof_theory_tests.cpp
-    tests/truth_table_determination.cpp
-    tests/combinatorics_tests.cpp
-    tests/fmla_parser_tests.cpp
-    tests/pnm_axiomatization.cpp
-    tests/clone_generation_tests.cpp
+    # tests/core_utils_tests.cpp
+    # tests/nmatrices_tests.cpp
+    # tests/genmatrices_tests.cpp
+    # tests/proof_theory_tests.cpp
+    # tests/truth_table_determination.cpp
+    # tests/combinatorics_tests.cpp
+    # tests/fmla_parser_tests.cpp
+    # tests/pnm_axiomatization.cpp
+    # tests/clone_generation_tests.cpp
 )
 
 
@@ -115,9 +115,9 @@ target_link_libraries(maintest PRIVATE gtest logicantsy)
 target_include_directories(maintest PRIVATE include)
 gtest_discover_tests(maintest)
 
-add_executable(ltsy src/cli/cli.cpp ${BISON_bison_fmla_parser_OUTPUTS} ${FLEX_flex_fmla_lexer_OUTPUTS})
-target_link_libraries(ltsy PRIVATE logicantsy PUBLIC yaml-cpp)
-target_include_directories(ltsy PRIVATE include PUBLIC ${yamlcpp_SOURCE_DIR}/include ${spdlog_SOURCE_DIR}/include)
+#add_executable(ltsy src/cli/cli.cpp ${BISON_bison_fmla_parser_OUTPUTS} ${FLEX_flex_fmla_lexer_OUTPUTS})
+#target_link_libraries(ltsy PRIVATE logicantsy PUBLIC yaml-cpp)
+#target_include_directories(ltsy PRIVATE include PUBLIC ${yamlcpp_SOURCE_DIR}/include ${spdlog_SOURCE_DIR}/include)
 
 
 enable_testing()
