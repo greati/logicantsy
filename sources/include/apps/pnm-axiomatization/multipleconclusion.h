@@ -185,7 +185,8 @@ namespace ltsy {
                     if (simplify_dilution)
                         remove_dilutions(sigma_conn);
                     sigma_conn = simplify_by_cut2(sigma_conn);
-                    remove_dilutions(sigma_conn);
+                    if (simplify_dilution)
+                        remove_dilutions(sigma_conn);
                     if (simplify_subrule_sound)
                         sigma_conn = simplify_by_subrule_soundness(sigma_conn);
                     result["\\Sigma_{" + symb + "}"] = make_calc_item(sigma_conn);

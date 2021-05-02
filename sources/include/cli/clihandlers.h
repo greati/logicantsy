@@ -442,9 +442,16 @@ namespace ltsy {
                         temp += "\\end{smallmatrix}\n";
                         temp += "$}";
                         temp += "}";
+                        // begin document
                         temp += "\\begin{document}\n";
                         temp += "\\tableofcontents\n";
                         temp += "    \\begin{center}\n";
+                        // section of truth-tables
+                        temp += "\\section{Interpretation}\n";
+                        temp += "{\% for conn, tt in interps \%}";
+                        temp += "(|{ tt }|)";
+                        temp += "{\% endfor \%}\n";
+                        // schemas, one per section
                         temp += "{\% for group, schemas in axiomatization \%}";
                         temp += "\\section{Schemas of $(|{ group }|)$ }\n";
                         temp += "Size: (|{ length(schemas) }|)\n";
@@ -520,6 +527,13 @@ namespace ltsy {
                               });
                               result_data["axiomatization"][k].push_back(rule_json);
                         }
+                    }
+
+                    result_data["interps"] = {};
+                    for (auto [c, interp] : *pnmatrix->interpretation()) {
+                        auto tt = interp->truth_table();
+                        auto ttstr = printer->print(*tt);
+                        result_data["interps"][_tex_translation[c]] = ttstr;
                     }
 
                     // if derive

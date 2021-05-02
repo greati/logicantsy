@@ -235,7 +235,7 @@ namespace ltsy {
                  signature->add(compound->connective());
                  // parse tt and interpret connectives
                  NDTruthTable tt = parse_nd_truth_table(it_tt->second, real_values,
-                         compound->connective()->arity(), _str_to_val);
+                         compound->connective()->arity(), _str_to_val, compound->connective()->symbol());
                  auto truth_interp = std::make_shared<TruthInterp<std::set<int>>>(compound->connective(), 
                          std::make_shared<NDTruthTable>(tt));
                  sig_truth_interp->try_interpret(truth_interp);
