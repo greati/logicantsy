@@ -1,0 +1,67 @@
+semantics:
+  values: [f, bot, top, t]
+  judgements:
+    NR: [bot, t]
+    NA: [bot, f]
+    A:  [top, t]
+    R:  [top, f]
+transformations:
+  V: [[0,1],[2,3]]
+  H: [[0,3],[1,2]]
+  D: [[0,2],[1,3]]
+relations:
+  a:
+    components: [V]
+    compound: [V]
+  b:
+    compound: [V]
+  c:
+    components: [V]
+  d:
+    components: [H]
+    compound: [H]
+  e:
+    components: [H]
+  f:
+    compound: [H]
+  g:
+    components: [D]
+    compound: [D]
+  h:
+    components: [D]
+  i:
+    compound: [D]
+  j:
+    components: [V]
+    compound: [H]
+  k:
+    components: [H]
+    compound: [V]
+  l:
+    components: [H]
+    compound: [D]
+  m:
+    components: [D]
+    compound: [H]
+  n:
+    components: [V]
+    compound: [D]
+  o:
+    components: [D]
+    compound: [V]
+truth-tables:
+  neg p:
+    restrictions:
+      - [f]: [t]
+      - [t]: [f]
+      - [bot]: [bot]
+      - [top]: [top]
+latex:
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  p: "\\varphi"
+  q: "\\psi"
+  myand: "\\land"
+  myor: "\\lor"

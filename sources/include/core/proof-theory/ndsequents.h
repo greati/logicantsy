@@ -171,6 +171,16 @@ namespace ltsy {
                 }
                 return NdSequent<FmlaContainerT>{res_sequent_fmlas};
             }
+
+            NdSequent<FmlaContainerT> transform(const std::vector<std::pair<int, int>>& transformation) const {
+                NdSequent<FmlaContainerT> result {*this};
+                for (const auto [i,j] : transformation) {
+                    auto temp = result._sequent_fmlas[i];
+                    result.set(i, result._sequent_fmlas[j]);
+                    result.set(j, temp);
+                }
+                return result;
+            }
     };
 
     template class NdSequent<std::set>;

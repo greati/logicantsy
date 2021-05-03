@@ -6,6 +6,7 @@
 #include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
 #include "apps/pnm-axiomatization/multipleconclusion.h"
+#include "apps/dualization/symmetrical_calculi_dualization.h"
 
 namespace ltsy {
 

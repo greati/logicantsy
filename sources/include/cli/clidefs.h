@@ -18,6 +18,9 @@ namespace ltsy {
 
             inline static const std::string MON_MATRIX_AXIMTZR_APP_NAME = "axiomatize-monadic-matrix";
             inline static const std::string MON_MATRIX_AXIMTZR_APP_DESC = "Produce a generalized Hilbert calculus for a monadic partial matrix";
+
+            inline static const std::string TT_DUALIZER_APP_NAME = "dualizer";
+            inline static const std::string TT_DUALIZER_APP_DESC = "Produce dualized versions of given truth-tables";
     };
 
 };

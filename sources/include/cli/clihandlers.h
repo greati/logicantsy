@@ -205,6 +205,21 @@ namespace ltsy {
             }
     };
 
+    class TTSymmetricalDualizerCLIHandler {
+        private:
+        public:
+
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
+
+                YAMLCppParser parser;
+            }
+    };
+
+
     class TTDeterminizerCLIHandler {
 
         private:
