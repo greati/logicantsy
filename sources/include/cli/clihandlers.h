@@ -239,13 +239,13 @@ namespace ltsy {
                         temp += "\\begin{smallmatrix}\n";
                         for (auto i = 2; i <= dimension; i+=2) {
                             temp += "#"+std::to_string(i);
-                            if (i != dimension) temp += "&;&";
+                            if (i != dimension) temp += "&\\mid&";
                         }
                         temp += "\\\\\n";
                         temp += "\\midrule\n";
                         for (auto i = 1; i < dimension; i+=2) {
                             temp += "#"+std::to_string(i);
-                            if (i != dimension-1) temp += "&;&";
+                            if (i != dimension-1) temp += "&\\mid&";
                         }
                         temp += "\\end{smallmatrix}\n";
                         temp += "$}";

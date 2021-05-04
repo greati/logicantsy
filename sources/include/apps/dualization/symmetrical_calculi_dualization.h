@@ -147,9 +147,6 @@ namespace ltsy {
                     r.calculus = MultipleConclusionCalculus {
                         std::vector<MultipleConclusionRule>(new_rules.begin(), new_rules.end())
                     };
-                    std::cout << "Calculus" << std::endl;
-                    for (auto rule : r.calculus.rules())
-                        std::cout << rule.sequent().to_string() << std::endl;
                     transformation_results.push_back(r);
                 }
                 return transformation_results;
