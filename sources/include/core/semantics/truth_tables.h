@@ -171,6 +171,7 @@ namespace ltsy {
 
             inline int number_of_rows() const {return _images.size(); }
             decltype(_fmla) fmla() const { return _fmla; };
+            void set_fmla(std::shared_ptr<Formula> fmla) { _fmla = fmla; };
 
             bool operator<(const TruthTableBase<CellType>& other) const {
                 return this->_images < other._images;
@@ -235,6 +236,7 @@ namespace ltsy {
             inline void set_values_names(const decltype(_values_names)& values_names) { 
                 _values_names = values_names; 
             }
+            decltype(_values_names) get_values_names() const { return _values_names; }
 
             inline std::string get_value_name(int value) const { 
                 auto f = _values_names.find(value);

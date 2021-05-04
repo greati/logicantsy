@@ -102,6 +102,13 @@ namespace ltsy {
                 auto rule_fmlas = _sequent.collect_fmlas();
                 return is_subset(rule_fmlas, fmlas); 
             }
+
+            MultipleConclusionRule transform(const std::vector<std::pair<int, int>>& transformation,
+                        std::function<bool(std::shared_ptr<Formula>)> pred = [](auto f) -> bool { return true; }) const {
+                MultipleConclusionRule result {*this};
+                result._sequent = this->_sequent.transform(transformation, pred);
+                return result;
+            }
     };
 
 

@@ -207,15 +207,191 @@ namespace ltsy {
 
     class TTSymmetricalDualizerCLIHandler {
         private:
+            const std::string LATEX_TITLE = "latex";
+            const std::string SEMANTICS_VALUES_TITLE = "values";
+            const std::string TTS_TITLE = "truth-tables";
+            const std::string MOVEMENTS_TITLE = "movements";
+            const std::string TRANSFORMATIONS_TITLE = "transformations";
+            const std::string COMPOUND_TITLE = "compound";
+            const std::string TEMPLATE_TITLE = "template";
+            const std::string COMPONENTS_TITLE = "components";
+            std::map<std::string, std::string> _tex_translation;
+            std::map<int, std::string> _val_to_str;
+            std::map<std::string, int> _str_to_val;
         public:
+
+            std::string get_default_template(
+                    Printer::PrinterType output_type, unsigned int dimension = 4) {
+                std::string temp;
+                switch(output_type) {
+                    case Printer::PrinterType::LATEX: {
+                        temp += "\\documentclass{article}\n";
+                        temp += "\\usepackage[utf8]{inputenc}\n";
+                        temp += "\\usepackage[english]{babel}\n";
+                        temp += "\\usepackage{booktabs}\n";
+                        temp += "\\usepackage{amsmath}\n";
+                        temp += "\\usepackage{float}\n";
+                        temp += "\\usepackage{graphicx}\n";
+                        temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+                        unsigned int index=1;
+                        //dimension = dimension % 2 ? dimension : dimension + 1;
+                        temp += "\\scalebox{1.5}{$\n";
+                        temp += "\\begin{smallmatrix}\n";
+                        for (auto i = 2; i <= dimension; i+=2) {
+                            temp += "#"+std::to_string(i);
+                            if (i != dimension) temp += "&;&";
+                        }
+                        temp += "\\\\\n";
+                        temp += "\\midrule\n";
+                        for (auto i = 1; i < dimension; i+=2) {
+                            temp += "#"+std::to_string(i);
+                            if (i != dimension-1) temp += "&;&";
+                        }
+                        temp += "\\end{smallmatrix}\n";
+                        temp += "$}";
+                        temp += "}";
+                        temp += "\\begin{document}\n";
+                        temp += "\\tableofcontents\n";
+                        temp += "    \\begin{center}\n";
+                        temp += "{\% for ttname, transformations in transfs \%}";
+                        temp += "   \\section{(|{ ttname }|)}\n";
+                        temp += "   {\% for tname, components in transformations \%}";
+                        temp += "       \\subsection{(|{ ttname }|)((|{ tname }|))}\n";
+                        temp += "       (|{ components.table }|)\n"; 
+                        temp += "       {\% for axiom in components.calculus \%}\n";
+                        temp += "(|{ axiom.name }|)\n";
+                        temp += "\\[\n";
+                        temp += "\\bCon";
+                        temp += "           {\% for fmlas in axiom.schema \%}\n";
+                        temp += "{\\text{ (|{ fmlas }|) }}";
+                        temp += "           {\% endfor \%}\n";
+                        temp += "\\]";
+                        temp += "       {\% endfor \%}\n";
+                        temp += "   {\% endfor \%}";
+                        temp += "{\% endfor \%}";
+                        temp += "    \\end{center}\n";
+                        temp += "\\end{document}";
+                    break;}
+                    case Printer::PrinterType::PLAIN:
+                    break;
+                }
+                return temp;
+            }
 
             void handle(const std::string& yaml_path, 
                     Printer::PrinterType output_type, 
                     bool verbose=true,
                     std::optional<std::string> template_path=std::nullopt,
                     std::optional<std::string> dest_path=std::nullopt) {
-
                 YAMLCppParser parser;
+                nlohmann::json result_data;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+                    // get latex
+                    if (auto latex_node = root[LATEX_TITLE]) {
+                        for (auto it = latex_node.begin(); it != latex_node.end(); ++it)
+                           _tex_translation[it->first.as<std::string>()] = it->second.as<std::string>(); 
+                    }
+                    // values
+                    auto values_node = parser.hard_require(root, SEMANTICS_VALUES_TITLE);
+                    auto values = values_node.as<std::vector<std::string>>();
+                    std::set<int> real_values;
+                    auto nvalues = values.size();
+                    for (int i {0}; i < nvalues; ++i) {
+                        _str_to_val[values[i]] = i;
+                        _val_to_str[i] = values[i];
+                        real_values.insert(i);
+                    }
+                    // movements
+                    std::map<std::string, std::vector<std::pair<int, int>>> changes;
+                    auto changes_node = parser.hard_require(root, MOVEMENTS_TITLE);
+                    for (auto it_mv = changes_node.begin(); it_mv != changes_node.end(); ++it_mv) {
+                        auto name = it_mv->first.as<std::string>();
+                        auto moves = it_mv->second;
+                        changes[name] = std::vector<std::pair<int,int>>();
+                        for (auto it_moves = moves.begin(); it_moves != moves.end(); ++it_moves) {
+                            std::vector<int> moves_pair = it_moves->as<std::vector<int>>();
+                            std::pair<int, int> p {moves_pair[0], moves_pair[1]};
+                            changes[name].push_back(p);
+                        }
+                    }
+                    // transformations
+                    std::map<std::string, SymmetricalCalculiDualization::Transformation> transformations;
+                    auto transf_node = parser.hard_require(root, TRANSFORMATIONS_TITLE);
+                    for (auto it_tf = transf_node.begin(); it_tf != transf_node.end(); ++it_tf) {
+                        auto name = it_tf->first.as<std::string>();
+                        auto transf = it_tf->second;
+                        SymmetricalCalculiDualization::Transformation transformation;
+                        transformation.name = name;
+                        for (auto it_transf = transf.begin(); it_transf != transf.end(); ++it_transf) {
+                            auto what_moves_name = it_transf->first.as<std::string>();
+                            if (what_moves_name != COMPOUND_TITLE and what_moves_name != COMPONENTS_TITLE)
+                                throw std::invalid_argument("Unknown specification of transformation: " + what_moves_name);
+                            SymmetricalCalculiDualization::WhatMoves what_moves =
+                                what_moves_name == COMPOUND_TITLE ? SymmetricalCalculiDualization::WhatMoves::COMPOUND :
+                                SymmetricalCalculiDualization::WhatMoves::COMPONENTS;
+                            auto changes_spec = it_transf->second;
+                            SymmetricalCalculiDualization::Movement movement;
+                            movement.what_moves = what_moves;
+                            for (auto it_change = changes_spec.begin(); it_change != changes_spec.end(); ++it_change) {
+                                auto changes_pos = changes[it_change->as<std::string>()];
+                                movement.movement = changes_pos;
+                            }
+                            transformation.movements.push_back(movement);
+                        }
+                        transformations[name] = transformation;
+                    }
+                    spdlog::debug("Quantity of transformations: " + std::to_string(transformations.size()));
+                    SymmetricalCalculiDualization dualizer {transformations};
+                    PrinterFactory printer_factory;
+                    auto printer = printer_factory.make_printer(output_type, _tex_translation);
+                    // tts
+                    auto tts_node = parser.hard_require(root, TTS_TITLE);
+                    for (auto it_tt = tts_node.begin(); it_tt != tts_node.end(); ++it_tt) {
+                        // capture connective and variables
+                        auto [compound, collected_vars] = parser.parse_connective_representant(it_tt->first);
+                        spdlog::info("Processing " + compound->connective()->symbol());
+                        // parse tt and interpret connectives
+                        NDTruthTable tt = parser.parse_nd_truth_table(it_tt->second, real_values,
+                                compound->connective()->arity(), _str_to_val, compound->connective()->symbol());
+                        std::cout << tt.print().str() << std::endl;
+                        tt.set_fmla(compound);
+                        auto transformation_results = dualizer.create_oppositions(std::make_shared<NDTruthTable>(tt));
+                        nlohmann::json response_name;
+                        for (auto& [tt, calculus, transformation] : transformation_results) {
+                            spdlog::info("Printing transformation " + transformation.name);
+                            tt.set_values_names(_val_to_str);
+                            response_name[transformation.name]["table"] = printer->print(tt);
+                            response_name[transformation.name]["calculus"] = {};
+                            for (auto r : calculus.rules()) {
+                                nlohmann::json rule_json ({
+                                    {"name", r.name()},        
+                                    {"schema", printer->print(r.sequent())},        
+                                });
+                                response_name[transformation.name]["calculus"].push_back(rule_json);
+                            }
+                        }
+                        result_data["transfs"][tt.name()] = response_name;
+                    }
+                    // report
+                    // get template if exists
+                    std::string template_source;
+                    if (template_path) {
+                        template_source = *template_path;
+                    } else if (auto temp = root[TEMPLATE_TITLE]) {
+                        template_source = temp.as<std::string>(); 
+                    } else {
+                        template_source = get_default_template(output_type);
+                    }
+                    // generate report
+                    AppReport report;
+                    auto r = report.produce(template_source, result_data, template_path.has_value(), dest_path);
+                    std::cout << r << std::endl;
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
             }
     };
 
