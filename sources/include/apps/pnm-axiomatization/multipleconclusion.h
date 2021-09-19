@@ -99,13 +99,66 @@ namespace ltsy {
                 }
             }
 
+            PNMMultipleConclusionAxiomatizer(const std::vector<int>& dsets_rule_positions,
+                    decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp)
+            : _prem_conc_pos_corresp {prem_conc_pos_corresp} {
+            
+                for (int i = 0, j=0; i < dsets_rule_positions.size(); i += 2) {
+                    _opposition_dsets[i] = i+1;
+                    _dsets_positions[i] = j;
+                    _dsets_positions[i+1] = j++; 
+                }
+                for (int i = 0; i < dsets_rule_positions.size(); i += 1) {
+                    _dsets_rule_positions[i]=dsets_rule_positions[i]; 
+                }
+            }
+
+            MultipleConclusionCalculus simplify_calculus(
+                const MultipleConclusionCalculus& calculus,
+                bool simplify_overlap=true, 
+                bool simplify_dilution=true, 
+                bool simplify_by_cuts=true,
+                std::optional<unsigned int> simplify_by_subrule_deriv=std::nullopt,
+                bool simplify_by_subrule_soundness=false
+                ) 
+            {
+                MultipleConclusionCalculus result = calculus;
+                auto rules_vector = result.rules();
+                auto rules_set = std::set<MultipleConclusionRule> {rules_vector.begin(), rules_vector.end()};
+                spdlog::info("Overlap...");
+                if (simplify_overlap)
+                    rules_set = remove_overlaps(rules_set);
+                spdlog::info("Dilution...");
+                if (simplify_dilution)
+                    remove_dilutions(rules_set);
+                spdlog::info("Cuts...");
+                if (simplify_by_cuts)
+                    rules_set = simplify_by_cut2(rules_set);
+                spdlog::info("Dilution...");
+                if (simplify_dilution)
+                    remove_dilutions(rules_set);
+                if (simplify_by_subrule_soundness)
+                    rules_set = this->simplify_by_subrule_soundness(rules_set);
+                if (simplify_by_cuts)
+                    rules_set = simplify_by_cut2(rules_set);
+                spdlog::info("Dilution...");
+                if (simplify_dilution)
+                    remove_dilutions(rules_set);
+                result = MultipleConclusionCalculus {std::vector<MultipleConclusionRule> {rules_set.begin(), rules_set.end()}};
+                if (simplify_by_subrule_deriv)
+                    rules_set = this->simplify_by_subrule_deriv(result, *simplify_by_subrule_deriv);
+                spdlog::info("Done.");
+                return MultipleConclusionCalculus {std::vector<MultipleConclusionRule> {rules_set.begin(), rules_set.end()}};
+            }
+
             MultipleConclusionCalculus make_single_calculus(
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
                     bool simplify_subrule_sound=true, 
                     std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
-                    std::optional<unsigned int> simplify_with_derivation=std::nullopt) {
-                auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, simplify_subrule_sound); 
+                    std::optional<unsigned int> simplify_with_derivation=std::nullopt,
+                    bool simplify_by_cuts=true) {
+                auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, simplify_subrule_sound, simplify_by_cuts); 
                 std::set<MultipleConclusionRule> full_calculus_rules; 
                 for (auto [k, calculus] : axiomatization) {
                     auto calculus_rules = calculus.rules();
@@ -150,7 +203,8 @@ namespace ltsy {
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
                     bool simplify_subrule_sound=true,
-                    bool simplify_subrule_deriv=true) {
+                    bool simplify_subrule_deriv=true,
+                    bool simplify_by_cuts=true) {
                 auto make_calc_item = [&](const std::set<MultipleConclusionRule>& rulesset) {
                     std::vector<MultipleConclusionRule> rules;
                     for (auto r : rulesset)
@@ -184,7 +238,8 @@ namespace ltsy {
                         sigma_conn = remove_overlaps(sigma_conn);
                     if (simplify_dilution)
                         remove_dilutions(sigma_conn);
-                    sigma_conn = simplify_by_cut2(sigma_conn);
+                    if (simplify_by_cuts)
+                        sigma_conn = simplify_by_cut2(sigma_conn);
                     if (simplify_dilution)
                         remove_dilutions(sigma_conn);
                     if (simplify_subrule_sound)
@@ -195,8 +250,10 @@ namespace ltsy {
                 //non-total rules
                 spdlog::info("Producing T rules...");
                 auto non_total_rules = make_nontotal_rules();
-                non_total_rules = simplify_by_cut2(non_total_rules);
-                remove_dilutions(non_total_rules);
+                if (simplify_by_cuts)
+                    non_total_rules = simplify_by_cut2(non_total_rules);
+                if (simplify_dilution)
+                    remove_dilutions(non_total_rules);
                 result["\\mathcal{T}"] = make_calc_item(non_total_rules);
                 spdlog::info("Done.");
                 return result;
@@ -358,9 +415,9 @@ namespace ltsy {
                         for (auto seps2 : sep_choices2) {
                             std::vector<FmlaSet> sequent_fmlas {_dsets_rule_positions.size()};
                             for (auto d1 : dset1)
-                                sequent_fmlas[_dsets_rule_positions[d1]] = seps1[_dsets_positions[d1]];
+                                sequent_fmlas[_dsets_rule_positions[d1]] = seps2[_dsets_positions[d1]];
                             for (auto d2 : dset2)
-                                sequent_fmlas[_dsets_rule_positions[d2]] = seps2[_dsets_positions[d2]];
+                                sequent_fmlas[_dsets_rule_positions[d2]] = seps1[_dsets_positions[d2]];
                             NdSequent<std::set> sequent {sequent_fmlas};
                             auto rule_name = make_exists_rule_name(X, rule_idx++);
                             MultipleConclusionRule mcrule {rule_name, sequent, _prem_conc_pos_corresp};

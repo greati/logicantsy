@@ -1,0 +1,75 @@
+values: [f, b, n, t]
+base:
+  smly(p):
+    restrictions:
+      - [t]: [f]
+      - [b]: [b]
+      - [n]: [t]
+      - [f]: [t]
+  frwn(p):
+    restrictions:
+      - [t]: [f]
+      - [b]: [f]
+      - [n]: [n]
+      - [f]: [t]
+  csmly(p):
+    restrictions:
+      - [t]: [t]
+      - [b]: [f]
+      - [n]: [b]
+      - [f]: [t]
+#  cfrwn(p):
+#    restrictions:
+#      - [t]: [f]
+#      - [b]: [n]
+#      - [n]: [t]
+#      - [f]: [f]
+  p and q:
+    restrictions:
+      - [f, _]: [f]
+      - [_, f]: [f]
+      - [b, t]: [b]
+      - [n, t]: [n]
+      - [t, b]: [b]
+      - [t, n]: [n]
+      - [b, n]: [f]
+      - [n, b]: [f]
+      - [b,b]: [b]
+      - [n,n]: [n]
+      - [t, t]: [t]
+  p or q:
+    restrictions:
+      - [t, _]: [t]
+      - [_, t]: [t]
+      - [b, f]: [b]
+      - [n, f]: [n]
+      - [f, b]: [b]
+      - [f, n]: [n]
+      - [b, n]: [t]
+      - [n, b]: [t]
+      - [b,b]: [b]
+      - [n,n]: [n]
+      - [f, f]: [f]
+  n():
+    restrictions:
+      - []: [f]
+  b():
+    restrictions:
+      - []: [t] 
+search:
+  fden(p):
+    restrictions:
+      - [t]: [f]
+      - [b]: [b]
+      - [n]: [n]
+      - [f]: [t]
+  const():
+    restrictions:
+      - []: [t]
+  cfrwn(p):
+    restrictions:
+      - [t]: [f]
+      - [b]: [n]
+      - [n]: [t]
+      - [f]: [f]
+

@@ -333,7 +333,16 @@ namespace ltsy {
             TruthTable<std::set<int>> compose(const std::vector<TruthTable<std::set<int>>>& gs) const {
                 if (gs.size() != this->_arity)
                     throw std::invalid_argument("wrong parameters number on composition of truth-table");
+
+                if (this->_arity == 0)
+                    return *this;
+
                 auto arity = gs[0].arity();
+
+                for (auto g : gs)
+                    if (g.arity() != arity)
+                        throw std::invalid_argument("the components must have the same arity");
+
                 auto number_of_rows = gs[0].number_of_rows();
 
                 auto validate_input = [&](const std::vector<int>& input, int l) -> bool {

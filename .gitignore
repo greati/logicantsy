@@ -1,1 +1,7 @@
 build/*
+*.aux
+*.log
+*.pdf
+*.tex
+*.toc
+.vscode

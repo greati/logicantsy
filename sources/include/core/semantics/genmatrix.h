@@ -10,6 +10,7 @@
 #include <set>
 #include "external/ProgressBar/ProgressBar.hpp"
 #include "spdlog/spdlog.h"
+#include <optional>
 
 namespace ltsy {
     
@@ -176,6 +177,7 @@ namespace ltsy {
             /* Constructor.
              */
             Discriminator(const decltype(separators) _separators) : separators {_separators} {}
+            Discriminator() {}
             
             /* Collect all discriminator formulas in a single set.
              */

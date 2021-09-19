@@ -84,7 +84,7 @@ target_include_directories(logicantsy PUBLIC include ${spdlog_SOURCE_DIR}/includ
 # --------------------------------------- #
 FetchContent_Declare(googletest
     GIT_REPOSITORY  https://github.com/google/googletest.git
-    GIT_TAG         2fe3bd994b3189899d93f1d5a881e725e046fdc2 # 1.8.1
+    GIT_TAG         e2239ee6043f73722e7aa812a459f54a28552929 # 1.11.0
 )
 FetchContent_GetProperties(googletest)
 if (NOT googletest_POPULATED)

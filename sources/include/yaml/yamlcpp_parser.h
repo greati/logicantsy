@@ -200,6 +200,25 @@ namespace ltsy {
             }
         }
 
+        std::vector<NDTruthTable> parse_nd_truth_table_vector
+            (
+                const YAML::Node& root,
+                const std::set<int>& values,
+                const std::map<std::string, int>& str_to_val
+            ) const {
+            std::vector<NDTruthTable> result;
+            for (auto it_tt = root.begin(); it_tt != root.end(); ++it_tt) {
+                // capture connective and variables
+                auto [compound, collected_vars] = parse_connective_representant(it_tt->first);
+                // parse tt and interpret connectives
+                NDTruthTable tt = parse_nd_truth_table(it_tt->second, values,
+                        compound->connective()->arity(), str_to_val, compound->connective()->symbol());
+                tt.set_fmla(compound);
+                result.push_back(tt);
+            }            
+            return result;
+        }
+
         std::shared_ptr<GenMatrix> parse_gen_matrix(const YAML::Node& root) const {
             auto pnmatrix_node = hard_require(root, PNMATRIX_NAME);             
             std::map<int, std::string> _val_to_str;
@@ -278,6 +297,17 @@ namespace ltsy {
                 }
             }
             return Discriminator {separators}; 
+        }
+
+        FmlaSet parse_fmla_set(const YAML::Node& set_fmla_node) {
+            FmlaSet fmlas_in_place;
+            auto fmlas_str = set_fmla_node.as<std::vector<std::string>>();
+            for (const auto& fmla_str : fmlas_str) {
+                auto fmla_parser = make_fmla_parser(set_fmla_node);
+                auto parsed_fmla = fmla_parser->parse(fmla_str);
+                fmlas_in_place.insert(parsed_fmla);
+            }
+            return fmlas_in_place;
         }
 
         std::shared_ptr<NdSequent<std::set>> parse_nd_sequent(const YAML::Node& seq_node) {
