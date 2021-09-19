@@ -171,6 +171,7 @@ namespace ltsy {
 
             inline int number_of_rows() const {return _images.size(); }
             decltype(_fmla) fmla() const { return _fmla; };
+            void set_fmla(std::shared_ptr<Formula> fmla) { _fmla = fmla; };
 
             bool operator<(const TruthTableBase<CellType>& other) const {
                 return this->_images < other._images;
@@ -235,6 +236,7 @@ namespace ltsy {
             inline void set_values_names(const decltype(_values_names)& values_names) { 
                 _values_names = values_names; 
             }
+            decltype(_values_names) get_values_names() const { return _values_names; }
 
             inline std::string get_value_name(int value) const { 
                 auto f = _values_names.find(value);
@@ -331,7 +333,16 @@ namespace ltsy {
             TruthTable<std::set<int>> compose(const std::vector<TruthTable<std::set<int>>>& gs) const {
                 if (gs.size() != this->_arity)
                     throw std::invalid_argument("wrong parameters number on composition of truth-table");
+
+                if (this->_arity == 0)
+                    return *this;
+
                 auto arity = gs[0].arity();
+
+                for (auto g : gs)
+                    if (g.arity() != arity)
+                        throw std::invalid_argument("the components must have the same arity");
+
                 auto number_of_rows = gs[0].number_of_rows();
 
                 auto validate_input = [&](const std::vector<int>& input, int l) -> bool {

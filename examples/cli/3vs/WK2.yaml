@@ -1,0 +1,52 @@
+pnmatrix:
+  values: [0, u, 1]
+  distinguished_sets:
+    - [1]
+  infer_complements: true
+  interpretation:
+    p and q:
+      default: [0]
+      restrictions:
+        - [1, 1]: [1]
+        - [u, _]: [u]
+        - [_, u]: [u]
+    p or q:
+      default: [1]
+      restrictions:
+        - [0, 0]: [0]
+        - [u, _]: [u]
+        - [_, u]: [u]
+    p -> q:
+      default: [1]
+      restrictions:
+        - [1, 0]: [0]
+        - [u, _]: [u]
+        - [_, u]: [u]
+    neg p:
+      restrictions:
+        - [0]: [1]
+        - [u]: [u]
+        - [1]: [0]
+sequent_dset_correspondence: [1, 0]
+premisses_conclusions_correspondence: [[1, 0]]
+simplify_overlap: true
+simplify_dilution: true
+simplify_subrules: true
+simplify_derivation: 14
+discriminator:
+  0: [[neg p],[p]]
+  u: [[],[p, neg p]]
+  1: [[p],[neg p]]
+latex:
+  0: "0"
+  u: "u"
+  1: "1"
+  "->": "\\to"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\sigma"
+  neg: "\\neg"
+  and: "\\land"
+  or: "\\lor"

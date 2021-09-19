@@ -62,6 +62,7 @@ simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: true
 simplify_derivation: 14
+simplify_by_cuts: true
 # discriminator using less complex formulas as possible
 discriminator:
   ^0: [[o(p)], [p]]

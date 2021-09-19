@@ -102,6 +102,13 @@ namespace ltsy {
                 auto rule_fmlas = _sequent.collect_fmlas();
                 return is_subset(rule_fmlas, fmlas); 
             }
+
+            MultipleConclusionRule transform(const std::vector<std::pair<int, int>>& transformation,
+                        std::function<bool(std::shared_ptr<Formula>)> pred = [](auto f) -> bool { return true; }) const {
+                MultipleConclusionRule result {*this};
+                result._sequent = this->_sequent.transform(transformation, pred);
+                return result;
+            }
     };
 
 
@@ -305,8 +312,8 @@ namespace ltsy {
                 bool end_branch = false;
 
                 DerivationTreeNode(const decltype(rule_instance)& _rule,
-                        bool _star = true) :
-                    rule_instance {_rule}, star {_star} {}
+                        bool _star = true, bool _closed = true) :
+                    rule_instance {_rule}, star {_star}, closed {_closed} {}
 
                 DerivationTreeNode(const decltype(node)& _node,
                         const decltype(rule_instance)& _rule,
@@ -396,7 +403,7 @@ namespace ltsy {
                 //std::cout << "fmlas to make instances" << std::endl;
                 //print_set(fmlas_to_make_instances);
                 // check satisfaction
-                bool satisfied = false;
+                bool satisfied = derivation->closed;//false;
                 for (auto i {0}; i < conclusions.size() and not satisfied; ++i) {
                     //std::cout << "Check for closure on pos " + std::to_string(i) << std::endl;
                     //print_set(node_fmlas[i]);
@@ -456,6 +463,7 @@ namespace ltsy {
                                        std::make_optional<MultipleConclusionRule>(rule_instance)
                                    );
                                derivation->add_child(star_node);
+                               derivation->closed=true;
                                return true;
                            } else {
                                for (auto i {0}; i < rule_conclusions.size(); ++i) {

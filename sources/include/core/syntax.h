@@ -684,9 +684,11 @@ namespace ltsy {
                     compound->components()[0]->accept(*this);
                 } else if (arity == 2) {
                     auto components = compound->components();
+                    buffer << "(";
                     components[0]->accept(*this);
                     buffer << " " << get_translation(symbol) << " ";
                     components[1]->accept(*this);
+                    buffer << ")";
                 } else {
                     buffer << get_translation(symbol) << "(";
                     auto components = compound->components();
@@ -698,7 +700,12 @@ namespace ltsy {
                     buffer <<")";
                 }
             }
-            std::string get_string() { return buffer.str(); }
+            std::string get_string() { 
+                std::string result = buffer.str();
+                if ((result.size() >= 3) and (result[0] == '(') and (result[result.size()-1] == ')'))
+                    result = result.substr(1, result.size() - 2);
+                return result;
+            }
     };
 
     /* Implements an assignment of formulas to propositional variables.

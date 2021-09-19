@@ -6,12 +6,46 @@
 #include "tt_determination/ndsequents_normal_form.h"
 #include "core/semantics/attitudes.h"
 #include "apps/pnm-axiomatization/multipleconclusion.h"
+#include "apps/dualization/symmetrical_calculi_dualization.h"
+#include "apps/clones/clone_generation.h"
 
 namespace ltsy {
 
     class AppsFacade {
 
         public:
+
+            std::pair<
+                std::optional<std::set<NDTruthTable>>,
+                std::optional<std::set<NDTruthTable>>>
+            clone_membership(const int nvalues, const std::vector<NDTruthTable>& base, const NDTruthTable& f, 
+                std::optional<int> max_depth=std::nullopt, 
+                bool return_clone = false) const {
+                ltsy::CloneGenerator generator {nvalues, base};
+
+                auto make_props = [](int n) {
+                    std::vector<std::shared_ptr<Formula>> props;
+                    for (int i = 1; i <= n; ++i)
+                        props.push_back(std::make_shared<Prop>("p"+std::to_string(i)));
+                    return props;
+                };
+
+                auto membership_predicate = [&](NDTruthTable tt) { return tt == f; };
+                std::vector<std::shared_ptr<Formula>> props = make_props(f.arity());
+
+                if (not return_clone) {
+                    auto results = generator.generate(f.arity(), props, max_depth, std::pair<std::function<bool(NDTruthTable)>, int> {membership_predicate, 1});
+                    if (results.size() > 0) {
+                        return {results, std::nullopt};
+                    } else return {std::nullopt, std::nullopt};
+                } else {
+                    auto results = generator.generate(f.arity(), props, max_depth);
+                    auto searchedtt = results.find(f);
+                    if (searchedtt != results.end()) {
+                        return {std::set<NDTruthTable>{*searchedtt}, results};
+                    } else return {std::nullopt, results};
+                }
+            }
 
             /* App to axiomatize a monadic generalized matrix
              * given a ser of separators.
@@ -26,15 +60,34 @@ namespace ltsy {
                     bool simplify_dilution=true,
                     bool simplify_subrules=true,
                     std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
-                    std::optional<unsigned int> simplify_by_derivation=std::nullopt
+                    std::optional<unsigned int> simplify_by_derivation=std::nullopt,
+                    bool simplify_by_cuts=true
                     ) {
                PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
                if (simplify_by_derivation or simplify_subrules_deriv)
                    return 
                    axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, simplify_subrules, 
-                           simplify_subrules_deriv, simplify_by_derivation).group();
+                           simplify_subrules_deriv, simplify_by_derivation, simplify_by_cuts).group();
                else
-                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules);
+                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules, false, simplify_by_cuts);
+            }
+
+            /* App to axiomatize a monadic generalized matrix
+             * given a ser of separators.
+             * */
+            MultipleConclusionCalculus
+            simplify_mult_conc_axiomatizer(
+                    const MultipleConclusionCalculus& calculus,
+                    const std::vector<std::pair<int,int>>& prem_conc_corresp,
+                    const std::vector<int>& sequent_dset_correspondence,
+                    bool simplify_overlap=true,
+                    bool simplify_dilution=true,
+                    bool simplify_by_cuts=true,
+                    std::optional<unsigned int> simplify_by_subrule_deriv=std::nullopt,
+                    bool simplify_by_subrule_soundness=false
+                    ) {
+               PNMMultipleConclusionAxiomatizer axiomatizer {sequent_dset_correspondence, prem_conc_corresp}; 
+               return axiomatizer.simplify_calculus(calculus, simplify_overlap, simplify_dilution, simplify_by_cuts, simplify_by_subrule_deriv, simplify_by_subrule_soundness);
             }
 
             /* App to check soundness of a rule wrt a given

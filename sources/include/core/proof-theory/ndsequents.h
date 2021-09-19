@@ -171,6 +171,28 @@ namespace ltsy {
                 }
                 return NdSequent<FmlaContainerT>{res_sequent_fmlas};
             }
+
+            NdSequent<FmlaContainerT> transform(const std::vector<std::pair<int, int>>& transformation,
+                std::function<bool(std::shared_ptr<Formula>)> pred = [](auto f) -> bool { return true; }) const {
+                NdSequent<FmlaContainerT> result {*this};
+                for (const auto [i,j] : transformation) {
+                    auto oldi = result._sequent_fmlas[i];
+                    auto oldj = result._sequent_fmlas[j];
+                    for (auto fmla : oldi) {
+                        if (pred(fmla)) {
+                            result._sequent_fmlas[i].erase(fmla);
+                            result._sequent_fmlas[j].insert(fmla);
+                        }
+                    }
+                    for (auto fmla : oldj) {
+                        if (pred(fmla)) {
+                            result._sequent_fmlas[j].erase(fmla);
+                            result._sequent_fmlas[i].insert(fmla);
+                        }
+                    }
+                }
+                return result;
+            }
     };
 
     template class NdSequent<std::set>;

@@ -1,0 +1,36 @@
+calculus:
+  r1: [[p1 or q1, p2, q1],[p1, p1 or p2]]
+  r2: [[p1 or q1, p1 or p2, q1],[p1, p2, p2 or q1]]
+  r3: [[p1 or q1, (p1 or p2) or q1, q1],[p1, p2, p2 or q1]]
+  r4: [[p1 or q1, p2 or q1, q1],[p1, p2, (p1 or p2) or q1]]
+  r5: [[p1 or q1, p2 or q1, p1 or p2, q1],[p1, p2]]
+  r6: [[p1, p2],[p1 or p2]]
+  r7: [[p1, p2 or q1, q1],[p2, p1 or p2]]
+  r8: [[p1, p1 or p2, q1],[p2, p2 or q1]]
+  r9: [[p1, (p1 or p2) or q1, q1],[p2, p2 or q1]]
+  r10: [[p2, p1 or p2, q1],[p1, p1 or q1]]
+  r11: [[p2, (p1 or p2) or q1, q1],[p1, p1 or q1]]
+  r12: [[p2 or q1, p1 or p2, q1],[p1, p1 or q1, p2]]
+  r13: [[p2 or q1, (p1 or p2) or q1, q1],[p1, p1 or q1, p2]]
+  r14: [[p1 or p2, q1],[p1, p1 or q1, p2, p2 or q1]]
+  r15: [[(p1 or p2) or q1, q1],[p1, p1 or q1, p2, p2 or q1]]
+
+analyticity_formulas: [p]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_by_subrule_soundness: false
+simplify_by_subrule_deriv: 5
+
+prem_conc_correspondence: [[0, 1]]
+sequent_dset_correspondence: [0, 1]
+
+simplify_max_level: 5
+
+derive:
+  r3: [[q, p or q],[(p or r) or q]]
+  r20: [[p1 or p2, q1],[p1 or q1]]
+  r21: [[p1 or p1],[p1]]
+  r21: [[p1],[p1 or p1]]
+  r22: [[p1 or p2],[p2 or p1]]
+#  r6: [[q, (p or r) or q],[r or q]]

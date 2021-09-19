@@ -132,7 +132,11 @@ namespace ltsy {
                     decltype(_attitudes) attitudes)
                 : NdSequentTruthTableDeterminizer {nvalues, props, connective, attitudes, std::nullopt} { /* empty */}
 
-            void determine(const std::vector<NdSequent<std::set>>& sequents) {
+            void determine(const std::vector<NdSequent<std::set>>& sequents, 
+                           std::string name = "#",
+                           std::map<int, std::string> val_to_str = {}) {
+                _table.set_name(name);
+                _table.set_values_names(val_to_str);
                 for (const auto& s : sequents)
                     _determine_by_sequent(s);
             } 

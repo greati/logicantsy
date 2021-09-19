@@ -205,6 +205,198 @@ namespace ltsy {
             }
     };
 
+    class TTSymmetricalDualizerCLIHandler {
+        private:
+            const std::string LATEX_TITLE = "latex";
+            const std::string SEMANTICS_VALUES_TITLE = "values";
+            const std::string TTS_TITLE = "truth-tables";
+            const std::string MOVEMENTS_TITLE = "movements";
+            const std::string TRANSFORMATIONS_TITLE = "transformations";
+            const std::string COMPOUND_TITLE = "compound";
+            const std::string TEMPLATE_TITLE = "template";
+            const std::string COMPONENTS_TITLE = "components";
+            std::map<std::string, std::string> _tex_translation;
+            std::map<int, std::string> _val_to_str;
+            std::map<std::string, int> _str_to_val;
+        public:
+
+            std::string get_default_template(
+                    Printer::PrinterType output_type, unsigned int dimension = 4) {
+                std::string temp;
+                switch(output_type) {
+                    case Printer::PrinterType::LATEX: {
+                        temp += "\\documentclass{article}\n";
+                        temp += "\\usepackage[utf8]{inputenc}\n";
+                        temp += "\\usepackage[english]{babel}\n";
+                        temp += "\\usepackage{booktabs}\n";
+                        temp += "\\usepackage{hyperref}\n";
+                        temp += "\\usepackage{amsmath}\n";
+                        temp += "\\usepackage{float}\n";
+                        temp += "\\usepackage{graphicx}\n";
+                        temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+                        unsigned int index=1;
+                        //dimension = dimension % 2 ? dimension : dimension + 1;
+                        temp += "\\scalebox{1.5}{$\n";
+                        temp += "\\begin{smallmatrix}\n";
+                        for (auto i = 2; i <= dimension; i+=2) {
+                            temp += "#"+std::to_string(i);
+                            if (i != dimension) temp += "&\\mid&";
+                        }
+                        temp += "\\\\\n";
+                        temp += "\\midrule\n";
+                        for (auto i = 1; i < dimension; i+=2) {
+                            temp += "#"+std::to_string(i);
+                            if (i != dimension-1) temp += "&\\mid&";
+                        }
+                        temp += "\\end{smallmatrix}\n";
+                        temp += "$}";
+                        temp += "}";
+                        temp += "\\begin{document}\n";
+                        temp += "\\tableofcontents\n";
+                        temp += "    \\begin{center}\n";
+                        temp += "{\% for ttname, transformations in transfs \%}";
+                        temp += "   \\section{(|{ ttname }|)}\n";
+                        temp += "   {\% for tname, components in transformations \%}";
+                        temp += "       \\subsection{(|{ ttname }|)((|{ tname }|))}\n";
+                        temp += "       (|{ components.table }|)\n"; 
+                        temp += "       {\% for axiom in components.calculus \%}\n";
+                        temp += "(|{ axiom.name }|)\n";
+                        temp += "\\[\n";
+                        temp += "\\bCon";
+                        temp += "           {\% for fmlas in axiom.schema \%}\n";
+                        temp += "{\\text{ (|{ fmlas }|) }}";
+                        temp += "           {\% endfor \%}\n";
+                        temp += "\\]";
+                        temp += "       {\% endfor \%}\n";
+                        temp += "   {\% endfor \%}";
+                        temp += "{\% endfor \%}";
+                        temp += "    \\end{center}\n";
+                        temp += "\\end{document}";
+                    break;}
+                    case Printer::PrinterType::PLAIN:
+                    break;
+                }
+                return temp;
+            }
+
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
+                YAMLCppParser parser;
+                nlohmann::json result_data;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+                    // get latex
+                    if (auto latex_node = root[LATEX_TITLE]) {
+                        for (auto it = latex_node.begin(); it != latex_node.end(); ++it)
+                           _tex_translation[it->first.as<std::string>()] = it->second.as<std::string>(); 
+                    }
+                    // values
+                    auto values_node = parser.hard_require(root, SEMANTICS_VALUES_TITLE);
+                    auto values = values_node.as<std::vector<std::string>>();
+                    std::set<int> real_values;
+                    auto nvalues = values.size();
+                    for (int i {0}; i < nvalues; ++i) {
+                        _str_to_val[values[i]] = i;
+                        _val_to_str[i] = values[i];
+                        real_values.insert(i);
+                    }
+                    // movements
+                    std::map<std::string, std::vector<std::pair<int, int>>> changes;
+                    auto changes_node = parser.hard_require(root, MOVEMENTS_TITLE);
+                    for (auto it_mv = changes_node.begin(); it_mv != changes_node.end(); ++it_mv) {
+                        auto name = it_mv->first.as<std::string>();
+                        auto moves = it_mv->second;
+                        changes[name] = std::vector<std::pair<int,int>>();
+                        for (auto it_moves = moves.begin(); it_moves != moves.end(); ++it_moves) {
+                            std::vector<int> moves_pair = it_moves->as<std::vector<int>>();
+                            std::pair<int, int> p {moves_pair[0], moves_pair[1]};
+                            changes[name].push_back(p);
+                        }
+                    }
+                    // transformations
+                    std::map<std::string, SymmetricalCalculiDualization::Transformation> transformations;
+                    auto transf_node = parser.hard_require(root, TRANSFORMATIONS_TITLE);
+                    for (auto it_tf = transf_node.begin(); it_tf != transf_node.end(); ++it_tf) {
+                        auto name = it_tf->first.as<std::string>();
+                        auto transf = it_tf->second;
+                        SymmetricalCalculiDualization::Transformation transformation;
+                        transformation.name = name;
+                        for (auto it_transf = transf.begin(); it_transf != transf.end(); ++it_transf) {
+                            auto what_moves_name = it_transf->first.as<std::string>();
+                            if (what_moves_name != COMPOUND_TITLE and what_moves_name != COMPONENTS_TITLE)
+                                throw std::invalid_argument("Unknown specification of transformation: " + what_moves_name);
+                            SymmetricalCalculiDualization::WhatMoves what_moves =
+                                what_moves_name == COMPOUND_TITLE ? SymmetricalCalculiDualization::WhatMoves::COMPOUND :
+                                SymmetricalCalculiDualization::WhatMoves::COMPONENTS;
+                            auto changes_spec = it_transf->second;
+                            SymmetricalCalculiDualization::Movement movement;
+                            movement.what_moves = what_moves;
+                            for (auto it_change = changes_spec.begin(); it_change != changes_spec.end(); ++it_change) {
+                                auto changes_pos = changes[it_change->as<std::string>()];
+                                movement.movement = changes_pos;
+                            }
+                            transformation.movements.push_back(movement);
+                        }
+                        transformations[name] = transformation;
+                    }
+                    spdlog::debug("Quantity of transformations: " + std::to_string(transformations.size()));
+                    SymmetricalCalculiDualization dualizer {transformations};
+                    PrinterFactory printer_factory;
+                    auto printer = printer_factory.make_printer(output_type, _tex_translation);
+                    // tts
+                    auto tts_node = parser.hard_require(root, TTS_TITLE);
+                    for (auto it_tt = tts_node.begin(); it_tt != tts_node.end(); ++it_tt) {
+                        // capture connective and variables
+                        auto [compound, collected_vars] = parser.parse_connective_representant(it_tt->first);
+                        spdlog::info("Processing " + compound->connective()->symbol());
+                        // parse tt and interpret connectives
+                        NDTruthTable tt = parser.parse_nd_truth_table(it_tt->second, real_values,
+                                compound->connective()->arity(), _str_to_val, compound->connective()->symbol());
+                        std::cout << tt.print().str() << std::endl;
+                        tt.set_fmla(compound);
+                        auto transformation_results = dualizer.create_oppositions(std::make_shared<NDTruthTable>(tt));
+                        nlohmann::json response_name;
+                        for (auto& [tt, calculus, transformation] : transformation_results) {
+                            spdlog::info("Printing transformation " + transformation.name);
+                            tt.set_values_names(_val_to_str);
+                            response_name[transformation.name]["table"] = printer->print(tt);
+                            response_name[transformation.name]["calculus"] = {};
+                            for (auto r : calculus.rules()) {
+                                nlohmann::json rule_json ({
+                                    {"name", r.name()},        
+                                    {"schema", printer->print(r.sequent())},        
+                                });
+                                response_name[transformation.name]["calculus"].push_back(rule_json);
+                            }
+                        }
+                        result_data["transfs"][tt.name()] = response_name;
+                    }
+                    // report
+                    // get template if exists
+                    std::string template_source;
+                    if (template_path) {
+                        template_source = *template_path;
+                    } else if (auto temp = root[TEMPLATE_TITLE]) {
+                        template_source = temp.as<std::string>(); 
+                    } else {
+                        template_source = get_default_template(output_type);
+                    }
+                    // generate report
+                    AppReport report;
+                    auto r = report.produce(template_source, result_data, template_path.has_value(), dest_path);
+                    std::cout << r << std::endl;
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
+    };
+
+
     class TTDeterminizerCLIHandler {
 
         private:
@@ -381,6 +573,207 @@ namespace ltsy {
             };
     };
 
+    class AnalyticProofSearchCLIHandler {
+        public:
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
+                YAMLCppParser parser;
+                nlohmann::json result_data;
+                std::vector<MultipleConclusionRule> calculus_rules;
+                const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
+
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+                    auto simplify_max_level = parser.hard_require(root, "simplify_max_level").as<int>();
+                    auto simplify_overlap = parser.hard_require(root, "simplify_overlap").as<bool>();
+                    auto simplify_dilution = parser.hard_require(root, "simplify_dilution").as<bool>();
+                    auto simplify_by_cuts = parser.hard_require(root, "simplify_by_cuts").as<bool>();
+                    auto simplify_by_subrule_soundness = parser.hard_require(root, "simplify_by_subrule_soundness").as<bool>();
+                    auto simplify_by_subrule_deriv = parser.optional_require<unsigned int>(root, "simplify_by_subrule_deriv");
+                    auto prem_conc_corr_node = parser.hard_require(root, "prem_conc_correspondence");
+                    auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
+                        .as<std::vector<int>>();
+                    std::vector<std::pair<int,int>> prem_conc_corr;
+                    for (auto it = prem_conc_corr_node.begin(); it != prem_conc_corr_node.end(); it++) {
+                        auto prem_conc = it->as<std::vector<int>>();
+                        prem_conc_corr.push_back({prem_conc[0], prem_conc[1]});
+                    }
+                    auto calculus_node = parser.hard_require(root, "calculus");
+                    for (auto it = calculus_node.begin(); it != calculus_node.end(); ++it) {
+                        auto name =  it->first.as<std::string>();
+                        auto sequent =  parser.parse_nd_sequent(it->second);
+                        MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
+                        calculus_rules.push_back(rule);
+                    }
+                    MultipleConclusionCalculus calculus {calculus_rules};
+
+                    AppsFacade apps_facade;
+                    calculus = apps_facade.simplify_mult_conc_axiomatizer(calculus, prem_conc_corr, seq_dset_corr,
+                            simplify_overlap, simplify_dilution, simplify_by_cuts, simplify_by_subrule_deriv, simplify_by_subrule_soundness);
+
+                    spdlog::info("Below are the result simplification by overlap, dilution, cut");
+                    auto set_rules = calculus.rules();
+                    for (auto r : set_rules) {
+                        std::cout << r.sequent() << std::endl;
+                    }
+
+                    auto analiticity_formulas_node = parser.hard_require(root, "analyticity_formulas");
+                    FmlaSet analiticity_formulas = parser.parse_fmla_set(analiticity_formulas_node);
+                    // simplification
+                    spdlog::info("Below are the result of the simplification attempt");
+                    const auto [simp_calculus, removed_rules, level] = simplify_by_derivation(calculus, analiticity_formulas, 0, simplify_max_level);
+                    for (const auto& removed_rule : removed_rules) {
+                        const auto& [rule, derivation] = removed_rule;
+                        std::cout << "derived " << rule.name() << std::endl;
+                        auto derivtree = derivation->print().str();
+                        std::cout << derivtree << std::endl;
+                    }
+                    spdlog::info("Final calculus:");
+                    set_rules = simp_calculus.rules();
+                    for (auto r : set_rules) {
+                        std::cout << r.name() << ":=" << r.sequent() << std::endl;
+                    }
+                    spdlog::info("Below are the requested derivations in the original calculus");
+                    // derivations
+                    if (auto derive_node = root["derive"]) {
+                        for (auto it = derive_node.begin(); it != derive_node.end(); ++it) {
+                            auto name =  it->first.as<std::string>();
+                            auto sequent =  parser.parse_nd_sequent(it->second);
+                            MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
+                            auto derivation = calculus.derive(rule, analiticity_formulas);
+                            if (derivation->closed)
+                                std::cout << name + " is derivable." << std::endl;
+                            else
+                                std::cout << name + " is underivable." << std::endl;
+                            auto derivtree = derivation->print().str();
+                            std::cout << derivtree << std::endl;
+                        }
+                    }
+                    
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
+
+            struct DerivedRule {
+                MultipleConclusionRule rule;
+                std::shared_ptr<MultipleConclusionCalculus::DerivationTreeNode> derivation;
+                DerivedRule(const decltype(rule)& _rule, const decltype(derivation)& _derivation):
+                    rule {_rule}, derivation {_derivation} {/* empty */}
+                bool operator<(const DerivedRule& other) const { return this->rule < other.rule; }
+            };
+
+            std::tuple<MultipleConclusionCalculus, std::set<DerivedRule>, unsigned int>
+                simplify_by_derivation(const MultipleConclusionCalculus& calculus, const FmlaSet& phi,
+                        unsigned int depth, std::optional<unsigned int> max_depth = std::nullopt) const {
+                if (calculus.size() == 0)
+                    return {calculus, {}, depth};
+                if (max_depth and depth >= *max_depth)
+                    return std::tuple<MultipleConclusionCalculus, 
+                           std::set<DerivedRule>, unsigned int>(calculus, {}, *max_depth);
+                MultipleConclusionCalculus simplified_calc = calculus;
+                std::set<DerivedRule> rules_removed = {};
+                auto rules = calculus.rules();
+                int  max_depth_so_far = depth;
+                for (auto i {0}; i < rules.size(); ++i) {
+                    auto rules_simp = rules;
+                    rules_simp.erase(rules_simp.begin() + i);
+                    MultipleConclusionCalculus simp_calc {rules_simp};
+                    auto derivation = simp_calc.derive(rules[i], phi);
+                    if (derivation->closed) {
+                        spdlog::debug("Derived " + rules[i].name() + ": " + rules[i].sequent().to_string() + 
+                                " in depth " + std::to_string(depth) + " using " + 
+                                std::to_string(simp_calc.size()) + " rules ");
+                        const auto [rec_calculus, rec_rules_rem, rec_depth] = 
+                            simplify_by_derivation(simp_calc, phi, depth + 1, max_depth);
+                        if (rec_depth > max_depth_so_far) {
+                            max_depth_so_far = rec_depth;
+                            simplified_calc = rec_calculus; 
+                            rules_removed = rec_rules_rem;
+                            rules_removed.insert(DerivedRule{rules[i], derivation});
+                            if (max_depth and rec_depth >= *max_depth)
+                                break;
+                        }
+                    }
+                }
+                return std::make_tuple(simplified_calc, rules_removed, max_depth_so_far);
+            }
+            
+    };
+
+    /* Handler for the sequent rule soundness app.
+     * */
+    class CloneMembershipCLIHandler {
+
+        private:
+            const std::string BASE_FUNCTIONS = "base";
+            const std::string SEARCH_FUNCTIONS = "search";
+            const std::string VALUES = "values";
+            const std::string MAX_DEPTH = "max_depth";
+            std::map<std::string, std::string> _tex_translation;
+
+        public:
+
+            void handle(const std::string& yaml_path, 
+                    Printer::PrinterType output_type, 
+                    bool verbose=true,
+                    std::optional<std::string> template_path=std::nullopt,
+                    std::optional<std::string> dest_path=std::nullopt) {
+                YAMLCppParser parser;
+                nlohmann::json result_data;
+                try {
+                    auto root = parser.load_from_file(yaml_path);
+                    auto max_depth_opt = parser.optional_require<int>(root, MAX_DEPTH);
+                    auto functions_root = parser.hard_require(root, BASE_FUNCTIONS);
+
+                    std::map<int, std::string> val_to_str;
+                    std::map<std::string, int> str_to_val;
+
+                    auto values = parser.hard_require(root, VALUES).as<std::vector<std::string>>();
+                    std::set<int> real_values;
+                    auto nvalues = values.size();
+                    for (int i {0}; i < nvalues; ++i) {
+                        str_to_val[values[i]] = i;
+                        val_to_str[i] = values[i];
+                        real_values.insert(i);
+                    }
+                    std::vector<NDTruthTable> functions = parser.parse_nd_truth_table_vector(functions_root, real_values, str_to_val);
+
+                    auto search_functions_root = parser.hard_require(root, SEARCH_FUNCTIONS);
+                    std::vector<NDTruthTable> search_functions = parser.parse_nd_truth_table_vector(search_functions_root, real_values, str_to_val);
+
+                    AppsFacade apps_facade;
+
+                    if (max_depth_opt)
+                        spdlog::info("Notice: max depth of search is " + std::to_string(*max_depth_opt));
+
+                    for (auto& sf : search_functions) {
+                        spdlog::info("Searching for " + sf.name());
+                        auto [opt_result, opt_clone] = apps_facade.clone_membership(nvalues, functions, sf, max_depth_opt);
+                        if (not opt_result) 
+                            spdlog::info("Not in clone.");
+                        else {
+                            spdlog::info("In clone! How:");
+                            for (auto r : *opt_result) {
+                                std::cout << *r.fmla() << std::endl;
+                                std::cout << r.print().str() << std::endl;
+                            }
+                        }
+                            
+                    }
+        
+                } catch (ParseException& pe) {
+                    spdlog::critical(pe.message());
+                } catch (YAML::Exception& ye) {
+                    spdlog::critical(ye.what());
+                }
+            }
+    };    
     
     /* Handler for the sequent rule soundness app.
      * */
@@ -396,6 +789,7 @@ namespace ltsy {
             const std::string SIMPLIFY_SUBRULES = "simplify_subrules";
             const std::string SIMPLIFY_SUBRULES_DERIV = "simplify_subrules_deriv";
             const std::string SIMPLIFY_DERIVATION = "simplify_derivation";
+            const std::string SIMPLIFY_CUTS = "simplify_by_cuts";
             const std::string DERIVE = "derive";
             const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
             const std::string PREM_CONC_CORRESPOND_TITLE = "premisses_conclusions_correspondence";
@@ -422,8 +816,12 @@ namespace ltsy {
                         temp += "\\usepackage[english]{babel}\n";
                         temp += "\\usepackage{booktabs}\n";
                         temp += "\\usepackage{amsmath}\n";
+                        temp += "\\usepackage{amssymb}\n";
                         temp += "\\usepackage{float}\n";
                         temp += "\\usepackage{graphicx}\n";
+                        temp += "\\newcommand{\\Set}[1]{\n";
+                        temp += "\\{#1\\}";
+                        temp += "}\n";
                         temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
                         unsigned int index=1;
                         //dimension = dimension % 2 ? dimension : dimension + 1;
@@ -446,6 +844,10 @@ namespace ltsy {
                         temp += "\\begin{document}\n";
                         temp += "\\tableofcontents\n";
                         temp += "    \\begin{center}\n";
+                        // section of desigs
+                        temp += "{\% for dset in dsets \%}";
+                        temp += "\\Set{(|{dset}|)}";
+                        temp += "{\% endfor \%}";
                         // section of truth-tables
                         temp += "\\section{Interpretation}\n";
                         temp += "{\% for conn, tt in interps \%}";
@@ -493,6 +895,7 @@ namespace ltsy {
                     auto simplify_overlap = parser.hard_require(root, SIMPLIFY_OVERLAP).as<bool>();
                     auto simplify_dilution = parser.hard_require(root, SIMPLIFY_DILUTION).as<bool>();
                     auto simplify_subrules = parser.hard_require(root, SIMPLIFY_SUBRULES).as<bool>();
+                    auto simplify_by_cuts = parser.hard_require(root, SIMPLIFY_CUTS).as<bool>();
                     auto simplify_subrules_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_SUBRULES_DERIV);
                     auto simplify_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_DERIVATION);
                     auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
@@ -512,7 +915,7 @@ namespace ltsy {
                     auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
                             monadic_discriminator, seq_dset_corr, prem_conc_corr, 
                             simplify_overlap, simplify_dilution, simplify_subrules, simplify_subrules_derivation, 
-                            simplify_derivation);
+                            simplify_derivation, simplify_by_cuts);
                     
                     PrinterFactory printer_factory;
                     auto printer = printer_factory.make_printer(output_type, _tex_translation);
@@ -535,6 +938,16 @@ namespace ltsy {
                         auto ttstr = printer->print(*tt);
                         result_data["interps"][_tex_translation[c]] = ttstr;
                     }
+
+                    std::vector<std::set<std::string>> dsets_transl;
+                    for (const auto& dset : pnmatrix->distinguished_sets()) {
+                        std::set<std::string> dset_trans;
+                        for (const auto& dsetv : dset) {
+                            dset_trans.insert(pnmatrix->val_to_str()[dsetv]);
+                        }
+                        dsets_transl.push_back(dset_trans);
+                    }
+                    result_data["dsets"] = dsets_transl;
 
                     // if derive
                     if (auto derive_node = root[DERIVE]) {

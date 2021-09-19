@@ -50,13 +50,17 @@ premisses_conclusions_correspondence: [[1, 0], [3, 2]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: false
-simplify_derivation: 5
+simplify_by_cuts: true
+#simplify_derivation: 0
 discriminator:
   I: [  [p, neg p], [],     [p],  []  ]
   T: [  [p],        [neg p],[p],  []  ]
   F: [  [],         [p],    [],   [p] ]
   t: [  [p],        [],     [],   [p] ]
   f: [  [],         [p],    [p],  []  ]
+    #derive:
+    #  cc0: [[o(o(p))],[],[],[]]
+    #  cc1: [[o(neg(o(p)))],[],[],[]]
 latex:
   "->": "\\to"
   p: "\\varphi"

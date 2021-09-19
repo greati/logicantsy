@@ -10,6 +10,7 @@
 #include <set>
 #include "external/ProgressBar/ProgressBar.hpp"
 #include "spdlog/spdlog.h"
+#include <optional>
 
 namespace ltsy {
     
@@ -77,7 +78,9 @@ namespace ltsy {
             inline decltype(_values) values() const { return _values; }
             inline decltype(_distinguished_sets) distinguished_sets() const { return _distinguished_sets; }
             inline decltype(_interpretation) interpretation() const { return _interpretation; }
+            inline void set_interpretation(decltype(_interpretation) inter) {_interpretation = inter; }
             inline decltype(_signature) signature() const { return _signature; }
+            inline void set_signature(decltype(_signature) sig) { _signature = sig; }
 
             /* Return those subsets of values that
              * are subsets of maximal total subsets.
@@ -174,6 +177,7 @@ namespace ltsy {
             /* Constructor.
              */
             Discriminator(const decltype(separators) _separators) : separators {_separators} {}
+            Discriminator() {}
             
             /* Collect all discriminator formulas in a single set.
              */
