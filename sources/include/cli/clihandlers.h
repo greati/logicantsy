@@ -591,8 +591,7 @@ namespace ltsy {
                     auto simplify_overlap = parser.hard_require(root, "simplify_overlap").as<bool>();
                     auto simplify_dilution = parser.hard_require(root, "simplify_dilution").as<bool>();
                     auto simplify_by_cuts = parser.hard_require(root, "simplify_by_cuts").as<bool>();
-                    auto simplify_by_subrule_soundness = parser.hard_require(root, "simplify_by_subrule_soundness").as<bool>();
-                    auto simplify_by_subrule_deriv = parser.optional_require<unsigned int>(root, "simplify_by_subrule_deriv");
+                    auto simplify_by_subrule_deriv = parser.optional_require<unsigned int>(root, "simplify_by_subrule_deriv", false);
                     auto prem_conc_corr_node = parser.hard_require(root, "prem_conc_correspondence");
                     auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
                         .as<std::vector<int>>();
@@ -612,7 +611,7 @@ namespace ltsy {
 
                     AppsFacade apps_facade;
                     calculus = apps_facade.simplify_mult_conc_axiomatizer(calculus, prem_conc_corr, seq_dset_corr,
-                            simplify_overlap, simplify_dilution, simplify_by_cuts, simplify_by_subrule_deriv, simplify_by_subrule_soundness);
+                            simplify_overlap, simplify_dilution, simplify_by_cuts, simplify_by_subrule_deriv);
 
                     spdlog::info("Below are the result simplification by overlap, dilution, cut");
                     auto set_rules = calculus.rules();
@@ -728,7 +727,7 @@ namespace ltsy {
                 nlohmann::json result_data;
                 try {
                     auto root = parser.load_from_file(yaml_path);
-                    auto max_depth_opt = parser.optional_require<int>(root, MAX_DEPTH);
+                    auto max_depth_opt = parser.optional_require<int>(root, MAX_DEPTH, 0);
                     auto functions_root = parser.hard_require(root, BASE_FUNCTIONS);
 
                     std::map<int, std::string> val_to_str;
@@ -802,6 +801,7 @@ namespace ltsy {
                 switch(output_type) {
                     case Printer::PrinterType::PLAIN:
                         temp += "Check the result below:\n";
+                        temp += "{\% if exists(\"axiomatization\") \%}";
                         temp += "{\% for groups, schemas in axiomatization \%}";
                         temp += "Group of schemas (|{ groups }|):\n";
                         temp += "    {\% for schema in schemas \%}\n";
@@ -809,6 +809,9 @@ namespace ltsy {
                         temp += "- (|{ schema.schema }|)";
                         temp += "    {\% endfor \%}\n";
                         temp += "{\% endfor \%}";
+                        temp += "{\% else \%}";
+                        temp += "Empty calculus.";
+                        temp += "{\% endif \%}";
                         break;
                     case Printer::PrinterType::LATEX:
                         temp += "\\documentclass{article}\n";
@@ -854,6 +857,7 @@ namespace ltsy {
                         temp += "(|{ tt }|)";
                         temp += "{\% endfor \%}\n";
                         // schemas, one per section
+                        temp += "{\% if exists(\"axiomatization\") \%}";
                         temp += "{\% for group, schemas in axiomatization \%}";
                         temp += "\\section{Schemas of $(|{ group }|)$ }\n";
                         temp += "Size: (|{ length(schemas) }|)\n";
@@ -867,7 +871,10 @@ namespace ltsy {
                         temp += "\\]";
                         temp += "    {\% endfor \%}\n";
                         temp += "{\% endfor \%}\n";
-                        temp += "    \\end{center}\n";
+                        temp += "{\% else \%}";
+                        temp += "Empty calculus.";
+                        temp += "{\% endif \%}";
+                        temp += "\\end{center}\n";
                         temp += "\\end{document}";
                         break;
                 }
@@ -894,10 +901,9 @@ namespace ltsy {
                     auto disc_node = parser.hard_require(root, DISCR_TITLE);
                     auto simplify_overlap = parser.hard_require(root, SIMPLIFY_OVERLAP).as<bool>();
                     auto simplify_dilution = parser.hard_require(root, SIMPLIFY_DILUTION).as<bool>();
-                    auto simplify_subrules = parser.hard_require(root, SIMPLIFY_SUBRULES).as<bool>();
                     auto simplify_by_cuts = parser.hard_require(root, SIMPLIFY_CUTS).as<bool>();
-                    auto simplify_subrules_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_SUBRULES_DERIV);
-                    auto simplify_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_DERIVATION);
+                    auto simplify_subrules_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_SUBRULES_DERIV, std::nullopt);
+                    auto simplify_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_DERIVATION, std::nullopt);
                     auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
                     auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
                         .as<std::vector<int>>();
@@ -914,22 +920,24 @@ namespace ltsy {
                     AppsFacade apps_facade;
                     auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
                             monadic_discriminator, seq_dset_corr, prem_conc_corr, 
-                            simplify_overlap, simplify_dilution, simplify_subrules, simplify_subrules_derivation, 
+                            simplify_overlap, simplify_dilution, simplify_subrules_derivation, 
                             simplify_derivation, simplify_by_cuts);
                     
                     PrinterFactory printer_factory;
                     auto printer = printer_factory.make_printer(output_type, _tex_translation);
 
-                    result_data["axiomatization"] = {}; 
-                    for (auto [k, calculus] : axiomatization) {
-                        result_data["axiomatization"][k] = nlohmann::json::array();
-                        for (auto r : calculus.rules()) {
-                              nlohmann::json rule_json ({
-                                {"name", r.name()},        
-                                {"schema", printer->print(r.sequent())},        
-                              });
-                              result_data["axiomatization"][k].push_back(rule_json);
-                        }
+                    if (not axiomatization.empty()) {
+                        result_data["axiomatization"] = {}; 
+                        for (auto [k, calculus] : axiomatization) {
+                            result_data["axiomatization"][k] = nlohmann::json::array();
+                            for (auto r : calculus.rules()) {
+                                nlohmann::json rule_json ({
+                                    {"name", r.name()},        
+                                    {"schema", printer->print(r.sequent())},        
+                                });
+                                result_data["axiomatization"][k].push_back(rule_json);
+                            }
+                            }                    
                     }
 
                     result_data["interps"] = {};

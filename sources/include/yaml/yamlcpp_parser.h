@@ -46,10 +46,10 @@ namespace ltsy {
         }
 
         template<typename T>
-        std::optional<T> optional_require(const YAML::Node & curr_node, const std::string& node_name) const {
+        std::optional<T> optional_require(const YAML::Node & curr_node, const std::string& node_name, const std::optional<T>& default_value) const {
             if (curr_node[node_name])
                 return curr_node[node_name].as<T>();
-            else return std::nullopt;
+            else return default_value;
         }
 
         const std::string TT_DEFAULT_VALUE_NAME = "default";
@@ -260,7 +260,7 @@ namespace ltsy {
                  sig_truth_interp->try_interpret(truth_interp);
             }
             // parse infer complements
-            bool infer_complements = hard_require(pnmatrix_node, PNMATRIX_INFER_COMPLEMENTS_NAME).as<bool>();
+            bool infer_complements = optional_require(pnmatrix_node, PNMATRIX_INFER_COMPLEMENTS_NAME, std::make_optional<bool>(true)).value();
             // create matrix
             auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, 
                     signature, sig_truth_interp, infer_complements);

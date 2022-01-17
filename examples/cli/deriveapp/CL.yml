@@ -1,0 +1,19 @@
+calculus:
+  r1: [[p, p -> q],[q]]
+  r2: [[q], [p -> q]]
+  r3: [[],[p, p -> q]]
+
+analyticity_formulas: [p]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_by_subrule_soundness: false
+simplify_by_subrule_deriv: 0
+
+prem_conc_correspondence: [[0, 1]]
+sequent_dset_correspondence: [0, 1]
+
+simplify_max_level: 5
+
+derive:
+  r4: [[],[((q -> p) -> p) -> ((p -> q) -> q)]]

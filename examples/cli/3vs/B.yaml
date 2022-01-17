@@ -29,15 +29,24 @@ pnmatrix:
         - [1]: [0]
 sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
+#simplify_overlap: false
+#simplify_dilution: false
+#simplify_subrules: false
+##simplify_derivation: 20
+##simplify_subrules_deriv: 20
+#simplify_by_cuts: false
 simplify_overlap: true
 simplify_dilution: true
-simplify_subrules: true
+simplify_subrules: false
+simplify_subrules_deriv: 40
+simplify_derivation: 40
 simplify_by_cuts: true
-simplify_derivation: 20
+
+
 discriminator:
   0: [[neg p],[p]]
   u: [[],[p, neg p]]
-  1: [[p],[neg p]]
+  1: [[p],[]]
 derive:
   WKPartial1: [[neg p2, p2],[neg p1, p1]]
 latex:

@@ -92,7 +92,7 @@ namespace ltsy {
                 for (int i = 0, j=0; i < _gen_matrix->distinguished_sets().size(); i += 2) {
                     _opposition_dsets[i] = i+1;
                     _dsets_positions[i] = j;
-                    _dsets_positions[i+1] = j++; 
+                    _dsets_positions[i+1] = j++;
                 }
                 for (int i = 0; i < _gen_matrix->distinguished_sets().size(); i += 1) {
                     _dsets_rule_positions[i]=dsets_rule_positions[i]; 
@@ -118,8 +118,7 @@ namespace ltsy {
                 bool simplify_overlap=true, 
                 bool simplify_dilution=true, 
                 bool simplify_by_cuts=true,
-                std::optional<unsigned int> simplify_by_subrule_deriv=std::nullopt,
-                bool simplify_by_subrule_soundness=false
+                std::optional<unsigned int> simplify_by_subrule_deriv=std::nullopt
                 ) 
             {
                 MultipleConclusionCalculus result = calculus;
@@ -137,8 +136,6 @@ namespace ltsy {
                 spdlog::info("Dilution...");
                 if (simplify_dilution)
                     remove_dilutions(rules_set);
-                if (simplify_by_subrule_soundness)
-                    rules_set = this->simplify_by_subrule_soundness(rules_set);
                 if (simplify_by_cuts)
                     rules_set = simplify_by_cut2(rules_set);
                 spdlog::info("Dilution...");
@@ -154,11 +151,10 @@ namespace ltsy {
             MultipleConclusionCalculus make_single_calculus(
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
-                    bool simplify_subrule_sound=true, 
                     std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
                     std::optional<unsigned int> simplify_with_derivation=std::nullopt,
                     bool simplify_by_cuts=true) {
-                auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, simplify_subrule_sound, simplify_by_cuts); 
+                auto axiomatization = make_calculus(simplify_overlap, simplify_dilution, false, simplify_by_cuts); 
                 std::set<MultipleConclusionRule> full_calculus_rules; 
                 for (auto [k, calculus] : axiomatization) {
                     auto calculus_rules = calculus.rules();
@@ -169,7 +165,7 @@ namespace ltsy {
                                                                 full_calculus_rules.end()}
                 };
 
-                if (simplify_subrules_deriv) {
+                if (simplify_subrules_deriv and *simplify_subrules_deriv > 0) {
                     spdlog::debug("Simplify by deriving subrules");
                     auto simp_rules = simplify_by_subrule_deriv(full_calculus, *simplify_subrules_deriv);
                     full_calculus = MultipleConclusionCalculus {std::vector<MultipleConclusionRule>{
@@ -177,22 +173,13 @@ namespace ltsy {
                                                                         simp_rules.end()}};
                 }
 
-                if (simplify_with_derivation) {
+                if (simplify_with_derivation and *simplify_with_derivation > 0) {
                     spdlog::info("Simplifying using derivations...");
                     const auto& [simplified_calc, removed_rules, depth] = 
                         simplify_by_derivation(full_calculus, 0, simplify_with_derivation);
                     for (const auto& rr : removed_rules)
                         spdlog::info("Removed rule " + rr.sequent().to_string());
                     full_calculus = simplified_calc;
-                   //spdlog::info("Simplify with subrule soundness");
-                   //auto rules_simp = simplified_calc.rules();
-                   //auto rules_simp_set = simplify_by_subrule_soundness(
-                   //            std::set<MultipleConclusionRule>{rules_simp.begin(), 
-                   //            rules_simp.end()}
-                   //        );
-                   //full_calculus = MultipleConclusionCalculus {
-                   //    std::vector<MultipleConclusionRule>{rules_simp_set.begin(), rules_simp_set.end()}
-                   //};
                 }
                 spdlog::info("Ended with " + std::to_string(full_calculus.rules().size()) + " rules.");
                 full_calculus.rename_rules();
@@ -202,7 +189,6 @@ namespace ltsy {
             std::map<std::string, MultipleConclusionCalculus> make_calculus(
                     bool simplify_overlap=true, 
                     bool simplify_dilution=true, 
-                    bool simplify_subrule_sound=true,
                     bool simplify_subrule_deriv=true,
                     bool simplify_by_cuts=true) {
                 auto make_calc_item = [&](const std::set<MultipleConclusionRule>& rulesset) {
@@ -228,6 +214,7 @@ namespace ltsy {
                     d = remove_overlaps(d);
                 if (simplify_dilution)
                     remove_dilutions(d);
+                spdlog::info(std::to_string(d.size()) + " D rules.");
                 result["\\mathcal{D}"] = make_calc_item(d);
                 spdlog::info("Done.");
                 // sigma
@@ -242,8 +229,10 @@ namespace ltsy {
                         sigma_conn = simplify_by_cut2(sigma_conn);
                     if (simplify_dilution)
                         remove_dilutions(sigma_conn);
-                    if (simplify_subrule_sound)
-                        sigma_conn = simplify_by_subrule_soundness(sigma_conn);
+                    if (simplify_by_cuts)
+                        sigma_conn = simplify_by_cut2(sigma_conn);
+                    if (simplify_dilution)
+                        remove_dilutions(sigma_conn);
                     result["\\Sigma_{" + symb + "}"] = make_calc_item(sigma_conn);
                     spdlog::info("Done.");
                 }
@@ -303,7 +292,7 @@ namespace ltsy {
                         new_rule.set(_dsets_rule_positions[d2], dif2);
                         new_rule.set_name("(cut:" + r1.name() + "," + r2.name() + ")");
                         // perform unions in other dimensions
-                        for (const auto& [d1o,d2o] : _opposition_dsets) {
+                        for (auto [d1o,d2o] : _opposition_dsets) {
                             if (d1 != d1o and d2 != d2o) {
                                 auto s11o = r1.sequent().sequent_fmlas()[_dsets_rule_positions[d1o]]; 
                                 auto s21o = r2.sequent().sequent_fmlas()[_dsets_rule_positions[d1o]]; 
@@ -318,9 +307,11 @@ namespace ltsy {
                         // check if result is subrule
                         if (subrule_check) {
                             if (not r1.sequent().is_dilution_of(new_rule.sequent())
-                                    or not r2.sequent().is_dilution_of(new_rule.sequent()))
+                                    or not r2.sequent().is_dilution_of(new_rule.sequent())) {
                                 return std::nullopt;
+                            }
                         }
+
                         return std::optional<MultipleConclusionRule>(new_rule);
                     }
                 }
@@ -518,11 +509,60 @@ namespace ltsy {
                 return result;
             }
 
+            std::set<MultipleConclusionRule> make_sigma_deterministic_rules(
+                    std::shared_ptr<TruthInterp<std::set<int>>> interp) {
+                auto values = _gen_matrix->values();
+                auto dsets = _gen_matrix->distinguished_sets();
+                std::set<MultipleConclusionRule> result;
+                auto interpretation = _gen_matrix->interpretation();
+                // loop over interpretations
+                auto connective = interp->connective();
+                auto truth_table = interp->truth_table();
+                auto arity = connective->arity();
+                auto props = make_props(arity);
+                auto compound = make_compound(connective, props);
+                // loop over the determinants
+                for (auto determinant : truth_table->get_determinants()) {
+                    auto args = determinant.get_args(); 
+                    auto response = determinant.get_last();
+                    //auto response_complement = utils::set_difference(values, response);
+                    for (auto y : response) {
+                         std::vector<FmlaSet> sequent {dsets.size()};
+                         for (int i = 0; i < args.size(); ++i) {
+                            auto xi = args[i];
+                            for (auto [dset, dpos] : _dsets_rule_positions) {
+                                auto seps = _discriminator.apply_subs(xi, props[i]);
+                                sequent[dpos].insert(seps[dset].begin(), seps[dset].end());
+                            }
+                         }
+                         for (auto [dset, dpos] : _dsets_rule_positions) {
+                            auto seps = _discriminator.apply_subs(y, compound);
+                            for (auto sep : seps[dset]) {
+                                auto sequent_copy = sequent;
+                                auto opposite_pos = _opposition_dsets.find(dpos)->second;
+                                sequent_copy[opposite_pos].insert(sep);
+                                NdSequent<std::set> sequent_rule {sequent_copy};
+                                // make rule name
+                                std::string rule_name = connective->symbol() + "-";
+                                for (auto a : args)
+                                    rule_name += std::to_string(a) + ",";
+                                rule_name += std::to_string(y);
+                                MultipleConclusionRule mcrule {rule_name, sequent_rule, _prem_conc_pos_corresp};
+                                mcrule.set_group("\\Sigma_{" + connective->symbol() + "}");
+                                result.insert(mcrule);
+                            }
+                         }
+                    }
+                } 
+                return result;
+            }
+
             std::map<std::string, std::set<MultipleConclusionRule>> make_sigma_rules() {
                 std::map<std::string, std::set<MultipleConclusionRule>> result;
                 auto interpretation = _gen_matrix->interpretation();
                 // loop over interpretations
                 for (auto [symb, interp] : *interpretation) {
+                    //auto rules = make_sigma_deterministic_rules(interp);
                     auto rules = make_sigma_rules(interp);
                     result[symb] = rules;
                 }
@@ -535,9 +575,9 @@ namespace ltsy {
                 std::set<MultipleConclusionRule> result;
                 auto props = make_props(_gen_matrix->values().size()); 
                 for (const auto& X : non_total_subsets) {
+		    if (X.empty()) continue;
                     std::vector<FmlaSet> sequent_fmlas {dist_sets_qtd};
                     for (const auto& x : X) {
-                        if (X.empty()) continue;
                         auto prop = props[x];
                         for (int i = 0; i < dist_sets_qtd; ++i) {
                             auto seps = _discriminator.apply_subs(x, prop);
@@ -549,44 +589,6 @@ namespace ltsy {
                     mcrule.set_group("\\mathcal{T}");
                     result.insert(mcrule);
                 }
-                return result;
-            }
-
-            std::set<MultipleConclusionRule> simplify_by_subrule_soundness(
-                    const std::set<MultipleConclusionRule>& rules) {
-                spdlog::debug("Simplifying by subrule soundness (size "+ std::to_string(rules.size()) +")...");
-                std::vector<int> dset_positions;
-                for (const auto& [a, b] : _dsets_rule_positions)
-                    dset_positions.push_back(b);
-                std::set<MultipleConclusionRule> result;
-                for (const auto& rule : rules) {
-                    spdlog::debug("Processing rule " + rule.sequent().to_string());
-                    std::set<MultipleConclusionRule> sound_subrules;
-                    ltsy::MultipleConclusionSubrulesGenerator gen {rule}; 
-                    while(gen.has_next()) {
-                        auto subr = gen.next();
-                        // if it was the last, ignore
-                        if (not gen.has_next()) break;
-                        spdlog::debug("Subrule " + subr.sequent().to_string());
-                        NdSequentRule<std::set> ndrule {subr.name(), {}, {subr.sequent()}};
-                        auto sig = ndrule.infer_signature();
-                        NdSequentGenMatrixValidator<std::set> validator {_gen_matrix, dset_positions}; 
-                        try {
-                            auto has_counterexample = validator.is_rule_satisfiability_preserving(ndrule, sig, 1);  
-                            if (not has_counterexample) {
-                                sound_subrules.insert(subr);
-                                break; //! TODO keep all sound subrules and them select one amonst them? 
-                            }
-                        } catch (std::exception e) {
-                            continue;
-                        }
-                    }
-                    if (sound_subrules.empty())
-                        result.insert(rule);
-                    else
-                        result.insert(sound_subrules.begin(), sound_subrules.end());
-                }
-                
                 return result;
             }
 
@@ -641,7 +643,7 @@ namespace ltsy {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
                     MultipleConclusionCalculus simp_calc {rules_simp};
-                    auto derivation = simp_calc.derive(rules[i], _discriminator.get_formulas());
+                    auto derivation = simp_calc.derive(rules[i], {});
                     if (derivation->closed) {
                         spdlog::debug("Derived " + rules[i].sequent().to_string() + 
                                 " in depth " + std::to_string(depth) + " using " + 

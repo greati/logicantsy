@@ -32,11 +32,12 @@ sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
-simplify_subrules: true
+simplify_subrules: false
+simplify_subrules_deriv: 25
+simplify_derivation: 25
 simplify_by_cuts: true
-simplify_derivation: 6
 discriminator:
-  0: [[neg p],[p]]
+  0: [[],[p]]
   u: [[p, neg p],[]]
   1: [[p],[neg p]]
 latex:

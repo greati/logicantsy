@@ -1,0 +1,39 @@
+calculus:
+  r1: [[neg q, p -> q],[q, p, neg p]]
+  r2: [[p, p -> q],[q, neg q]]
+  r3: [[neg q, neg(p -> q)],[q, p, neg p, p -> q]]
+  r4: [[p, neg(p -> q)], [q, neg q, p -> q]]
+  r5: [[p, neg q, p -> q], [q]]
+  r6: [[p, neg q],[q, p -> q, neg(p -> q)]]
+  r7: [[neg p],[p, p -> q]]
+  r8: [[],[p, neg p, q, neg q, p -> q]]
+  r9: [[q],[p -> q]]
+  r10: [[p],[neg(neg(p)), neg p]]
+  r11: [[neg(neg(p))],[p, neg p]]
+  r12: [[p, neg p],[]]
+
+analyticity_formulas: [p, neg p]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_by_subrule_soundness: false
+simplify_by_subrule_deriv: 20
+simplify_derivation: 20
+
+prem_conc_correspondence: [[0, 1]]
+sequent_dset_correspondence: [0, 1]
+
+simplify_max_level: 10
+
+derive:
+  R1: [[neg p],[p -> q]]
+  R2: [[q],[p -> q]]
+  R3: [[],[p, neg q, p -> q]]
+  R4: [[neg q, p],[neg(p -> q)]]
+  R5: [[p -> q, neg q],[neg p]]
+  R6: [[neg(p -> q)],[neg q]]
+  R7: [[neg(p -> q)],[p]]
+  R8: [[p -> q, p],[q]]
+
+#derive:
+#  r3: [[p2 -> q0, p1 -> p2],[q0, q12, q12 -> q0, p1, p2, p1 -> q0]]

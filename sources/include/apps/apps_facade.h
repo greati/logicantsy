@@ -58,7 +58,6 @@ namespace ltsy {
                     const std::vector<std::pair<int,int>>& prem_conc_corresp,
                     bool simplify_overlap=true,
                     bool simplify_dilution=true,
-                    bool simplify_subrules=true,
                     std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
                     std::optional<unsigned int> simplify_by_derivation=std::nullopt,
                     bool simplify_by_cuts=true
@@ -66,10 +65,10 @@ namespace ltsy {
                PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
                if (simplify_by_derivation or simplify_subrules_deriv)
                    return 
-                   axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, simplify_subrules, 
+                   axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, 
                            simplify_subrules_deriv, simplify_by_derivation, simplify_by_cuts).group();
                else
-                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, simplify_subrules, false, simplify_by_cuts);
+                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, false, simplify_by_cuts);
             }
 
             /* App to axiomatize a monadic generalized matrix
@@ -83,11 +82,10 @@ namespace ltsy {
                     bool simplify_overlap=true,
                     bool simplify_dilution=true,
                     bool simplify_by_cuts=true,
-                    std::optional<unsigned int> simplify_by_subrule_deriv=std::nullopt,
-                    bool simplify_by_subrule_soundness=false
+                    std::optional<unsigned int> simplify_by_subrule_deriv=std::nullopt
                     ) {
                PNMMultipleConclusionAxiomatizer axiomatizer {sequent_dset_correspondence, prem_conc_corresp}; 
-               return axiomatizer.simplify_calculus(calculus, simplify_overlap, simplify_dilution, simplify_by_cuts, simplify_by_subrule_deriv, simplify_by_subrule_soundness);
+               return axiomatizer.simplify_calculus(calculus, simplify_overlap, simplify_dilution, simplify_by_cuts, simplify_by_subrule_deriv);
             }
 
             /* App to check soundness of a rule wrt a given

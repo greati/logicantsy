@@ -5,31 +5,10 @@ pnmatrix:
   infer_complements: true
   interpretation:
     p and q:
-      restrictions:
-        - [1, 1]: [1]
-        - [u, _]: [u]
-        - [_, u]: [u]
-        - [0, _]: [0]
-        - [_, 0]: [0]
-    p or q:
-      restrictions:
-        - [0, 0]: [0]
-        - [u, _]: [u]
-        - [_, u]: [u]
-        - [1, _]: [1]
-        - [_, 1]: [1]
-    p -> q:
       default: [1]
       restrictions:
-        - [u, 0]: [0]
-        - [u, u]: [1]
-        - [1, 0]: [0]
-        - [1, u]: [u]
-    neg p:
-      restrictions:
-        - [0]: [1]
-        - [u]: [0]
-        - [1]: [0]
+        - [0, 0]: [u]
+        - [1, 0]: [u]
 sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
@@ -39,8 +18,8 @@ simplify_derivation: 20
 simplify_subrules_deriv: 20
 simplify_by_cuts: true
 discriminator:
-  0: [[neg p],[p]]
-  u: [[],[p, neg p]]
+  0: [[],[p, p and p]]
+  u: [[p and p],[p]]
   1: [[p],[]]
 latex:
   0: "0"
@@ -53,5 +32,6 @@ latex:
   p3: "\\phi"
   p4: "\\sigma"
   neg: "\\neg"
-  and: "\\land"
+  and: "\\bullet"
   or: "\\lor"
+  o: "\\bullet"

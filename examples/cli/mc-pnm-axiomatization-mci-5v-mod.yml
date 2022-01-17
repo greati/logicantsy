@@ -3,6 +3,7 @@ pnmatrix:
   distinguished_sets:
     - [I, T, t]
     - [I, T, f]
+  infer_complements: true
   interpretation:
     p or q:
       default: [f]
@@ -44,24 +45,35 @@ pnmatrix:
       default: [T]
       restrictions:
         - [I]: [F]
+        - [T]: []
 sequent_dset_correspondence: [1, 0, 3, 2]
 premisses_conclusions_correspondence: [[1, 0], [3, 2]]
-simplify_overlap: true
-simplify_dilution: true
-simplify_by_cuts: true
-simplify_subrules_deriv: 9
-simplify_derivation: 8
+simplify_overlap: false
+simplify_dilution: false
+simplify_subrules: false
+simplify_by_cuts: false
+#simplify_subrules_deriv: 0
+simplify_derivation: 0
+#simplify_derivation: 0
 discriminator:
-  I: [  [p],        [o(p)], [p],   []  ]
-  T: [  [o(p),p],   [],     [p],   []  ]
-  F: [  [],         [p],    [],    [p] ]
-  t: [  [p],        [],     [],    [p] ]
-  f: [  [],         [p],    [p],   []  ]
-#derive:
-  #  cc0: [[o(o(p))],[],[],[]]
-  #  cc1: [[o(neg(o(p)))],[],[],[]]
+  I: [  [p, neg p], [],     [p],  []  ]
+  T: [  [p],        [neg p],[p],  []  ]
+  F: [  [],         [p],    [],   [p] ]
+  t: [  [p],        [],     [],   [p] ]
+  f: [  [],         [p],    [p],  []  ]
+  #  I: [  [p],        [o(p)], [p],   []  ]
+  #  T: [  [o(p),p],   [],     [p],   []  ]
+  #  F: [  [],         [p],    [],    [p] ]
+  #  t: [  [p],        [],     [],    [p] ]
+  #  f: [  [],         [p],    [p],   []  ]
+    #derive:
+    #  cc0: [[o(o(p))],[],[],[]]
+    #  cc1: [[o(neg(o(p)))],[],[],[]]
 derive:
-  c: [[],[p and q, o(p and q)],[],[p and q]]
+  #a: [[p1 and p2, (q1 -> neg p1) and (q2 -> p2), o(p1) or o(p2)],[],[],[(neg(o(p1)) or neg(q1)) and (neg(o(p2)) or neg(q2))]]
+  a: [[o(p)],[],[],[neg(neg(o(p)))]]
+  b: [[o(neg(o(p)))],[],[],[]]
+  b: [[o(neg(neg(o(p))))],[],[],[]]
 latex:
   "->": "\\to"
   p: "\\varphi"

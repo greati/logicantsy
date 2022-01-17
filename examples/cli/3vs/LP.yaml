@@ -23,14 +23,24 @@ pnmatrix:
         - [0]: [1]
         - [u]: [u]
         - [1]: [0]
+    p -> q:
+      restrictions:
+        - [0, _]: [1]
+        - [_, 1]: [1]
+        - [u, 0]: [0]
+        - [u, u]: [u]
+        - [1, 0]: [0]
+        - [1, u]: [u]
 sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
-simplify_overlap: true
-simplify_dilution: true
-simplify_subrules: true
-simplify_derivation: 14
+simplify_overlap: false
+simplify_dilution: false
+simplify_subrules: false
+#simplify_derivation: 20
+#simplify_subrules_deriv: 20
+simplify_by_cuts: false
 discriminator:
-  0: [[neg p],[p]]
+  0: [[],[p]]
   u: [[p, neg p],[]]
   1: [[p],[neg p]]
 latex:

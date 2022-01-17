@@ -35,9 +35,17 @@ sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
-simplify_subrules: true
-simplify_derivation: 14
+simplify_subrules: false
+simplify_subrules_deriv: 35
+simplify_derivation: 30
 simplify_by_cuts: true
+
+derive:
+  R1: [[p -> (q -> p)], []]
+  R2: [[(neg q -> neg p) -> (p -> q)],[]]
+  R3: [[(((p -> q)-> q) -> ((q -> p) -> p))],[]]
+  R4: [[(p -> q) -> ((q -> r) -> (p -> r))], []]
+
 discriminator:
   0: [[neg p],[p]]
   u: [[],[p, neg p]]

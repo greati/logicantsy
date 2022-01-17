@@ -32,12 +32,15 @@ pnmatrix:
         - [1]: [0]
 sequent_dset_correspondence: [1, 0]
 premisses_conclusions_correspondence: [[1, 0]]
-simplify_overlap: true
-simplify_dilution: true
-simplify_subrules: true
-simplify_derivation: 14
-simplify_by_cuts: true
+simplify_overlap: false
+simplify_dilution: false
+simplify_subrules: false
+#simplify_subrules_deriv: 0
+#simplify_derivation: 0
+simplify_by_cuts: false
 discriminator:
+  #0: [[p -> p],[p]]
+  #u: [[],[p, p -> p]]
   0: [[neg p],[p]]
   u: [[],[p, neg p]]
   1: [[p],[]]

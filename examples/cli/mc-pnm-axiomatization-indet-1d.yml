@@ -1,0 +1,61 @@
+pnmatrix:
+  values: [t, f]
+  distinguished_sets:
+    - [t]
+  interpretation:
+    p or q:
+      default: [t, f]
+      restrictions:
+    p and q:
+      default: [t, f]
+      restrictions:
+    neg p:
+      default: [t, f]
+      restrictions:
+    o(p):
+      default: [t, f]
+      restrictions:
+sequent_dset_correspondence: [1, 0]
+premisses_conclusions_correspondence: [[1, 0]]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+#simplify_subrules_deriv: 1
+#simplify_derivation: 1
+discriminator:
+  f: [[], [p]]
+  t: [[p],[]]
+#derive:
+  #  cc0: [[o(o(p))],[],[],[]]
+  #  cc1: [[o(neg(o(p)))],[],[],[]]
+latex:
+  "->": "\\to"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\sigma"
+  q: "\\psi"
+  r: "\\phi"
+  "->": "\\to"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\sigma"
+  q: "\\psi"
+  r: "\\phi"
+  circ: "\\circ"
+  o: "\\circ"
+  and: "\\land"
+  or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  bot: "\\bot"
+  top: "\\top"
+  foo: "\\circ"
+  not: "\\neg"
+  neg: "\\neg"
+  conf: "-"
+  tilde: "\\sim"
+  "`to`": "\\Tilde{\\supset}"
