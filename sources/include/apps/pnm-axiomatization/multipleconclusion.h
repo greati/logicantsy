@@ -239,6 +239,8 @@ namespace ltsy {
                 //non-total rules
                 spdlog::info("Producing T rules...");
                 auto non_total_rules = make_nontotal_rules();
+                if (simplify_overlap)
+                    non_total_rules = remove_overlaps(non_total_rules);
                 if (simplify_by_cuts)
                     non_total_rules = simplify_by_cut2(non_total_rules);
                 if (simplify_dilution)

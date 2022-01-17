@@ -2,6 +2,14 @@
 
 Library and CLI assistant for research in logic.
 
+## Requirements
+```
+- C++14
+- make, cmake
+- bison
+- flex
+```
+
 ## Build
 
 ```

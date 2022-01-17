@@ -57,9 +57,6 @@ discriminator:
   F: [  [],         [p],    [],    [p] ]
   t: [  [p],        [],     [],    [p] ]
   f: [  [],         [p],    [p],   []  ]
-#derive:
-  #  cc0: [[o(o(p))],[],[],[]]
-  #  cc1: [[o(neg(o(p)))],[],[],[]]
 derive:
   c: [[],[p and q, o(p and q)],[],[p and q]]
 latex:
