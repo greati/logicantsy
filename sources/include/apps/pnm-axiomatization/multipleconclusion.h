@@ -37,6 +37,7 @@ namespace ltsy {
             std::string make_d_rule_name(const int v, const int& idx) const {
                 std::string s = "D-";
                 s += std::to_string(v);
+                s += std::to_string(idx);
                 return s;
             }
 
@@ -51,33 +52,46 @@ namespace ltsy {
              * When X = \empty, a single choice is possible: (\empty,...,\empty)
              * */
             std::set<std::vector<FmlaSet>> 
-                make_separator_choice(const std::set<int> X, const std::vector<int>& distsets) {
+            make_separator_choice(const std::set<int> X, const std::vector<int>& distsets) {
                 // base case: X is empty
                 if (X.empty())
                     return { std::vector<FmlaSet>(distsets.size(), FmlaSet{}) };
                 // check if possible
-                auto x = *(X.begin());
-                int possible = false;
-                for (auto dset : distsets) {
-                    if (_discriminator.separators[x][dset].size() > 0) {
-                        possible=true;
+                int possible = true;
+                for (const auto x : X) {
+                     auto i {0};
+                     while (i < distsets.size() and _discriminator.separators[x][distsets[i]].size() == 0) i++;
+                     if (i == distsets.size()) {
+                        possible = false;
                         break;
-                    }
+                     }
                 }
                 if (not possible) return {};
+                const auto x = *(X.begin());
                 // recursive step
                 auto Xm = X;
-                Xm.erase(Xm.begin());
+                Xm.erase(x);
                 auto rec_result = make_separator_choice(Xm, distsets);
                 std::set<std::vector<FmlaSet>> result = {};
-                for (auto distset : distsets) {
-                    for (auto res : rec_result) {
-                        for (auto fmla : _discriminator.separators[x][distset]) {
-                            auto new_res = res;
-                            new_res[_dsets_positions[distset]].insert(fmla);
-                            result.insert(new_res); 
+                for (auto res : rec_result) {
+                    std::set<std::vector<FmlaSet>> rec_choice_expansions = {res};
+                    for (auto distset : distsets) {
+                        std::set<std::vector<FmlaSet>> rec_choice_expansions_cpy = rec_choice_expansions;
+                        std::set<std::vector<FmlaSet>> new_choice_expansions = {};
+                        for (auto rec_choice_expansion : rec_choice_expansions_cpy) {
+                            if (_discriminator.separators[x][distset].size() > 0) {
+                                for (auto fmla : _discriminator.separators[x][distset]) {
+                                    auto new_res = rec_choice_expansion;
+                                    new_res[_dsets_positions[distset]].insert(fmla);
+                                    new_choice_expansions.insert(new_res); 
+                                }
+                            } else {
+                                new_choice_expansions.insert(rec_choice_expansion);
+                            }
                         } 
+                        rec_choice_expansions = new_choice_expansions;
                     }
+                    result.insert(rec_choice_expansions.begin(), rec_choice_expansions.end());
                 } 
                 return result;
             }
@@ -401,8 +415,9 @@ namespace ltsy {
                         dset1.push_back(d1); dset2.push_back(d2);
                     }
 
-                    auto sep_choices1 = make_separator_choice(X, dset1);
-                    auto sep_choices2 = make_separator_choice(NX, dset2);
+                    auto sep_choices1 = make_separator_choice(X, dset2);
+                    auto sep_choices2 = make_separator_choice(NX, dset1);
+
                     int rule_idx = 1;
                     for (auto seps1 : sep_choices1) {
                         for (auto seps2 : sep_choices2) {
@@ -433,8 +448,8 @@ namespace ltsy {
                 auto dsets = _gen_matrix->distinguished_sets();
                 std::set<MultipleConclusionRule> result;
                 std::shared_ptr<Formula> p = std::make_shared<Prop>("p");
+                int rule_idx = 1;
                 for (auto v : values) {
-                    int rule_idx = 1;
                     std::vector<FmlaSet> base_seq_fmlas {dsets.size()};
                     for (int i = 0; i < dsets.size(); ++i)
                         base_seq_fmlas[_dsets_rule_positions[i]] = 

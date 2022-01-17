@@ -1,21 +1,26 @@
 pnmatrix:
-  values: [t, f]
+  values: [f, u, t]
   distinguished_sets:
-    - [t]
-    - [f]
+    - [t, u]
+    - [f, u]
   interpretation:
-    p or q:
-      default: [t, f]
+    p -> q:
+      default: [t,u]
       restrictions:
+        - [_, u]: []
+        - [u, _]: []
+        - [t, f]: [f]
     p and q:
-      default: [t, f]
+      default: [f]
       restrictions:
+        - [_, u]: []
+        - [u, _]: []
+        - [t, t]: [t,u]
     neg p:
-      default: [t, f]
       restrictions:
-    o(p):
-      default: [t, f]
-      restrictions:
+        - [f]: [t, u]
+        - [u]: []
+        - [t]: [f]
 sequent_dset_correspondence: [1, 0, 3, 2]
 premisses_conclusions_correspondence: [[1, 0], [3, 2]]
 simplify_overlap: false
@@ -25,7 +30,8 @@ simplify_by_cuts: false
 #simplify_derivation: 1
 discriminator:
   f: [  [],        [p], [],   []  ]
-  t: [  [p],   [],     [],   []  ]
+  u: [ [p], [], [p], []]
+  t: [  [p],   [],     [],   [p]  ]
 #derive:
   #  cc0: [[o(o(p))],[],[],[]]
   #  cc1: [[o(neg(o(p)))],[],[],[]]
