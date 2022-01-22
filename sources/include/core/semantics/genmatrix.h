@@ -915,17 +915,17 @@ namespace ltsy {
                         ++(*progress_bar);
                         (*progress_bar).display();
                     }
-                    // check validity of premisses
-                    bool premisses_valid = true;
-                    for (const auto& p : rule.premisses()) {
+                    // check validity of premises
+                    bool premises_valid = true;
+                    for (const auto& p : rule.premises()) {
                         if (not is_valid_under_valuation(*val, p)) {
-                            premisses_valid = false;
+                            premises_valid = false;
                             break;
                         }
                     }
                     // check non-validity of conclusions
                     bool conclusions_not_valid = true;
-                    if (premisses_valid) {
+                    if (premises_valid) {
                         for (const auto& c : rule.conclusions()) {
                             if (is_valid_under_valuation(*val, c)) {
                                 conclusions_not_valid = false;
@@ -933,7 +933,7 @@ namespace ltsy {
                             }
                         }
                     }
-                    if (premisses_valid and conclusions_not_valid) {
+                    if (premises_valid and conclusions_not_valid) {
                         counter_examples.push_back(CounterExample{*(val->copy())});
                     }
                     if (counter_examples.size() >= max_counter_examples)

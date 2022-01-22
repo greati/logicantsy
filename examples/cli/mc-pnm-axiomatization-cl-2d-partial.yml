@@ -21,48 +21,30 @@ pnmatrix:
         - [f]: [t, u]
         - [u]: []
         - [t]: [f]
-sequent_dset_correspondence: [1, 0, 3, 2]
-premisses_conclusions_correspondence: [[1, 0], [3, 2]]
-simplify_overlap: false
-simplify_dilution: false
-simplify_by_cuts: false
-#simplify_subrules_deriv: 1
-#simplify_derivation: 1
 discriminator:
-  f: [  [],        [p], [],   []  ]
-  u: [ [p], [], [p], []]
-  t: [  [p],   [],     [],   [p]  ]
-#derive:
-  #  cc0: [[o(o(p))],[],[],[]]
-  #  cc1: [[o(neg(o(p)))],[],[],[]]
+  f: [ [],  [p], [],  []  ]
+  u: [ [p], [],  [p], []  ]
+  t: [ [p], [],  [],  [p] ]
+sequent_dset_correspondence: [1, 0, 3, 2]
+premises_conclusions_correspondence: [[1, 0], [3, 2]]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_subrules_deriv: 10
+simplify_derivation: 10
+derive:
+  r1: [[q],[p],[p -> q],[]]
+  r2: [[],[],[p,q],[p and q]]
 latex:
   "->": "\\to"
-  p: "\\varphi"
-  p1: "\\varphi"
-  p2: "\\psi"
-  p3: "\\phi"
-  p4: "\\sigma"
-  q: "\\psi"
-  r: "\\phi"
-  "->": "\\to"
-  p: "\\varphi"
-  p1: "\\varphi"
-  p2: "\\psi"
-  p3: "\\phi"
-  p4: "\\sigma"
-  q: "\\psi"
-  r: "\\phi"
-  circ: "\\circ"
-  o: "\\circ"
   and: "\\land"
   or: "\\lor"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\sigma"
+  q: "\\psi"
   f: "\\mathbf{f}"
   t: "\\mathbf{t}"
-  bot: "\\bot"
-  top: "\\top"
-  foo: "\\circ"
-  not: "\\neg"
   neg: "\\neg"
-  conf: "-"
-  tilde: "\\sim"
-  "`to`": "\\Tilde{\\supset}"

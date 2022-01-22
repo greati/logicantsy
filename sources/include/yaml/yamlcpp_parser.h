@@ -59,7 +59,7 @@ namespace ltsy {
         const std::string PNMATRIX_INFER_COMPLEMENTS_NAME = "infer_complements";
         const std::string PNMATRIX_DSETS_NAME = "distinguished_sets";
         const std::string PNMATRIX_INTERP_NAME = "interpretation";
-        const std::string PREMISSES_SEQRULE_NAME = "premisses";
+        const std::string premises_SEQRULE_NAME = "premises";
         const std::string CONCLUSIONS_SEQRULE_NAME = "conclusions";
 
         std::shared_ptr<FmlaParser> make_fmla_parser(const YAML::Node& node) const {
@@ -327,17 +327,17 @@ namespace ltsy {
 
         std::shared_ptr<NdSequentRule<std::set>> parse_nd_sequent_rule(const std::string& name, 
                 const YAML::Node& rule_node) {
-            auto premisses_node = hard_require(rule_node, PREMISSES_SEQRULE_NAME);
-            std::vector<NdSequent<std::set>> premisses;
-            for (const auto& p : premisses_node) {
-                premisses.push_back(*parse_nd_sequent(p));
+            auto premises_node = hard_require(rule_node, premises_SEQRULE_NAME);
+            std::vector<NdSequent<std::set>> premises;
+            for (const auto& p : premises_node) {
+                premises.push_back(*parse_nd_sequent(p));
             }
             auto conclusions_node = hard_require(rule_node, CONCLUSIONS_SEQRULE_NAME);
             std::vector<NdSequent<std::set>> conclusions;
             for (const auto& c : conclusions_node) {
                 conclusions.push_back(*parse_nd_sequent(c));
             }
-            return std::make_shared<NdSequentRule<std::set>>(name, premisses, conclusions); 
+            return std::make_shared<NdSequentRule<std::set>>(name, premises, conclusions); 
         }
 
     };

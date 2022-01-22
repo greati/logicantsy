@@ -14,7 +14,7 @@ pnmatrix:
         - [_,_]: [F]
         - [F,T]: [T]
 sequent_dset_correspondence: [0, 3, 2, 1]
-premisses_conclusions_correspondence: [[0, 3], [2, 1]]
+premises_conclusions_correspondence: [[0, 3], [2, 1]]
 simplify_overlap: true
 simplify_dilution: true
 simplify_subrules: false

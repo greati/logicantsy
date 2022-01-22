@@ -41,11 +41,11 @@ sequent_dset_correspondence: [0, 3, 2, 1]
 max_counter_models: 2
 rules:
   negelim:
-    premisses:
+    premises:
     conclusions:
       - [[],[neg neg p],[p],[]]
   imp:
-    premisses:
+    premises:
     conclusions:
       - [[],[p -> q],[p, o(q)],[]]
 latex:

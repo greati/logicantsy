@@ -32,12 +32,12 @@ max_counter_models: 2
 sequent_dset_correspondence: [0, 1]
 rules:
   explosion:
-    premisses:
+    premises:
       - [[], [p and neg p]] # {} |-- p /\ ~p
     conclusions:            # ---------------
       - [[], [q]]           # {} |-- q
   orE:
-    premisses:
+    premises:
       - [[s], [p or q]]     # s    |-- p \/ q
       - [[t, p], [r]]       # t, p |-- r
       - [[q], [r]]          # q    |-- r

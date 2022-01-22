@@ -49,19 +49,19 @@ sequent_dset_correspondence: [0, 3, 2, 1]
 max_counter_models: 2
 rules:
   empty:
-    premisses:
+    premises:
     conclusions:
       - [[],[],[],[]]
   andnot:
-    premisses:
+    premises:
     conclusions:
       - [[],[],[p1 and p2],[neg(p1 and p2)]]
   ornot:
-    premisses:
+    premises:
     conclusions:
       - [[],[],[p1 or p2],[neg(p1 or p2)]]
   impnot:
-    premisses:
+    premises:
     conclusions:
       - [[],[],[p1 -> p2],[neg(p1 -> p2)]]
 latex:

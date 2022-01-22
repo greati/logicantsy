@@ -22,7 +22,7 @@ namespace ltsy {
             NdSequent<std::set> _sequent;
             std::shared_ptr<FormulaVarAssignment> _substitution;
             std::vector<std::pair<int,int>> _prem_conc_pos_corresp;
-            std::vector<FmlaSet> _premisses;
+            std::vector<FmlaSet> _premises;
             std::vector<FmlaSet> _conclusions;
             bool _all_conclusions_empty = true;
 
@@ -36,7 +36,7 @@ namespace ltsy {
                 _substitution {substitution} {
             
                 for (const auto& [p,c] : prem_conc_pos_corresp) {
-                    _premisses.push_back(sequent[p]);   
+                    _premises.push_back(sequent[p]);   
                     _conclusions.push_back(sequent[c]);   
                     _all_conclusions_empty &= sequent[c].empty();
                 }
@@ -88,7 +88,7 @@ namespace ltsy {
 
             decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp() const { return _prem_conc_pos_corresp; }
 
-            std::vector<FmlaSet> premisses() const { return _premisses; }
+            std::vector<FmlaSet> premises() const { return _premises; }
             std::vector<FmlaSet> conclusions() const { return _conclusions; }
 
             MultipleConclusionRule apply_substitution(const FormulaVarAssignment& ass) const {
@@ -447,14 +447,14 @@ namespace ltsy {
                        }
                        if (conclusion_intersect_node_fmlas)
                            continue;
-                       //std::cout << "Rule instance before checking for premisses: " << std::endl;
+                       //std::cout << "Rule instance before checking for premises: " << std::endl;
                        //std::cout << rule_instance.sequent().to_string() << std::endl;
-                       // check if premisses subseteq node_fmlas
-                       const auto& premisses = rule_instance.premisses();
-                       bool premisses_satisfied = true;
+                       // check if premises subseteq node_fmlas
+                       const auto& premises = rule_instance.premises();
+                       bool premises_satisfied = true;
                        for (auto i {0}; i < node_fmlas.size(); ++i)
-                           premisses_satisfied &= is_subset(premisses[i], node_fmlas[i]);
-                       if (premisses_satisfied) {
+                           premises_satisfied &= is_subset(premises[i], node_fmlas[i]);
+                       if (premises_satisfied) {
                            //std::cout << ">> Rule with premiss satisfied" << std::endl;
                            //std::cout << rule_instance.sequent().to_string() << std::endl;
                            if (rule_instance.all_conclusions_empty()) {
@@ -499,7 +499,7 @@ namespace ltsy {
                                    if (not useful_instance) break; // stop checking this instance!
                                }
                            }
-                       } else continue; // go to next rule instance if premisses are not satisfied
+                       } else continue; // go to next rule instance if premises are not satisfied
                        if (some_premiss_satisfied and satisfied) {
                            derivation->closed = true;
                            return true; 
@@ -585,17 +585,17 @@ namespace ltsy {
                 }
                 // compute the generalized subformulas
                 const auto& [thetak_1, thetak] = gen_subformulas(statement, phi, props_phi, _analiticity_level);
-                // identify premisses and conclusion
-                std::vector<FmlaSet> premisses;
+                // identify premises and conclusion
+                std::vector<FmlaSet> premises;
                 std::vector<FmlaSet> conclusions;
                 for (const auto& [p,c] : statement.prem_conc_pos_corresp()) {
-                    premisses.push_back(statement.sequent()[p]);   
+                    premises.push_back(statement.sequent()[p]);   
                     conclusions.push_back(statement.sequent()[c]);   
                 }
                 // search for the derivation
-                auto derivation = std::make_shared<DerivationTreeNode>(premisses, 
+                auto derivation = std::make_shared<DerivationTreeNode>(premises, 
                         std::vector<std::shared_ptr<DerivationTreeNode>>{});
-                bool derivation_result = expand_node(premisses, conclusions, thetak_1, thetak, derivation, 0,
+                bool derivation_result = expand_node(premises, conclusions, thetak_1, thetak, derivation, 0,
                         max_depth);
                 return derivation;
             };

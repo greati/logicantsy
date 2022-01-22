@@ -43,10 +43,11 @@ pnmatrix:
       restrictions:
         - []: [t]
 sequent_dset_correspondence: [1, 0]
-premisses_conclusions_correspondence: [[1, 0]]
+premises_conclusions_correspondence: [[1, 0]]
 simplify_overlap: true
 simplify_dilution: true
-simplify_subrules: true
+simplify_by_cuts: true
+simplify_subrules_deriv: 30
 simplify_derivation: 30
 discriminator:
   top:  [[p, neg p],[]]
@@ -61,15 +62,10 @@ latex:
   p3: "\\phi"
   q: "\\psi"
   r: "\\phi"
-  circ: "\\circ"
-  o: "\\circ"
   and: "\\land"
   or: "\\lor"
   f: "\\mathbf{f}"
   t: "\\mathbf{t}"
   bot: "\\bot"
   top: "\\top"
-  foo: "\\circ"
-  not: "\\neg"
   neg: "\\neg"
-  "`to`": "\\Tilde{\\supset}"

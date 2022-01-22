@@ -704,18 +704,18 @@ $(function() {
 <div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;                std::vector&lt;std::shared_ptr&lt;Prop&gt;&gt; props {props_set.begin(), props_set.end()};</div>
 <div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;                <a class="code" href="classltsy_1_1_gen_matrix_valuation_generator.html">ltsy::GenMatrixValuationGenerator</a> generator {_matrix, props};</div>
 <div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;                <span class="keywordflow">while</span> (generator.has_next()) {</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;                    <span class="comment">// check validity of premisses</span></div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;                    <span class="keywordtype">bool</span> premisses_valid = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;                    <span class="comment">// check validity of premises</span></div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;                    <span class="keywordtype">bool</span> premises_valid = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;                    <span class="keyword">auto</span> val = generator.next();</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; p : rule.premisses()) {</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; p : rule.premises()) {</div>
 <div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;                        <span class="keywordflow">if</span> (not is_valid_under_valuation(*val, p)) {</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;                            premisses_valid = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;                            premises_valid = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;                            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;                        }</div>
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;                    }</div>
 <div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;                    <span class="comment">// check non-validity of conclusions</span></div>
 <div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;                    <span class="keywordtype">bool</span> conclusions_not_valid = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;                    <span class="keywordflow">if</span> (premisses_valid) {</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;                    <span class="keywordflow">if</span> (premises_valid) {</div>
 <div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : rule.conclusions()) {</div>
 <div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;                            <span class="keywordflow">if</span> (is_valid_under_valuation(*val, c)) {</div>
 <div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;                                conclusions_not_valid = <span class="keyword">false</span>;</div>
@@ -723,7 +723,7 @@ $(function() {
 <div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;                            }</div>
 <div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                        }</div>
 <div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                    }</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;                    <span class="keywordflow">if</span> (premisses_valid and conclusions_not_valid)</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;                    <span class="keywordflow">if</span> (premises_valid and conclusions_not_valid)</div>
 <div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                        counter_examples.push_back(CounterExample{*val});</div>
 <div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;                    <span class="keywordflow">if</span> (counter_examples.size() &gt;= max_counter_examples)</div>
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;                        <span class="keywordflow">break</span>;</div>

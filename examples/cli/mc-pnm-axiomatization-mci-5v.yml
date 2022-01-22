@@ -45,29 +45,19 @@ pnmatrix:
       restrictions:
         - [I]: [F]
 sequent_dset_correspondence: [1, 0, 3, 2]
-premisses_conclusions_correspondence: [[1, 0], [3, 2]]
-simplify_overlap: true
-simplify_dilution: true
-simplify_by_cuts: true
-simplify_subrules_deriv: 9
-simplify_derivation: 8
+premises_conclusions_correspondence: [[1, 0], [3, 2]]
 discriminator:
   I: [  [p],        [o(p)], [p],   []  ]
   T: [  [o(p),p],   [],     [p],   []  ]
   F: [  [],         [p],    [],    [p] ]
   t: [  [p],        [],     [],    [p] ]
   f: [  [],         [p],    [p],   []  ]
-derive:
-  c: [[],[p and q, o(p and q)],[],[p and q]]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_subrules_deriv: 9
+simplify_derivation: 8
 latex:
-  "->": "\\to"
-  p: "\\varphi"
-  p1: "\\varphi"
-  p2: "\\psi"
-  p3: "\\phi"
-  p4: "\\sigma"
-  q: "\\psi"
-  r: "\\phi"
   "->": "\\to"
   p: "\\varphi"
   p1: "\\varphi"
@@ -82,11 +72,4 @@ latex:
   or: "\\lor"
   f: "\\mathbf{f}"
   t: "\\mathbf{t}"
-  bot: "\\bot"
-  top: "\\top"
-  foo: "\\circ"
-  not: "\\neg"
   neg: "\\neg"
-  conf: "-"
-  tilde: "\\sim"
-  "`to`": "\\Tilde{\\supset}"

@@ -791,7 +791,7 @@ namespace ltsy {
             const std::string SIMPLIFY_CUTS = "simplify_by_cuts";
             const std::string DERIVE = "derive";
             const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
-            const std::string PREM_CONC_CORRESPOND_TITLE = "premisses_conclusions_correspondence";
+            const std::string PREM_CONC_CORRESPOND_TITLE = "premises_conclusions_correspondence";
             const std::string LATEX_TITLE = "latex";
             std::map<std::string, std::string> _tex_translation;
 

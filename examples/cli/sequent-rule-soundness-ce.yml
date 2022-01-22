@@ -19,6 +19,6 @@ max_counter_models: 2
 sequent_dset_correspondence: [0, 1, 2, 3]
 rules:
   mixingrule:
-    premisses:
+    premises:
     conclusions:                              # ---------------
       - [[], [neg p, p], [], [o(p), p]]       # [...]

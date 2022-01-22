@@ -198,35 +198,35 @@ namespace ltsy {
     template class NdSequent<std::set>;
 
     /* NdSequent-to-NdSequent bidimensional rule representation.
-     * It contains a set of NdSequent-premisses,
+     * It contains a set of NdSequent-premises,
      * and a set of NdSequent-conclusions.
      * */
     template<template<class...> typename FmlaContainerT>
     class NdSequentRule {
     
         private:
-            std::vector<NdSequent<FmlaContainerT>> _premisses;
+            std::vector<NdSequent<FmlaContainerT>> _premises;
             std::vector<NdSequent<FmlaContainerT>> _conclusions;
             std::string _name;
 
         public:
 
-            NdSequentRule(const std::string& name, const decltype(_premisses)& premisses,
+            NdSequentRule(const std::string& name, const decltype(_premises)& premises,
                     const decltype(_conclusions)& conclusions) : 
                 _name {name},
-                _premisses {premisses}, _conclusions {conclusions} {/* empty */}
+                _premises {premises}, _conclusions {conclusions} {/* empty */}
 
-            NdSequentRule(const decltype(_premisses)& premisses,
+            NdSequentRule(const decltype(_premises)& premises,
                     const decltype(_conclusions)& conclusions) :
-                _premisses {premisses}, _conclusions {conclusions} {/* empty */}
+                _premises {premises}, _conclusions {conclusions} {/* empty */}
 
-            inline decltype(_premisses) premisses() const { return _premisses; };
+            inline decltype(_premises) premises() const { return _premises; };
             inline decltype(_conclusions) conclusions() const { return _conclusions; };
             inline decltype(_name) name() const { return _name; };
 
             std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>> collect_props() const {
                 std::set<std::shared_ptr<Prop>, utils::DeepSharedPointerComp<Prop>> props;
-                for (const auto& p : _premisses) {
+                for (const auto& p : _premises) {
                     auto collected_props = p.collect_props();
                     props.insert(collected_props.begin(), collected_props.end());
                 }
@@ -246,7 +246,7 @@ namespace ltsy {
              * */
             Signature infer_signature() const {
                 Signature sig;
-                for (const auto& p : _premisses)
+                for (const auto& p : _premises)
                     sig.join(p.infer_signature());
                 for (const auto& c : _conclusions) 
                     sig.join(c.infer_signature());
