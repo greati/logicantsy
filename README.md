@@ -1,13 +1,14 @@
 # logicantsy
 
-Library and CLI assistant for research in logic.
+Prototypical library and CLI assistant for research in logic.
 
 ## Requirements
 ```
-- C++14
+- C++17
 - make, cmake
 - bison
 - flex
+- boost
 ```
 
 ## Build
@@ -76,3 +77,15 @@ Example of a command:
         - `semantics`: code related to semantics, like truth-tables and generalized matrices
 - `/sources/tests`: here you may find how to use the classes
 
+# Usages in research
+
+- Vitor Greati's MSc thesis: introduction of the theoretical aspects behind the
+tool and presentation of the first finite axiomatization of the logic **mCi**.
+- C. Caleiro, S. Marcelino, P. Filipe, M. Cristani:
+analytic calculus for conjunctions, disjunctions, negations and contraries of intersective gradable adjectives when uttered by a single or more agents.
+
+# Future of logicantsy
+
+The present implementation is a prototype written in the context of my MSc thesis for some functionalities
+that will be part of a much more complete and integrated tool called CT4L, to be
+developed by researchers of the Instituto de Telecomunicações (Portugal) in the near future.

@@ -57,6 +57,9 @@ simplify_dilution: true
 simplify_by_cuts: true
 simplify_subrules_deriv: 9
 simplify_derivation: 8
+derive:
+  rejlfi: [ [], [], [], [p, neg p, neg(o(p))] ]
+  nexpl: [ [], [], [], [p, neg p] ]
 latex:
   "->": "\\to"
   p: "\\varphi"
