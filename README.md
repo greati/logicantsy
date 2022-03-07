@@ -89,5 +89,5 @@ See [this](https://github.com/greati/logicantsy/blob/be58fcf0df32a253526d4224037
 # Future of logicantsy
 
 The present implementation is a prototype written in the context of my MSc thesis for some functionalities
-that will be part of a much more complete and integrated tool called CT4L, to be
+that will be part of a much more complete and integrated tool, which will be
 developed in partnership with researchers of the Instituto de Telecomunicações (Portugal) in the near future.
