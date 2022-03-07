@@ -81,8 +81,10 @@ Example of a command:
 
 - Vitor Greati's MSc thesis: introduction of the theoretical aspects behind the
 tool and presentation of the first finite axiomatization of the logic **mCi**.
+See [this](https://github.com/greati/logicantsy/blob/be58fcf0df32a253526d422403777a9975a61bd5/examples/outputs/mcicons.pdf).
 - C. Caleiro, S. Marcelino, P. Filipe, M. Cristani:
 analytic calculus for conjunctions, disjunctions, negations and contraries of intersective gradable adjectives when uttered by a single or more agents.
+See [this](https://github.com/greati/logicantsy/blob/be58fcf0df32a253526d422403777a9975a61bd5/examples/outputs/inters_grad_adjectives.pdf).
 
 # Future of logicantsy
 
