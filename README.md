@@ -88,4 +88,4 @@ analytic calculus for conjunctions, disjunctions, negations and contraries of in
 
 The present implementation is a prototype written in the context of my MSc thesis for some functionalities
 that will be part of a much more complete and integrated tool called CT4L, to be
-developed by researchers of the Instituto de Telecomunicações (Portugal) in the near future.
+developed in partnership with researchers of the Instituto de Telecomunicações (Portugal) in the near future.
