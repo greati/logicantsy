@@ -53,12 +53,12 @@ and search for proof over this axiomatization. The GIF below illustrates this ap
 ![grab-landing-page](https://github.com/greati/logicantsy/blob/master/examples/cli/kleene-2d.gif)
 
 Examples of YAML inputs:
-- Strong Kleene (two-dimensional): https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-2D.yml
-- A two-dimensional logic over the billatice FOUR: https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/mc-pnm-axiomatization-avron-4v-2D.yml
-- mCi in a two-dimensional environment: https://raw.githubusercontent.com/greati/logicantsy/master/examples/cli/mc-pnm-axiomatization-mci-5v.yml
+- Strong Kleene (two-dimensional): https://raw.githubusercontent.com/greati/logicantsy/master/examples/axiomatization/Kleenebmatrix.yaml
+- A two-dimensional logic over the billatice FOUR: https://raw.githubusercontent.com/greati/logicantsy/master/examples/axiomatization/FDEbmatrix.yaml
+- mCi in a two-dimensional environment: https://raw.githubusercontent.com/greati/logicantsy/master/examples/axiomatization/mCibmatrix.yaml
 
 Example of a command:
-`./ltsy axiomatize-monadic-matrix -f ../examples/cli/mc-pnm-axiomatization-impfree-strong-kleene-2D.yml -o latex -s sk2d.tex`
+`./ltsy axiomatize-monadic-matrix -f ../examples/axiomatization/Kleenebmatrix.yaml -o latex -s sk2d.tex`
 
 # Project main structure
 - `/docs`: documentation

@@ -3,7 +3,6 @@ pnmatrix:
   distinguished_sets:
     - [top, t]
     - [top, f]
-  infer_complements: true
   interpretation:
     p and q:
       restrictions:
@@ -31,68 +30,36 @@ pnmatrix:
         - [top,top]: [top]
         - [bot,bot]: [bot]
         - [f, f]: [f]
-    p -> q:
-      restrictions:
-        - [f, _]: [t]
-        - [_, t]: [t]
-        - [t, f]: [f]
-        - [t, top]: [top]
-        - [t, bot]: [bot]
-        - [top, f]: [bot]
-        - [top, top]: [t]
-        - [top, bot]: [bot]
-        - [bot, f]: [top]
-        - [bot, top]: [top]
-        - [bot, bot]: [t]
     neg p:
       restrictions:
         - [t]: [f]
         - [f]: [t]
         - [bot]: [bot]
         - [top]: [top]
-    conf(p):
+    bot():
       restrictions:
-        - [t]: [t]
-        - [f]: [f]
-        - [bot]: [top]
-        - [top]: [bot]
-    tilde(p):
+        - []: [f]
+    top():
       restrictions:
-        - [t]: [f]
-        - [f]: [t]
-        - [bot]: [top]
-        - [top]: [bot]
-sequent_dset_correspondence: [1, 0, 3, 2]
-premises_conclusions_correspondence: [[1, 0], [3, 2]]
+        - []: [t]
 simplify_overlap: true
 simplify_dilution: true
-simplify_subrules: false
-simplify_derivation: 8
+simplify_by_cuts: true
+simplify_derivation: 100
+simplify_subrules_deriv: 100
 discriminator:
   top:  [[p],[],[p],[]]
   t:    [[p],[],[],[p]]
   f:    [[],[p],[p],[]]
   bot:  [[],[p],[],[p]]
 latex:
-  "->": "\\to"
   p: "\\varphi"
   p1: "\\varphi"
   p2: "\\psi"
-  p3: "\\phi"
-  p4: "\\sigma"
-  q: "\\psi"
-  r: "\\phi"
-  circ: "\\circ"
-  o: "\\circ"
   and: "\\land"
   or: "\\lor"
   f: "\\mathbf{f}"
   t: "\\mathbf{t}"
   bot: "\\bot"
   top: "\\top"
-  foo: "\\circ"
-  not: "\\neg"
   neg: "\\neg"
-  conf: "-"
-  tilde: "\\sim"
-  "`to`": "\\Tilde{\\supset}"

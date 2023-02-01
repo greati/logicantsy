@@ -201,6 +201,32 @@ namespace {
         std::cout << s << std::endl;
     }
 
+    TEST(ProofTheory, MultipleConclusionCalculusTrivialities) {
+        ltsy::BisonFmlaParser parser;
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        auto p_and_q = parser.parse("p and q");
+        auto p_and_p = parser.parse("p and p");
+        auto p_or_q = parser.parse("p or q");
+        auto p_or_p = parser.parse("p or p");
+        auto neg_p = parser.parse("neg p");
+        ltsy::MultipleConclusionRule rule1
+            {"exp", ltsy::NdSequent<std::set>({{p, neg_p},{q}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule2
+            {"con_i", ltsy::NdSequent<std::set>({{p, q},{p_and_q, p_or_q}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule3
+            {"disj", ltsy::NdSequent<std::set>({{p},{p_or_q}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule4
+            {"idemp", ltsy::NdSequent<std::set>({{p},{p_and_p, p_or_p}}), {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule5
+            {"empty", ltsy::NdSequent<std::set>({ltsy::FmlaSet{},ltsy::FmlaSet{}}), {{0,1}}}; 
+        ltsy::MultipleConclusionCalculus calc {{rule2, rule3, rule5}};
+       {
+           auto derivation = calc.derive(rule5, {{p}});
+           ASSERT_TRUE(derivation->closed);
+       }
+    }
+
     TEST(ProofTheory, NegationFragmentDerivability) {
         ltsy::BisonFmlaParser parser;
         auto p = parser.parse("p");
@@ -230,6 +256,27 @@ namespace {
        {
            auto derivation = calc.derive(rule3, {{p}});
            ASSERT_TRUE(derivation->closed);
+       }
+
+       {
+	   ltsy::MultipleConclusionRule rule5
+            {"empty", ltsy::NdSequent<std::set>({ltsy::FmlaSet{},ltsy::FmlaSet{}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule5, {{p}});
+           ASSERT_FALSE(derivation->closed);
+       }
+
+       {
+	   ltsy::MultipleConclusionRule rule5
+            {"empty", ltsy::NdSequent<std::set>({ltsy::FmlaSet{},ltsy::FmlaSet{p}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule5, {{p}});
+           ASSERT_FALSE(derivation->closed);
+       }
+
+       {
+	   ltsy::MultipleConclusionRule rule5
+            {"empty", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p},ltsy::FmlaSet{}}), {{0,1}}}; 
+           auto derivation = calc.derive(rule5, {{p}});
+           ASSERT_FALSE(derivation->closed);
        }
 
        {

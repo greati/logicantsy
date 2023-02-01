@@ -17,7 +17,7 @@ namespace ltsy {
                 Printer {translation} {}
 
             std::string print(std::shared_ptr<Formula> fmla) const override {
-                FormulaPrinter printer {_translation};
+                FormulaPrinter printer;
                 fmla->accept(printer);
                 return printer.get_string();
             }
@@ -26,12 +26,14 @@ namespace ltsy {
                 std::vector<std::string> result;
                 for (auto i = 0; i < seq.dimension(); ++i) {
                     std::stringstream os;
+		    os << "[";
                     const auto seq_fmlas = seq[i];
                     for (auto it = seq_fmlas.begin(); it != seq_fmlas.end(); ++it) {
-                        os << print(*it);
+                        os << "\"" << print(*it) << "\"";
                         if (std::next(it) != seq_fmlas.end())
                             os << ", ";
                     }
+		    os << "]";
                     result.push_back(os.str());
                 }
                 return result;

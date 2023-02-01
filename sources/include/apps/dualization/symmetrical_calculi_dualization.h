@@ -90,7 +90,10 @@ namespace ltsy {
                 auto sigtint = std::make_shared<SignatureTruthInterp<std::set<int>>>(sig);
                 _base_matrix->set_interpretation(sigtint);
                 // axiomatize input table
-                PNMMultipleConclusionAxiomatizer axiomatizer {_discriminant, _base_matrix, {{0, 3, 2, 1}}, {{0, 3}, {2, 1}}};
+                PNMMultipleConclusionAxiomatizer axiomatizer {_discriminant, _base_matrix, 
+			std::make_optional<std::vector<int>>({{0, 3, 2, 1}}), 
+			std::make_optional<std::vector<std::pair<int,int>>>({{0, 3}, {2, 1}})
+		};
                 //props
                 std::vector<Prop> props;
                 auto props_pointers = axiomatizer.make_props(tt->arity());

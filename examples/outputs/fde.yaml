@@ -1,0 +1,31 @@
+calculus:
+  r2: [[],[],["p1 and p2"],["p1", "p2"]]
+  r6: [[],[],["p1"],["p1 and p2"]]
+  r8: [[],[],["p2"],["p1 and p2"]]
+  r12: [["p1 and p2"],["p1"],[],[]]
+  r13: [["p1 and p2"],["p2"],[],[]]
+  r19: [["p1", "p2"],["p1 and p2"],[],[]]
+  r1: [[],[],[],["bot"]]
+  r14: [["bot"],[],[],[]]
+  r9: [[],["neg p1"],["p1"],[]]
+  r11: [[],["p1"],["neg p1"],[]]
+  r15: [["neg p1"],[],[],["p1"]]
+  r17: [["p1"],[],[],["neg p1"]]
+  r3: [[],[],["p1 or p2"],["p1"]]
+  r4: [[],[],["p1 or p2"],["p2"]]
+  r7: [[],[],["p1", "p2"],["p1 or p2"]]
+  r16: [["p1 or p2"],["p1", "p2"],[],[]]
+  r18: [["p1"],["p1 or p2"],[],[]]
+  r20: [["p2"],["p1 or p2"],[],[]]
+  r5: [[],[],["top"],[]]
+  r10: [[],["top"],[],[]]
+analyticity_formulas: ["p"]
+simplify_overlap: false
+simplify_dilution: false
+simplify_by_cuts: false
+simplify_by_subrule_deriv: 0
+prem_conc_correspondence: [[0,1],[2,3]]
+sequent_dset_correspondence: [0,1,2,3]
+simplify_max_level: 0
+derive:
+    # write queries as rulename: rule-description

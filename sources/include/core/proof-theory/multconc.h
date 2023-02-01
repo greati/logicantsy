@@ -25,6 +25,7 @@ namespace ltsy {
             std::vector<FmlaSet> _premises;
             std::vector<FmlaSet> _conclusions;
             bool _all_conclusions_empty = true;
+	    bool _all_premises_empty = true;
 
         public:
 
@@ -39,6 +40,7 @@ namespace ltsy {
                     _premises.push_back(sequent[p]);   
                     _conclusions.push_back(sequent[c]);   
                     _all_conclusions_empty &= sequent[c].empty();
+                    _all_premises_empty &= sequent[p].empty();
                 }
             
             }
@@ -85,6 +87,16 @@ namespace ltsy {
                     if (not concset.empty()) return false;
                 return true;
             }
+
+            decltype(_all_premises_empty) all_premises_empty() const { 
+                for (const auto& premset : _premises)
+                    if (not premset.empty()) return false;
+                return true;
+            }
+
+	    inline bool is_empty() const {
+	    	return all_premises_empty() and all_conclusions_empty();
+	    }
 
             decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp() const { return _prem_conc_pos_corresp; }
 
@@ -386,8 +398,9 @@ namespace ltsy {
 
             std::vector<MultipleConclusionRule> _rules;
             unsigned int _analiticity_level = 1;
+	    std::optional<MultipleConclusionRule> _empty_rule = std::nullopt;
 
-            void print_set(const FmlaSet& f) {
+            void print_set(const FmlaSet& f) const {
                 for (auto ff : f)
                     std::cout << (*ff) << std::endl;
             }
@@ -398,15 +411,9 @@ namespace ltsy {
                     const FmlaSet& fmlas_allowed_in_derivations,
                     std::shared_ptr<DerivationTreeNode> derivation,
                     int level, const std::optional<int>& max_depth) {
-                //std::cout << "Fmlas allowed in derivs" << std::endl;
-                //print_set(fmlas_allowed_in_derivations);
-                //std::cout << "fmlas to make instances" << std::endl;
-                //print_set(fmlas_to_make_instances);
                 // check satisfaction
                 bool satisfied = derivation->closed;//false;
                 for (auto i {0}; i < conclusions.size() and not satisfied; ++i) {
-                    //std::cout << "Check for closure on pos " + std::to_string(i) << std::endl;
-                    //print_set(node_fmlas[i]);
                     FmlaSet inters = intersection(node_fmlas[i], conclusions[i]);
                     satisfied = satisfied or not inters.empty();
                 }
@@ -447,16 +454,12 @@ namespace ltsy {
                        }
                        if (conclusion_intersect_node_fmlas)
                            continue;
-                       //std::cout << "Rule instance before checking for premises: " << std::endl;
-                       //std::cout << rule_instance.sequent().to_string() << std::endl;
                        // check if premises subseteq node_fmlas
                        const auto& premises = rule_instance.premises();
                        bool premises_satisfied = true;
                        for (auto i {0}; i < node_fmlas.size(); ++i)
                            premises_satisfied &= is_subset(premises[i], node_fmlas[i]);
                        if (premises_satisfied) {
-                           //std::cout << ">> Rule with premiss satisfied" << std::endl;
-                           //std::cout << rule_instance.sequent().to_string() << std::endl;
                            if (rule_instance.all_conclusions_empty()) {
                                auto star_node = 
                                    std::make_shared<DerivationTreeNode>(
@@ -548,9 +551,17 @@ namespace ltsy {
             /* Basic constructor.
              * */
             MultipleConclusionCalculus(const decltype(_rules)& rules)
-                : _rules {rules} {}
+                : _rules {rules} {
+		for (auto r : rules)
+		    if (r.is_empty()) {
+		    	this->_empty_rule = r;
+			break;
+		    }
+	    }
 
             decltype(_rules) rules() const { return _rules; }
+	    std::set<MultipleConclusionRule> rules_set() const { return std::set<MultipleConclusionRule>{_rules.begin(), _rules.end()}; }
+
             void add_rule(const MultipleConclusionRule& rule) { _rules.push_back(rule); }
 
             inline unsigned int size() const { return _rules.size(); }
@@ -567,6 +578,26 @@ namespace ltsy {
                 return groups;
             }
 
+
+            bool is_equivalent(MultipleConclusionCalculus other_calculus,
+                    const FmlaSet& this_phi, const FmlaSet& other_phi) {
+		    for (const auto& r : this->_rules) {
+		    	auto deriv = other_calculus.derive(r, other_phi);
+			if (not deriv->closed) {
+				std::cout << "in generated: " << r.sequent().to_string() << std::endl;
+				return false;
+			}
+		    }
+		    for (const auto& r : other_calculus.rules_set()) {
+		    	auto deriv = this->derive(r, this_phi);
+			if (not deriv->closed) {
+				std::cout << "in expected: " << r.sequent().to_string() << std::endl;
+				return false;
+			}
+		    }
+		    return true;
+	    }
+
             /* Try to produce a derivation tree based
              * on the system's rules.
              *
@@ -575,6 +606,17 @@ namespace ltsy {
              * */
             std::shared_ptr<DerivationTreeNode> derive(const MultipleConclusionRule& statement,
                     const FmlaSet& phi, std::optional<int> max_depth = std::nullopt) {
+		// when there is an empty rule in the calculus
+		if (statement.is_empty() and this->_empty_rule) {
+		    auto closed_derivation = std::make_shared<DerivationTreeNode>(
+		        this->_empty_rule->premises(), 
+			std::vector<std::shared_ptr<DerivationTreeNode>>{
+                          std::make_shared<DerivationTreeNode>(this->_empty_rule)
+			}
+		    );
+		    closed_derivation->closed = true;
+	 	    return closed_derivation;
+		}
                 // get the props in phi
                 PropSet props_phi;
                 for (auto f : phi) {
@@ -584,7 +626,7 @@ namespace ltsy {
                     props_phi.insert(p.begin(), p.end());
                 }
                 // compute the generalized subformulas
-                const auto& [thetak_1, thetak] = gen_subformulas(statement, phi, props_phi, _analiticity_level);
+                auto [thetak_1, thetak] = gen_subformulas(statement, phi, props_phi, _analiticity_level);
                 // identify premises and conclusion
                 std::vector<FmlaSet> premises;
                 std::vector<FmlaSet> conclusions;

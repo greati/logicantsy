@@ -21,6 +21,9 @@ namespace ltsy {
                     case Printer::PrinterType::LATEX:
                         printer = std::make_shared<LaTeXPrinter>(translation);
                         break;
+                    case Printer::PrinterType::YAML:
+                        printer = std::make_shared<StdPrinter>(translation);
+                        break;
                 }
                 return printer;
             };

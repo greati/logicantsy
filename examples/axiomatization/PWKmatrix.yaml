@@ -1,0 +1,41 @@
+pnmatrix:
+  values: [f, u, t]
+  distinguished_sets:
+    - [u, t]
+  interpretation:
+    p or q:
+      restrictions:
+        - [_,_]: [t]
+        - [u,_]: [u]
+        - [_,u]: [u]
+        - [f,f]: [f]
+    p and q:
+      restrictions:
+        - [_,_]: [f]
+        - [u,_]: [u]
+        - [_,u]: [u]
+        - [t,t]: [t]
+    neg p:
+      restrictions:
+        - [t]: [f]
+        - [u]: [u]
+        - [f]: [t]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_derivation: 5
+simplify_subrules_deriv: 100
+discriminator:
+  t: [[p],[neg p]]
+  u: [[p, neg p],[]]
+  f: [[],[p]]
+latex:
+  p1: "\\varphi"
+  p2: "\\psi"
+  and: "\\land"
+  or: "\\lor"
+  ->: "\\to"
+  neg: "\\neg"
+  t: "\\mathtt{t}"
+  u: "\\mathtt{u}"
+  f: "\\mathtt{f}"

@@ -1,0 +1,23 @@
+calculus:
+  r2: [["p1 -> p2"],["p2"]]
+  r3: [["p1 -> p2", "p1"],[]]
+  r10: [["p2"],["p1 -> p2", "p1"]]
+  r4: [["p1 and p2"],["p1", "p2"]]
+  r8: [["p1"],["p1 and p2"]]
+  r11: [["p2"],["p1 and p2"]]
+  r1: [[],["neg p1", "p1"]]
+  r5: [["neg p1", "p1"],[]]
+  r6: [["p1 or p2"],["p1"]]
+  r7: [["p1 or p2"],["p2"]]
+  r9: [["p1", "p2"],["p1 or p2"]]
+analyticity_formulas: ["p"]
+simplify_overlap: false
+simplify_dilution: false
+simplify_by_cuts: false
+simplify_by_subrule_deriv: 0
+prem_conc_correspondence: [[1,0]]
+sequent_dset_correspondence: [1,0]
+simplify_max_level: 0
+derive:
+  dist1: [["(p or q) and (p or r)"],["p or (q and r)"]]
+  # write queries as rulename: rule-description

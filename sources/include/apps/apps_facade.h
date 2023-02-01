@@ -50,25 +50,26 @@ namespace ltsy {
             /* App to axiomatize a monadic generalized matrix
              * given a ser of separators.
              * */
-            std::map<std::string, MultipleConclusionCalculus>
+	    std::pair<std::map<std::string, MultipleConclusionCalculus>, PNMMultipleConclusionAxiomatizer>
             monadic_gen_matrix_mult_conc_axiomatizer(
                     std::shared_ptr<GenMatrix> matrix,
                     Discriminator discriminator,
-                    const std::vector<int>& sequent_set_correspondence,
-                    const std::vector<std::pair<int,int>>& prem_conc_corresp,
+                    std::optional<std::vector<int>> sequent_set_correspondence,
+                    std::optional<std::vector<std::pair<int,int>>> prem_conc_corresp,
                     bool simplify_overlap=true,
                     bool simplify_dilution=true,
                     std::optional<unsigned int> simplify_subrules_deriv=std::nullopt,
                     std::optional<unsigned int> simplify_by_derivation=std::nullopt,
-                    bool simplify_by_cuts=true
+                    bool simplify_by_cuts=true 
                     ) {
                PNMMultipleConclusionAxiomatizer axiomatizer {discriminator, matrix, sequent_set_correspondence, prem_conc_corresp}; 
+
                if (simplify_by_derivation or simplify_subrules_deriv)
-                   return 
+                   return {
                    axiomatizer.make_single_calculus(simplify_overlap, simplify_dilution, 
-                           simplify_subrules_deriv, simplify_by_derivation, simplify_by_cuts).group();
+                           simplify_subrules_deriv, simplify_by_derivation, simplify_by_cuts).group(), axiomatizer};
                else
-                   return axiomatizer.make_calculus(simplify_overlap, simplify_dilution, false, simplify_by_cuts);
+                   return {axiomatizer.make_calculus(simplify_overlap, simplify_dilution, false, simplify_by_cuts), axiomatizer};
             }
 
             /* App to axiomatize a monadic generalized matrix

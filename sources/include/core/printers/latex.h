@@ -23,7 +23,7 @@ namespace ltsy {
             Printer {translation} {}
 
         std::string print(std::shared_ptr<Formula> fmla) const override {
-            FormulaPrinter printer {_translation};
+            FormulaLaTeXPrinter printer {_translation};
             fmla->accept(printer);
             return inline_math(printer.get_string());
         }

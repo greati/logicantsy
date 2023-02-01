@@ -15,6 +15,7 @@ namespace ltsy {
             enum class PrinterType : int {
                 PLAIN,
                 LATEX,
+		YAML,
             };
 
             Printer() {}

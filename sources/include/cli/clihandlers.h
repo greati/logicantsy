@@ -643,10 +643,12 @@ namespace ltsy {
                             auto sequent =  parser.parse_nd_sequent(it->second);
                             MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
                             auto derivation = calculus.derive(rule, analiticity_formulas);
-                            if (derivation->closed)
-                                std::cout << name + " is derivable." << std::endl;
-                            else
-                                std::cout << name + " is underivable." << std::endl;
+			    if (derivation != nullptr) {
+				    if (derivation->closed)
+					std::cout << name + " is derivable." << std::endl;
+				    else
+					std::cout << name + " is underivable." << std::endl;
+			    }
                             auto derivtree = derivation->print().str();
                             std::cout << derivtree << std::endl;
                         }
@@ -793,12 +795,40 @@ namespace ltsy {
             const std::string SEQUENT_DSET_CORRESPOND_TITLE = "sequent_dset_correspondence";
             const std::string PREM_CONC_CORRESPOND_TITLE = "premises_conclusions_correspondence";
             const std::string LATEX_TITLE = "latex";
+            const std::string B_ENTAILMENT_OUTPUT = "b_entailment_output";
             std::map<std::string, std::string> _tex_translation;
 
         public:
-            std::string get_default_template(Printer::PrinterType output_type, unsigned int dimension=4) {
+            std::string get_default_template(Printer::PrinterType output_type, unsigned int dimension=4, bool b_entailment_output=false) {
                 std::string temp;
                 switch(output_type) {
+                    case Printer::PrinterType::YAML:
+			temp += "calculus:\n";
+                        temp += "{\% if exists(\"axiomatization\") \%}";
+                        temp += "{\% for groups, schemas in axiomatization \%}";
+                        temp += "{\% for schema in schemas \%}";
+                        temp += "  (|{ schema.name }|): [";
+                        temp += "{\% for fmlas in schema.schema \%}";
+			temp += "(|{ fmlas }|)";
+			temp += "{\% if not loop.is_last \%}";
+			temp += ",";
+			temp += "{\% endif \%}";
+                        temp += "{\% endfor \%}]\n";
+                        temp += "{\% endfor \%}";
+                        temp += "{\% endfor \%}";
+                        temp += "{\% else \%}"; //empty calculus
+                        temp += "{\% endif \%}";
+			temp += "analyticity_formulas: [(|{ analyticity_formulas }|)]\n"; 
+			temp += "simplify_overlap: false\n";
+			temp += "simplify_dilution: false\n";
+			temp += "simplify_by_cuts: false\n";
+			temp += "simplify_by_subrule_deriv: 0\n";
+			temp += "prem_conc_correspondence: (|{ prem_conc_corr }|)\n";
+			temp += "sequent_dset_correspondence: (|{ seq_dset_corr  }|)\n";
+			temp += "simplify_max_level: 0\n";
+			temp += "derive:\n";
+			temp += "    # write queries as rulename: rule-description";
+                        break;
                     case Printer::PrinterType::PLAIN:
                         temp += "Check the result below:\n";
                         temp += "{\% if exists(\"axiomatization\") \%}";
@@ -825,24 +855,44 @@ namespace ltsy {
                         temp += "\\newcommand{\\Set}[1]{\n";
                         temp += "\\{#1\\}";
                         temp += "}\n";
-                        temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
-                        unsigned int index=1;
-                        //dimension = dimension % 2 ? dimension : dimension + 1;
-                        temp += "\\scalebox{1.5}{$\n";
-                        temp += "\\begin{smallmatrix}\n";
-                        for (auto i = 2; i <= dimension; i+=2) {
-                            temp += "#"+std::to_string(i);
-                            if (i != dimension) temp += "&;&";
-                        }
-                        temp += "\\\\\n";
-                        temp += "\\midrule\n";
-                        for (auto i = 1; i < dimension; i+=2) {
-                            temp += "#"+std::to_string(i);
-                            if (i != dimension-1) temp += "&;&";
-                        }
-                        temp += "\\end{smallmatrix}\n";
-                        temp += "$}";
-                        temp += "}";
+			if (b_entailment_output) {
+				temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+				unsigned int index=1;
+				//dimension = dimension % 2 ? dimension : dimension + 1;
+				temp += "\\scalebox{1.5}{$\n";
+				temp += "\\begin{smallmatrix}\n";
+				for (auto i = 2; i <= dimension; i+=2) {
+				    temp += "#"+std::to_string(i);
+				    if (i != dimension) temp += "&;&";
+				}
+				temp += "\\\\\n";
+				temp += "\\midrule\n";
+				for (auto i = 1; i < dimension; i+=2) {
+				    temp += "#"+std::to_string(i);
+				    if (i != dimension-1) temp += "&;&";
+				}
+				temp += "\\end{smallmatrix}\n";
+				temp += "$}";
+				temp += "}";
+			} else {
+				temp += "\\newcommand{\\bCon}[" + std::to_string(dimension) + "]{";
+				unsigned int index=1;
+				temp += "\\scalebox{1.5}{$\n";
+				temp += "\\begin{smallmatrix}\n";
+				for (auto i = 1; i < dimension; i+=2) {
+				    temp += "#"+std::to_string(i);
+				    if (i != dimension-1) temp += "&;&";
+				}
+				temp += "\\\\\n";
+				temp += "\\midrule\n";
+				for (auto i = 2; i <= dimension; i+=2) {
+				    temp += "#"+std::to_string(i);
+				    if (i != dimension) temp += "&;&";
+				}
+				temp += "\\end{smallmatrix}\n";
+				temp += "$}";
+				temp += "}";
+			}
                         // begin document
                         temp += "\\begin{document}\n";
                         temp += "\\tableofcontents\n";
@@ -892,7 +942,7 @@ namespace ltsy {
                     auto root = parser.load_from_file(yaml_path);
 
                     // get latex
-                    if (auto latex_node = root[LATEX_TITLE]) {
+                    if (auto latex_node = root[LATEX_TITLE]; output_type == Printer::PrinterType::LATEX) {
                         for (auto it = latex_node.begin(); it != latex_node.end(); ++it)
                            _tex_translation[it->first.as<std::string>()] = it->second.as<std::string>(); 
                     }
@@ -905,23 +955,28 @@ namespace ltsy {
                     auto simplify_subrules_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_SUBRULES_DERIV, std::nullopt);
                     auto simplify_derivation = parser.optional_require<unsigned int>(root, SIMPLIFY_DERIVATION, std::nullopt);
                     auto monadic_discriminator = parser.parse_monadic_discriminator(disc_node, pnmatrix);
-                    auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
-                        .as<std::vector<int>>();
-                    auto prem_conc_corr_node = parser.hard_require(root, PREM_CONC_CORRESPOND_TITLE);
-                    std::vector<std::pair<int,int>> prem_conc_corr;
-                    for (auto it = prem_conc_corr_node.begin(); it != prem_conc_corr_node.end(); it++) {
-                        auto prem_conc = it->as<std::vector<int>>();
-                        prem_conc_corr.push_back({prem_conc[0], prem_conc[1]});
-                    }
+                    auto seq_dset_corr = parser.optional_require<std::vector<int>>(root, SEQUENT_DSET_CORRESPOND_TITLE, std::nullopt);
+                    auto prem_conc_corr_node = parser.optional_require<std::vector<std::vector<int>>>(root, PREM_CONC_CORRESPOND_TITLE, std::nullopt);
+
+		    std::optional<std::vector<std::pair<int,int>>> prem_conc_corr = std::nullopt;
+		    if (prem_conc_corr_node) {
+			    prem_conc_corr = std::vector<std::pair<int,int>>{};
+			    for (auto it = prem_conc_corr_node->begin(); it != prem_conc_corr_node->end(); it++) {
+				//auto prem_conc = it->as<std::vector<int>>();
+				prem_conc_corr->push_back({(*it)[0], (*it)[1]});
+			    }
+		    }
 
                     if (verbose)
                         spdlog::info("Input tables: \n" + pnmatrix->print());
 
                     AppsFacade apps_facade;
-                    auto axiomatization = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
+                    auto axiomatization_with_axiomatizer = apps_facade.monadic_gen_matrix_mult_conc_axiomatizer(pnmatrix, 
                             monadic_discriminator, seq_dset_corr, prem_conc_corr, 
                             simplify_overlap, simplify_dilution, simplify_subrules_derivation, 
                             simplify_derivation, simplify_by_cuts);
+		    auto axiomatization = axiomatization_with_axiomatizer.first;
+		    auto axiomatizer = axiomatization_with_axiomatizer.second;
                     
                     PrinterFactory printer_factory;
                     auto printer = printer_factory.make_printer(output_type, _tex_translation);
@@ -939,6 +994,18 @@ namespace ltsy {
                             }
                             }                    
                     }
+			
+		    auto discriminator_formulas = monadic_discriminator.get_formulas();
+		    std::string analyticity_formulas = "";
+		    int i = 0;
+		    for (const auto& fm : discriminator_formulas) {
+			    analyticity_formulas += "\"" + printer->print(fm) + "\"";
+			    i++;
+			    if (i < discriminator_formulas.size()) analyticity_formulas += ",";
+		    }
+		    result_data["analyticity_formulas"] = analyticity_formulas;
+		    result_data["prem_conc_corr"] = axiomatizer.prem_conc_pos_corresp();
+		    result_data["seq_dset_corr"] = axiomatizer.seq_dset_corr();
 
                     result_data["interps"] = {};
                     for (auto [c, interp] : *pnmatrix->interpretation()) {
@@ -973,7 +1040,7 @@ namespace ltsy {
                         for (auto it = derive_node.begin(); it != derive_node.end(); ++it) {
                             auto name =  it->first.as<std::string>();
                             auto sequent =  parser.parse_nd_sequent(it->second);
-                            MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
+                            MultipleConclusionRule rule (name, *sequent, axiomatizer.prem_conc_pos_corresp());
                             auto derivation = full_calculus.derive(rule, discriminator_fmlas);
                             if (derivation->closed)
                                 std::cout << name + " is derivable." << std::endl;
@@ -993,7 +1060,7 @@ namespace ltsy {
                     } else if (auto temp = root[TEMPLATE_TITLE]) {
                         template_source = temp.as<std::string>(); 
                     } else {
-                        template_source = get_default_template(output_type, pnmatrix->distinguished_sets().size());
+                        template_source = get_default_template(output_type, pnmatrix->distinguished_sets().size(), false);
                     }
                     // generate report
                     AppReport report;

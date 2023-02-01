@@ -14,6 +14,13 @@ namespace ltsy {
      * matrix. For now, the focus is on at most
      * two distinguished sets.
      *
+     * D1 D1* D2 D2* ... DN DN* (dimension = N*2)
+     *
+     * [[D1],[D1*],[D2],[D2*],...,[DN],    [DN*]]
+     *
+     *   [0    1]   [2   3]        [2N-2   2N-1] 	(prem_conc_pos_corresp)
+     *   [0 1 2 3 ... 2N-2 2N-1] 			(dsets_rule_positions)
+     *
      * @author Vitor Greati
      * */
     class PNMMultipleConclusionAxiomatizer {
@@ -99,17 +106,30 @@ namespace ltsy {
         public:
 
             PNMMultipleConclusionAxiomatizer(const decltype(_discriminator)& discriminator,
-                    decltype(_gen_matrix) gen_matrix, const std::vector<int>& dsets_rule_positions,
-                    decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp)
-            : _discriminator {discriminator}, _gen_matrix {gen_matrix}, _prem_conc_pos_corresp {prem_conc_pos_corresp} {
+                    decltype(_gen_matrix) gen_matrix, 
+		    std::optional<std::vector<int>> dsets_rule_positions,
+                    std::optional<decltype(_prem_conc_pos_corresp)> prem_conc_pos_corresp)
+            : _discriminator {discriminator}, _gen_matrix {gen_matrix} {
+
+		if (not dsets_rule_positions) {
+			_dsets_rule_positions = std::map<int, int>{};
+			for (int i = 0; i < gen_matrix->distinguished_sets().size(); i += 1)
+				_dsets_rule_positions[i] = i;
+		} else {
+			for (int i = 0; i < (*dsets_rule_positions).size(); i += 1) 
+			    _dsets_rule_positions[i] = (*(dsets_rule_positions))[i]; 
+		}
+
+		if (not prem_conc_pos_corresp) {
+			_prem_conc_pos_corresp = decltype(_prem_conc_pos_corresp){};
+			for (int i = 0; i < gen_matrix->distinguished_sets().size(); i += 2)
+				_prem_conc_pos_corresp.push_back(std::pair<int, int>{i, i+1});
+		} else _prem_conc_pos_corresp = *prem_conc_pos_corresp;
             
                 for (int i = 0, j=0; i < _gen_matrix->distinguished_sets().size(); i += 2) {
                     _opposition_dsets[i] = i+1;
                     _dsets_positions[i] = j;
                     _dsets_positions[i+1] = j++;
-                }
-                for (int i = 0; i < _gen_matrix->distinguished_sets().size(); i += 1) {
-                    _dsets_rule_positions[i]=dsets_rule_positions[i]; 
                 }
             }
 
@@ -126,6 +146,17 @@ namespace ltsy {
                     _dsets_rule_positions[i]=dsets_rule_positions[i]; 
                 }
             }
+
+	    decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp() const { 
+	   	return _prem_conc_pos_corresp; 
+	    }
+
+	    std::vector<int> seq_dset_corr() const { 
+		    std::vector<int> seq_dset_corr;
+		    for (auto [k,v]: this->_dsets_rule_positions)
+			    seq_dset_corr.push_back(v);
+		    return seq_dset_corr;
+	    }
 
             MultipleConclusionCalculus simplify_calculus(
                 const MultipleConclusionCalculus& calculus,
@@ -660,7 +691,7 @@ namespace ltsy {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
                     MultipleConclusionCalculus simp_calc {rules_simp};
-                    auto derivation = simp_calc.derive(rules[i], {});
+                    auto derivation = simp_calc.derive(rules[i], _discriminator.get_formulas());
                     if (derivation->closed) {
                         spdlog::debug("Derived " + rules[i].sequent().to_string() + 
                                 " in depth " + std::to_string(depth) + " using " + 

@@ -39,7 +39,6 @@ namespace ltsy {
             inline int dimension() const { return _dimension; }
             inline decltype(_sequent_fmlas) sequent_fmlas() const { return _sequent_fmlas; }
 
-
             FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>>& operator[](int i) { return _sequent_fmlas[i]; }
 
             FmlaContainerT<std::shared_ptr<Formula>, utils::DeepSharedPointerComp<Formula>> operator[](int i) const { return _sequent_fmlas[i]; }

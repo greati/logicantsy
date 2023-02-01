@@ -38,7 +38,7 @@ namespace ltsy {
             std::optional<std::string> _save_path {std::nullopt};
 
             std::map<std::string, Printer::PrinterType> output_type_mapping
-                {{"plain", Printer::PrinterType::PLAIN}, {"latex", Printer::PrinterType::LATEX}};
+                {{"plain", Printer::PrinterType::PLAIN}, {"latex", Printer::PrinterType::LATEX}, {"yaml", Printer::PrinterType::YAML}};
 
         public:
 

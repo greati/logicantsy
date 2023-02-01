@@ -62,10 +62,10 @@ namespace {
         //ltsy::CloneGenerator generator {4, {tt_smile, tt_csmile, tt_and, tt_or}};
         ltsy::CloneGenerator generator {3, {tt_to,tt_and,tt_or,tt_neg}};
         const auto unary_clone = generator.generate(1, {p, q});
-        for (const auto& f : unary_clone) {
-            std::cout << *f.fmla() << std::endl;
-            std::cout << f.print().str() << std::endl;
-        }
+        //for (const auto& f : unary_clone) {
+        //    std::cout << *f.fmla() << std::endl;
+        //    std::cout << f.print().str() << std::endl;
+        //}
     }
 
     TEST(CloneGen, GenerateCloneDeterministicTeamFour) {
@@ -160,10 +160,10 @@ namespace {
         //ltsy::CloneGenerator generator {4, {tt_smile, tt_csmile, tt_and, tt_or}};
         ltsy::CloneGenerator generator {4, {tt_smile, tt_csmile, tt_cfrown, tt_and, tt_or}};
         const auto unary_clone = generator.generate(1, {p, q});
-        for (const auto& f : unary_clone) {
-            std::cout << *f.fmla() << std::endl;
-            std::cout << f.print().str() << std::endl;
-        }
+        //for (const auto& f : unary_clone) {
+        //    std::cout << *f.fmla() << std::endl;
+        //    std::cout << f.print().str() << std::endl;
+        //}
     }
 
     TEST(CloneGen, GenerateCloneDeterministicFDE) {
@@ -263,10 +263,10 @@ namespace {
 
         ltsy::CloneGenerator generator {4, {tt_or, tt_dmneg, tt_and}};
         const auto unary_clone = generator.generate(1, {p, q});
-        for (const auto& f : unary_clone) {
-            std::cout << *f.fmla() << std::endl;
-            std::cout << f.print().str() << std::endl;
-        }
+        //for (const auto& f : unary_clone) {
+        //    std::cout << *f.fmla() << std::endl;
+        //    std::cout << f.print().str() << std::endl;
+        //}
     }
 
 
@@ -305,10 +305,10 @@ namespace {
         }, conv_p);   
         ltsy::CloneGenerator generator {5, {tt_neg, tt_conv, tt_conf}};
         const auto unary_clone = generator.generate(1, {p, q});
-        for (const auto& f : unary_clone) {
-            std::cout << *f.fmla() << std::endl;
-            std::cout << f.print().str() << std::endl;
-        }
+        //for (const auto& f : unary_clone) {
+        //    std::cout << *f.fmla() << std::endl;
+        //    std::cout << f.print().str() << std::endl;
+        //}
     }
 
     TEST(CloneGen, GenerateUnaryCloneMci) {
@@ -431,10 +431,10 @@ namespace {
                         (ltsy::utils::is_subset(B, D) and ltsy::utils::is_subset(A, U));
                 }, 2)
         );
-        for (const auto& f : unary_clone) {
-            std::cout << *f.fmla() << std::endl;
-            std::cout << f.print().str() << std::endl;
-        }
+        //for (const auto& f : unary_clone) {
+        //    std::cout << *f.fmla() << std::endl;
+        //    std::cout << f.print().str() << std::endl;
+        //}
     }
 }
 

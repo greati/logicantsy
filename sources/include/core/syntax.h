@@ -646,16 +646,93 @@ namespace ltsy {
     class FormulaPrinter : public FormulaVisitor<void> {
         private:
             std::stringstream buffer; //> Stores the printed formula
-            std::map<std::string, std::string> translation_map; //> Translates the symbols
         public:
 
             /* Empty constructor.
              */
             FormulaPrinter() {}
 
+            virtual void visit_prop(Prop* prop) override {
+                buffer << prop->symbol();
+            }
+
+            virtual void visit_compound(Compound* compound) override {
+                auto arity = compound->connective()->arity();
+                auto symbol = compound->connective()->symbol();
+
+                if (arity == 0) {
+                    buffer << symbol;
+                } else if (arity == 1 and 
+                    (compound->components()[0]->type() == Formula::FmlaType::PROP or
+                     compound->components()[0]->connective()->arity() == 1)) {
+		    if (symbol == "neg") {
+			    buffer << symbol << " ";
+			    compound->components()[0]->accept(*this);
+		    } else {
+			    buffer << symbol << "(";
+			    compound->components()[0]->accept(*this);
+			    buffer << ")";
+		    }
+                } else if (arity == 2) {
+		    if (symbol == "and" or symbol == "or" or symbol == "->") {
+			    auto components = compound->components();
+			    if (components[0]->type() != Formula::FmlaType::PROP)
+				    buffer << "(";
+			    components[0]->accept(*this);
+			    if (components[0]->type() != Formula::FmlaType::PROP)
+				    buffer << ")";
+			    buffer << " " << symbol << " ";
+			    if (components[1]->type() != Formula::FmlaType::PROP)
+				    buffer << "(";
+			    components[1]->accept(*this);
+			    if (components[1]->type() != Formula::FmlaType::PROP)
+				    buffer << ")";
+		    } else {
+			    auto components = compound->components();
+			    buffer << symbol << "(";
+			    components[0]->accept(*this);
+			    buffer << ",";
+			    components[1]->accept(*this);
+			    buffer << ")";	    
+		    }
+                } else {
+                    buffer << symbol << "(";
+                    auto components = compound->components();
+                    for (auto it = components.cbegin(); it != components.cend(); ++it) {
+                        (*it)->accept(*this);
+                        if (std::next(it) != components.cend())
+                            buffer << ",";
+                    }
+                    buffer <<")";
+                }
+            }
+            std::string get_string() { 
+                std::string result = buffer.str();
+                if ((result.size() >= 3) and (result[0] == '(') and (result[result.size()-1] == ')'))
+                    result = result.substr(1, result.size() - 2);
+                return result;
+            }
+    };
+
+
+    /**
+     * A visitor to print a formula.
+     *
+     * @author Vitor Greati
+     * */
+    class FormulaLaTeXPrinter : public FormulaVisitor<void> {
+        private:
+            std::stringstream buffer; //> Stores the printed formula
+            std::map<std::string, std::string> translation_map; //> Translates the symbols
+        public:
+
+            /* Empty constructor.
+             */
+            FormulaLaTeXPrinter() {}
+
             /* Constructor based on the translation.
              */
-            FormulaPrinter(const decltype(translation_map)& tmap) : translation_map {tmap} {}
+            FormulaLaTeXPrinter(const decltype(translation_map)& tmap) : translation_map {tmap} {}
 
             /* Get the translation of a symbol, or the symbol itself if it
              * is not translatable.
@@ -671,24 +748,30 @@ namespace ltsy {
                 buffer << get_translation(prop->symbol());
             }
 
-            virtual void visit_compound(Compound* compound) override {
+	    virtual void visit_compound(Compound* compound) override {
                 auto arity = compound->connective()->arity();
                 auto symbol = compound->connective()->symbol();
 
                 if (arity == 0) {
                     buffer << get_translation(symbol);
-                } else if (arity == 1 and 
+                } else if (arity == 1 and
                     (compound->components()[0]->type() == Formula::FmlaType::PROP or
                      compound->components()[0]->connective()->arity() == 1)) {
                     buffer << get_translation(symbol);
                     compound->components()[0]->accept(*this);
                 } else if (arity == 2) {
                     auto components = compound->components();
-                    buffer << "(";
+		    if (components[0]->type() != Formula::FmlaType::PROP)
+			    buffer << "(";
                     components[0]->accept(*this);
+		    if (components[0]->type() != Formula::FmlaType::PROP)
+			    buffer << ")";
                     buffer << " " << get_translation(symbol) << " ";
+		    if (components[1]->type() != Formula::FmlaType::PROP)
+			    buffer << "(";
                     components[1]->accept(*this);
-                    buffer << ")";
+		    if (components[1]->type() != Formula::FmlaType::PROP)
+			    buffer << ")";
                 } else {
                     buffer << get_translation(symbol) << "(";
                     auto components = compound->components();
@@ -700,6 +783,7 @@ namespace ltsy {
                     buffer <<")";
                 }
             }
+
             std::string get_string() { 
                 std::string result = buffer.str();
                 if ((result.size() >= 3) and (result[0] == '(') and (result[result.size()-1] == ')'))
@@ -786,9 +870,10 @@ namespace ltsy {
                 _current_iterators.clear();
                 for (int i = 0; i < _props.size(); ++i) {
                     _current_iterators.push_back(_gamma.begin());
-                    if (std::next(_current_iterators[i]) == _gamma.end())
+                    if (_current_iterators[i] == _gamma.end() or std::next(_current_iterators[i]) == _gamma.end())
                         qtd_in_max++;
-                    _current->set(*_props[i], *_current_iterators[i]);
+		    if (_current_iterators[i] != _gamma.end())
+			_current->set(*_props[i], *_current_iterators[i]);
                 }
             }
 
@@ -842,7 +927,7 @@ namespace ltsy {
             }
 
             bool has_next() const {
-                return not finished;
+                return not finished and not _gamma.empty();
             }
 
             void reset() {
