@@ -1,0 +1,487 @@
+pnmatrix:
+  values: [^f, f, n, b, t, ^t]
+  distinguished_sets_structure:
+    up_t_hat:
+      - [^t]
+    up_t:
+      - [t, ^t]
+    up_b:
+      - [b, t, ^t]
+    up_n:
+      - [n, t, ^t]
+    up_f:
+      - [f, b, n, t, ^t]
+    #distinguished_sets:
+    #  #- [^t]
+    #  #- [t, ^t]
+    #  #- [b, t, ^t]
+    #  #- [n, t, ^t]
+    #  - [f, b, n, t, ^t]
+    #  #- [^f, f, b, n, t, ^t]
+  interpretation:
+    p -> q:
+      default: [^t]
+      restrictions:
+        - [_,  ^f]: [^f]
+        - [^f, ^f]: [^t]
+        - [n, f]: [b]
+        - [b, f]: [n]
+        - [t, f]: [f]
+        - [^t, f]: [f]
+        - [b, n]: [n]
+        - [t, n]: [n]
+        - [^t, n]: [n]
+        - [n, b]: [b]
+        - [t, b]: [b]
+        - [^t, b]: [b]
+        - [^t, t]: [t]
+    p or q:
+      restrictions:
+        - [^f, ^f]: [^f]
+        - [f, _]  : [f]
+        - [_, f]  : [f]
+        - [n, _]  : [n]
+        - [_, n]  : [n]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [b, n]  : [t]
+        - [n, b]  : [t]
+        - [t, _]  : [t]
+        - [_, t]  : [t]
+        - [^t, _] : [^t]
+        - [_, ^t] : [^t]
+    p and q:
+      restrictions:
+        - [^t, ^t]: [^t]
+        - [t, _]  : [t]
+        - [_, t]  : [t]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [n, _]  : [n]
+        - [_, n]  : [n]
+        - [n, b]  : [f]
+        - [b, n]  : [f]
+        - [f, _]  : [f]
+        - [_, f]  : [f]
+        - [^f, _] : [^f]
+        - [_, ^f] : [^f]
+    neg p:
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [t]
+        - [n] : [n]
+        - [b] : [b]
+        - [t] : [f]
+        - [^t]: [^f]
+    o(p):
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [^f]
+        - [n] : [^f]
+        - [b] : [^f]
+        - [t] : [^f]
+        - [^t]: [^t]
+    bot():
+      restrictions:
+        - []: [^f]
+    top():
+      restrictions:
+        - []: [^t]
+sequent_dset_correspondence: [0, 1]
+max_counter_models: 1
+rules:
+  # RDIAMOND
+  #arrows_or:
+  #  premises:
+  #  conclusions:
+  #    - [[],["o(neg p -> p)","o(p -> neg p)"]]
+  #id:
+  #  premises:
+  #  conclusions:
+  #    - [[], ["o(p -> p)"]]
+  #trans:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p -> q)","o(q -> r)","o(q)"], ["o(r)","o(p -> r)"]]
+  #dl1:
+  #  premises:
+  #  conclusions:
+  #    - [[], ["o(p -> neg p)", "o(q)", "o(q -> p)"]]
+  #dg0:
+  #  premises:
+  #  conclusions:
+  #    - [[], ["o(neg p -> p)", "o(q)", "o(p -> q)"]]
+  #inclass1:
+  #  premises:
+  #  conclusions:
+  #    - [["o(neg p -> p)", "o(p -> q)"], ["o(p)", "o(neg q -> q)"]]
+  #inclass2:
+  #  premises:
+  #  conclusions:
+  #    - [["o(q -> neg q)", "o(p -> q)"], ["o(q)", "o(p -> neg p)"]]
+  #inclass3:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(p -> q)"], ["o(p)", "o(q)", "o(q -> p)"]]
+  #just2:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(r -> neg r)", "o(neg r -> r)"], ["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(p -> r)", "o(q -> r)"]]
+  #imp1:
+  #  premises:
+  #  conclusions:
+  #    - [["o(q)"],["o(p -> q)"]]
+  #imp2:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p)", "o(q)"],["p", "q", "p -> q"]]
+  #imp3:
+  #  premises:
+  #  conclusions:
+  #    - [["p", "p -> q"],["q"]]
+  #imp4:
+  #  premises:
+  #  conclusions:
+  #    - [["o(q)", "p -> q"],["o(p)", "q"]]
+  #imp5:
+  #  premises:
+  #  conclusions:
+  #    - [[q],[p -> q]]
+  #imp6:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p)", "p", "o(neg q -> q)"],["o(neg(p -> q) -> (p -> q))"]]
+  #imp7:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p)", "p", "o(q -> neg q)"],["o((p -> q) -> neg (p -> q))"]]
+  #imp10:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p)"],["p", "o(p -> q)"]]
+  #imp11:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p)"],["p", "p -> q"]]
+  #imp12:
+  #  premises:
+  #  conclusions:
+  #    - [["o(p -> q)"],["o(p)", "o(q)", "p -> q"]]
+  imp14:
+    premises:
+    conclusions:
+      - [[],["o(p -> neg p)", "o(q)", "o(p -> q)", "o((p -> q) -> q)"]]
+  imp15:
+    premises:
+    conclusions:
+      - [[],["o(p -> neg p)", "o(q)", "o(p -> q)", "o(q -> (p -> q))"]]
+  #imp16:
+  #  premises:
+  #  conclusions:
+  #    - [["o(neg p -> p)", "o(p -> neg p)"],["o(p)", "o(q)", "o(p -> q)", "o(neg(p -> q) -> (p -> q))"]]
+  #imp17:
+  #  premises:
+  #  conclusions:
+  #    - [["o(neg p -> p)", "o(p -> neg p)"],["o(p)", "o(q)", "o(p -> q)", "o((p -> q) -> neg (p -> q))"]]
+  #imp18:
+  #  premises:
+  #  conclusions:
+  #    - [["o(neg p -> p)", "o(p -> neg p)", "o((p -> q) -> p)"],["o(p)", "o(q)", "o(p -> q)"]]
+        #  #RNEG
+        #  neg1:
+        #    premises:
+        #    conclusions:
+        #      - [[o(p)],[p, neg p]]
+        #  neg2:
+        #    premises:
+        #    conclusions:
+        #      - [[o(p), neg p, p],[]]
+        #  neg3:
+        #    premises:
+        #    conclusions:
+        #      - [[o(p)],[o(neg p)]]
+  neg31:
+    premises:
+    conclusions:
+        - [[o(neg p)],[o(p)]]
+        #  neg4:
+        #    premises:
+        #    conclusions:
+        #      - [[o((neg neg p) -> neg p)],[o(p -> neg p)]]
+        #  neg5:
+        #    premises:
+        #    conclusions:
+        #      - [[o(neg p -> (neg neg p))],[o(neg p -> p)]]
+        #  neg6:
+        #    premises:
+        #    conclusions:
+        #      - [[o(p -> neg p)],[o(neg neg p -> neg p)]]
+        #  neg7:
+        #    premises:
+        #    conclusions:
+        #      - [[o(neg p -> p)],[o(neg p -> neg neg p)]]
+        #  # RCONS
+        #  cons1:
+        #    premises:
+        #    conclusions:
+        #      - [[],[o(o(p))]]
+        #  # RCONJ
+  and1:
+    premises:
+    conclusions:
+      - [[],["o((p and q) -> q)"]]
+  and2:
+    premises:
+    conclusions:
+      - [[p, o(p)],[o(q -> (p and q))]]
+  and3:
+    premises:
+    conclusions:
+      - [[],["o((p and q) -> p)"]]
+  and4:
+    premises:
+    conclusions:
+      - [[q, o(q)],[o(p -> (p and q))]]
+  and5:
+    premises:
+    conclusions:
+      - [[o(p)],[p, o(p and q)]]
+  and6:
+    premises:
+    conclusions:
+      - [[p and q],[p]]
+  and7:
+    premises:
+    conclusions:
+      - [[o(q)],[q, o(p and q)]]
+  and8:
+    premises:
+    conclusions:
+      - [[p and q],[q]]
+  and9:
+    premises:
+    conclusions:
+      - [[o(p -> q)],[o(p -> (p and q))]]
+  and10:
+    premises:
+    conclusions:
+      - [[o(p -> q)],[o(p -> (q and p))]]
+  and11:
+    premises:
+    conclusions:
+      - [[o(neg p -> p), o(p -> neg p), o(neg q -> q), o(q -> neg q), o(neg(p and q) -> (p and q))],[o(p), o(q), o(p -> q)]]
+  #ROR
+  or1:
+    premises:
+    conclusions:
+      - [[], [o(q -> (p or q))]]
+  or2:
+    premises:
+    conclusions:
+      - [[o(p)], [p, o((p or q) -> q)]]
+  or3:
+    premises:
+    conclusions:
+      - [[], [o(p -> (p or q))]]
+  or4:
+    premises:
+    conclusions:
+      - [[o(q)], [q, o((p or q) -> p)]]
+  or5:
+    premises:
+    conclusions:
+      - [[p, o(p)], [o(p or q)]]
+  or6:
+    premises:
+    conclusions:
+      - [[p], [p or q]]
+  or7:
+    premises:
+    conclusions:
+      - [[q, o(q)], [o(p or q)]]
+  or8:
+    premises:
+    conclusions:
+      - [[q], [p or q]]
+  or9:
+    premises:
+    conclusions:
+      - [[o(p -> q)], [o((p or q) -> q)]]
+  or10:
+    premises:
+    conclusions:
+      - [[o(p -> q)], [o((q or p) -> q)]]
+  or11:
+    premises:
+    conclusions:
+      - [[o(neg p -> p), o(p -> neg p), o(neg q -> q), o(q -> neg q), o((p or q) -> neg(p or q))],[o(p), o(q), o(p -> q)]]
+        #  interp:
+        #    premises:
+        #    conclusions:
+        #      - [[(p and (neg p) and q and (neg q) and (neg(o(p -> q)))) or t],[(r or (neg r)) or t]]
+        #topinterp:
+        #  premises:
+        #  conclusions:
+        #    - [[(p or neg p) or t],[(r or neg r) or (t or neg(o(t)))]]
+  rDt:
+    premises:
+    conclusions:
+      - [[p, o(neg q -> q), o(neg r -> r)], [o(p -> neg p), o(q -> r), q, r]]
+  rDtnew:
+    premises:
+    conclusions:
+      - [[p, o(neg q -> q), o(neg r -> r), o(q -> neg q), o(r -> neg r)], [o(p -> neg p), o(q -> r), q, r]]
+  bla:
+    premises:
+    conclusions:
+      - [[p, o(p), o(p -> q)],[o(q)]]
+  ble:
+    premises:
+    conclusions:
+      - [["o(p and q)", "q"],["o(p)"]]
+  blo:
+    premises:
+    conclusions:
+      - [[o(p or q)],[o(p), q]]
+  anda1:
+    premises:
+    conclusions:
+      - [[o(neg q -> q), o(q -> neg q), o(p)],[o(q), o(p and q), o(neg(p and q) -> (p and q))]]
+  anda2:
+    premises:
+    conclusions:
+      - [[o(neg q -> q), o(q -> neg q), o(p)],[o(q), o(p and q), o((p and q) -> neg(p and q))]]
+  anda3:
+    premises:
+    conclusions:
+      - [[o(p), o((p and q) -> neg(p and q))],[o(q -> neg q), o(q), o(p and q)]]
+  anda4:
+    premises:
+    conclusions:
+      - [[o(p), o(neg(p and q) -> (p and q))],[o((neg q) -> q), o(q), o(p and q)]]
+  # NEW RULES FOR AND
+  anda10:
+    premises:
+    conclusions:
+      - [[o(p), p, o(p and q)],[o(q)]]
+  anda11:
+    premises:
+    conclusions:
+      - [[o(p)],[p, o(q), o(p and q)]]
+  anda12:
+    premises:
+    conclusions:
+      - [[],[(p and q) -> p]]
+  # op in omega, oq not in omega
+  anda13:
+    premises:
+    conclusions:
+      - [[p, o(p), o(q -> neg q), o(neg q -> q)],[o(p and q), o(q), o(neg(p and q) -> (p and q))]]
+  anda14:
+    premises:
+    conclusions:
+      - [[p, o(p), o(q -> neg q), o(neg q -> q)],[o(p and q), o(q), o((p and q) -> neg(p and q))]]
+  anda15:
+    premises:
+    conclusions:
+      - [[p, o(p), o((p and q) -> neg(p and q))],[o(q -> neg q), o(p and q)]]
+  anda16:
+    premises:
+    conclusions:
+      - [[p, o(p), o(neg(p and q) -> (p and q))],[o(neg q -> q), o(p and q)]]
+  anda17:
+    premises:
+    conclusions:
+      - [[neg(p and q)],[neg p, neg q]]
+  or16: 
+    premises:
+    conclusions:
+      - [["o(p or q)"],["o(q)", "p"]]
+  imp100:
+    premises:
+    conclusions:
+      - [[o(neg q -> q), o(q -> neg q), o(p)],[p, o((p or q) -> neg(p or q))]]
+  dia1:
+    premises:
+    conclusions:
+      - [["o(p -> q)", "o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)"],["o(p)", "o(q)", "o(q -> p)"]]
+  n1:
+    premises:
+    conclusions:
+      - [[],[neg(o(p -> neg p)), o(p -> neg p)]]
+  n2:
+    premises:
+    conclusions:
+      - [[neg(o(p -> neg p)), o(p -> neg p)],[]]
+  n3:
+    premises:
+    conclusions:
+      - [[],[neg(o(neg p -> p)), o(neg p -> p)]]
+  n4:
+    premises:
+    conclusions:
+      - [[neg(o(neg p -> p)), o(neg p -> p)],[]]
+  n5:
+    premises:
+    conclusions:
+      - [[],[neg(o(p -> q)), o(p -> q)]]
+  n6:
+    premises:
+    conclusions:
+      - [[neg(o(p -> q)), o(p -> q)],[]]
+  impa:
+    premises:
+    conclusions:
+      - [[p -> q, o(p -> q), neg q],[neg p]]
+  ble:
+    premises:
+    conclusions:
+      - [[o(neg p -> p), o(p -> neg p), o(q -> neg q), o(neg q -> q), o(p -> q)],[o(p), o(q)]]
+  hoi:
+    premises:
+    conclusions:
+      - [[o(neg p)],[o(p -> neg p)]]
+  foi2:
+    premises:
+    conclusions:
+      - [[o(p -> neg p), o(neg p -> p), o(neg neg p -> neg p), o(neg p -> neg neg p)],[o(p), o(neg p), o(neg neg p -> p)]]
+  leq2:
+    premises:
+    conclusions:
+      - [[p, o(p -> q)],[o(p), q]]
+  impdia:
+    premises:
+    conclusions:
+      - [[o(p), p, o(neg q -> q), o(q -> neg q)],[o(q), o(q -> (p -> q))]]
+  impt:
+    premises:
+    conclusions:
+      - [[o(p), p, o((p -> q) -> neg(p -> q))],[o(q), o(q -> neg q)]]
+  impf:
+    premises:
+    conclusions:
+      - [[o(p), p, o(neg(p -> q) -> (p -> q))],[o(q), o(neg q -> q)]]
+  imptf:
+    premises:
+    conclusions:
+      - [[o(neg(p -> q) -> (p -> q))],[o(p -> neg p), o(p -> q), o(neg q -> q), o(p), o(q)]]
+  imptborn1:
+    premises:
+    conclusions:
+      - [[o(neg q -> q), o(q -> neg q)],[o(p -> neg p), o(p), o(p -> q), o(q), o(neg(p -> q) -> (p -> q))]]
+  imptborn2:
+    premises:
+    conclusions:
+      - [[o(neg q -> q), o(q -> neg q)],[o(p -> neg p), o(p), o(p -> q), o(q), o((p -> q) -> neg(p -> q))]]
+  impbf1:
+    premises:
+    conclusions:
+      - [[o(neg p -> p), o(p -> neg p)],[o(p), o(neg q -> q), o(q), o(neg(p -> q) -> (p -> q))]]
+  impbf2:
+    premises:
+    conclusions:
+      - [[o(neg p -> p), o(p -> neg p)],[o(p), o(neg q -> q), o(q), o((p -> q) -> neg(p -> q))]]
+  impbf3:
+    premises:
+    conclusions:
+      - [[o(neg p -> p), o(p -> neg p), o(p -> (p -> q))],[o(p), o(neg q -> q), o(q)]]

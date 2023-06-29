@@ -661,7 +661,7 @@ namespace ltsy {
                 auto symbol = compound->connective()->symbol();
 
                 if (arity == 0) {
-                    buffer << symbol;
+                    buffer << symbol << "()";
                 } else if (arity == 1 and 
                     (compound->components()[0]->type() == Formula::FmlaType::PROP or
                      compound->components()[0]->connective()->arity() == 1)) {
@@ -872,8 +872,8 @@ namespace ltsy {
                     _current_iterators.push_back(_gamma.begin());
                     if (_current_iterators[i] == _gamma.end() or std::next(_current_iterators[i]) == _gamma.end())
                         qtd_in_max++;
-		    if (_current_iterators[i] != _gamma.end())
-			_current->set(*_props[i], *_current_iterators[i]);
+                    if (_current_iterators[i] != _gamma.end())
+                        _current->set(*_props[i], *_current_iterators[i]);
                 }
             }
 
@@ -884,14 +884,12 @@ namespace ltsy {
                     const decltype(_gamma)& gamma)
                 : _gamma {gamma} {
                 _props = decltype(_props){props.begin(), props.end()};
-                _current = std::make_shared<FormulaVarAssignment>();
                 reset();    
             }
 
             FormulaVarAssignmentGenerator(const decltype(_props)& props,
                     const decltype(_gamma)& gamma)
                 : _props {props}, _gamma {gamma} {
-                _current = std::make_shared<FormulaVarAssignment>();
                 _props = decltype(_props){props.begin(), props.end()};
                 reset();    
             }
@@ -931,6 +929,8 @@ namespace ltsy {
             }
 
             void reset() {
+                qtd_in_max = 0;
+                _current = std::make_shared<FormulaVarAssignment>();
                 initialize_iterators();
                 finished = false or _props.empty() or _gamma.empty();
                 first = not finished;

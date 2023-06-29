@@ -94,9 +94,9 @@ namespace ltsy {
                 return true;
             }
 
-	    inline bool is_empty() const {
-	    	return all_premises_empty() and all_conclusions_empty();
-	    }
+            inline bool is_empty() const {
+                return all_premises_empty() and all_conclusions_empty();
+            }
 
             decltype(_prem_conc_pos_corresp) prem_conc_pos_corresp() const { return _prem_conc_pos_corresp; }
 
@@ -120,6 +120,14 @@ namespace ltsy {
                 MultipleConclusionRule result {*this};
                 result._sequent = this->_sequent.transform(transformation, pred);
                 return result;
+            }
+
+            int branching_value() const {
+                int b = 0;
+                for (const auto& s : _conclusions) {
+                    b += s.size(); 
+                }
+                return b;
             }
     };
 
@@ -228,6 +236,7 @@ namespace ltsy {
             decltype(_rules)::iterator _rules_it;
             FormulaVarAssignmentGenerator _current_subst_generator;
             bool finished = false;
+            bool first = true;
         public:
             MCProofSearchSequentialHeuristics(const decltype(_rules)& rules,
                     const decltype(_fmlas_to_make_instances)& fmlas_to_make_instances)
@@ -239,6 +248,7 @@ namespace ltsy {
                 if (_rules.empty())
                     finished = true;
                 else {
+                    first = true;
                     finished = false;
                     _rules_it = _rules.begin();
                     auto rule = *(_rules_it);
@@ -250,11 +260,20 @@ namespace ltsy {
 
             MultipleConclusionRule select_instance() {
                 if (has_next()) {
+                    if (first and not _current_subst_generator.has_next()) {
+                        first = false;
+                        if (std::next(_rules_it) == _rules.end() and not _current_subst_generator.has_next())
+                            finished = true;
+                        return *(_rules_it);
+                    }
+                    first = false;
                     if (std::next(_rules_it) != _rules.end() and not _current_subst_generator.has_next()) {
                         auto rule = *(++_rules_it);
                         auto rule_props = rule.sequent().collect_props();
                         _current_subst_generator = FormulaVarAssignmentGenerator 
                                                         {rule_props, _fmlas_to_make_instances};
+                        if (rule_props.size() == 0)
+                            return rule;
                     }
                     auto rule = *(_rules_it);
                     if (_current_subst_generator.has_next()) {
@@ -291,6 +310,37 @@ namespace ltsy {
                 : MCProofSearchSequentialHeuristics {rules, fmlas_to_make_instances} {
                 // shuffle
                 std::random_shuffle(_rules.begin(), _rules.end());
+                init();
+            }
+    };
+
+    /* A modification of the sequential heuristics
+     * to sort the rules by certain criteria.
+     *
+     * @author Vitor Greati
+     * */
+    class MCProofSearchRankingSequentialHeuristics : public MCProofSearchSequentialHeuristics {
+        private:
+            double _assign_rank(const MultipleConclusionRule& rule) const {
+                //branching factor
+                int b = rule.branching_value();
+                double branching_factor = 1.0 / (b + 1);
+                // final ranking
+                double rank = branching_factor;
+                return rank;
+            }
+        public:
+            MCProofSearchRankingSequentialHeuristics(const decltype(_rules)& rules,
+                    const decltype(_fmlas_to_make_instances)& fmlas_to_make_instances)
+                : MCProofSearchSequentialHeuristics {rules, fmlas_to_make_instances} {
+                std::sort(
+                        _rules.begin(), 
+                        _rules.end(), 
+                        [&](MultipleConclusionRule a, MultipleConclusionRule b) {
+                            return this->_assign_rank(a) > this->_assign_rank(b);
+                        }
+                );
+                //init
                 init();
             }
     };
@@ -338,6 +388,20 @@ namespace ltsy {
 
                 void add_child(std::shared_ptr<DerivationTreeNode> new_node) {
                     children.push_back(new_node);
+                }
+
+                std::optional<DerivationTreeNode> get_open_branch_leaf() const {
+                    if (this->closed or this->end_branch or this->star) 
+                        return std::nullopt;
+                    else if (this->children.size() == 0) {
+                        return std::make_optional<DerivationTreeNode>(*this);
+                    } else {
+                        for (const auto& child : this->children) {
+                            auto r = child->get_open_branch_leaf();
+                            if (r) return r;
+                        }
+                        return std::nullopt;
+                    }
                 }
 
                 std::stringstream print(const DerivationTreeNode* parent=nullptr, int level = 0) const {
@@ -410,9 +474,23 @@ namespace ltsy {
                     const FmlaSet& fmlas_to_make_instances,
                     const FmlaSet& fmlas_allowed_in_derivations,
                     std::shared_ptr<DerivationTreeNode> derivation,
-                    int level, const std::optional<int>& max_depth) {
+                    int level, const std::optional<int>& max_depth,
+                    std::set<std::shared_ptr<DerivationTreeNode>>& closed_derivations) {
                 // check satisfaction
                 bool satisfied = derivation->closed;//false;
+                /// first on the known closed derivations
+                for (const auto& closed_node : closed_derivations) {
+                    const auto& prems = closed_node->node;
+                    bool all_subsets = true;
+                    for (auto i {0}; i < prems.size() and all_subsets; ++i)
+                        all_subsets = all_subsets and is_subset(prems[i], node_fmlas[i]);
+                    satisfied = satisfied or all_subsets;
+                    if (satisfied) {
+                        derivation->children = closed_node->children;
+                        break;
+                    }
+                }
+                /// then if conclusions are hit
                 for (auto i {0}; i < conclusions.size() and not satisfied; ++i) {
                     FmlaSet inters = intersection(node_fmlas[i], conclusions[i]);
                     satisfied = satisfied or not inters.empty();
@@ -430,20 +508,25 @@ namespace ltsy {
                         return false;
                     auto rules = _rules;
                     // create the heuristics
-                    auto heuristics = std::make_shared<MCProofSearchRandSequentialHeuristics>(rules,
+                    auto heuristics = std::make_shared<MCProofSearchRankingSequentialHeuristics>(rules,
                             fmlas_to_make_instances);
-                    bool some_premiss_satisfied = false;
+
+                   bool some_premiss_satisfied = false;
+
                     while (heuristics->has_next()) {
                        bool useful_instance = true;
                        some_premiss_satisfied = false;
-                       satisfied = false;
-                       // obtain an instance
+                       
+                       // obtain the instance
                        auto rule_instance = heuristics->select_instance();
-                       // validate for analiticity
+
+                       // validate if the formulas in the instance pass analiticity test
                        if (not rule_instance.has_only(fmlas_allowed_in_derivations))
                            continue;
+
                        auto rule_conclusions = rule_instance.conclusions();
-                       // check node fmlas conclusion intersection
+
+                       // check node fmlas conclusion intersection; if yes, no need to expand, go to next instance
                        bool conclusion_intersect_node_fmlas = false;
                        for (auto i {0}; i < rule_conclusions.size(); ++i) {
                             FmlaSet inters = intersection(node_fmlas[i], rule_conclusions[i]);
@@ -454,12 +537,15 @@ namespace ltsy {
                        }
                        if (conclusion_intersect_node_fmlas)
                            continue;
+
                        // check if premises subseteq node_fmlas
                        const auto& premises = rule_instance.premises();
                        bool premises_satisfied = true;
                        for (auto i {0}; i < node_fmlas.size(); ++i)
                            premises_satisfied &= is_subset(premises[i], node_fmlas[i]);
+                       // if yes, prepare to close branch or expand
                        if (premises_satisfied) {
+                           // check if rule instance has empty conclusion, to create star node and close the branch
                            if (rule_instance.all_conclusions_empty()) {
                                auto star_node = 
                                    std::make_shared<DerivationTreeNode>(
@@ -468,9 +554,10 @@ namespace ltsy {
                                derivation->add_child(star_node);
                                derivation->closed=true;
                                return true;
+                           // not closed yet, call expand
                            } else {
-                               for (auto i {0}; i < rule_conclusions.size(); ++i) {
-                                   some_premiss_satisfied = true;
+                               some_premiss_satisfied = true;
+                               for (auto i {0}; i < rule_conclusions.size() & useful_instance; ++i) {
                                    for (auto rule_conc_fmla : rule_conclusions[i]) {
                                        // expand a new node by adding A in position i
                                        decltype(node_fmlas) new_node_fmlas {node_fmlas.begin(), 
@@ -486,23 +573,25 @@ namespace ltsy {
                                        auto expanded_satisfied = expand_node(new_node_fmlas, 
                                                conclusions, fmlas_to_make_instances, 
                                                fmlas_allowed_in_derivations, new_node, level+1,
-                                               max_depth);
+                                               max_depth, closed_derivations);
                                        satisfied = expanded_satisfied;
                                        // if the expanded node do not lead to a closed derivation
+                                       // it is because we have tried all the other instances
                                        if (not expanded_satisfied) {
                                            useful_instance = false;
                                            derivation->add_child(new_node); 
                                            derivation->closed = false;
                                            return false;
-                                           //break; // stop checking the expansion by this formula
                                        }
                                        // else
                                        derivation->add_child(new_node); // subtree accepted, add it to the current tree
+                                       closed_derivations.insert(new_node);// record the closed derivation
                                    }
                                    if (not useful_instance) break; // stop checking this instance!
                                }
                            }
-                       } else continue; // go to next rule instance if premises are not satisfied
+                       // premises not in node, go to next instance
+                       } else continue;
                        if (some_premiss_satisfied and satisfied) {
                            derivation->closed = true;
                            return true; 
@@ -606,17 +695,17 @@ namespace ltsy {
              * */
             std::shared_ptr<DerivationTreeNode> derive(const MultipleConclusionRule& statement,
                     const FmlaSet& phi, std::optional<int> max_depth = std::nullopt) {
-		// when there is an empty rule in the calculus
-		if (statement.is_empty() and this->_empty_rule) {
-		    auto closed_derivation = std::make_shared<DerivationTreeNode>(
-		        this->_empty_rule->premises(), 
-			std::vector<std::shared_ptr<DerivationTreeNode>>{
-                          std::make_shared<DerivationTreeNode>(this->_empty_rule)
-			}
-		    );
-		    closed_derivation->closed = true;
-	 	    return closed_derivation;
-		}
+                // when there is an empty rule in the calculus
+                if (statement.is_empty() and this->_empty_rule) {
+                    auto closed_derivation = std::make_shared<DerivationTreeNode>(
+                        this->_empty_rule->premises(), 
+                    std::vector<std::shared_ptr<DerivationTreeNode>>{
+                                  std::make_shared<DerivationTreeNode>(this->_empty_rule)
+                    }
+                    );
+                    closed_derivation->closed = true;
+                    return closed_derivation;
+                }
                 // get the props in phi
                 PropSet props_phi;
                 for (auto f : phi) {
@@ -627,6 +716,7 @@ namespace ltsy {
                 }
                 // compute the generalized subformulas
                 auto [thetak_1, thetak] = gen_subformulas(statement, phi, props_phi, _analiticity_level);
+                
                 // identify premises and conclusion
                 std::vector<FmlaSet> premises;
                 std::vector<FmlaSet> conclusions;
@@ -637,8 +727,17 @@ namespace ltsy {
                 // search for the derivation
                 auto derivation = std::make_shared<DerivationTreeNode>(premises, 
                         std::vector<std::shared_ptr<DerivationTreeNode>>{});
+
+                for (auto f : thetak_1) {
+                    std::cout << *f << std::endl;
+                }
+
+                for (auto f : thetak) {
+                    std::cout << *f << std::endl;
+                }
+                std::set<std::shared_ptr<DerivationTreeNode>> closed_derivations;
                 bool derivation_result = expand_node(premises, conclusions, thetak_1, thetak, derivation, 0,
-                        max_depth);
+                        max_depth, closed_derivations);
                 return derivation;
             };
     

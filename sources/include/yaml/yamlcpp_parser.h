@@ -58,6 +58,7 @@ namespace ltsy {
         const std::string PNMATRIX_VALUES_NAME = "values";
         const std::string PNMATRIX_INFER_COMPLEMENTS_NAME = "infer_complements";
         const std::string PNMATRIX_DSETS_NAME = "distinguished_sets";
+        const std::string PNMATRIX_DSETS_STRUCT_NAME = "distinguished_sets_structure";
         const std::string PNMATRIX_INTERP_NAME = "interpretation";
         const std::string premises_SEQRULE_NAME = "premises";
         const std::string CONCLUSIONS_SEQRULE_NAME = "conclusions";
@@ -219,10 +220,26 @@ namespace ltsy {
             return result;
         }
 
-        std::shared_ptr<GenMatrix> parse_gen_matrix(const YAML::Node& root) const {
+        std::vector<std::set<int>> parse_d_set(const YAML::Node& dsets_node,
+                std::map<int, std::string>& _val_to_str,
+                std::map<std::string, int>& _str_to_val) const {
+            std::vector<std::set<int>> distinguished_sets;
+            for (const auto& dset_node : dsets_node) {
+                std::set<int> dset;
+                auto dset_strs = dset_node.as<std::vector<std::string>>();
+                for (const auto& s : dset_strs) {
+                    dset.insert(_str_to_val[s]);
+                }
+                distinguished_sets.push_back(dset);
+            }
+            return distinguished_sets;       
+        }
+
+        std::set<std::shared_ptr<GenMatrix>> parse_gen_matrix(const YAML::Node& root) const {
             auto pnmatrix_node = hard_require(root, PNMATRIX_NAME);             
             std::map<int, std::string> _val_to_str;
             std::map<std::string, int> _str_to_val;
+
             // parse values
             auto values_node = hard_require(pnmatrix_node, PNMATRIX_VALUES_NAME);
             auto values = values_node.as<std::vector<std::string>>();
@@ -233,17 +250,7 @@ namespace ltsy {
                 _val_to_str[i] = values[i];
                 real_values.insert(i);
             }
-            // parse distinguished sets
-            std::vector<std::set<int>> distinguished_sets;
-            auto dsets_node = hard_require(pnmatrix_node, PNMATRIX_DSETS_NAME);
-            for (const auto& dset_node : dsets_node) {
-                std::set<int> dset;
-                auto dset_strs = dset_node.as<std::vector<std::string>>();
-                for (const auto& s : dset_strs) {
-                    dset.insert(_str_to_val[s]);
-                }
-                distinguished_sets.push_back(dset);
-            } 
+ 
             // parse interpretations
             auto interp_node = hard_require(pnmatrix_node, PNMATRIX_INTERP_NAME);
             auto signature = std::make_shared<Signature>();
@@ -259,14 +266,39 @@ namespace ltsy {
                          std::make_shared<NDTruthTable>(tt));
                  sig_truth_interp->try_interpret(truth_interp);
             }
+
             // parse infer complements
             bool infer_complements = optional_require(pnmatrix_node, PNMATRIX_INFER_COMPLEMENTS_NAME, std::make_optional<bool>(true)).value();
-            // create matrix
-            auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, 
-                    signature, sig_truth_interp, infer_complements);
-            gen_matrix->set_val_to_str(_val_to_str);
-            gen_matrix->set_str_to_val(_str_to_val);
-            return gen_matrix;
+
+            // parse distinguished sets
+            std::set<std::vector<std::set<int>>> distinguished_sets_structure;
+
+            if (soft_require(pnmatrix_node, PNMATRIX_DSETS_NAME)) {
+                auto dsets_node = pnmatrix_node[PNMATRIX_DSETS_NAME];
+                auto dset = parse_d_set(dsets_node, _val_to_str, _str_to_val);
+                distinguished_sets_structure.insert(dset);
+            }
+            if (soft_require(pnmatrix_node, PNMATRIX_DSETS_STRUCT_NAME)) {
+                auto dsets_struct_node = pnmatrix_node[PNMATRIX_DSETS_STRUCT_NAME];
+                for (auto it_tt = dsets_struct_node.begin(); it_tt != dsets_struct_node.end(); ++it_tt) {
+                    auto dset = parse_d_set(it_tt->second, _val_to_str, _str_to_val);
+                    distinguished_sets_structure.insert(dset);
+                }
+            }
+
+            if (distinguished_sets_structure.size() == 0) 
+                throw std::logic_error("the matrix needs at least one configuration of distinguished sets");
+
+            std::set<std::shared_ptr<GenMatrix>> genmatrices;
+            for (auto distinguished_sets : distinguished_sets_structure) {
+                // create matrix
+                auto gen_matrix = std::make_shared<GenMatrix>(real_values, distinguished_sets, 
+                        signature, sig_truth_interp, infer_complements);
+                gen_matrix->set_val_to_str(_val_to_str);
+                gen_matrix->set_str_to_val(_str_to_val);
+                genmatrices.insert(gen_matrix);
+            }
+            return genmatrices;
         }
 
         Discriminator parse_monadic_discriminator(const YAML::Node& det_node, std::shared_ptr<GenMatrix> genmatrix) {

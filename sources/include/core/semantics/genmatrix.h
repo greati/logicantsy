@@ -70,6 +70,7 @@ namespace ltsy {
                 return _interpretation->print(_val_to_str).str();  
             }
 
+
             inline void set_val_to_str(decltype(_val_to_str) val_to_str) { _val_to_str = val_to_str; }
             inline void set_str_to_val(decltype(_str_to_val) str_to_val) { _str_to_val = str_to_val; }
             inline decltype(_val_to_str) val_to_str() const { return _val_to_str; }
@@ -853,25 +854,24 @@ namespace ltsy {
              *
              * @author Vitor Greati
              * */
-            std::optional<std::set<std::shared_ptr<Formula>>>
+            FmlaSet
             is_fmla_set_valid_under_valuation(const GenMatrixValuation val, 
                             const FmlaSet& fmls, const std::set<int>& dset) const {
-                std::set<std::shared_ptr<Formula>> fail_fmls;
+                FmlaSet fail_fmls;
                 for (const auto& f : fmls) {
                    GenMatrixEvaluator collector {std::make_shared<GenMatrixValuation>(val)};
                    auto fmla_values = f->accept(collector);     
                    if (!utils::is_subset(fmla_values, dset))
                        fail_fmls.insert(f);
                 }
-                if (fail_fmls.empty()) return std::nullopt;
-                else return std::make_optional<std::set<std::shared_ptr<Formula>>>(fail_fmls);               
+                return fail_fmls;   
             }
 
             bool
             is_valid_under_valuation(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
                      auto is_model_result = is_fmla_set_valid_under_valuation(val, seq[i], _d_sets[_sequent_set_correspondence[i]]);
-                     if (is_model_result) return true;
+                     if (not is_model_result.empty()) return true;
                  }
                  return false;
             }
@@ -923,16 +923,18 @@ namespace ltsy {
                             break;
                         }
                     }
+
+                    if (not premises_valid) continue;
+
                     // check non-validity of conclusions
                     bool conclusions_not_valid = true;
-                    if (premises_valid) {
-                        for (const auto& c : rule.conclusions()) {
-                            if (is_valid_under_valuation(*val, c)) {
-                                conclusions_not_valid = false;
-                                break;
-                            }
+                    for (const auto& c : rule.conclusions()) {
+                        if (is_valid_under_valuation(*val, c)) {
+                            conclusions_not_valid = false;
+                            break;
                         }
                     }
+
                     if (premises_valid and conclusions_not_valid) {
                         counter_examples.push_back(CounterExample{*(val->copy())});
                     }

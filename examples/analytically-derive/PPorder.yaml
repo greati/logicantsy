@@ -1,0 +1,237 @@
+calculus:
+  # new tentative rules
+  #n1: [[],[neg(o(p -> neg p)), o(p -> neg p)]]
+  #n2: [[neg(o(p -> neg p)), o(p -> neg p)],[]]
+  #n3: [[],[neg(o(neg p -> p)), o(neg p -> p)]]
+  #n4: [[neg(o(neg p -> p)), o(neg p -> p)],[]]
+  #n5: [[],[neg(o(p -> q)), o(p -> q)]]
+  #n6: [[neg(o(p -> q)), o(p -> q)],[]]
+  # R_diamond
+  arrows_or:  [[],["o(neg p -> p)","o(p -> neg p)"]]
+  id:         [[], ["o(p -> p)"]]
+  trans:      [["o(p -> q)","o(q -> r)"], ["o(q)","o(p -> r)"]]
+  dl1:        [[], ["o(p -> neg p)", "o(q)", "o(q -> p)"]]
+  dg0:        [[], ["o(neg p -> p)", "o(q)", "o(p -> q)"]]
+  inclass1:   [["o(neg p -> p)", "o(p -> q)"], ["o(p)", "o(neg q -> q)"]]
+  inclass2:   [["o(q -> neg q)", "o(p -> q)"], ["o(q)", "o(p -> neg p)"]]
+  inclass3:   [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(p -> q)"], ["o(p)", "o(q)", "o(q -> p)"]]
+  just2:      [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(r -> neg r)", "o(neg r -> r)"], ["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(p -> r)", "o(q -> r)"]]
+  # R_imp
+  imp1:       [["o(q)"],["o(p -> q)"]]
+  imp3:       [["p", "p -> q"],["q"]]
+  imp4:       [["o(q)", "p -> q"],["o(p)", "q"]]
+  imp5:       [["q"],["p -> q"]]
+  imp6:       [["o(p)", "p", "o(neg q -> q)"],["o(neg(p -> q) -> (p -> q))"]]
+  imp7:       [["o(p)", "p", "o(q -> neg q)"],["o((p -> q) -> neg (p -> q))"]]
+  imp10:      [["o(p)"],["p", "o(p -> q)"]]
+  imp11:      [["o(p)"],["p", "p -> q"]]
+  imp12:      [["o(p -> q)"],["o(p)", "o(q)", "p -> q"]]
+  imp14:      [[],["o(p -> neg p)", "o(q)", "o(p -> q)", "o((p -> q) -> q)"]]
+  imp15:      [[],["o(p -> neg p)", "o(q)", "o(p -> q)", "o(q -> (p -> q))"]]
+  imp16:      [["o(neg p -> p)", "o(p -> neg p)"],["o(p)", "o(q)", "o(p -> q)", "o(neg(p -> q) -> (p -> q))"]]
+  imp17:      [["o(neg p -> p)", "o(p -> neg p)"],["o(p)", "o(q)", "o(p -> q)", "o((p -> q) -> neg (p -> q))"]]
+  imp18:      [["o(neg p -> p)", "o(p -> neg p)", "o((p -> q) -> p)"],["o(p)", "o(q)", "o(p -> q)"]]
+  imp19:      [["p", "o(p)", "o(p -> q)"],["o(q)"]] #new!
+  imp20:      [["p", "o(p)", "o(q)"],["o(p -> q)"]] #new! (maybe derivable already)
+  imp21:      [["o(p)", "p", "o(neg q -> q)", "o(q -> neg q)"],["o(q)", "o(q -> (p -> q))"]] #new!
+  imp22:      [["o(p)", "p", "o((p -> q) -> neg(p -> q))"],["o(q)", "o(q -> neg q)"]] #new!
+  imp23:      [["o(p)", "p", "o(neg(p -> q) -> (p -> q))"],["o(q)", "o(neg q -> q)"]] #new!
+
+  imptf: [["o(neg(p -> q) -> (p -> q))"],["o(p -> neg p)", "o(p -> q)", "o(neg q -> q)", "o(p)", "o(q)"]] #test
+  imptborn1: [["o(neg q -> q)", "o(q -> neg q)"],["o(p -> neg p)", "o(p)", "o(p -> q)", "o(q)", "o(neg(p -> q) -> (p -> q))"]] #test
+  imptborn2: [["o(neg q -> q)", "o(q -> neg q)"],["o(p -> neg p)", "o(p)", "o(p -> q)", "o(q)", "o((p -> q) -> neg(p -> q))"]] #test
+  impbf1: [["o(neg p -> p)", "o(p -> neg p)"],["o(p)", "o(neg q -> q)", "o(q)", "o(neg(p -> q) -> (p -> q))"]] #test
+  impbf2: [["o(neg p -> p)", "o(p -> neg p)"],["o(p)", "o(neg q -> q)", "o(q)", "o((p -> q) -> neg(p -> q))"]] #test
+  impbf3: [["o(neg p -> p)", "o(p -> neg p)", "o(p -> (p -> q))"],["o(p)", "o(neg q -> q)", "o(q)"]] #test
+
+  imp24: [["o(p)","p"],["o(q -> (p -> q))"]]
+  imp25: [["o(p)","p"],["o((p -> q) -> q)"]]
+  imp26: [["o(p)","p","o((p -> q) -> neg(p -> q))"],["o(q -> neg q)"]]
+  imp27: [["o(p)","p","o(neg(p -> q) -> (p -> q))"],["o(neg q -> q)"]]
+
+  I4: [[o(neg(p -> q) -> (p -> q))],[o(p), o(q), o(p -> neg p), o(neg q -> q)]]
+  I5: [[o(neg q -> q)],[o(q), o(p -> neg p), o(neg(p -> q) -> (p -> q))]]
+  I6: [[o(q -> neg q)],[o(q), o(p -> neg p), o((p -> q) -> neg(p -> q))]]
+  I7: [[o(p -> neg p), o(neg p -> p)],[o(p), o(neg q -> q), o(neg(p -> q) -> (p -> q))]]
+  I8: [[o(p -> neg p), o(neg p -> p)],[o(p), o(neg q -> q), o((p -> q) -> neg(p -> q))]]
+  # R_neg
+  neg1:       [["o(p)"],["p", "neg p"]]
+  neg2:       [["o(p)", "neg p", "p"],[]]
+  neg3:       [["o(p)"],["o(neg p)"]]
+  neg31:      [["o(neg p)"],["o(p)"]] #new!
+  neg4:       [["o((neg(neg p)) -> (neg p))"],["o(p -> (neg p))"]]
+  neg5:       [["o((neg p) -> (neg(neg p)))"],["o((neg p) -> p)"]]
+  neg6:       [["o(p -> (neg p))"],["o(neg(neg p) -> (neg p))"]]
+  neg7:       [["o((neg p) -> p)"],["o((neg p) -> neg(neg p))"]]
+  # R_cons
+  cons1:      [[],["o(o(p))"]]
+  # R_and
+  #and11:      [[],["(p and q) -> q"]]                 #new
+  #and1:       [[],["o((p and q) -> q)"]]
+  #and2:       [["p", "o(p)"],["o(q -> (p and q))"]]
+  #and21:      [["p", "o(p)"],["q -> (p and q)"]]      #new
+  #and3:       [[],["o((p and q) -> p)"]]
+  #and31:      [[],["(p and q) -> p"]]                 #new
+  #and4:       [["q", "o(q)"],["o(p -> (p and q))"]]
+  #and41:      [["q", "o(q)"],["p -> (p and q)"]]      #new
+  #and5:       [["o(p)"],["p", "o(p and q)"]]
+  #and6:       [["p and q"],["p"]]
+  #and7:       [["o(q)"],["q", "o(p and q)"]]
+  #and8:       [["p and q"],["q"]]
+  #and9:       [["o(p -> q)"],["o(p -> (p and q))"]]
+  #and10:      [["o(p -> q)"],["o(p -> (q and p))"]]
+  #and11:      [["o(neg p -> p)", "o(p -> neg p)", "o(neg q -> q)", "o(q -> neg q)", "o(neg(p and q) -> (p and q))"],["o(p)", "o(q)", "o(p -> q)"]]
+  #and15:      [["o(p)","o(q)"],["o(p and q)"]]        #new
+  #and16:      [["o(p and q)"],["o(p)","o(q)"]]        #new
+  #and17:      [["p", "q"],["p and q"]]
+  #and18:      [["o(p and q)", "p"], ["o(q)"]]         #new
+  #and19:      [["o(p and q)", "q"], ["o(p)"]]         #new
+  # R_or
+  or1:        [[], ["o(q -> (p or q))"]]
+  or11:       [[], ["q -> (p or q)"]]                 #new
+  or2:        [["o(p)"], ["p", "o((p or q) -> q)"]]
+  or21:       [["o(p)"], ["p", "(p or q) -> q"]]      #new
+  or3:        [[], ["o(p -> (p or q))"]]
+  or31:       [[], ["p -> (p or q)"]]                 #new
+  or4:        [["o(q)"], ["q", "o((p or q) -> p)"]]
+  or41:       [["o(q)"], ["q", "(p or q) -> p"]]      #new
+  or5:        [["p", "o(p)"], ["o(p or q)"]]
+  or6:        [["p"], ["p or q"]]
+  or7:        [["q", "o(q)"], ["o(p or q)"]]
+  or8:        [["q"], ["p or q"]]
+  or9:        [["o(p -> q)"], ["o((p or q) -> q)"]]
+  or10:       [["o(p -> q)"], ["o((q or p) -> q)"]]
+  or11:       [["o((neg p) -> p)", "o(p -> (neg p))", "o((neg q) -> q)", "o(q -> (neg q))", "o((p or q) -> neg(p or q))"],["o(p)", "o(q)", "o(p -> q)"]]
+  or13:       [["o(p or q)"], ["o(p)", "o(q)"]] #new!
+  or12:       [["o(p)", "o(q)"],["o(p or q)"]]  #new!
+  or14:       [["p or q", "o(p)"], ["p", "q"]]  #new!
+  or15:       [["p or q", "o(q)"], ["p", "q"]]  #new!
+  or16:       [["o(p or q)"],["o(p)", "q"]]     #new!
+  or17:       [["o(p or q)"],["o(q)", "p"]]     #new!
+  or18:       [["o(p)", "p"],["o(p or q)"]]     #new!
+  or19:       [["o(q)", "q"],["o(p or q)"]]     #new!
+  # R_filter
+  Dleq:       [["o(p -> q)", "p"], ["o(q)", "q"]]
+  Dbnf:       [["p", "q", "o(neg p -> p)", "o(neg q -> q)", "o(p -> neg p)", "o(q -> neg q)"],["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(neg r -> r)", "r"]]
+  #Dnt:       [["p", "o((neg q) -> q)", "o((neg r) -> r)"], ["o(p -> (neg p))", "o(q -> r)", "q", "r"]]
+analyticity_formulas: ["p", "o(p)", "o(p -> q)", "o((neg p) -> p)", "o(p -> (neg p))"]
+simplify_overlap: false
+simplify_dilution: false
+simplify_by_cuts: false
+simplify_by_subrule_deriv: 0
+prem_conc_correspondence: [[0,1]]
+sequent_dset_correspondence: [0,1]
+simplify_max_level: 0
+print_tree: false
+print_open_node: true
+test_soundness: true
+pnmatrix:
+  values: [^f, f, n, b, t, ^t]
+  distinguished_sets_structure:
+    up_t_hat:
+      - [^t]
+    up_t:
+      - [t, ^t]
+    up_b:
+      - [b, t, ^t]
+    up_n:
+      - [n, t, ^t]
+    up_f:
+      - [f, b, n, t, ^t]
+  interpretation:
+    p -> q:
+      default: [^t]
+      restrictions:
+        - [_,  ^f]: [^f]
+        - [^f, ^f]: [^t]
+        - [n, f]: [b]
+        - [b, f]: [n]
+        - [t, f]: [f]
+        - [^t, f]: [f]
+        - [b, n]: [n]
+        - [t, n]: [n]
+        - [^t, n]: [n]
+        - [n, b]: [b]
+        - [t, b]: [b]
+        - [^t, b]: [b]
+        - [^t, t]: [t]
+    p or q:
+      restrictions:
+        - [^f, ^f]: [^f]
+        - [f, _]  : [f]
+        - [_, f]  : [f]
+        - [n, _]  : [n]
+        - [_, n]  : [n]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [b, n]  : [t]
+        - [n, b]  : [t]
+        - [t, _]  : [t]
+        - [_, t]  : [t]
+        - [^t, _] : [^t]
+        - [_, ^t] : [^t]
+    p and q:
+      restrictions:
+        - [^t, ^t]: [^t]
+        - [t, _]  : [t]
+        - [_, t]  : [t]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [n, _]  : [n]
+        - [_, n]  : [n]
+        - [n, b]  : [f]
+        - [b, n]  : [f]
+        - [f, _]  : [f]
+        - [_, f]  : [f]
+        - [^f, _] : [^f]
+        - [_, ^f] : [^f]
+    neg p:
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [t]
+        - [n] : [n]
+        - [b] : [b]
+        - [t] : [f]
+        - [^t]: [^f]
+    o(p):
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [^f]
+        - [n] : [^f]
+        - [b] : [^f]
+        - [t] : [^f]
+        - [^t]: [^t]
+    bot():
+      restrictions:
+        - []: [^f]
+    top():
+      restrictions:
+        - []: [^t]
+
+derive:
+  #eq_id: [[],[(p -> p) and (o(p -> p))]]
+  #symm: [[(p -> q) and (q -> p) and o(p -> q) and o(q -> p)],[(q -> p) and (p -> q) and o(q -> p) and o(p -> q)]]
+  #trans: [[(p -> q) and (q -> p) and o(p -> q) and o(q -> p), (q -> r) and (r -> q) and o(q -> r) and o(r -> q)],[(p -> r) and (r -> p) and o(p -> r) and o(r -> p)]]
+  #just2prime: [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(r -> neg r)", "o(neg r -> r)"], ["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(p -> r)", "q -> r"]]
+  #ormc: [[p or q],[p, q]]
+  #r5: [[p],[neg neg p]]
+  #r6: [[neg neg p],[p]]
+  #r10: [[neg p],[neg(p and q)]]
+  #r11: [[neg q],[neg(p and q)]]
+  #r12: [[neg(p and q)],[neg p, neg q]]
+  #r15: [[p or q],[p, q]]
+  r16:  [[neg p, neg q],[neg(p or q)]] #still underivable!!!
+  #r16weak: [[neg p, neg q, o(p)],[neg(p or q)]]
+  #r17: [[neg(p or q)],[neg p]]
+  #r18: [[neg(p or q)],[neg q]]
+  #impctp: [[p -> q, o(p -> q), neg q],[neg p]]
+  #enf1: [["p", "neg p", "neg q"],["o(p)", "neg(p or q)"]]
+  #imptf: [[o(neg(p -> q) -> (p -> q))],[o(p -> neg p), o(p -> q), o(neg q -> q), o(p), o(q)]] #test
+  #imptborn1: [[o(neg q -> q), o(q -> neg q)],[o(p -> neg p), o(p), o(p -> q), o(q), o(neg(p -> q) -> (p -> q))]] #test
+  #imptborn2: [[o(neg q -> q), o(q -> neg q)],[o(p -> neg p), o(p), o(p -> q), o(q), o((p -> q) -> neg(p -> q))]] #test
+  #impbf1: [[o(neg p -> p), o(p -> neg p)],[o(p), o(neg q -> q), o(q), o(neg(p -> q) -> (p -> q))]] #test
+  #impbf2: [[o(neg p -> p), o(p -> neg p)],[o(p), o(neg q -> q), o(q), o((p -> q) -> neg(p -> q))]] #test
+  #impbf3: [[o(neg p -> p), o(p -> neg p), o(p -> (p -> q))],[o(p), o(neg q -> q), o(q)]] #test
+  #I1: [[o(p), p, o(neg(p -> q) -> (p -> q))],[o(neg q -> q)]]
+  #I2: [[o(p), p, o((p -> q) -> neg(p -> q))],[o(q -> neg q)]]
+  #I3: [[o(p), p, o(p -> q)],[o(q)]]

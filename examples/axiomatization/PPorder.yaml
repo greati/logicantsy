@@ -1,0 +1,143 @@
+pnmatrix:
+  values: [^f, f, n, b, t, ^t]
+  distinguished_sets:
+    - [b, t, ^t]
+  interpretation:
+    #    cl(p,q):
+    #      default: [b, t, ^t]
+    #      restrictions:
+    #        - [b, n]: [^f, f, n]
+    #        - [b, f]: [^f, f, n]
+    #        - [b, ^f]: [^f, f, n]
+    #        - [t, n]: [^f, f, n]
+    #        - [t, f]: [^f, f, n]
+    #        - [t, ^f]: [^f, f, n]
+    #        - [^t, f]: [^f, f, n]
+    #        - [^t, n]: [^f, f, n]
+    #        - [^t, ^f]: [^f, n]
+    p -> q:
+      default: [^t]
+      restrictions:
+        - [_,  ^f]: [^f]
+        - [^f, ^f]: [^t]
+        - [n, f]: [b]
+        - [b, f]: [n]
+        - [t, f]: [f]
+        - [^t, f]: [f]
+        - [b, n]: [n]
+        - [t, n]: [n]
+        - [^t, n]: [n]
+        - [n, b]: [b]
+        - [t, b]: [b]
+        - [^t, b]: [b]
+        - [^t, t]: [t]
+          #    p or q:
+          #      restrictions:
+          #        - [^f, ^f]: [^f]
+          #        - [f, _]  : [f]
+          #        - [_, f]  : [f]
+          #        - [n, _]  : [n]
+          #        - [_, n]  : [n]
+          #        - [b, _]  : [b]
+          #        - [_, b]  : [b]
+          #        - [b, n]  : [t]
+          #        - [n, b]  : [t]
+          #        - [t, _]  : [t]
+          #        - [_, t]  : [t]
+          #        - [^t, _] : [^t]
+          #        - [_, ^t] : [^t]
+          #    p and q:
+          #      restrictions:
+          #        - [^t, ^t]: [^t]
+          #        - [t, _]  : [t]
+          #        - [_, t]  : [t]
+          #        - [b, _]  : [b]
+          #        - [_, b]  : [b]
+          #        - [n, _]  : [n]
+          #        - [_, n]  : [n]
+          #        - [n, b]  : [f]
+          #        - [b, n]  : [f]
+          #        - [f, _]  : [f]
+          #        - [_, f]  : [f]
+          #        - [^f, _] : [^f]
+          #        - [_, ^f] : [^f]
+    neg p:
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [t]
+        - [n] : [n]
+        - [b] : [b]
+        - [t] : [f]
+        - [^t]: [^f]
+    o(p):
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [^f]
+        - [n] : [^f]
+        - [b] : [^f]
+        - [t] : [^f]
+        - [^t]: [^t]
+          #    N(p):
+          #      default: [^t]
+          #      restrictions:
+          #        - [^f]: [^f]
+    bot():
+      restrictions:
+        - []: [^f]
+    top():
+      restrictions:
+        - []: [^t]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_derivation: 18
+simplify_subrules_deriv: 100
+# discriminator using less complex formulas as possible
+discriminator:
+  ^f: [[o(p)], [p]]
+  f:  [[neg p], [o(p), p]]
+  n:  [[], [p, o(p), neg p]]
+  b:  [[p, neg p], [o(p)]]
+  t:  [[p], [o(p), neg p]]
+  ^t: [[p, o(p)], []]
+derive:
+  #e: [["neg(p -> p)"], []]
+  #exp1: [["neg(p -> q) and neg(q -> p)"],["bot()"]]
+  #exp2: [["bot()"], ["neg(p -> q) and neg(q -> p)"]]
+  #exp12: [["N(neg(p -> q) and neg(q -> p))"],["N(bot())"]]
+  #exp22: [["N(bot())"], ["N(neg(p -> q) and neg(q -> p))"]]
+# a discriminator with less p's
+#discriminator:
+#  ^f: [[o(p), neg p], []]
+#  f:  [[neg p], [o(p), p]]
+#  n:  [[], [p, o(p), neg p]]
+#  b:  [[p, neg p], [o(p)]]
+#  t:  [[p], [o(p), neg p]]
+#  ^t: [[o(p)], [neg p]]
+latex:
+  "->": "\\Rightarrow"
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\phi"
+  p4: "\\eta"
+  p5: "\\mu"
+  p6: "\\sigma"
+  q: "\\psi"
+  r: "\\phi"
+  o: "\\circ"
+  and: "\\land"
+  or: "\\lor"
+  f: "\\mathbf{f}"
+  t: "\\mathbf{t}"
+  b: "\\mathbf{b}"
+  n: "\\mathbf{n}"
+  bot: "\\bot"
+  top: "\\top"
+  not: "\\neg"
+  neg: "\\neg"
+  "^t": "\\mathbf{\\hat t}"
+  "^f": "\\mathbf{\\hat f}"
+  "N": "\\nabla"
+  "=>": "\\to"
+  "cl": "\\to"

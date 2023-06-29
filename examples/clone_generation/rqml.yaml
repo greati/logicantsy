@@ -1,0 +1,40 @@
+values: [f, i, t]
+base:
+  p or q:
+    restrictions:
+      - [_,_]: [t]
+      - [f,f]: [f]
+      - [i,f]: [i]
+      - [f,i]: [i]
+      - [i,i]: [i]
+  ~(p):
+    restrictions:
+      - [t]: [i]
+      - [i]: [f]
+      - [f]: [t]
+max_depth: 1000
+search:
+  bar(p):
+    restrictions:
+      - [t]: [i]
+      - [i]: [t]
+      - [f]: [t]
+  p -> q:
+    restrictions:
+      - [_,_]: [t]
+      - [t,i]: [i]
+      - [t,f]: [f]
+      - [i,f]: [i]
+  not(p):
+    restrictions:
+      - [t]: [f]
+      - [i]: [i]
+      - [f]: [t]
+  p and q:
+    restrictions:
+      - [_,_]: [f]
+      - [t,t]: [t]
+      - [i,t]: [i]
+      - [t,i]: [i]
+      - [i,i]: [i]
+
