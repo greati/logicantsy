@@ -1,4 +1,14 @@
 calculus:
+  # R_diamond
+  updown:     [[],["o(neg p -> p)", "o(p -> neg p)"]]
+  id:         [[],["o(p -> p)"]]
+  trans:      [["o(p -> q)", "o(q -> r)"],["o(q)","o(p -> r)"]]
+  leqt:       [[],["o(p -> neg p)", "o(q)", "o(q -> p)"]]
+  geqf:       [[],["o(neg p -> p)", "o(q)", "o(p -> q)"]]
+  inclass1:   [["o(neg p -> p)", "o(p -> q)"],["o(p)", "o(neg q -> q)"]]
+  inclass2:   [["o(q -> neg q)", "o(p -> q)"],["o(q)", "o(p -> neg p)"]]
+  inclass3:   [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(p -> q)"], ["o(p)", "o(q)", "o(q -> p)"]]
+  just2:      [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(r -> neg r)", "o(neg r -> r)"], ["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(p -> r)", "o(q -> r)"]]
   # R_imp
   imp1:       [["o(q)"],["o(p -> q)"]]
   imp2:       [["q"],["p -> q"]]
@@ -71,7 +81,10 @@ calculus:
   or15:       [["o(q -> p)"],["o((p or q) -> p)"]]
   or16:       [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o((p or q) -> neg(p or q))"],["o(p)", "o(q)", "o(p -> q)"]]
   # R_filters
-  f1:         [["p", "q", "o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)"],["o(p)", "o(q)", "o(p -> q)", "o(r)", "o(neg r -> r)", "r"]]
+  Dmeet:      [["p", "q", "o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)"],["o(p)", "o(q)", "o(p -> q)", "o(r)", "r"]]
+  Dleq:       [["p", "o(p -> q)"],["o(q)", "q"]]
+  Dnupt:      [["r", "o(neg p -> p)", "o(neg q -> q)"],["o(r -> neg r)", "o(p -> q)", "p", "q"]]
+  #Dnupf:     [["p"],["o(neg p -> p)"]]
 analyticity_formulas: ["p", "o(p)", "o(p -> q)", "o((neg p) -> p)", "o(p -> (neg p))"]
 simplify_overlap: false
 simplify_dilution: false
@@ -88,8 +101,8 @@ pnmatrix:
   distinguished_sets_structure:
     up_t_hat:
       - [^t]
-    up_t:
-      - [t, ^t]
+        #up_t:
+        #- [t, ^t]
     up_b:
       - [b, t, ^t]
     up_n:
@@ -166,3 +179,23 @@ pnmatrix:
       restrictions:
         - []: [^t]
 derive:
+  # The previous logic
+  #r5:   [[p],[neg neg p]]
+  #r6:   [[neg neg p],[p]]
+  #r10:  [[neg p],[neg(p and q)]]
+  #r11:  [[neg q],[neg(p and q)]]
+  #r12:  [[neg(p and q)],[neg q, neg p]]
+  #r15:  [[p or q],[p, q]]
+  #r16:  [[neg p, neg q],[neg(p or q)]]
+  #r17:  [[neg(p or q)],[neg p]]
+  #r18:  [[neg(p or q)],[neg q]]
+  #r26:  [[o(p)],[o(p and q), p]]
+  #r27:  [[o(q)],[o(p and q), q]]
+  #r28:  [[o(p and q), q],[o(p)]]
+  #r29:  [[o(p and q), p],[o(q)]]
+  #r34:  [[o(p), p],[o(p or q)]]
+  #r35:  [[o(q), q],[o(p or q)]]
+  #r36:  [[o(p or q)],[o(p),q]]
+  #r37:  [[o(p or q)],[o(q),p]]
+  # Rules with equality
+  #just2prime: [["o(p -> neg p)", "o(neg p -> p)", "o(q -> neg q)", "o(neg q -> q)", "o(r -> neg r)", "o(neg r -> r)"], ["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(p -> r)", "q -> r"]]
