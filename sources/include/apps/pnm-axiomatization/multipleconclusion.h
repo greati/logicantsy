@@ -694,7 +694,7 @@ namespace ltsy {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
                     MultipleConclusionCalculus simp_calc {rules_simp};
-                    auto derivation = simp_calc.derive(rules[i], _discriminator.get_formulas());
+                    auto derivation = simp_calc.derive(rules[i], {std::make_shared<Prop>("p")}); // It cannot be the set of separators! We need empty-analytic to preserve theta-analiticity.
                     if (derivation->closed) {
                         spdlog::debug("Derived " + rules[i].sequent().to_string() + 
                                 " in depth " + std::to_string(depth) + " using " + 

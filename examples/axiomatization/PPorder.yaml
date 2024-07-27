@@ -15,22 +15,22 @@ pnmatrix:
     #        - [^t, f]: [^f, f, n]
     #        - [^t, n]: [^f, f, n]
     #        - [^t, ^f]: [^f, n]
-    p -> q:
-      default: [^t]
-      restrictions:
-        - [_,  ^f]: [^f]
-        - [^f, ^f]: [^t]
-        - [n, f]: [b]
-        - [b, f]: [n]
-        - [t, f]: [f]
-        - [^t, f]: [f]
-        - [b, n]: [n]
-        - [t, n]: [n]
-        - [^t, n]: [n]
-        - [n, b]: [b]
-        - [t, b]: [b]
-        - [^t, b]: [b]
-        - [^t, t]: [t]
+    #p -> q:
+    #  default: [^t]
+    #  restrictions:
+    #    - [_,  ^f]: [^f]
+    #    - [^f, ^f]: [^t]
+    #    - [n, f]: [b]
+    #    - [b, f]: [n]
+    #    - [t, f]: [f]
+    #    - [^t, f]: [f]
+    #    - [b, n]: [n]
+    #    - [t, n]: [n]
+    #    - [^t, n]: [n]
+    #    - [n, b]: [b]
+    #    - [t, b]: [b]
+    #    - [^t, b]: [b]
+    #    - [^t, t]: [t]
           #    p or q:
           #      restrictions:
           #        - [^f, ^f]: [^f]
@@ -61,6 +61,17 @@ pnmatrix:
           #        - [_, f]  : [f]
           #        - [^f, _] : [^f]
           #        - [_, ^f] : [^f]
+    p -> q:
+      restrictions:
+        - [_, b]: [b]
+        - [_, n]: [n]
+        - [_, f]: [f]
+        - [_,^f]: [^f]
+        - [n,_] : [t]
+        - [f,_] : [t]
+        - [_,t] : [t]
+        - [_,^t]: [^t]
+        - [^f,_]: [^t]
     neg p:
       restrictions:
         - [^f]: [^t]
@@ -90,7 +101,7 @@ pnmatrix:
 simplify_overlap: true
 simplify_dilution: true
 simplify_by_cuts: true
-simplify_derivation: 18
+simplify_derivation: 9
 simplify_subrules_deriv: 100
 # discriminator using less complex formulas as possible
 discriminator:

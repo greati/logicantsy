@@ -596,11 +596,16 @@ namespace ltsy {
                     auto simplify_max_level = parser.hard_require(root, "simplify_max_level").as<int>();
                     auto simplify_overlap = parser.hard_require(root, "simplify_overlap").as<bool>();
                     auto simplify_dilution = parser.hard_require(root, "simplify_dilution").as<bool>();
+                    auto simplify_by_derivation_flag = parser.hard_require(root, "simplify_by_derivation").as<bool>();
                     auto simplify_by_cuts = parser.hard_require(root, "simplify_by_cuts").as<bool>();
                     auto simplify_by_subrule_deriv = parser.optional_require<unsigned int>(root, "simplify_by_subrule_deriv", false);
+                    auto simplify_by_subrule_semantics = parser.optional_require<bool>(root, "simplify_by_subrule_semantics", false);
+                    auto use_original_calculus = parser.optional_require<bool>(root, "use_original_calculus", false);
                     auto prem_conc_corr_node = parser.hard_require(root, "prem_conc_correspondence");
                     auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
                         .as<std::vector<int>>();
+                    auto analiticity_formulas_node = parser.hard_require(root, "analyticity_formulas");
+                    FmlaSet analiticity_formulas = parser.parse_fmla_set(analiticity_formulas_node);
                     std::vector<std::pair<int,int>> prem_conc_corr;
                     for (auto it = prem_conc_corr_node.begin(); it != prem_conc_corr_node.end(); it++) {
                         auto prem_conc = it->as<std::vector<int>>();
@@ -619,16 +624,6 @@ namespace ltsy {
                     //}
 
 
-                    //// simplification
-                    //spdlog::info("Below are the result of the simplification attempt");
-                    //const auto [simp_calculus, removed_rules, level] = simplify_by_derivation(calculus, analiticity_formulas, 0, simplify_max_level);
-                    //for (const auto& removed_rule : removed_rules) {
-                    //    const auto& [rule, derivation] = removed_rule;
-                    //    std::cout << "derived " << rule.name() << std::endl;
-                    //    auto derivtree = derivation->print().str();
-                    //    std::cout << derivtree << std::endl;
-                    //}
-
                     auto calculus_node = parser.hard_require(root, "calculus");
                     for (auto it = calculus_node.begin(); it != calculus_node.end(); ++it) {
                         auto name =  it->first.as<std::string>();
@@ -636,7 +631,6 @@ namespace ltsy {
                         MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
                         calculus_rules.push_back(rule);
                     }
-
 
                     AppsFacade apps_facade;
 
@@ -671,10 +665,78 @@ namespace ltsy {
                     if (not passed_soundness)
                         spdlog::error("Soundness test not passed, verify log.");
                     else {
+
+                        if (*simplify_by_subrule_semantics) {
+                            // simplify via semantics
+                            std::map<std::string, std::vector<MultipleConclusionRule>> sound_subrules_all;
+                            for (const auto& rule : calculus_rules) {
+                                std::vector<MultipleConclusionRule> sound_subrules;
+                                spdlog::info("Simplifying by sound subrules semantically: " + rule.name() + "...");
+                                ltsy::MultipleConclusionSubrulesGenerator gen {rule}; 
+                                unsigned long long counter = 1;
+                                while(gen.has_next()) {
+                                    spdlog::info("Subrule " + std::to_string(counter) + "\/" + std::to_string(gen.size()));
+                                    auto subr = gen.next();
+                                    NdSequentRule<std::set> sequent_rule (rule.name(), {}, {subr.sequent()});
+                                    bool passed_soundness = true;
+                                    for (const auto& pnmatrix : *pnmatrices) {
+                                        auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
+                                                            pnmatrix, seq_dset_corr, {sequent_rule}, 1,
+                                                            std::nullopt
+                                                        );
+                                        auto result = soundness_results[rule.name()];
+                                        if (result) {
+                                            passed_soundness = false;
+                                            break;
+                                        }
+                                    }
+                                    if (passed_soundness)
+                                        sound_subrules.push_back(subr);
+                                    counter += 1;
+                                }
+                                std::sort(
+                                    sound_subrules.begin(), 
+                                    sound_subrules.end(), 
+                                    [&](MultipleConclusionRule a, MultipleConclusionRule b) {
+                                        return std::make_tuple<int,int,int,int>(a.branching_value(), a.premises_size(), a.conclusion_complexity(), a.premises_complexity()) < 
+                                               std::make_tuple<int,int,int,int>(b.branching_value(), b.premises_size(), b.conclusion_complexity(), b.premises_complexity());
+                                    }
+                                );
+                                sound_subrules_all[rule.name()] = sound_subrules;
+                            }
+                            spdlog::info("Results of simplification by sound subrules via semantics:");
+
+                            std::vector<MultipleConclusionRule> calculus_rules_simp_sound_subrules_semantics;
+                            for (const auto& [name, subrules] : sound_subrules_all) {
+                                spdlog::info("For rule " + name + ", " + std::to_string(subrules.size()) + " sound subrules:");
+                                if (not subrules.empty())
+                                    calculus_rules_simp_sound_subrules_semantics.push_back(subrules[0]);
+                                for (const auto& subrule : subrules) {
+                                    std::cout << subrule.sequent() << std::endl;     
+                                }
+                            }
+                            
+                            if (not use_original_calculus)
+                                calculus_rules = calculus_rules_simp_sound_subrules_semantics;
+                        }
+
+                        MultipleConclusionCalculus calculus {calculus_rules};
+
+                        if (simplify_by_derivation_flag) {
+                            // simplification by derivation
+                            spdlog::info("Below are the result of the simplification attempt");
+                            const auto [simp_calculus, removed_rules, level] = simplify_by_derivation(calculus, analiticity_formulas, 0, simplify_max_level);
+                            for (const auto& removed_rule : removed_rules) {
+                                const auto& [rule, derivation] = removed_rule;
+                                std::cout << "derived " << rule.name() << std::endl;
+                                auto derivtree = derivation->print().str();
+                                spdlog::info(derivtree);
+                            }
+                        }
+
                         // derivations
                         if (auto derive_node = root["derive"]) {
 
-                            MultipleConclusionCalculus calculus {calculus_rules};
 
                             spdlog::info("Here is the calculus:");
                             auto set_rules = calculus.rules();
@@ -684,9 +746,6 @@ namespace ltsy {
 
                             spdlog::info("Below are the requested derivations in the calculus:");
                             for (auto it = derive_node.begin(); it != derive_node.end(); ++it) {
-                                
-                                auto analiticity_formulas_node = parser.hard_require(root, "analyticity_formulas");
-                                FmlaSet analiticity_formulas = parser.parse_fmla_set(analiticity_formulas_node);
                                 auto name =  it->first.as<std::string>();
                                 auto sequent =  parser.parse_nd_sequent(it->second);
                                 MultipleConclusionRule rule {name, *sequent, prem_conc_corr};
@@ -747,7 +806,8 @@ namespace ltsy {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
                     MultipleConclusionCalculus simp_calc {rules_simp};
-                    auto derivation = simp_calc.derive(rules[i], phi);
+                    spdlog::info("Trying to derive " + rules[i].name());
+                    auto derivation = simp_calc.derive(rules[i], {std::make_shared<Prop>("p")});
                     if (derivation->closed) {
                         spdlog::debug("Derived " + rules[i].name() + ": " + rules[i].sequent().to_string() + 
                                 " in depth " + std::to_string(depth) + " using " + 

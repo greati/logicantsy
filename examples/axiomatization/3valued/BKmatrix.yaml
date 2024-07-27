@@ -1,7 +1,7 @@
 pnmatrix:
   values: [f, u, t]
   distinguished_sets:
-    - [u, t]
+    - [t]
   interpretation:
     p or q:
       restrictions:
@@ -15,6 +15,12 @@ pnmatrix:
         - [u,_]: [u]
         - [_,u]: [u]
         - [t,t]: [t]
+    p -> q:
+      default: [t]
+      restrictions:
+        - [u,_]: [u]
+        - [_,u]: [u]
+        - [t,f]: [f]
     neg p:
       restrictions:
         - [t]: [f]
@@ -23,12 +29,12 @@ pnmatrix:
 simplify_overlap: true
 simplify_dilution: true
 simplify_by_cuts: true
-simplify_derivation: 50
+simplify_derivation: 100
 simplify_subrules_deriv: 100
 discriminator:
-  t: [[p],[neg p]]
-  u: [[p, neg p],[]]
-  f: [[],[p]]
+  t: [[p],[]]
+  u: [[],[p, neg p]]
+  f: [[neg p],[p]]
 latex:
   p1: "\\varphi"
   p2: "\\psi"

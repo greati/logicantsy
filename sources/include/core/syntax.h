@@ -708,8 +708,6 @@ namespace ltsy {
             }
             std::string get_string() { 
                 std::string result = buffer.str();
-                if ((result.size() >= 3) and (result[0] == '(') and (result[result.size()-1] == ')'))
-                    result = result.substr(1, result.size() - 2);
                 return result;
             }
     };

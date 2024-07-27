@@ -106,10 +106,9 @@ calculus:
   or12:       [["o(p)", "o(q)"],["o(p or q)"]]  #new!
   or14:       [["p or q", "o(p)"], ["p", "q"]]  #new!
   or15:       [["p or q", "o(q)"], ["p", "q"]]  #new!
-  or16:       [["o(p or q)"],["o(p)", "q"]]     #new!
-  or17:       [["o(p or q)"],["o(q)", "p"]]     #new!
-  or18:       [["o(p)", "p"],["o(p or q)"]]     #new!
-  or19:       [["o(q)", "q"],["o(p or q)"]]     #new!
+  or17:       [["o(p)", "o((p or q) -> neg(p or q))"],["p", "o(q -> neg q)"]] #new!
+  or18:       [["o(p)", "o(p or q)"],["p", "o(q -> neg q)"]] #new!
+
   # R_filter
   Dleq:       [["o(p -> q)", "p"], ["o(q)", "q"]]
   Dbnf:       [["p", "q", "o(neg p -> p)", "o(neg q -> q)", "o(p -> neg p)", "o(q -> neg q)"],["o(p)", "o(q)", "o(r)", "o(p -> q)", "o(neg r -> r)", "r"]]
@@ -220,7 +219,9 @@ derive:
   #r11: [[neg q],[neg(p and q)]]
   #r12: [[neg(p and q)],[neg p, neg q]]
   #r15: [[p or q],[p, q]]
-  r16:  [[neg p, neg q],[neg(p or q)]] #still underivable!!!
+  #r16:  [[neg p, neg q],[neg(p or q)]] 
+  or17:       [["o(p or q)"],["o(q)", "p"]]     #new!
+  or16:       [["o(p or q)"],["o(p)", "q"]]     #new!
   #r16weak: [[neg p, neg q, o(p)],[neg(p or q)]]
   #r17: [[neg(p or q)],[neg p]]
   #r18: [[neg(p or q)],[neg q]]
@@ -235,3 +236,5 @@ derive:
   #I1: [[o(p), p, o(neg(p -> q) -> (p -> q))],[o(neg q -> q)]]
   #I2: [[o(p), p, o((p -> q) -> neg(p -> q))],[o(q -> neg q)]]
   #I3: [[o(p), p, o(p -> q)],[o(q)]]
+  #or18:       [["o(p)", "p"],["o(p or q)"]]     #new!
+  #or19:       [["o(q)", "q"],["o(p or q)"]]     #new!

@@ -15,6 +15,12 @@ pnmatrix:
         - [u,_]: [u]
         - [_,u]: [u]
         - [t,t]: [t]
+    p -> q:
+      default: [t]
+      restrictions:
+        - [u,_]: [u]
+        - [_,u]: [u]
+        - [t,f]: [f]
     neg p:
       restrictions:
         - [t]: [f]
@@ -29,6 +35,8 @@ discriminator:
   t: [[p],[neg p]]
   u: [[p, neg p],[]]
   f: [[],[p]]
+derive:
+  comm_and: [[p and q],[q and p]]
 latex:
   p1: "\\varphi"
   p2: "\\psi"

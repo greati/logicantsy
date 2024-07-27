@@ -89,6 +89,7 @@ namespace ltsy {
             inline std::set<std::set<int>> get_non_total_subsets() const {
                 std::set<std::set<int>> max_total_subsets;
                 get_maximal_total_subsets(_values, max_total_subsets); 
+
                 std::set<std::set<int>> result;
                 DiscretureCombinationGenerator combination_gen {_values.size()};
                 while (combination_gen.has_next()) {
@@ -105,6 +106,7 @@ namespace ltsy {
                     if (not is_subset_of_max_total)
                         result.insert(X);
                 }
+
                 return result;
             }
 
@@ -492,22 +494,28 @@ namespace ltsy {
 
             std::set<int> visit_compound(Compound* compound) override {
                if (compound != nullptr) {
+                   std::set<int> result;
                    auto connective = compound->connective();
                    auto conn_interp = 
                        _matrix_valuation_ptr->interpretation()
                            ->get_interpretation(connective->symbol());
-                   auto components = compound->components();
-                   std::vector<std::set<int>> args;
-                   for (auto component : components) {
-                        args.push_back(component->accept(*this));
-                   }
-                   auto possible_arguments = utils::cartesian_product(args);
-                   std::set<int> result;
-                   for (const auto& arg : possible_arguments) {
-                      auto conn_values = conn_interp->at(arg);
+                   if (connective->arity() == 0) {
+                      auto conn_values = conn_interp->at({});
                       result.insert(conn_values.begin(), conn_values.end());
+                      return result;
+                   } else {
+                       auto components = compound->components();
+                       std::vector<std::set<int>> args;
+                       for (auto component : components) {
+                            args.push_back(component->accept(*this));
+                       }
+                       auto possible_arguments = utils::cartesian_product(args);
+                       for (const auto& arg : possible_arguments) {
+                          auto conn_values = conn_interp->at(arg);
+                          result.insert(conn_values.begin(), conn_values.end());
+                       }
+                       return result;
                    }
-                   return result;
                } else throw std::logic_error("compound points to null");
             }
     };
@@ -900,7 +908,6 @@ namespace ltsy {
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props, std::make_shared<Signature>(sig)};
-                spdlog::debug(generator.total());
                 if (generator.total() >= (1 << 22)) {
                     spdlog::warn("Rule avoided, too many valuations to test");
                     throw std::logic_error("Too many valuations to test");

@@ -372,8 +372,9 @@ namespace ltsy {
                 for (int i = 0; i < number_of_rows; ++i) {
                     // collect images of g's
                     std::vector<std::set<int>> gsimages;
-                    for (const auto& g : gs)
+                    for (const auto& g : gs) {
                         gsimages.push_back(g.at(i));
+                    }
                     const auto& cartproduct = utils::cartesian_product(gsimages);
                     std::set<int> comp_output;
                     for (const auto& input : cartproduct) {

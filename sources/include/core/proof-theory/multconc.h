@@ -129,6 +129,34 @@ namespace ltsy {
                 }
                 return b;
             }
+
+            int premises_size() const {
+                int b = 0;
+                for (const auto& s : _premises) {
+                    b += s.size(); 
+                }
+                return b;
+            }
+
+            int premises_complexity() const {
+                int b = 0;
+                for (const auto& s : _premises) {
+                    for (const auto& f : s) {
+                        b += f->complexity(); 
+                    }
+                }
+                return b;
+            }
+
+            int conclusion_complexity() const {
+                int b = 0;
+                for (const auto& s : _conclusions) {
+                    for (const auto& f : s) {
+                        b += f->complexity(); 
+                    }
+                }
+                return b;
+            }
     };
 
 
@@ -145,6 +173,7 @@ namespace ltsy {
             int _dim;
             bool finished = false;
             bool first = true;
+            unsigned long long _size = 1;
     
         public:
 
@@ -153,9 +182,12 @@ namespace ltsy {
                    for (int i = 0; i < _base_rule.sequent().dimension(); ++i) {
                         auto fmlas_pos = _base_rule.sequent().sequent_fmlas()[i];
                         _fmlas.push_back(std::vector<std::shared_ptr<Formula>>(fmlas_pos.begin(), fmlas_pos.end()));
+                        _size *= std::pow(2, fmlas_pos.size());
                    }
                    reset();
             }
+
+            unsigned long long size() const { return _size; }
 
             void reset() {
                 finished = false;
@@ -462,7 +494,7 @@ namespace ltsy {
 
             std::vector<MultipleConclusionRule> _rules;
             unsigned int _analiticity_level = 1;
-	    std::optional<MultipleConclusionRule> _empty_rule = std::nullopt;
+            std::optional<MultipleConclusionRule> _empty_rule = std::nullopt;
 
             void print_set(const FmlaSet& f) const {
                 for (auto ff : f)
@@ -670,22 +702,22 @@ namespace ltsy {
 
             bool is_equivalent(MultipleConclusionCalculus other_calculus,
                     const FmlaSet& this_phi, const FmlaSet& other_phi) {
-		    for (const auto& r : this->_rules) {
-		    	auto deriv = other_calculus.derive(r, other_phi);
-			if (not deriv->closed) {
-				std::cout << "in generated: " << r.sequent().to_string() << std::endl;
-				return false;
-			}
-		    }
-		    for (const auto& r : other_calculus.rules_set()) {
-		    	auto deriv = this->derive(r, this_phi);
-			if (not deriv->closed) {
-				std::cout << "in expected: " << r.sequent().to_string() << std::endl;
-				return false;
-			}
-		    }
-		    return true;
-	    }
+                for (const auto& r : this->_rules) {
+                    auto deriv = other_calculus.derive(r, other_phi);
+                    if (not deriv->closed) {
+                        std::cout << "in generated: " << r.sequent().to_string() << std::endl;
+                        return false;
+                    }
+                }
+                for (const auto& r : other_calculus.rules_set()) {
+                    auto deriv = this->derive(r, this_phi);
+                    if (not deriv->closed) {
+                        std::cout << "in expected: " << r.sequent().to_string() << std::endl;
+                        return false;
+                    }
+                }
+                return true;
+            }
 
             /* Try to produce a derivation tree based
              * on the system's rules.
@@ -716,7 +748,7 @@ namespace ltsy {
                 }
                 // compute the generalized subformulas
                 auto [thetak_1, thetak] = gen_subformulas(statement, phi, props_phi, _analiticity_level);
-                
+
                 // identify premises and conclusion
                 std::vector<FmlaSet> premises;
                 std::vector<FmlaSet> conclusions;
@@ -727,14 +759,6 @@ namespace ltsy {
                 // search for the derivation
                 auto derivation = std::make_shared<DerivationTreeNode>(premises, 
                         std::vector<std::shared_ptr<DerivationTreeNode>>{});
-
-                for (auto f : thetak_1) {
-                    std::cout << *f << std::endl;
-                }
-
-                for (auto f : thetak) {
-                    std::cout << *f << std::endl;
-                }
                 std::set<std::shared_ptr<DerivationTreeNode>> closed_derivations;
                 bool derivation_result = expand_node(premises, conclusions, thetak_1, thetak, derivation, 0,
                         max_depth, closed_derivations);

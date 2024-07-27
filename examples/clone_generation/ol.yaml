@@ -1,0 +1,42 @@
+values: [g, t, f]
+base:
+  p -> q: 
+    default: [g]
+    restrictions:
+      - [g,t]: [t]
+      - [g,f]: [f]
+      - [t,t]: [t]
+      - [t,f]: [f]
+  p or q:
+    default: [t]
+    restrictions:
+      - [g,g]: [g]
+      - [f,g]: [f]
+      - [g,f]: [f]
+      - [f,f]: [f]
+  p and q:
+    default: [f]
+    restrictions:
+      - [g,g]: [g]
+      - [g,t]: [t]
+      - [t,g]: [t]
+      - [t,t]: [t]
+  neg p:
+    restrictions:
+      - [g]: [g]
+      - [t]: [f]
+      - [f]: [t]
+max_depth: 10000
+search:
+  fa(p,q):
+    default: [g]
+    restrictions:
+      - [g,f]: [f]
+      - [t,f]: [f]
+      - [t,t]: [t]
+  df(p,q):
+    default: [g]
+    restrictions:
+      - [g,f]: [g]
+      - [t,f]: [f]
+      - [t,t]: [t]

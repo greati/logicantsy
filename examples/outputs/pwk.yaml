@@ -1,0 +1,40 @@
+calculus:
+  r1: [[],["neg(p1 and p2)", "p1"]]
+  r2: [[],["neg(p1 and p2)", "p2"]]
+  r4: [["p1 and p2"],["neg p1", "p2"]]
+  r5: [["p1 and p2"],["neg p2", "p1"]]
+  r6: [["p1 and p2"],["p1", "p2"]]
+  r7: [["neg(p1 and p2)"],["neg p1", "neg p2"]]
+  r12: [["neg p1"],["neg(p1 and p2)"]]
+  r13: [["neg p1", "p1"],["p1 and p2"]]
+  r15: [["neg p2"],["neg(p1 and p2)"]]
+  r16: [["neg p2", "p2"],["p1 and p2"]]
+  r21: [["p1", "p2"],["p1 and p2"]]
+  r3: [[],["neg p1", "p1"]]
+  r8: [["neg neg p1"],["p1"]]
+  r19: [["p1"],["neg neg p1"]]
+    #r9: [["neg(p1 or p2)"],["neg p1", "neg p2"]]
+  r10: [["neg(p1 or p2)"],["neg p1", "p2"]]
+  r11: [["neg(p1 or p2)"],["neg p2", "p1"]]
+  r14: [["neg p1", "p1"],["neg(p1 or p2)"]]
+  r17: [["neg p2", "p2"],["neg(p1 or p2)"]]
+  r18: [["p1 or p2"],["p1", "p2"]]
+  r20: [["p1"],["p1 or p2"]]
+  r22: [["p2"],["p1 or p2"]]
+analyticity_formulas: ["neg p","p"]
+simplify_overlap: false
+simplify_dilution: false
+simplify_by_cuts: false
+simplify_by_subrule_deriv: 0
+prem_conc_correspondence: [[0,1]]
+sequent_dset_correspondence: [0,1]
+simplify_max_level: 20
+simplify_by_derivation: true
+print_tree: true
+derive:
+  comm_and: [["p and q"],["q and p"]]
+  comm_nand: [["neg(p and q)"],["neg(q and p)"]]
+  r2: [["neg p1"],["neg(p1 and p2)"]]
+  r3: [["neg (p or q)"],["neg p"]]
+
+    # write queries as rulename: rule-description

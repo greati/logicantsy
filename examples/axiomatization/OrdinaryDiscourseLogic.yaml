@@ -1,0 +1,90 @@
+pnmatrix:
+  values: [g, t, f]
+  distinguished_sets:
+    - [g, t]
+  interpretation:
+    #biimp(p,q):
+    #  default: [f]
+    #  restrictions:
+    #    - [f, f]: [g]
+    #    - [g, g]: [g]
+    #    - [g, t]: [t]
+    #    - [t, g]: [t]
+    #    - [t, t]: [t]
+    #dt(p,q):
+    #  default: [t]
+    #  restrictions:
+    #    - [g, g]: [g]
+    #    - [t, f]: [f]
+    #    - [g, f]: [f]
+          #altdisj(p,q):
+          #  default: [t]
+          #  restrictions:
+          #    - [g, g]: [g]
+          #    - [f, f]: [f]
+          #p -> q:
+          #  restrictions:
+          #    - [g,t]: [t]
+          #    - [g,f]: [f]
+          #    - [t,t]: [t]
+          #    - [t,f]: [f]
+          #    - [_,g]: [g]
+          #    - [f,_]: [g]
+          #dimp(p,q):
+          #  restrictions:
+          #    - [g, g]: [g]
+          #    - [_, t]: [t]
+          #    - [f, _]: [t]
+          #    - [t, g]: [f]
+          #    - [g, f]: [f]
+          #    - [t, f]: [f]
+    sqor(p,q):
+      restrictions:
+        - [f, _]: [f]
+        - [t, _]: [t]
+        - [g, _]: [g]
+        - [g, t]: [t]
+    p or q:
+      restrictions:
+        - [f,f]: [f]
+        - [f,g]: [f]
+        - [g,f]: [f]
+        - [t,_]: [t]
+        - [_,t]: [t]
+        - [g,g]: [g]
+          #p and q:
+          #  restrictions:
+          #    - [t,t]: [t]
+          #    - [t,g]: [t]
+          #    - [g,t]: [t]
+          #    - [f,_]: [f]
+          #    - [_,f]: [f]
+          #    - [g,g]: [g]
+    neg p:
+      restrictions:
+        - [g]: [g]
+        - [t]: [f]
+        - [f]: [t]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_derivation: 100
+simplify_subrules_deriv: 100
+discriminator:
+  g: [[p, neg p], []]
+  t: [[p], [neg p]]
+  f: [[], [p]]
+latex:
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  and: "\\land"
+  or: "\\lor"
+  ->: "\\to"
+  neg: "\\neg"
+  t: "\\mathtt{t}"
+  u: "\\mathtt{u}"
+  g: "\\mathtt{g}"
+  f: "\\mathtt{f}"
+  biimp: "\\Leftrightarrow"
+  dimp: "\\Rightarrow"
