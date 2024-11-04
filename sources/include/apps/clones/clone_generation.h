@@ -6,6 +6,147 @@
 
 namespace ltsy {
 
+
+    class AllInputFunctionGenerator { 
+    
+        private:
+
+           std::set<NDTruthTable> _previous_functions;
+           std::set<NDTruthTable> _new_functions;
+           int _arity;
+           std::vector<NDTruthTable> _current;
+           std::vector<InputFunctionSetProduct> _function_tuples_generators;
+           bool finished = false;
+           bool first = true;
+
+        public:
+
+            InputFunctionSetProduct(int arity, const decltype(_previous_functions)& previous_functions, 
+                    const decltype(_new_functions)& new_functions)
+            : _arity {arity}, _new_functions {new_functions}, 
+                _previous_functions {previous_functions} {
+                if (arity < 0) throw std::invalid_argument("arity in input generator must be >= 1");
+                reset();
+            } 
+
+            void reset() {
+                if (_arity == 0) {
+                    finished = true; first = false;
+                } else {
+                    finished = false;
+                    first = true;
+                    _function_tuples_generators.clear();
+                    for (int i = 1; i <= _arity; ++i) {
+                        _function_tuples_generators.push_back(InputFunctionSetProduct{_arity, _previous_functions, _new_functions, i});
+                    } 
+                    _current = _function_tuples_generators[0].current();
+                }
+            }
+
+            std::vector<NDTruthTable> next() {
+                if (_arity == 0) { first = false; return _current; }
+                if (first) { first = false; return _current; }
+                if (has_next()) {
+                    int i = _arity - 1;
+                    while (i >= 0 and std::next(_iterators[i]) == get_end_iterator()) {
+                        _iterators[i] = _new_functions.begin();
+                        _current[i] = *_iterators[i];
+                        --i;    
+                    }
+                    _iterators[i]++;
+                    _current[i] = *_iterators[i];
+                    return _current;
+                } else throw std::logic_error("no more inputs to generate");
+            }
+            bool has_next() {
+                if (_arity == 0) return false;
+                if (first) return true;
+                for (int i = 0; i < _arity; ++i)
+                    if (std::next(_iterators[i]) != get_end_iterator())
+                        return true;
+                return false;
+            }
+            decltype(_previous_functions.begin()) get_end_iterator() const {
+                return (_arity_previous > 0) ? (_previous_functions.end()) : (_new_functions.end());
+            }
+    };
+
+    class InputFunctionSetProduct { 
+    
+        private:
+
+           std::set<NDTruthTable> _previous_functions;
+           std::set<NDTruthTable> _new_functions;
+           int _arity;
+           int _arity_new;
+           int _arity_previous;
+           std::vector<decltype(_previous_functions.begin())> _iterators;
+           std::vector<NDTruthTable> _current;
+           bool finished = false;
+           bool first = true;
+
+        public:
+
+            InputFunctionSetProduct(int arity, const decltype(_previous_functions)& previous_functions, 
+                    const decltype(_new_functions)& new_functions,
+                    int arity_new)
+            : _arity {arity}, _new_functions {new_functions}, 
+                _previous_functions {previous_functions},
+                _arity_new {arity_new}, _arity_previous {arity - arity_new} {
+                if (arity < 0) throw std::invalid_argument("arity in input generator must be >= 1");
+                if (arity_new < 1) throw std::invalid_argument("new functions must appear in at least one component");
+                reset();
+            } 
+
+            void reset() {
+                if (_arity == 0) {
+                    finished = true; first = false;
+                } else {
+                    finished = false;
+                    first = true;
+                    _iterators.clear();
+                    for (int i = 0; i < _arity_new; ++i) {
+                        _iterators.push_back(_new_functions.begin());
+                        _current.push_back(*_iterators[i]);
+                    } 
+                    for (int i = _arity_new; i < _arity_new + _arity_previous; ++i) {
+                        _iterators.push_back(_previous_functions.begin());
+                        _current.push_back(*_iterators[i]);
+                    }
+                }
+            }
+
+            std::vector<NDTruthTable> next() {
+                if (_arity == 0) { first = false; return _current; }
+                if (first) { first = false; return _current; }
+                if (has_next()) {
+                    int i = _arity - 1;
+                    while (i >= 0 and std::next(_iterators[i]) == get_end_iterator()) {
+                        _iterators[i] = _new_functions.begin();
+                        _current[i] = *_iterators[i];
+                        --i;    
+                    }
+                    _iterators[i]++;
+                    _current[i] = *_iterators[i];
+                    return _current;
+                } else throw std::logic_error("no more inputs to generate");
+            }
+            bool has_next() {
+                if (_arity == 0) return false;
+                if (first) return true;
+                for (int i = 0; i < _arity; ++i)
+                    if (std::next(_iterators[i]) != get_end_iterator())
+                        return true;
+                return false;
+            }
+            decltype(_previous_functions.begin()) get_end_iterator() const {
+                return (_arity_previous > 0) ? (_previous_functions.end()) : (_new_functions.end());
+            }
+            decltype(_current) current() const {
+                return _current;
+            }
+    };
+
     class InputFunctionsGenerator {
     
         private:
