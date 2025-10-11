@@ -1228,26 +1228,74 @@ namespace ltsy {
                     auto seq_dset_corr = parser.hard_require(root, SEQUENT_DSET_CORRESPOND_TITLE)
                         .as<std::vector<int>>();
                     AppsFacade apps_facade;
+
+                    std::vector<NdSequentRule<std::set>> rules_with_unknown_connectives;
+                    std::vector<std::shared_ptr<Connective>> unknown_connectives;
+
+                    auto matrices_signature = *((*(pnmatrices.begin()))->signature());
+
                     for (const auto& rule : rules) {
                         spdlog::info("Checking for rule " + rule.name() + "...");
+
+                        auto rule_sig = rule.infer_signature();
+                        auto sig_diff = rule_sig.diff(matrices_signature);
+
                         try {
                             for (const auto& pnmatrix : pnmatrices) {
-                                auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
-                                            pnmatrix, seq_dset_corr, {rule}, max_counter_models,
-                                            std::make_optional<progresscpp::ProgressBar>(70)
-                                        );
-                                auto result = soundness_results[rule.name()];
-                                if (not result) {
-                                    spdlog::info("Sound.");
-                                } else {
-                                    spdlog::info("Not sound. Consider the following configuration(s):");
-                                    for (const auto& ce : *result) {
-                                        spdlog::info("\n" + ce.val.print(pnmatrix->val_to_str()).str());
+
+                                if (sig_diff.size() > 1)
+                                    throw std::invalid_argument("you cannot give more than one unknown connective in a rule");
+                                else if (sig_diff.size() == 0) {
+                                    auto soundness_results = apps_facade.sequent_rule_soundness_check_gen_matrix(
+                                                pnmatrix, seq_dset_corr, {rule}, max_counter_models,
+                                                std::make_optional<progresscpp::ProgressBar>(70)
+                                            );
+                                    auto result = soundness_results[rule.name()];
+                                    if (not result) {
+                                        spdlog::info("Sound.");
+                                    } else {
+                                        spdlog::info("Not sound. Consider the following configuration(s):");
+                                        for (const auto& ce : *result) {
+                                            spdlog::info("\n" + ce.val.print(pnmatrix->val_to_str()).str());
+                                        }
                                     }
+                                } else {
+                                    rules_with_unknown_connectives.push_back(rule);
+                                    unknown_connectives.push_back(*(sig_diff.begin()));
+
+                                    if (unknown_connectives.size() > 1)
+                                        throw std::invalid_argument("you cannot give more than one unknown connective for the search");
                                 }
                             }
+
                         } catch(std::exception e) {}
                     }
+                    
+                    spdlog::info("Looking now for rules with a unknown connective");
+                    //try {
+                        auto unknown_connective = unknown_connectives[0];
+                        for (const auto& pnmatrix : pnmatrices) {
+                            std::optional<std::set<NDTruthTable>> result_unk_conn =
+                                    apps_facade.look_for_rule_satisfied_in_clone(
+                                        pnmatrix,
+                                        unknown_connective,
+                                        rules_with_unknown_connectives,
+                                        seq_dset_corr);
+                            if (!result_unk_conn)
+                                spdlog::info("No connective found that make all rules with unknowns sound, for the set search parameters.");
+                            else {
+                                for (const auto& tt : *result_unk_conn) {
+                                    spdlog::info("\n" + tt.print().str());
+                                    if (tt.fmla() == nullptr)
+                                        spdlog::info("no associated formula to print");
+                                    else
+                                        std::cout << *tt.fmla() << std::endl;
+                                }
+                            }
+                        } 
+                    //} catch(std::exception e) {
+                    //    spdlog::critical(e.what());
+                    //}
                 } catch (ParseException& pe) {
                     spdlog::critical(pe.message());
                 } catch (YAML::Exception& ye) {

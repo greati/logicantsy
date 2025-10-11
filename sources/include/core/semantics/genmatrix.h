@@ -83,6 +83,11 @@ namespace ltsy {
             inline decltype(_signature) signature() const { return _signature; }
             inline void set_signature(decltype(_signature) sig) { _signature = sig; }
 
+            void set_connective_interpretation(std::shared_ptr<TruthInterp<std::set<int>>> truth_interp) {
+                _signature->add(truth_interp->connective());
+                this->_interpretation->try_interpret(truth_interp, true); 
+            }
+
             /* Return those subsets of values that
              * are subsets of maximal total subsets.
              */

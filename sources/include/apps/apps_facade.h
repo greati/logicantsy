@@ -15,6 +15,59 @@ namespace ltsy {
 
         public:
 
+            std::optional<std::set<NDTruthTable>>
+            look_for_rule_satisfied_in_clone(
+                std::shared_ptr<GenMatrix> matrix,
+                const std::shared_ptr<Connective> target_connective,
+                const std::vector<NdSequentRule<std::set>>& rules, 
+                const std::vector<int>& sequent_set_correspondence,
+                std::optional<int> max_depth=std::nullopt,
+                std::optional<int> max_satisfied=std::nullopt
+                ) 
+                const {
+                
+                auto nvalues = matrix->values().size();
+
+                ltsy::CloneGenerator generator {nvalues, matrix->interpretation()->get_truth_tables()};
+
+                auto predicate = [&](NDTruthTable tt) {
+                    tt.set_name(target_connective->symbol());
+                    auto truth_interp = std::make_shared<TruthInterp<std::set<int>>>(target_connective, std::make_shared<NDTruthTable>(tt));
+                    auto matrix_cpy = *matrix;
+                    matrix_cpy.set_connective_interpretation(truth_interp);
+                    NdSequentGenMatrixValidator<std::set> validator {std::make_shared<GenMatrix>(matrix_cpy), sequent_set_correspondence}; 
+
+                    bool result = true;
+                    for (const auto& r : rules) {
+                        Signature sig = r.infer_signature();
+                        if (validator.is_rule_satisfiability_preserving(r, sig, 1, std::nullopt)) {
+                            result = false;
+                            break;
+                        }
+                    }
+                    return result;
+                };
+
+
+                auto make_props = [](int n) {
+                    std::vector<std::shared_ptr<Formula>> props;
+                    for (int i = 1; i <= n; ++i)
+                        props.push_back(std::make_shared<Prop>("p"+std::to_string(i)));
+                    return props;
+                };
+
+                std::vector<std::shared_ptr<Formula>> props = make_props(target_connective->arity());
+
+                auto results = generator.generate(
+                        target_connective->arity(), 
+                        props, 
+                        max_depth, 
+                        std::make_pair<std::function<bool(NDTruthTable)>, int>(predicate, (max_satisfied ? max_satisfied.value() : 10) ));
+                if (results.size() > 0) {
+                    return results;
+                } else return std::nullopt;
+            }
+
             std::pair<
                 std::optional<std::set<NDTruthTable>>,
                 std::optional<std::set<NDTruthTable>>>

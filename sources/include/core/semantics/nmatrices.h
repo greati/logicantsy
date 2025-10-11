@@ -109,6 +109,8 @@ namespace ltsy {
                 reset();
             };
 
+            decltype(_connective) connective() const { return _connective; }
+
             decltype(_current) next() {
                 if (not has_next())
                     throw std::logic_error("no next truth interpretation to produce");
@@ -157,6 +159,13 @@ namespace ltsy {
             auto end() { return _truth_interps.end(); }
             auto cbegin() { return _truth_interps.cbegin(); }
             auto cend() { return _truth_interps.cend(); }
+
+            std::vector<TruthTable<CellType>> get_truth_tables() const {
+                std::vector<TruthTable<CellType>> tables; 
+                for (const auto& [s, t] : _truth_interps)
+                    tables.push_back(*(t->truth_table()));
+                return tables;
+            }
 
             std::shared_ptr<SignatureTruthInterp> copy() const {
                 decltype(_signature) sig = nullptr;
