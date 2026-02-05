@@ -70,6 +70,7 @@ namespace ltsy {
                 return _interpretation->print(_val_to_str).str();  
             }
 
+
             inline void set_val_to_str(decltype(_val_to_str) val_to_str) { _val_to_str = val_to_str; }
             inline void set_str_to_val(decltype(_str_to_val) str_to_val) { _str_to_val = str_to_val; }
             inline decltype(_val_to_str) val_to_str() const { return _val_to_str; }
@@ -82,12 +83,18 @@ namespace ltsy {
             inline decltype(_signature) signature() const { return _signature; }
             inline void set_signature(decltype(_signature) sig) { _signature = sig; }
 
+            void set_connective_interpretation(std::shared_ptr<TruthInterp<std::set<int>>> truth_interp) {
+                _signature->add(truth_interp->connective());
+                this->_interpretation->try_interpret(truth_interp, true); 
+            }
+
             /* Return those subsets of values that
              * are subsets of maximal total subsets.
              */
             inline std::set<std::set<int>> get_non_total_subsets() const {
                 std::set<std::set<int>> max_total_subsets;
                 get_maximal_total_subsets(_values, max_total_subsets); 
+
                 std::set<std::set<int>> result;
                 DiscretureCombinationGenerator combination_gen {_values.size()};
                 while (combination_gen.has_next()) {
@@ -104,6 +111,7 @@ namespace ltsy {
                     if (not is_subset_of_max_total)
                         result.insert(X);
                 }
+
                 return result;
             }
 
@@ -491,22 +499,28 @@ namespace ltsy {
 
             std::set<int> visit_compound(Compound* compound) override {
                if (compound != nullptr) {
+                   std::set<int> result;
                    auto connective = compound->connective();
                    auto conn_interp = 
                        _matrix_valuation_ptr->interpretation()
                            ->get_interpretation(connective->symbol());
-                   auto components = compound->components();
-                   std::vector<std::set<int>> args;
-                   for (auto component : components) {
-                        args.push_back(component->accept(*this));
-                   }
-                   auto possible_arguments = utils::cartesian_product(args);
-                   std::set<int> result;
-                   for (const auto& arg : possible_arguments) {
-                      auto conn_values = conn_interp->at(arg);
+                   if (connective->arity() == 0) {
+                      auto conn_values = conn_interp->at({});
                       result.insert(conn_values.begin(), conn_values.end());
+                      return result;
+                   } else {
+                       auto components = compound->components();
+                       std::vector<std::set<int>> args;
+                       for (auto component : components) {
+                            args.push_back(component->accept(*this));
+                       }
+                       auto possible_arguments = utils::cartesian_product(args);
+                       for (const auto& arg : possible_arguments) {
+                          auto conn_values = conn_interp->at(arg);
+                          result.insert(conn_values.begin(), conn_values.end());
+                       }
+                       return result;
                    }
-                   return result;
                } else throw std::logic_error("compound points to null");
             }
     };
@@ -853,25 +867,24 @@ namespace ltsy {
              *
              * @author Vitor Greati
              * */
-            std::optional<std::set<std::shared_ptr<Formula>>>
+            FmlaSet
             is_fmla_set_valid_under_valuation(const GenMatrixValuation val, 
                             const FmlaSet& fmls, const std::set<int>& dset) const {
-                std::set<std::shared_ptr<Formula>> fail_fmls;
+                FmlaSet fail_fmls;
                 for (const auto& f : fmls) {
                    GenMatrixEvaluator collector {std::make_shared<GenMatrixValuation>(val)};
                    auto fmla_values = f->accept(collector);     
                    if (!utils::is_subset(fmla_values, dset))
                        fail_fmls.insert(f);
                 }
-                if (fail_fmls.empty()) return std::nullopt;
-                else return std::make_optional<std::set<std::shared_ptr<Formula>>>(fail_fmls);               
+                return fail_fmls;   
             }
 
             bool
             is_valid_under_valuation(const GenMatrixValuation& val, const NdSequent<FmlaContainerT>& seq) const {
                  for (int i {0}; i < seq.dimension(); ++i) {
                      auto is_model_result = is_fmla_set_valid_under_valuation(val, seq[i], _d_sets[_sequent_set_correspondence[i]]);
-                     if (is_model_result) return true;
+                     if (not is_model_result.empty()) return true;
                  }
                  return false;
             }
@@ -900,7 +913,6 @@ namespace ltsy {
                 auto props_set = rule.collect_props();
                 std::vector<std::shared_ptr<Prop>> props {props_set.begin(), props_set.end()};
                 ltsy::GenMatrixValuationGenerator generator {_matrix, props, std::make_shared<Signature>(sig)};
-                spdlog::debug(generator.total());
                 if (generator.total() >= (1 << 22)) {
                     spdlog::warn("Rule avoided, too many valuations to test");
                     throw std::logic_error("Too many valuations to test");
@@ -923,16 +935,18 @@ namespace ltsy {
                             break;
                         }
                     }
+
+                    if (not premises_valid) continue;
+
                     // check non-validity of conclusions
                     bool conclusions_not_valid = true;
-                    if (premises_valid) {
-                        for (const auto& c : rule.conclusions()) {
-                            if (is_valid_under_valuation(*val, c)) {
-                                conclusions_not_valid = false;
-                                break;
-                            }
+                    for (const auto& c : rule.conclusions()) {
+                        if (is_valid_under_valuation(*val, c)) {
+                            conclusions_not_valid = false;
+                            break;
                         }
                     }
+
                     if (premises_valid and conclusions_not_valid) {
                         counter_examples.push_back(CounterExample{*(val->copy())});
                     }

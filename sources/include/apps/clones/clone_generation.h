@@ -115,6 +115,9 @@ namespace ltsy {
                 }
                 int depth = 0;
                 while (previous != current) {
+                    std::set<NDTruthTable> new_functions;
+                    std::set_difference(current.begin(), current.end(), previous.begin(), previous.end(), 
+                            std::inserter(new_functions, new_functions.begin())); //compute the new functions
                     depth += 1;
                     if (max_depth and depth > *max_depth)
                         break;
@@ -122,7 +125,7 @@ namespace ltsy {
                     previous = current;
                     for (const auto& b : _base) {
                         auto arity_base = b.arity();
-                        InputFunctionsGenerator gen {arity_base, current};
+                        InputFunctionsGenerator gen {arity_base, previous};
                         while (gen.has_next()) {
                             auto gs = gen.next();
                             try {

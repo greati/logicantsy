@@ -146,6 +146,16 @@ namespace ltsy {
                 return std::atomic_load(&it->second);
             }
 
+            std::set<std::shared_ptr<Connective>> diff(const Signature& other) {
+                std::set<std::shared_ptr<Connective>> difference;
+                for (const auto& [s, conn] : _signature) {
+                    if (other._signature.find(s) == other._signature.end()) {
+                        difference.insert(conn);
+                    }
+                }
+                return difference;
+            }
+
             /* Signature equality.
              * */
             bool operator==(const Signature& other) const {
@@ -155,6 +165,8 @@ namespace ltsy {
             /* Indicates if the signature is empty.
              * */
             bool empty() const { return _signature.empty();};
+
+            const size_t size() const { return _signature.size(); }
 
     };
 
@@ -660,56 +672,63 @@ namespace ltsy {
                 auto arity = compound->connective()->arity();
                 auto symbol = compound->connective()->symbol();
 
-                if (arity == 0) {
-                    buffer << symbol;
-                } else if (arity == 1 and 
-                    (compound->components()[0]->type() == Formula::FmlaType::PROP or
-                     compound->components()[0]->connective()->arity() == 1)) {
-		    if (symbol == "neg") {
-			    buffer << symbol << " ";
-			    compound->components()[0]->accept(*this);
-		    } else {
-			    buffer << symbol << "(";
-			    compound->components()[0]->accept(*this);
-			    buffer << ")";
-		    }
-                } else if (arity == 2) {
-		    if (symbol == "and" or symbol == "or" or symbol == "->") {
-			    auto components = compound->components();
-			    if (components[0]->type() != Formula::FmlaType::PROP)
-				    buffer << "(";
-			    components[0]->accept(*this);
-			    if (components[0]->type() != Formula::FmlaType::PROP)
-				    buffer << ")";
-			    buffer << " " << symbol << " ";
-			    if (components[1]->type() != Formula::FmlaType::PROP)
-				    buffer << "(";
-			    components[1]->accept(*this);
-			    if (components[1]->type() != Formula::FmlaType::PROP)
-				    buffer << ")";
-		    } else {
-			    auto components = compound->components();
-			    buffer << symbol << "(";
-			    components[0]->accept(*this);
-			    buffer << ",";
-			    components[1]->accept(*this);
-			    buffer << ")";	    
-		    }
-                } else {
-                    buffer << symbol << "(";
-                    auto components = compound->components();
-                    for (auto it = components.cbegin(); it != components.cend(); ++it) {
-                        (*it)->accept(*this);
-                        if (std::next(it) != components.cend())
-                            buffer << ",";
-                    }
-                    buffer <<")";
+                buffer << symbol << "(";
+                auto components = compound->components();
+                for (auto it = components.cbegin(); it != components.cend(); ++it) {
+                (*it)->accept(*this);
+                if (std::next(it) != components.cend())
+                    buffer << ",";
                 }
+                buffer <<")";
+
+                //if (arity == 0) {
+                //    buffer << symbol << "()";
+                //} else if (arity == 1 and 
+                //    (compound->components()[0]->type() == Formula::FmlaType::PROP or
+                //     compound->components()[0]->connective()->arity() == 1)) {
+                //    if (symbol == "neg") {
+                //        buffer << symbol << " ";
+                //        compound->components()[0]->accept(*this);
+                //    } else {
+                //        buffer << symbol << "(";
+                //        compound->components()[0]->accept(*this);
+                //        buffer << ")";
+                //    }
+                //} else if (arity == 2) {
+                //    if (symbol == "and" or symbol == "or" or symbol == "->") {
+                //        auto components = compound->components();
+                //        if (components[0]->type() != Formula::FmlaType::PROP)
+                //            buffer << "(";
+                //        components[0]->accept(*this);
+                //        if (components[0]->type() != Formula::FmlaType::PROP)
+                //            buffer << ")";
+                //        buffer << " " << symbol << " ";
+                //        if (components[1]->type() != Formula::FmlaType::PROP)
+                //            buffer << "(";
+                //        components[1]->accept(*this);
+                //        if (components[1]->type() != Formula::FmlaType::PROP)
+                //            buffer << ")";
+                //    } else {
+                //        auto components = compound->components();
+                //        buffer << symbol << "(";
+                //        components[0]->accept(*this);
+                //        buffer << ",";
+                //        components[1]->accept(*this);
+                //        buffer << ")";	    
+                //    }
+                //} else {
+                //    buffer << symbol << "(";
+                //    auto components = compound->components();
+                //    for (auto it = components.cbegin(); it != components.cend(); ++it) {
+                //        (*it)->accept(*this);
+                //        if (std::next(it) != components.cend())
+                //            buffer << ",";
+                //    }
+                //    buffer <<")";
+                //}
             }
             std::string get_string() { 
                 std::string result = buffer.str();
-                if ((result.size() >= 3) and (result[0] == '(') and (result[result.size()-1] == ')'))
-                    result = result.substr(1, result.size() - 2);
                 return result;
             }
     };
@@ -872,8 +891,8 @@ namespace ltsy {
                     _current_iterators.push_back(_gamma.begin());
                     if (_current_iterators[i] == _gamma.end() or std::next(_current_iterators[i]) == _gamma.end())
                         qtd_in_max++;
-		    if (_current_iterators[i] != _gamma.end())
-			_current->set(*_props[i], *_current_iterators[i]);
+                    if (_current_iterators[i] != _gamma.end())
+                        _current->set(*_props[i], *_current_iterators[i]);
                 }
             }
 
@@ -884,14 +903,12 @@ namespace ltsy {
                     const decltype(_gamma)& gamma)
                 : _gamma {gamma} {
                 _props = decltype(_props){props.begin(), props.end()};
-                _current = std::make_shared<FormulaVarAssignment>();
                 reset();    
             }
 
             FormulaVarAssignmentGenerator(const decltype(_props)& props,
                     const decltype(_gamma)& gamma)
                 : _props {props}, _gamma {gamma} {
-                _current = std::make_shared<FormulaVarAssignment>();
                 _props = decltype(_props){props.begin(), props.end()};
                 reset();    
             }
@@ -931,6 +948,8 @@ namespace ltsy {
             }
 
             void reset() {
+                qtd_in_max = 0;
+                _current = std::make_shared<FormulaVarAssignment>();
                 initialize_iterators();
                 finished = false or _props.empty() or _gamma.empty();
                 first = not finished;

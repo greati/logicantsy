@@ -1,0 +1,81 @@
+values: [^f, f, n, b, t, ^t]
+base:
+  p or q:
+    restrictions:
+      - [^f, ^f]: [^f]
+      - [f, _]  : [f]
+      - [_, f]  : [f]
+      - [n, _]  : [n]
+      - [_, n]  : [n]
+      - [b, _]  : [b]
+      - [_, b]  : [b]
+      - [b, n]  : [t]
+      - [n, b]  : [t]
+      - [t, _]  : [t]
+      - [_, t]  : [t]
+      - [^t, _] : [^t]
+      - [_, ^t] : [^t]
+  p and q:
+    restrictions:
+      - [^t, ^t]: [^t]
+      - [t, _]  : [t]
+      - [_, t]  : [t]
+      - [b, _]  : [b]
+      - [_, b]  : [b]
+      - [n, _]  : [n]
+      - [_, n]  : [n]
+      - [n, b]  : [f]
+      - [b, n]  : [f]
+      - [f, _]  : [f]
+      - [_, f]  : [f]
+      - [^f, _] : [^f]
+      - [_, ^f] : [^f]
+  neg p:
+    restrictions:
+      - [^f]: [^t]
+      - [f] : [t]
+      - [n] : [n]
+      - [b] : [b]
+      - [t] : [f]
+      - [^t]: [^f]
+  o(p):
+    restrictions:
+      - [^f]: [^t]
+      - [f] : [^f]
+      - [n] : [^f]
+      - [b] : [^f]
+      - [t] : [^f]
+      - [^t]: [^t]
+  bot():
+    restrictions:
+      - []: [^f]
+  top():
+    restrictions:
+      - []: [^t]
+max_depth: 1000
+search:
+  p -> q:
+    restrictions:
+      - [_,  f]: [f]
+      - [f,  _]: [^t]
+      - [_, ^f]: [^f]
+      - [^f, _]: [^t]
+      - [_, ^t]: [^t]
+      - [^t, ^f]: [^f]
+      - [^t, f]: [f]
+      - [^t, n]: [n]
+      - [^t, b]: [b]
+      - [^t, t]: [t]
+      - [^t, ^t]: [^t]
+      - [t, f]: [f]
+      - [t, n]: [n]
+      - [t, b]: [b]
+      - [t, t]: [t]
+      - [b, f]: [f]
+      - [b, n]: [n]
+      - [b, b]: [^t]
+      - [b, t]: [^t]
+      - [n, f]: [f]
+      - [n, n]: [^t]
+      - [n, b]: [b]
+      - [n, t]: [^t]

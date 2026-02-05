@@ -1,0 +1,105 @@
+values: [g, t, f]
+base:
+  p -> q: #OL
+    default: [g]
+    restrictions:
+      - [g,t]: [t]
+      - [g,f]: [f]
+      - [t,t]: [t]
+      - [t,f]: [f]
+  #p -> q: #df
+  #  default: [g]
+  #  restrictions:
+  #    - [g,f]: [g]
+  #    - [t,f]: [f]
+  #    - [t,t]: [t]
+      #p -> q: #farrell
+      #  default: [g]
+      #  restrictions:
+      #    - [g,f]: [f]
+      #    - [t,f]: [f]
+      #    - [t,t]: [t]
+  p or q: #OL
+    default: [t]
+    restrictions:
+      - [g,g]: [g]
+      - [f,g]: [f]
+      - [g,f]: [f]
+      - [f,f]: [f]
+      #di(p, q):
+      #  restrictions:
+      #    - [g, g]: [g]
+      #    - [_, t]: [t]
+      #    - [f, _]: [t]
+      #    - [t, g]: [f]
+      #    - [g, f]: [f]
+      #    - [t, f]: [f]
+  neg p:
+    restrictions:
+      - [g]: [g]
+      - [t]: [f]
+      - [f]: [t]
+      #sqand(p,q):
+      #  default: [f]
+      #  restrictions:
+      #    - [t,t]: [t]
+      #    - [g,g]: [g]
+      #    - [g,t]: [g]
+      #    - [t,g]: [g]
+      #sqor(p,q):
+      #  default: [t]
+      #  restrictions:
+      #    - [f,f]: [f]
+      #    - [g,f]: [g]
+      #    - [f,g]: [g]
+      #    - [g,g]: [g]
+  #  zero():
+  #restrictions:
+  #- [] : [f]
+max_depth: 10000
+search:
+  LSC(p,q):
+    default: [f]
+    restrictions:
+      - [t,t]: [t]
+      - [g,g]: [f]
+      - [g,t]: [g]
+      - [t,g]: [g]
+  #p and q:
+  #  default: [f]
+  #  restrictions:
+  #    - [g,g]: [g]
+  #    - [g,t]: [t]
+  #    - [t,g]: [t]
+  #    - [t,t]: [t]
+      #p or q:
+      #  restrictions:
+      #    - [f,f]: [f]
+      #    - [f,g]: [f]
+      #    - [g,f]: [f]
+      #    - [t,_]: [t]
+      #    - [_,t]: [t]
+      #    - [g,g]: [g]
+      #OLimp(p,q):
+      #  restrictions:
+      #    - [g,t]: [t]
+      #    - [g,f]: [f]
+      #    - [t,t]: [t]
+      #    - [t,f]: [f]
+      #    - [_,g]: [g]
+      #    - [f,_]: [g]
+      #df(p,q):
+      #  restrictions:
+      #    - [g,t]: [g]
+      #    - [g,f]: [g]
+      #    - [t,t]: [t]
+      #    - [t,f]: [f]
+      #    - [_,g]: [g]
+      #    - [f,_]: [g]
+  #himp(p,q):
+  #  default: [t]
+  #  restrictions:
+  #    - [g,g]: [g]
+  #    - [t,g]: [g]
+  #    - [g,f]: [f]
+  #    - [t,f]: [f]

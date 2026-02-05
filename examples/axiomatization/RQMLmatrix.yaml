@@ -1,0 +1,61 @@
+pnmatrix:
+  values: [f, i, t]
+  distinguished_sets:
+    - [t]
+  interpretation:
+    p and q:
+      restrictions:
+        - [_,_]: [f]
+        - [t,t]: [t]
+        - [i,t]: [i]
+        - [t,i]: [i]
+        - [i,i]: [i]
+    p or q:
+      restrictions:
+        - [_,_]: [t]
+        - [f,f]: [f]
+        - [i,f]: [i]
+        - [f,i]: [i]
+        - [i,i]: [i]
+    p -> q:
+      restrictions:
+        - [_,_]: [t]
+        - [t,i]: [i]
+        - [t,f]: [f]
+        - [i,f]: [i]
+    not(p):
+      restrictions:
+        - [t]: [f]
+        - [i]: [i]
+        - [f]: [t]
+    tilde(p):
+      restrictions:
+        - [t]: [i]
+        - [i]: [f]
+        - [f]: [t]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_derivation: 5
+simplify_subrules_deriv: 100
+discriminator:
+  t: [[p],[]]
+  i: [[],[p, not(p)]]
+  f: [[not(p)],[p]]
+derive:
+  l1: [[],[p, not(tilde(p))]]
+  l2: [[],[tilde(p), not(tilde(p))]]
+  l3: [[],[not(tilde(p)), p, not(p)]]
+  l5: [[],[not(p), not(tilde(p))]]
+  l6: [[],[p, not(p)]]
+  l7: [[],[p, tilde(p)]]
+latex:
+  p1: "\\varphi"
+  p2: "\\psi"
+  or: "\\lor"
+  not: "{\\neg}"
+  tilde: "{\\sim}"
+  t: "\\mathtt{t}"
+  i: "\\mathtt{i}"
+  f: "\\mathtt{f}"
+  "->": "\\supset"

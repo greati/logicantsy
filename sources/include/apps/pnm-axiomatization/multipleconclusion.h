@@ -105,9 +105,10 @@ namespace ltsy {
 
         public:
 
-            PNMMultipleConclusionAxiomatizer(const decltype(_discriminator)& discriminator,
+            PNMMultipleConclusionAxiomatizer(
+                    const decltype(_discriminator)& discriminator,
                     decltype(_gen_matrix) gen_matrix, 
-		    std::optional<std::vector<int>> dsets_rule_positions,
+                    std::optional<std::vector<int>> dsets_rule_positions,
                     std::optional<decltype(_prem_conc_pos_corresp)> prem_conc_pos_corresp)
             : _discriminator {discriminator}, _gen_matrix {gen_matrix} {
 
@@ -665,6 +666,8 @@ namespace ltsy {
                             sound_subrules.insert(subr);
                             spdlog::debug("Derived subrule " + subr.sequent().to_string());
                             break; //! TODO keep all sound subrules and then select one amonst them? 
+                        } else {
+                            spdlog::debug("Subrule not derivable:" + subr.sequent().to_string());
                         }
                     }
                     if (sound_subrules.empty())
@@ -691,7 +694,7 @@ namespace ltsy {
                     auto rules_simp = rules;
                     rules_simp.erase(rules_simp.begin() + i);
                     MultipleConclusionCalculus simp_calc {rules_simp};
-                    auto derivation = simp_calc.derive(rules[i], _discriminator.get_formulas());
+                    auto derivation = simp_calc.derive(rules[i], {std::make_shared<Prop>("p")}); // It cannot be the set of separators! We need empty-analytic to preserve theta-analiticity.
                     if (derivation->closed) {
                         spdlog::debug("Derived " + rules[i].sequent().to_string() + 
                                 " in depth " + std::to_string(depth) + " using " + 

@@ -23,7 +23,7 @@ pnmatrix:
 simplify_overlap: true
 simplify_dilution: true
 simplify_by_cuts: true
-simplify_derivation: 5
+simplify_derivation: 50
 simplify_subrules_deriv: 100
 discriminator:
   t: [[p],[neg p]]

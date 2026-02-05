@@ -1,0 +1,98 @@
+pnmatrix:
+  values: [^f, f, n, b, t, ^t]
+  distinguished_sets_structure:
+    up_t_hat:
+      - [^t]
+        #up_t:
+        #  - [t, ^t]
+    up_b:
+      - [b, t, ^t]
+    up_n:
+      - [n, t, ^t]
+    up_f:
+      - [f, b, n, t, ^t]
+  interpretation:
+    p -> q:
+      default: [^t]
+      restrictions:
+        - [_,  ^f]: [^f]
+        - [^f, ^f]: [^t]
+        - [n, f]: [b]
+        - [b, f]: [n]
+        - [t, f]: [f]
+        - [^t, f]: [f]
+        - [b, n]: [n]
+        - [t, n]: [n]
+        - [^t, n]: [n]
+        - [n, b]: [b]
+        - [t, b]: [b]
+        - [^t, b]: [b]
+        - [^t, t]: [t]
+    p or q:
+      restrictions:
+        - [^f, ^f]: [^f]
+        - [f, _]  : [f]
+        - [_, f]  : [f]
+        - [n, _]  : [n]
+        - [_, n]  : [n]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [b, n]  : [t]
+        - [n, b]  : [t]
+        - [t, _]  : [t]
+        - [_, t]  : [t]
+        - [^t, _] : [^t]
+        - [_, ^t] : [^t]
+    p and q:
+      restrictions:
+        - [^t, ^t]: [^t]
+        - [t, _]  : [t]
+        - [_, t]  : [t]
+        - [b, _]  : [b]
+        - [_, b]  : [b]
+        - [n, _]  : [n]
+        - [_, n]  : [n]
+        - [n, b]  : [f]
+        - [b, n]  : [f]
+        - [f, _]  : [f]
+        - [_, f]  : [f]
+        - [^f, _] : [^f]
+        - [_, ^f] : [^f]
+    neg p:
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [t]
+        - [n] : [n]
+        - [b] : [b]
+        - [t] : [f]
+        - [^t]: [^f]
+    o(p):
+      restrictions:
+        - [^f]: [^t]
+        - [f] : [^f]
+        - [n] : [^f]
+        - [b] : [^f]
+        - [t] : [^f]
+        - [^t]: [^t]
+    bot():
+      restrictions:
+        - []: [^f]
+    top():
+      restrictions:
+        - []: [^t]
+sequent_dset_correspondence: [0, 1]
+max_counter_models: 10
+rules:
+  all:
+    premises:
+    conclusions:
+      - [["r and neg(r)", "p or q"],["p", "q"]]
+  part1:
+    premises:
+    conclusions:
+      - [["p or q"],["p", "q"]]
+  r122:
+    premises:
+    conclusions:
+      - [[],["(p or q) -> p", "q"]]
+

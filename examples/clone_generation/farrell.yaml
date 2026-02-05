@@ -1,0 +1,35 @@
+values: [g, t, f]
+base:
+  p -> q: #farrell
+    default: [g]
+    restrictions:
+      - [g,f]: [f]
+      - [t,f]: [f]
+      - [t,t]: [t]
+  neg p:
+    restrictions:
+      - [g]: [g]
+      - [t]: [f]
+      - [f]: [t]
+  p and q:
+    default: [f]
+    restrictions:
+      - [t,t]: [t]
+      - [g,g]: [g]
+      - [g,t]: [g]
+      - [t,g]: [g]
+  p or q:
+    default: [t]
+    restrictions:
+      - [f,f]: [f]
+      - [g,f]: [g]
+      - [f,g]: [g]
+      - [g,g]: [g]
+max_depth: 10000
+search:
+  df(p,q): #df
+    default: [g]
+    restrictions:
+      - [g,f]: [g]
+      - [t,f]: [f]
+      - [t,t]: [t]

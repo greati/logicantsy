@@ -1,0 +1,58 @@
+pnmatrix:
+  values: [g, h, t, f]
+  distinguished_sets:
+    - [g, t]
+  interpretation:
+    neg p:
+      restrictions:
+        - [h]: [f]
+        - [g]: [g]
+        - [t]: [f]
+        - [f]: [t,h]
+    p -> q: #OL
+      restrictions:
+        - [g,g]: [g]
+        - [g,t]: [t]
+        - [g,h]: [h]
+        - [g,f]: [f]
+
+        - [t,g]: [g]
+        - [t,t]: [t]
+        - [t,h]: []
+        - [t,f]: [f]
+
+        - [h,g]: [g]
+        - [h,t]: []
+        - [h,h]: [h]
+        - [h,f]: [f]
+
+        - [f,g]: [g]
+        - [f,t]: [g]
+        - [f,h]: [g]
+        - [f,f]: [g]
+simplify_overlap: true
+simplify_dilution: true
+simplify_by_cuts: true
+simplify_derivation: 5
+simplify_subrules_deriv: 100
+discriminator:
+  h: [[],[p -> p, p]]
+  g: [[p, neg p], []]
+  t: [[p], [neg p]]
+  f: [[p -> p], [p]]
+latex:
+  p: "\\varphi"
+  p1: "\\varphi"
+  p2: "\\psi"
+  p3: "\\xi"
+  p4: "\\phi"
+  and: "\\land"
+  or: "\\lor"
+  ->: "\\to"
+  neg: "\\neg"
+  t: "\\mathtt{t}"
+  u: "\\mathtt{u}"
+  g: "\\mathtt{g}"
+  f: "\\mathtt{f}"
+  biimp: "\\Leftrightarrow"
+  dimp: "\\Rightarrow"

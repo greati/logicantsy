@@ -104,6 +104,84 @@ namespace {
         ASSERT_TRUE(all_sub_rules == expected);
     }
 
+    TEST(ProofTheory, MCSequentialHeuristicsEmpty) {
+        ltsy::BisonFmlaParser parser;
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        ltsy::MCProofSearchSequentialHeuristics heuristics { {}, {p, q}};
+
+        std::vector<ltsy::MultipleConclusionRule> instances;
+        while (heuristics.has_next()) {
+            auto ins = heuristics.select_instance();
+            instances.push_back(ins);
+        }
+
+        ASSERT_EQ(instances.size(), 0);
+    }
+
+    TEST(ProofTheory, MCSequentialHeuristicsBotRule) {
+        ltsy::BisonFmlaParser parser;
+        auto bot = parser.parse("bot()");
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        ltsy::MultipleConclusionRule rule1
+            {"bot", ltsy::NdSequent<std::set>({ltsy::FmlaSet{},{bot}}), {{0,1}}}; 
+        ltsy::MCProofSearchSequentialHeuristics heuristics { {rule1}, {p, q}};
+
+        std::vector<ltsy::MultipleConclusionRule> instances;
+        while (heuristics.has_next()) {
+            auto ins = heuristics.select_instance();
+            instances.push_back(ins);
+        }
+
+        ASSERT_EQ(instances.size(), 1);
+        ASSERT_TRUE(instances[0] == rule1);
+    }
+
+    TEST(ProofTheory, MCSequentialHeuristicsInst) {
+        ltsy::BisonFmlaParser parser;
+        auto bot = parser.parse("bot()");
+        auto p = parser.parse("p");
+        auto q = parser.parse("q");
+        auto p_and_q = parser.parse("p and q");
+        ltsy::MultipleConclusionRule rule1
+            {"bot", ltsy::NdSequent<std::set>(
+                        {ltsy::FmlaSet{},{bot}}
+                    ), 
+                {{0,1}}}; 
+        ltsy::MultipleConclusionRule rule2
+            {"overlap", ltsy::NdSequent<std::set>(
+                        {ltsy::FmlaSet{p, q},{q}}
+                    ), 
+                {{0,1}}};
+        ltsy::MCProofSearchSequentialHeuristics heuristics { {rule1, rule2}, {bot, p_and_q, p}};
+
+        std::vector<ltsy::MultipleConclusionRule> instances;
+        while (heuristics.has_next()) {
+            auto ins = heuristics.select_instance();
+            instances.push_back(ins);
+        }
+        ASSERT_EQ(instances.size(), 10);
+
+        std::set<ltsy::MultipleConclusionRule> instances_set {instances.begin(), instances.end()};
+
+        std::set<ltsy::MultipleConclusionRule> instances_exp {
+            {"r1", ltsy::NdSequent<std::set>({ltsy::FmlaSet{},{bot}}), {{0,1}}},
+            {"r2", ltsy::NdSequent<std::set>({ltsy::FmlaSet{bot},{bot}}), {{0,1}}},
+            {"r3", ltsy::NdSequent<std::set>({ltsy::FmlaSet{bot, p},{p}}), {{0,1}}},
+            {"r4", ltsy::NdSequent<std::set>({ltsy::FmlaSet{bot, p_and_q},{p_and_q}}), {{0,1}}},
+            {"r5", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p, bot},{bot}}), {{0,1}}},
+            {"r6", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p, p},{p}}), {{0,1}}},
+            {"r7", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p, p_and_q},{p_and_q}}), {{0,1}}},
+            {"r8", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p_and_q, p},{p}}), {{0,1}}},
+            {"r9", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p_and_q, bot},{bot}}), {{0,1}}},
+            {"r10", ltsy::NdSequent<std::set>({ltsy::FmlaSet{p_and_q, p_and_q},{p_and_q}}), {{0,1}}},
+        };
+
+        ASSERT_TRUE(instances_set == instances_exp);
+
+    }
+
     TEST(ProofTheory, MultipleConclusionCalculus) {
         ltsy::BisonFmlaParser parser;
         auto p = parser.parse("p");

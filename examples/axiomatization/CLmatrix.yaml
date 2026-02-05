@@ -19,6 +19,12 @@ pnmatrix:
       restrictions:
         - [t]: [f]
         - [f]: [t]
+    bot():
+      restrictions:
+        - []: [f]
+    top():
+      restrictions:
+        - []: [t]
 simplify_overlap: true
 simplify_dilution: true
 simplify_by_cuts: true
@@ -27,6 +33,11 @@ simplify_subrules_deriv: 100
 discriminator:
   t: [[p],[ ]]
   f: [[ ],[p]]
+derive:
+  bot2: [["neg(p -> p)"],["bot"]]
+  derivbot: [["p and (neg p)"],["bot"]]
+  b: [["bot()"],["neg(p -> q) and neg(q -> p)"]]
+  nb: [["neg(top())"],["neg(p -> q) and neg(q -> p)"]]
 latex:
   p1: "\\varphi"
   p2: "\\psi"
@@ -36,3 +47,5 @@ latex:
   neg: "\\neg"
   t: "\\mathtt{t}"
   f: "\\mathtt{f}"
+  bot: "\\bot"
+  top: "\\top"
