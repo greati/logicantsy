@@ -454,10 +454,14 @@ namespace ltsy {
                     for (auto seps1 : sep_choices1) {
                         for (auto seps2 : sep_choices2) {
                             std::vector<FmlaSet> sequent_fmlas {_dsets_rule_positions.size()};
+                            auto i = 0;
                             for (auto d1 : dset1)
-                                sequent_fmlas[_dsets_rule_positions[d1]] = seps2[_dsets_positions[d1]];
+                                //sequent_fmlas[_dsets_rule_positions[d1]] = seps2[_dsets_positions[d1]];
+                                sequent_fmlas[_dsets_rule_positions[d1]] = seps1[i++];
+                            i = 0;
                             for (auto d2 : dset2)
-                                sequent_fmlas[_dsets_rule_positions[d2]] = seps1[_dsets_positions[d2]];
+                                //sequent_fmlas[_dsets_rule_positions[d2]] = seps1[_dsets_positions[d2]];
+                                sequent_fmlas[_dsets_rule_positions[d2]] = seps2[i++];
                             NdSequent<std::set> sequent {sequent_fmlas};
                             auto rule_name = make_exists_rule_name(X, rule_idx++);
                             MultipleConclusionRule mcrule {rule_name, sequent, _prem_conc_pos_corresp};
